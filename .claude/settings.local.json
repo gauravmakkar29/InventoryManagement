@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(mkdir -p \"D:/InventoryManagement/infra/modules/lambda-audit\")",
+      "Bash(zip placeholder.zip placeholder.js)",
+      "Bash(rm placeholder.js)",
+      "Bash(powershell -Command \"Compress-Archive -Path placeholder.js -DestinationPath placeholder.zip -Force\")",
+      "Bash(npx vitest:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)",
+      "WebFetch(domain:github.com)",
+      "WebSearch",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(rm -rf .git)",
+      "Bash(rm -rf novus-example-tests)",
+      "Bash(rm -f report_1.png report_2.png)",
+      "Bash(rm -f CONTRIBUTING.md)",
+      "Bash(mv novus-core:*)",
+      "Bash(mv novus-core-ui:*)",
+      "Bash(mv novus-core-api:*)",
+      "Bash(cd:*)",
+      "Bash(cp -r e2e/novus e2e/ims-e2e)",
+      "Bash(rm -rf e2e/novus)",
+      "Bash(rm -rf ims-core ims-core-ui ims-core-api)",
+      "Bash(rm -f pom.xml readme.md .gitignore)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(rm -f playwright.config.ts)",
+      "Bash(rm -rf fixtures pages specs reports)",
+      "Bash(grep -r novus --include=*.java --include=*.xml -l -i)"
+    ]
+  }
+}

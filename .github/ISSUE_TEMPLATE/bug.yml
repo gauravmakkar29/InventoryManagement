@@ -1,0 +1,84 @@
+name: Bug Report
+description: Report a bug or defect
+labels: ["bug"]
+body:
+  - type: input
+    id: parent-story
+    attributes:
+      label: Parent Story
+      description: "Reference the related story issue (e.g., #42)"
+      placeholder: "#"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - "Critical — System unusable / data loss"
+        - "High — Major feature broken, no workaround"
+        - "Medium — Feature impaired, workaround exists"
+        - "Low — Minor issue, cosmetic"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser(s) are affected?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari / WebKit
+        - Edge
+        - All
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: "Clear description of the bug"
+      placeholder: "When I click X, Y happens instead of Z."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: "Numbered steps to reproduce the bug"
+      value: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: "Screenshots, console errors, network traces, or E2E test output"
+      placeholder: "Paste screenshots or error logs here"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Which environment did this occur in?
+      options:
+        - Local development
+        - Dev (AWS)
+        - Staging (AWS)
+        - Production (AWS)
+    validations:
+      required: true

@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="IMS Gen2 - Smoke Suite" verbose="1">
+    <parameter name="report-name" value="IMS-Smoke-Report"/>
+    <listeners>
+        <listener class-name="com.ims.automation.listeners.ImsTestListener"/>
+    </listeners>
+    <test name="Smoke Tests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="com.ims.automation.*"/>
+        </packages>
+    </test>
+</suite>

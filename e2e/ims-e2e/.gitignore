@@ -1,0 +1,10 @@
+target/
+*.class
+*.jar
+*.log
+.idea/
+*.iml
+.DS_Store
+**/src/test/resources/screenshots/
+**/src/test/resources/reports/
+**/application-local.properties

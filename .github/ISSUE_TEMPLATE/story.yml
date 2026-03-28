@@ -1,0 +1,96 @@
+name: Story
+description: Create a new user story
+labels: ["story"]
+body:
+  - type: dropdown
+    id: epic
+    attributes:
+      label: Epic
+      description: Which epic does this story belong to?
+      options:
+        - "Epic 1 — Project Bootstrap & Auth Foundation"
+        - "Epic 2 — Core Inventory CRUD"
+        - "Epic 3 — Location & Hierarchy Management"
+        - "Epic 4 — Work Order System"
+        - "Epic 5 — Firmware Management"
+        - "Epic 6 — Audit Trail & History"
+        - "Epic 7 — Dashboard & KPIs"
+        - "Epic 8 — Bulk Operations"
+        - "Epic 9 — Multi-Tenant Isolation"
+        - "Epic 10 — Notifications & Alerts"
+        - "Epic 11 — Compliance Framework (NIST/ISO)"
+        - "Epic 12 — SBOM & Vulnerability Tracking"
+        - "Epic 13 — Geolocation & Map View"
+        - "Epic 14 — Reporting & Export"
+        - "Epic 15 — Customer Portal"
+        - "Epic 16 — Advanced Analytics"
+        - "Epic 17 — Terraform Infrastructure"
+        - "Epic 18 — OpenSearch Integration"
+    validations:
+      required: true
+
+  - type: input
+    id: story-id
+    attributes:
+      label: Story ID
+      description: "Unique story identifier (e.g., S-1.1)"
+      placeholder: "S-X.Y"
+    validations:
+      required: true
+
+  - type: input
+    id: story-points
+    attributes:
+      label: Story Points
+      description: "Estimated effort (1, 2, 3, 5, 8, 13)"
+      placeholder: "3"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: "As a [role], I want [capability] so that [benefit]."
+      placeholder: "As a technician, I want to scan a device barcode so that I can quickly pull up its details."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: "Checkboxes for each acceptance criterion"
+      value: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] Criterion 3
+    validations:
+      required: true
+
+  - type: textarea
+    id: e2e-coverage
+    attributes:
+      label: E2E Test Coverage
+      description: "List the E2E test scenarios that should cover this story"
+      placeholder: |
+        - e2e/specs/inventory/create-device.spec.ts
+        - Verify form validation
+        - Verify success notification
+    validations:
+      required: false
+
+  - type: textarea
+    id: definition-of-done
+    attributes:
+      label: Definition of Done
+      description: "Checklist for completeness"
+      value: |
+        - [ ] Code reviewed and approved
+        - [ ] Unit tests passing
+        - [ ] E2E tests passing
+        - [ ] No lint errors
+        - [ ] Accessibility checked
+        - [ ] Documentation updated (if applicable)
+    validations:
+      required: false

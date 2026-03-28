@@ -1,0 +1,244 @@
+// =============================================================================
+// IMS Gen 2 — Core Type Definitions (Section 4.4)
+// =============================================================================
+
+// --- Status Enums ---
+
+export enum DeviceStatus {
+  Online = "online",
+  Offline = "offline",
+  Maintenance = "maintenance",
+  Decommissioned = "decommissioned",
+}
+
+export enum FirmwareStatus {
+  Uploaded = "uploaded",
+  Testing = "testing",
+  Approved = "approved",
+  Deprecated = "deprecated",
+  Rejected = "rejected",
+}
+
+export enum ApprovalStage {
+  Uploaded = "uploaded",
+  Testing = "testing",
+  Approved = "approved",
+  Rejected = "rejected",
+}
+
+export enum ServiceOrderStatus {
+  Scheduled = "scheduled",
+  InProgress = "in_progress",
+  Completed = "completed",
+  Cancelled = "cancelled",
+}
+
+export enum ComplianceStatus {
+  Approved = "approved",
+  Pending = "pending",
+  Deprecated = "deprecated",
+  NonCompliant = "non_compliant",
+}
+
+export enum VulnerabilitySeverity {
+  Critical = "critical",
+  High = "high",
+  Medium = "medium",
+  Low = "low",
+  Info = "info",
+}
+
+export enum AuditAction {
+  Create = "create",
+  Update = "update",
+  Delete = "delete",
+  Login = "login",
+  Logout = "logout",
+  Approve = "approve",
+  Reject = "reject",
+  Deploy = "deploy",
+}
+
+export enum NotificationType {
+  Info = "info",
+  Warning = "warning",
+  Error = "error",
+  Success = "success",
+}
+
+// --- Entity Interfaces ---
+
+export interface Device {
+  id: string;
+  name: string;
+  serialNumber: string;
+  model: string;
+  manufacturer: string;
+  status: DeviceStatus;
+  firmwareVersion: string;
+  location: string;
+  coordinates?: { lat: number; lng: number };
+  customerId: string;
+  healthScore: number; // 0-100
+  lastSeen: string; // ISO date
+  installedDate: string; // ISO date
+  tags: string[];
+  metadata: Record<string, string>;
+}
+
+export interface Firmware {
+  id: string;
+  version: string;
+  name: string;
+  status: FirmwareStatus;
+  approvalStage: ApprovalStage;
+  releaseNotes: string;
+  fileSize: number; // bytes
+  checksum: string;
+  uploadedBy: string;
+  uploadedAt: string; // ISO date
+  approvedBy?: string;
+  approvedAt?: string; // ISO date
+  compatibleModels: string[];
+  targetDeviceCount: number;
+  deployedDeviceCount: number;
+}
+
+export interface ServiceOrder {
+  id: string;
+  title: string;
+  description: string;
+  status: ServiceOrderStatus;
+  priority: "low" | "medium" | "high" | "critical";
+  assignedTo: string;
+  customerId: string;
+  deviceId?: string;
+  scheduledDate: string; // ISO date
+  completedDate?: string; // ISO date
+  createdAt: string; // ISO date
+  updatedAt: string; // ISO date
+  notes: string[];
+}
+
+export interface Compliance {
+  id: string;
+  name: string;
+  description: string;
+  status: ComplianceStatus;
+  certificationType: string; // e.g., "NIST 800-53", "IEC 62443"
+  lastAuditDate: string; // ISO date
+  nextAuditDate: string; // ISO date
+  findings: number;
+  criticalFindings: number;
+  assignedTo: string;
+  documents: string[];
+}
+
+export interface Vulnerability {
+  id: string;
+  cveId: string;
+  title: string;
+  description: string;
+  severity: VulnerabilitySeverity;
+  cvssScore: number;
+  affectedDevices: number;
+  patchAvailable: boolean;
+  patchFirmwareId?: string;
+  discoveredAt: string; // ISO date
+  resolvedAt?: string; // ISO date
+  status: "open" | "mitigated" | "resolved" | "accepted";
+}
+
+export interface AuditLog {
+  id: string;
+  action: AuditAction;
+  entityType: string;
+  entityId: string;
+  userId: string;
+  userEmail: string;
+  details: string;
+  ipAddress: string;
+  timestamp: string; // ISO date
+  metadata: Record<string, string>;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  code: string;
+  contactEmail: string;
+  contactPhone: string;
+  address: string;
+  deviceCount: number;
+  activeServiceOrders: number;
+  complianceScore: number; // 0-100
+  createdAt: string; // ISO date
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  groups: string[];
+  customerId?: string;
+  lastLogin: string; // ISO date
+  isActive: boolean;
+}
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  read: boolean;
+  actionUrl?: string;
+  createdAt: string; // ISO date
+}
+
+// --- Search & Aggregation (OpenSearch) ---
+
+export interface SearchResult<T> {
+  hits: T[];
+  total: number;
+  took: number; // ms
+  maxScore: number;
+}
+
+export interface AggregationBucket {
+  key: string;
+  docCount: number;
+}
+
+export interface AggregationResult {
+  name: string;
+  buckets: AggregationBucket[];
+}
+
+// --- API Types ---
+
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, string>;
+}
+
+// --- Auth ---
+
+export interface AuthState {
+  user: User | null;
+  email: string | null;
+  groups: string[];
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  customerId: string | null;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => void;
+}

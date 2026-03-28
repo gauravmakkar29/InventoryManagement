@@ -1,0 +1,20 @@
+package com.ims.actions;
+
+import com.ims.actor.Actor;
+import com.ims.services.NovusLoggerService;
+
+public interface Waiter {
+    final NovusLoggerService log = NovusLoggerService.init(Waiter.class);
+
+    boolean waitAs(Actor actor);
+
+    public static void waitingForSeconds(double seconds) {
+        log.debug("actor waiting for " + seconds + " secs");
+        try {
+            Thread.sleep((long) (seconds * 1000));
+        } catch (InterruptedException e) {
+            log.error("Timed out ", e);
+            Thread.currentThread().interrupt();
+        }
+    }
+}
