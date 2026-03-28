@@ -1,0 +1,6 @@
+dist
+node_modules
+infra
+e2e/ims-e2e
+coverage
+*.tfvars

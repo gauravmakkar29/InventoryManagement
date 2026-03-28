@@ -27,7 +27,14 @@
       "Bash(echo \"exit: $?\")",
       "Bash(rm -f playwright.config.ts)",
       "Bash(rm -rf fixtures pages specs reports)",
-      "Bash(grep -r novus --include=*.java --include=*.xml -l -i)"
+      "Bash(grep -r novus --include=*.java --include=*.xml -l -i)",
+      "Bash(MSYS_NO_PATHCONV=1 \"/c/Program Files/GitHub CLI/gh.exe\" api \"users/gauravmakkar29/projects\")",
+      "Bash(MSYS_NO_PATHCONV=1 \"/c/Program Files/GitHub CLI/gh.exe\" api graphql -f query='{ __type\\(name: \"ProjectV2View\"\\) { fields { name type { name kind ofType { name } } } } }')",
+      "Bash(MSYS_NO_PATHCONV=1 \"/c/Program Files/GitHub CLI/gh.exe\" api graphql -f query='{ __type\\(name: \"CreateProjectV2ViewInput\"\\) { inputFields { name type { name kind } } } }')",
+      "Bash(MSYS_NO_PATHCONV=1 \"/c/Program Files/GitHub CLI/gh.exe\" api graphql -f query='{ __type\\(name: \"UpdateProjectV2ViewInput\"\\) { inputFields { name type { name kind } } } }')",
+      "Bash(npx commitlint:*)",
+      "Bash(MSYS_NO_PATHCONV=1 \"/c/Program Files/GitHub CLI/gh.exe\" api graphql -f query='{ node\\(id: \"PVT_kwHOARf1_84BTD7o\"\\) { ... on ProjectV2 { id number owner { ... on User { login id } } } } }')",
+      "Bash(GH_CLI=\"/c/Program Files/GitHub CLI/gh.exe\" bash scripts/setup-project-views.sh)"
     ]
   }
 }
