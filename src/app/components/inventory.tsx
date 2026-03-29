@@ -1,7 +1,11 @@
 import { useState, useMemo, useCallback } from "react";
-import { Search, ChevronDown, ChevronUp, ArrowUpDown, Package } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, ArrowUpDown, Package, Plus } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { DeviceStatus } from "../../lib/types";
+import { useAuth } from "../../lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
+import { CreateDeviceModal } from "./dialogs/create-device-modal";
+import type { CreateDevicePayload } from "./dialogs/create-device-modal";
 
 type Tab = "hardware" | "firmware" | "geo";
 type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
@@ -284,12 +288,35 @@ function SortHeader({
 // Main Component
 // ---------------------------------------------------------------------------
 export function Inventory() {
+  const { groups } = useAuth();
+  const role = getPrimaryRole(groups);
+  const canCreate = canPerformAction(role, "create");
+
   const [activeTab, setActiveTab] = useState<Tab>("hardware");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [locationFilter, setLocationFilter] = useState<string>("all");
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
+  const [devices, setDevices] = useState<MockDevice[]>(MOCK_DEVICES);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
+    const newDevice: MockDevice = {
+      id: `d${Date.now()}`,
+      name: payload.name,
+      serial: payload.serial,
+      model: payload.model,
+      status: payload.status,
+      location: payload.location,
+      health: payload.status === DeviceStatus.Online ? 100 : 0,
+      firmware: payload.firmware,
+      lastSeen: "just now",
+      lat: payload.lat,
+      lng: payload.lng,
+    };
+    setDevices((prev) => [newDevice, ...prev]);
+  }, []);
 
   const handleSort = useCallback(
     (field: SortField) => {
@@ -304,7 +331,7 @@ export function Inventory() {
   );
 
   const filteredDevices = useMemo(() => {
-    let result = [...MOCK_DEVICES];
+    let result = [...devices];
 
     // Search
     if (search) {
@@ -352,7 +379,7 @@ export function Inventory() {
     });
 
     return result;
-  }, [search, statusFilter, locationFilter, sortField, sortDir]);
+  }, [devices, search, statusFilter, locationFilter, sortField, sortDir]);
 
   return (
     <div className="space-y-5">
@@ -417,8 +444,22 @@ export function Inventory() {
             </select>
 
             <span className="text-[12px] text-gray-400 shrink-0">
-              {filteredDevices.length} of {MOCK_DEVICES.length} devices
+              {filteredDevices.length} of {devices.length} devices
             </span>
+
+            {canCreate && (
+              <button
+                onClick={() => setCreateModalOpen(true)}
+                className={cn(
+                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[13px] font-medium text-white shrink-0",
+                  "hover:bg-[#e86e00]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+                )}
+              >
+                <Plus className="h-4 w-4" />
+                Add Device
+              </button>
+            )}
           </div>
 
           {/* Table */}
@@ -546,6 +587,13 @@ export function Inventory() {
           </div>
         </div>
       )}
+
+      {/* Create Device Modal */}
+      <CreateDeviceModal
+        open={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onCreateDevice={handleCreateDevice}
+      />
     </div>
   );
 }
