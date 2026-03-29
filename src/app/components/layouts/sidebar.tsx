@@ -7,6 +7,7 @@ import {
   Shield,
   ClipboardList,
   BarChart3,
+  Users,
   X,
   LogOut,
 } from "lucide-react";
@@ -47,6 +48,12 @@ const NAV_GROUPS: NavGroup[] = [
         icon: ClipboardList,
       },
       { label: "Analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Admin",
+    items: [
+      { label: "User Management", path: "/user-management", page: "user-management", icon: Users },
     ],
   },
 ];

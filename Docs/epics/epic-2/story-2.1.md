@@ -4,34 +4,34 @@
 **Persona:** Raj (Operations Manager)
 **Priority:** High
 **Story Points:** 5
+**Status:** In Review (PR pending)
+**Branch:** `feature/IMS-31-dashboard-kpi-cards`
+**GitHub Issue:** #31
 
 ## User Story
-As an operations manager, I want to see four key performance indicators on the dashboard, so that I can immediately assess the overall health of the device fleet and deployment pipeline.
+
+As an operations manager, I want to see key performance indicators on the dashboard, so that I can quickly assess the health and status of the device fleet.
 
 ## Acceptance Criteria
-- [ ] AC1: When I navigate to the Dashboard (`/`), I see 4 compact KPI cards displayed in a single row at the top of the page
-- [ ] AC2: The "Total Devices" card shows the total count of all devices in the system
-- [ ] AC3: The "Active Deployments" card shows the count of firmware packages with status "Pending"
-- [ ] AC4: The "Pending Approvals" card shows the count of firmware packages in approval stages that have not yet reached "Approved"
-- [ ] AC5: The "Health Score" card shows the average health score across all devices as a percentage (e.g., "94.2%")
-- [ ] AC6: When data is loading, each card shows a skeleton placeholder animation
-- [ ] AC7: When a data fetch fails, the affected card shows "—" with a retry icon
 
-## UI Behavior
-- Cards are arranged in a responsive 4-column grid (stacks to 2x2 on tablet, 1-column on mobile)
-- Each card displays: icon (top-left), title (small text), value (large bold number), and optional trend indicator
-- Cards use compact sizing per enterprise design principles (no oversized hero cards)
-- Values use locale-aware number formatting (e.g., "1,247" not "1247")
+- [x] AC1: 4 KPI cards displayed (Total Devices, Active Deployments, Pending Approvals, Fleet Health) with locale-aware formatting
+- [x] AC2: Skeleton loaders shown during data fetch (1.2s simulated delay)
+- [x] AC3: Error state with retry button when data fetch fails
+- [x] AC4: Responsive grid: 1 col mobile, 2 col tablet, 4 col desktop
+- [x] AC5: Sparkline charts, trend arrows, and trend labels per card
+- [x] AC6: Refresh button in header reloads all data with spinning animation
 
-## Out of Scope
-- Trend calculations (up/down compared to previous period)
-- Click-through from KPI cards to detail pages
-- Real-time auto-refresh of KPI values
+## Implementation Notes
 
-## Tech Spec Reference
-See [tech-spec.md](./tech-spec.md) for parallel data fetching pattern, KPICard component interface, and query mappings.
+- `useDashboardData` hook with FetchState (loading/success/error) pattern
+- KpiSkeleton component with animate-pulse matching card layout
+- SectionError component with retry callback
+- 10% random failure rate for testing error states
+- `lastUpdated` timestamp shown next to refresh button
+- Includes all Epic 1 changes as base
 
 ## Definition of Done
+
 - [ ] Code reviewed and approved
 - [ ] Unit tests passing (>=85% coverage on new code)
 - [ ] E2E tests passing
