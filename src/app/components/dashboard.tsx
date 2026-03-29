@@ -413,6 +413,16 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Offline Banner */}
+      {!navigator.onLine && (
+        <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+          <WifiOff className="h-4 w-4 shrink-0 text-amber-500" />
+          <p className="text-[13px] font-medium text-amber-700">
+            You are offline. Some data may be stale.
+          </p>
+        </div>
+      )}
+
       {/* ================================================================ */}
       {/* Row 1: Welcome + Date/Refresh */}
       {/* ================================================================ */}
