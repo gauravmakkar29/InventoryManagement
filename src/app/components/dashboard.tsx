@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
+import { useDashboardData } from "../../lib/use-dashboard-data";
+import type { FetchState } from "../../lib/use-dashboard-data";
 
 // ---------------------------------------------------------------------------
 // Sparkline — micro inline chart
@@ -118,6 +120,101 @@ function SegmentedBar({
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Skeleton KPI Card
+// ---------------------------------------------------------------------------
+function KpiSkeleton() {
+  return (
+    <div className="card-elevated p-5 animate-pulse">
+      <div className="flex items-start justify-between">
+        <div className="h-10 w-10 rounded-xl bg-gray-100" />
+      </div>
+      <div className="mt-4">
+        <div className="h-8 w-24 rounded-md bg-gray-100" />
+        <div className="mt-2 h-4 w-20 rounded-md bg-gray-100" />
+      </div>
+      <div className="mt-3 flex items-center gap-2">
+        <div className="h-4 w-10 rounded-md bg-gray-100" />
+        <div className="h-3 w-16 rounded-md bg-gray-100" />
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Section Error State
+// ---------------------------------------------------------------------------
+function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {
+  return (
+    <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
+      <RefreshCw className="h-8 w-8 text-gray-300 mb-3" />
+      <p className="text-[14px] font-medium text-gray-700">{message}</p>
+      <button
+        onClick={onRetry}
+        className="mt-3 rounded-lg bg-[#FF7900] px-4 py-2 text-[13px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+      >
+        Retry
+      </button>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// KPI Section — handles loading / error / success states
+// ---------------------------------------------------------------------------
+function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void }) {
+  if (state === "loading") {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <KpiSkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
+
+  if (state === "error") {
+    return <SectionError message="Failed to load dashboard metrics" onRetry={onRetry} />;
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      {METRIC_CARDS.map((card) => {
+        const Icon = card.icon;
+        return (
+          <div key={card.label} className="card-elevated p-5">
+            <div className="flex items-start justify-between">
+              <div
+                className={cn("flex h-10 w-10 items-center justify-center rounded-xl", card.iconBg)}
+              >
+                <Icon className={cn("h-5 w-5", card.iconColor)} />
+              </div>
+            </div>
+            <div className="mt-4">
+              <p className="text-[30px] font-bold leading-none text-gray-900 tabular-nums">
+                {card.value}
+              </p>
+              <p className="mt-1.5 text-[13px] text-gray-500">{card.label}</p>
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <Sparkline data={card.spark} color={card.sparkColor} />
+              <div className="flex items-center gap-1">
+                {card.trendUp ? (
+                  <TrendingUp className="h-3 w-3 text-emerald-500" />
+                ) : (
+                  <TrendingDown className="h-3 w-3 text-emerald-500" />
+                )}
+                <span className="text-[11px] font-medium text-emerald-600">{card.trend}</span>
+                <span className="text-[11px] text-gray-400">{card.trendLabel}</span>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -281,6 +378,7 @@ const ATTENTION_ITEMS = [
 // ---------------------------------------------------------------------------
 export function Dashboard() {
   const { user, email } = useAuth();
+  const { data: dashData, state: dashState, refresh } = useDashboardData();
   const displayName = user?.name ?? email?.split("@")[0] ?? "User";
 
   const now = new Date();
@@ -310,11 +408,20 @@ export function Dashboard() {
         </div>
         <div className="flex items-center gap-3">
           <span className="text-[13px] text-gray-400">{dateStr}</span>
+          {dashData?.lastUpdated && (
+            <span className="text-[11px] text-gray-300">
+              Updated {dashData.lastUpdated.toLocaleTimeString()}
+            </span>
+          )}
           <button
+            onClick={refresh}
+            disabled={dashState === "loading"}
             className={cn(
               "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500",
               "hover:bg-gray-50 hover:text-gray-700",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
+              "disabled:cursor-not-allowed disabled:opacity-50",
+              dashState === "loading" && "animate-spin",
             )}
             aria-label="Refresh dashboard"
           >
@@ -324,45 +431,9 @@ export function Dashboard() {
       </div>
 
       {/* ================================================================ */}
-      {/* Row 2: 4 Metric Cards */}
+      {/* Row 2: 4 Metric Cards — with skeleton / error / data states */}
       {/* ================================================================ */}
-      <div className="grid grid-cols-4 gap-5">
-        {METRIC_CARDS.map((card) => {
-          const Icon = card.icon;
-          return (
-            <div key={card.label} className="card-elevated p-5">
-              <div className="flex items-start justify-between">
-                <div
-                  className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-xl",
-                    card.iconBg,
-                  )}
-                >
-                  <Icon className={cn("h-5 w-5", card.iconColor)} />
-                </div>
-              </div>
-              <div className="mt-4">
-                <p className="text-[30px] font-bold leading-none text-gray-900 tabular-nums">
-                  {card.value}
-                </p>
-                <p className="mt-1.5 text-[13px] text-gray-500">{card.label}</p>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <Sparkline data={card.spark} color={card.sparkColor} />
-                <div className="flex items-center gap-1">
-                  {card.trendUp ? (
-                    <TrendingUp className="h-3 w-3 text-emerald-500" />
-                  ) : (
-                    <TrendingDown className="h-3 w-3 text-emerald-500" />
-                  )}
-                  <span className="text-[11px] font-medium text-emerald-600">{card.trend}</span>
-                  <span className="text-[11px] text-gray-400">{card.trendLabel}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <KpiSection state={dashState} onRetry={refresh} />
 
       {/* ================================================================ */}
       {/* Row 3: Fleet Status (60%) + Health Score (40%) */}
