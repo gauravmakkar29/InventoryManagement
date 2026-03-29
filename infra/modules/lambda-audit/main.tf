@@ -42,10 +42,10 @@ resource "aws_lambda_function" "audit_processor" {
 
 # DynamoDB Stream -> Lambda event source mapping
 resource "aws_lambda_event_source_mapping" "audit_stream" {
-  event_source_arn  = var.dynamodb_stream_arn
-  function_name     = aws_lambda_function.audit_processor.arn
-  starting_position = "TRIM_HORIZON"
-  batch_size        = 25
+  event_source_arn       = var.dynamodb_stream_arn
+  function_name          = aws_lambda_function.audit_processor.arn
+  starting_position      = "TRIM_HORIZON"
+  batch_size             = 25
   maximum_retry_attempts = 3
 
   # Process only audit-relevant events

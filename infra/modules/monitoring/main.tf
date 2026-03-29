@@ -16,7 +16,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         width  = 12
         height = 6
         properties = {
-          title   = "DynamoDB - DataTable"
+          title = "DynamoDB - DataTable"
           metrics = [
             ["AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${var.project_name}-${var.environment}-DataTable"],
             ["AWS/DynamoDB", "ConsumedWriteCapacityUnits", "TableName", "${var.project_name}-${var.environment}-DataTable"],
@@ -35,7 +35,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         width  = 12
         height = 6
         properties = {
-          title   = "Lambda - Audit Processor"
+          title = "Lambda - Audit Processor"
           metrics = [
             ["AWS/Lambda", "Invocations", "FunctionName", "${var.project_name}-${var.environment}-audit-processor"],
             ["AWS/Lambda", "Errors", "FunctionName", "${var.project_name}-${var.environment}-audit-processor"],
@@ -54,7 +54,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         width  = 12
         height = 6
         properties = {
-          title   = "AppSync - GraphQL API"
+          title = "AppSync - GraphQL API"
           metrics = [
             ["AWS/AppSync", "4XXError", "GraphQLAPIId", "${var.project_name}-${var.environment}-api"],
             ["AWS/AppSync", "5XXError", "GraphQLAPIId", "${var.project_name}-${var.environment}-api"],
@@ -72,7 +72,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         width  = 12
         height = 6
         properties = {
-          title   = "Cognito - User Pool"
+          title = "Cognito - User Pool"
           metrics = [
             ["AWS/Cognito", "SignInSuccesses", "UserPool", "${var.project_name}-${var.environment}-user-pool"],
             ["AWS/Cognito", "TokenRefreshSuccesses", "UserPool", "${var.project_name}-${var.environment}-user-pool"],
