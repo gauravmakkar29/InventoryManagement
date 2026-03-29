@@ -11,6 +11,9 @@ import {
   FileWarning,
   TrendingUp,
   TrendingDown,
+  BarChart3,
+  ClipboardList,
+  Users,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
@@ -342,6 +345,22 @@ const RECENT_ACTIVITY = [
   },
 ];
 
+const SYSTEM_SERVICES = [
+  { name: "Deployment Pipeline", status: "healthy" as const, lastChecked: "2m ago" },
+  { name: "Compliance Engine", status: "healthy" as const, lastChecked: "5m ago" },
+  { name: "Asset Database", status: "healthy" as const, lastChecked: "1m ago" },
+  { name: "Analytics Service", status: "degraded" as const, lastChecked: "8m ago" },
+];
+
+const QUICK_ACTIONS = [
+  { label: "Register Device", path: "/inventory", badge: 0, icon: Monitor },
+  { label: "New Deployment", path: "/deployment", badge: 3, icon: Rocket },
+  { label: "Pending Reviews", path: "/compliance", badge: 5, icon: ShieldCheck },
+  { label: "Service Orders", path: "/account-service", badge: 2, icon: ClipboardList },
+  { label: "View Reports", path: "/analytics", badge: 0, icon: BarChart3 },
+  { label: "Manage Users", path: "/user-management", badge: 1, icon: Users },
+];
+
 const ATTENTION_ITEMS = [
   {
     icon: Rocket,
@@ -434,6 +453,61 @@ export function Dashboard() {
       {/* Row 2: 4 Metric Cards — with skeleton / error / data states */}
       {/* ================================================================ */}
       <KpiSection state={dashState} onRetry={refresh} />
+
+      {/* ================================================================ */}
+      {/* Row 2b: System Status Indicators + Quick Actions */}
+      {/* ================================================================ */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* System Status */}
+        <div className="card-elevated px-5 py-4">
+          <h3 className="text-[14px] font-semibold text-gray-900 mb-3">System Status</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {SYSTEM_SERVICES.map((svc) => (
+              <div
+                key={svc.name}
+                className="flex items-center gap-2.5 rounded-lg bg-gray-50 px-3 py-2.5"
+                title={`Last checked: ${svc.lastChecked}`}
+              >
+                <span
+                  className={cn(
+                    "h-2 w-2 shrink-0 rounded-full",
+                    svc.status === "healthy" ? "bg-emerald-500" : "bg-red-500",
+                  )}
+                />
+                <div className="min-w-0">
+                  <p className="truncate text-[13px] font-medium text-gray-700">{svc.name}</p>
+                  <p className="text-[11px] text-gray-400">{svc.lastChecked}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="card-elevated px-5 py-4">
+          <h3 className="text-[14px] font-semibold text-gray-900 mb-3">Quick Actions</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {QUICK_ACTIONS.map((action) => {
+              const Icon = action.icon;
+              return (
+                <a
+                  key={action.label}
+                  href={action.path}
+                  className="relative flex flex-col items-center gap-1.5 rounded-lg px-2 py-3 text-center hover:bg-gray-50"
+                >
+                  <Icon className="h-5 w-5 text-gray-400" />
+                  <span className="text-[12px] text-gray-600">{action.label}</span>
+                  {action.badge > 0 && (
+                    <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
+                      {action.badge}
+                    </span>
+                  )}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
 
       {/* ================================================================ */}
       {/* Row 3: Fleet Status (60%) + Health Score (40%) */}
