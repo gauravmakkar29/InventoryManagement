@@ -73,7 +73,12 @@ public class NovusReportingService {
 
     public synchronized void addTest(Method testInfo) {
         if (reportingEnabled) {
-            test.set(report.createTest(testInfo.getDeclaringClass().getSimpleName() + " - " + testInfo.getAnnotation(Description.class).value()));
+            var desc = testInfo.getAnnotation(Description.class);
+            var testAnnotation = testInfo.getAnnotation(Test.class);
+            String testName = desc != null ? desc.value()
+                    : (testAnnotation != null && !testAnnotation.description().isEmpty()) ? testAnnotation.description()
+                    : testInfo.getName();
+            test.set(report.createTest(testInfo.getDeclaringClass().getSimpleName() + " - " + testName));
             addScenario(testInfo);
             testSteps.set(test.get().createNode("Test Case Execution Steps"));
             addTestMetadata(testInfo);
@@ -82,20 +87,29 @@ public class NovusReportingService {
 
     public synchronized void addScenario(Method testInfo) {
         if (reportingEnabled) {
+            var desc = testInfo.getAnnotation(Description.class);
+            var outcome = testInfo.getAnnotation(Outcome.class);
+            var testAnnotation = testInfo.getAnnotation(Test.class);
+            String descText = desc != null ? desc.value()
+                    : (testAnnotation != null && !testAnnotation.description().isEmpty()) ? testAnnotation.description()
+                    : "No description";
+            String outcomeText = outcome != null ? outcome.value() : "Verify test passes";
+
             ExtentTest testDetails = test.get().createNode("Test Case Details");
             String[][] details = {
                 {"Test Description", "Expected Outcome"},
-                {testInfo.getAnnotation(Description.class).value(), testInfo.getAnnotation(Outcome.class).value()}};
+                {descText, outcomeText}};
             testDetails.info(MarkupHelper.createTable(details));
             var meta = testInfo.getAnnotation(MetaData.class);
-            var testInfoAnnotation = testInfo.getAnnotation(Test.class);
-            ExtentTest testMeta = test.get().createNode("Test Case Meta Data");
-            var isExpected = meta.bugs().length != 0 || testInfoAnnotation.expectedExceptions().length != 0;
-            String[][] metaData = {
-                {"References", "Bugs"},
-                {Arrays.toString(meta.stories()), Arrays.toString(meta.bugs())}};
-            testMeta.info(MarkupHelper.createTable(metaData));
-            if (isExpected) test.get().warning(MarkupHelper.createLabel("This Test Case is Expected to FAIL", ExtentColor.RED));
+            if (meta != null) {
+                var isExpected = meta.bugs().length != 0 || (testAnnotation != null && testAnnotation.expectedExceptions().length != 0);
+                String[][] metaData = {
+                    {"References", "Bugs"},
+                    {Arrays.toString(meta.stories()), Arrays.toString(meta.bugs())}};
+                ExtentTest testMeta = test.get().createNode("Test Case Meta Data");
+                testMeta.info(MarkupHelper.createTable(metaData));
+                if (isExpected) test.get().warning(MarkupHelper.createLabel("This Test Case is Expected to FAIL", ExtentColor.RED));
+            }
         }
     }
 
@@ -165,8 +179,10 @@ public class NovusReportingService {
 
     private synchronized void addTestMetadata(Method method) {
         var metaData = method.getAnnotation(MetaData.class);
-        test.get().assignAuthor(metaData.author());
-        test.get().assignCategory(metaData.category());
+        if (metaData != null) {
+            test.get().assignAuthor(metaData.author());
+            test.get().assignCategory(metaData.category());
+        }
     }
 
     private String base64(String path) {
