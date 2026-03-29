@@ -239,6 +239,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   customerId: string | null;
+  signInError: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => void;
 }
