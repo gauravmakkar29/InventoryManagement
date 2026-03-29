@@ -209,4 +209,24 @@ public class NovusSoftAssert extends SoftAssertions {
     public NovusSoftAssert and() {
         return this;
     }
+
+    public void assertTrue(boolean condition, String description) {
+        this.assertThat(condition).as(description).isTrue();
+        if (errorsOccurred == this.assertionErrorsCollected().size()) {
+            log.verificationSuccess(String.format("soft assert : [%s] - condition is true", description));
+        } else {
+            errorsOccurred = this.assertionErrorsCollected().size();
+            log.verificationFailure(String.format("soft assert : [%s] - expected true but was false", description));
+        }
+    }
+
+    public void assertFalse(boolean condition, String description) {
+        this.assertThat(condition).as(description).isFalse();
+        if (errorsOccurred == this.assertionErrorsCollected().size()) {
+            log.verificationSuccess(String.format("soft assert : [%s] - condition is false", description));
+        } else {
+            errorsOccurred = this.assertionErrorsCollected().size();
+            log.verificationFailure(String.format("soft assert : [%s] - expected false but was true", description));
+        }
+    }
 }

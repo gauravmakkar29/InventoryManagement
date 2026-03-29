@@ -23,9 +23,9 @@ module "cognito" {
 }
 
 module "iam" {
-  source            = "./modules/iam"
-  environment       = var.environment
-  project_name      = var.project_name
+  source             = "./modules/iam"
+  environment        = var.environment
+  project_name       = var.project_name
   dynamodb_table_arn = module.dynamodb.table_arn
 }
 
@@ -51,11 +51,11 @@ module "s3_frontend" {
 }
 
 module "cloudfront" {
-  source                  = "./modules/cloudfront"
-  environment             = var.environment
-  project_name            = var.project_name
-  frontend_bucket_arn     = module.s3_frontend.bucket_arn
-  frontend_bucket_domain  = module.s3_frontend.bucket_domain
+  source                 = "./modules/cloudfront"
+  environment            = var.environment
+  project_name           = var.project_name
+  frontend_bucket_arn    = module.s3_frontend.bucket_arn
+  frontend_bucket_domain = module.s3_frontend.bucket_domain
 }
 
 module "lambda_audit" {

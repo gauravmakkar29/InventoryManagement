@@ -74,6 +74,10 @@ public class NovusLoggerService {
         log.error(NovusAnsiColors.error(MessageFormat.format("[Exception occurred] with message {0} ", error)));
     }
 
+    public void error(String message, Object... obj) {
+        log.error(NovusAnsiColors.error(message), obj);
+    }
+
     public void testPass(String message) {
         log.info(NovusAnsiColors.verificationSuccess(message));
     }
