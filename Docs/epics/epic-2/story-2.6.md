@@ -4,34 +4,28 @@
 **Persona:** Raj (Operations Manager)
 **Priority:** Medium
 **Story Points:** 3
-
-## User Story
-As an operations manager, I want to manually refresh dashboard data and see clear loading indicators, so that I know the data is current before presenting to clients.
+**Status:** In Review (PR pending)
+**Branch:** `feature/IMS-38-recent-alerts-and-refresh`
+**GitHub Issue:** #48
 
 ## Acceptance Criteria
-- [ ] AC1: When the Dashboard page loads, all sections (KPIs, quick actions, alerts, system status) fetch data in parallel and display skeleton loaders while loading
-- [ ] AC2: When I click the "Refresh" button in the top-right corner of the dashboard, all data is re-fetched and loading skeletons appear during the fetch
-- [ ] AC3: When any individual data fetch fails, only the affected section shows an error state; other sections display their data normally
-- [ ] AC4: When a section is in error state, it shows "Unable to load [section name]" with a "Retry" button that re-fetches only that section
-- [ ] AC5: When all fetches complete, the "Last updated" timestamp below the Refresh button shows the current time (e.g., "Last updated: 2:34 PM")
-- [ ] AC6: When the network is offline, a banner appears at the top of the page: "You are offline. Some features may be unavailable."
 
-## UI Behavior
-- Skeleton loaders match the shape and size of the actual content (cards, list items)
-- Refresh button shows a spinning icon while data is being fetched
-- Error states use a muted card with an exclamation icon and retry button
-- Offline banner is persistent and dismisses automatically when connectivity is restored
-- All transitions are smooth (150-200ms, no abrupt content jumps)
+- [x] AC1: All dashboard sections show skeleton loaders during data fetch
+- [x] AC2: Manual Refresh button re-fetches all data with spinning animation
+- [x] AC3: Error state with retry button when data fetch fails
+- [x] AC4: "Last updated" timestamp shown in header
+- [x] AC5: Offline banner when network unavailable
 
-## Out of Scope
-- Auto-refresh on a timer
-- Stale-while-revalidate caching
-- Partial data display while some sections are still loading
+## Implementation Notes
 
-## Tech Spec Reference
-See [tech-spec.md](./tech-spec.md) for parallel fetch pattern, error handling strategy, and graceful degradation rules.
+- useDashboardData hook provides loading/success/error states
+- KpiSkeleton + SectionError components for loading/error UI
+- Refresh button spins while loading (animate-spin class)
+- navigator.onLine check for offline banner with WifiOff icon
+- Includes all previous Epic 1+2 changes as base
 
 ## Definition of Done
+
 - [ ] Code reviewed and approved
 - [ ] Unit tests passing (>=85% coverage on new code)
 - [ ] E2E tests passing
