@@ -38,7 +38,8 @@
       "WebFetch(domain:www.sungrowpower.com)",
       "WebFetch(domain:en.isolarcloud.com)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(GIT_EDITOR=true git rebase --continue)"
     ]
   }
 }

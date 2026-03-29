@@ -5,6 +5,7 @@ import { Eye, EyeOff, Check, X, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../../lib/use-auth";
 import { cn } from "../../lib/utils";
+import { MfaChallenge } from "./mfa-challenge";
 
 interface SignInForm {
   email: string;
@@ -29,7 +30,7 @@ const PASSWORD_RULES: PasswordRule[] = [
 ];
 
 export function SignIn() {
-  const { signIn, isAuthenticated, signInError } = useAuth();
+  const { signIn, isAuthenticated, signInError, mfaRequired } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showPolicyHints, setShowPolicyHints] = useState(false);
@@ -58,7 +59,11 @@ export function SignIn() {
   const onSubmit = async (data: SignInForm) => {
     try {
       await signIn(data.email, data.password);
-      navigate("/", { replace: true });
+      // If MFA is required, signIn won't throw but mfaRequired will be set
+      // Navigation happens after MFA verification
+      if (!mfaRequired) {
+        navigate("/", { replace: true });
+      }
     } catch (err) {
       // Check if it's a network error vs auth error
       if (err instanceof TypeError && err.message.includes("fetch")) {
@@ -67,6 +72,11 @@ export function SignIn() {
       // Auth errors are shown inline via signInError state
     }
   };
+
+  // Show MFA challenge screen
+  if (mfaRequired) {
+    return <MfaChallenge onSuccess={() => navigate("/", { replace: true })} />;
+  }
 
   return (
     <div className="flex min-h-screen">

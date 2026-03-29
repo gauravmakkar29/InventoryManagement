@@ -240,6 +240,11 @@ export interface AuthState {
   isLoading: boolean;
   customerId: string | null;
   signInError: string | null;
+  mfaRequired: boolean;
+  mfaEnabled: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  verifyMfa: (code: string) => Promise<void>;
+  setupMfa: () => Promise<string>;
+  confirmMfaSetup: (code: string) => Promise<void>;
   signOut: () => void;
 }
