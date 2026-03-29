@@ -42,7 +42,9 @@
       "Bash(git checkout:*)",
       "Bash(npm run:*)",
       "Bash(GIT_EDITOR=true git rebase --continue)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(gh workflow:*)",
+      "Bash(git cherry-pick:*)"
     ]
   }
 }

@@ -5,6 +5,7 @@ on:
     branches: [main, dev, staging]
   push:
     branches: [main, dev, staging]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -89,7 +90,9 @@ jobs:
         if: always()
         with:
           name: e2e-report
-          path: e2e/ims-e2e/ims-tests/src/test/resources/reports/
+          path: |
+            e2e/ims-e2e/ims-tests/src/test/resources/reports/
+            e2e/ims-e2e/ims-tests/src/test/resources/screenshots/
           retention-days: 30
 
   terraform-validate:
