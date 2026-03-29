@@ -1,43 +1,30 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router";
-import { Bell, Search, Sun, Moon, ChevronRight, ChevronDown } from "lucide-react";
-import { useTheme } from "next-themes";
+import { Bell, Search, Menu } from "lucide-react";
 import { useAuth } from "../../../lib/use-auth";
 import { cn } from "../../../lib/utils";
 
 /**
- * Route-to-breadcrumb mapping for the header.
+ * Route-to-title mapping for the header.
  */
-const ROUTE_LABELS: Record<string, string> = {
-  "/": "Dashboard",
-  "/inventory": "Inventory",
-  "/deployment": "Deployment",
-  "/compliance": "Compliance",
-  "/account-service": "Service Orders",
-  "/analytics": "Analytics",
+const ROUTE_META: Record<string, { title: string }> = {
+  "/": { title: "Dashboard" },
+  "/inventory": { title: "Inventory & Assets" },
+  "/deployment": { title: "Deployment" },
+  "/compliance": { title: "Compliance" },
+  "/account-service": { title: "Service Orders" },
+  "/analytics": { title: "Analytics" },
 };
 
-function useBreadcrumbs(): string[] {
+function usePageTitle(): string {
   const { pathname } = useLocation();
   return useMemo(() => {
+    const meta = ROUTE_META[pathname];
+    if (meta) return meta.title;
     const segments = pathname.split("/").filter(Boolean);
-    if (segments.length === 0) return ["Dashboard"];
-
-    const crumbs: string[] = [];
-    let accumulated = "";
-
-    for (const seg of segments) {
-      accumulated += "/" + seg;
-      const label = ROUTE_LABELS[accumulated];
-      if (label) {
-        crumbs.push(label);
-      } else {
-        // Capitalize unknown segments as fallback
-        crumbs.push(seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, " "));
-      }
-    }
-
-    return crumbs.length > 0 ? crumbs : ["Dashboard"];
+    if (segments.length === 0) return "Dashboard";
+    const last = segments[segments.length - 1]!;
+    return last.charAt(0).toUpperCase() + last.slice(1).replace(/-/g, " ");
   }, [pathname]);
 }
 
@@ -58,114 +45,94 @@ function getUserInitials(
   return "U";
 }
 
-export function Header() {
-  const { theme, setTheme } = useTheme();
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
+
+export function Header({ onToggleSidebar }: HeaderProps) {
   const { user, email } = useAuth();
-  const breadcrumbs = useBreadcrumbs();
+  const title = usePageTitle();
 
   const initials = getUserInitials(user?.name, email);
-  const notificationCount = 3;
+  const displayName = user?.name ?? email ?? "User";
+  const roleBadge = user?.groups?.[0] ?? "Operator";
 
   return (
     <header
-      className={cn(
-        "flex h-12 shrink-0 items-center justify-between border-b border-border bg-card px-4",
-      )}
+      className="flex h-14 shrink-0 items-center justify-between bg-white px-5"
+      style={{
+        boxShadow: "0 1px 0 rgba(0,0,0,0.05)",
+      }}
       role="banner"
     >
-      {/* Left: Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-[13px]">
-        {breadcrumbs.map((crumb, idx) => (
-          <span key={idx} className="flex items-center gap-1">
-            {idx > 0 && (
-              <ChevronRight className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
-            )}
-            <span
-              className={cn(
-                idx === breadcrumbs.length - 1
-                  ? "font-medium text-foreground"
-                  : "text-muted-foreground",
-              )}
-            >
-              {crumb}
-            </span>
-          </span>
-        ))}
-      </nav>
+      {/* Left: Hamburger + Page title */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onToggleSidebar}
+          className={cn(
+            "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-gray-500",
+            "hover:bg-gray-100 hover:text-gray-700",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
+          )}
+          aria-label="Toggle navigation"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <h1 className="text-[18px] font-semibold leading-tight text-gray-900">{title}</h1>
+      </div>
 
-      {/* Right: Actions */}
+      {/* Right: Search + Bell + Divider + User */}
       <div className="flex items-center gap-2">
-        {/* Search trigger */}
+        {/* Search bar — pill shape */}
         <button
           className={cn(
-            "flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-border text-muted-foreground",
-            "transition-colors duration-150",
-            "hover:border-accent/40 hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1",
+            "flex h-9 w-[240px] cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3.5",
+            "hover:border-gray-300",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-1",
           )}
-          aria-label="Search (Ctrl+K)"
-          title="Search (Ctrl+K)"
+          aria-label="Search (Cmd+K)"
+          title="Search (Cmd+K)"
         >
-          <Search className="h-3.5 w-3.5" />
+          <Search className="h-4 w-4 text-gray-400 shrink-0" />
+          <span className="flex-1 text-left text-[13px] text-gray-400">Search anything...</span>
+          <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-gray-200 bg-white px-1.5 text-[10px] font-medium text-gray-400">
+            Cmd+K
+          </kbd>
         </button>
 
         {/* Notification bell */}
         <button
           className={cn(
-            "relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground",
-            "transition-colors duration-150",
-            "hover:bg-muted hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1",
+            "relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-gray-500",
+            "hover:bg-gray-100 hover:text-gray-700",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-1",
           )}
-          aria-label={`Notifications${notificationCount > 0 ? ` (${notificationCount} unread)` : ""}`}
+          aria-label="Notifications"
         >
-          <Bell className="h-4 w-4" />
-          {notificationCount > 0 && (
-            <span
-              className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-bold leading-none text-white"
-              aria-hidden="true"
-            >
-              {notificationCount > 9 ? "9+" : notificationCount}
-            </span>
-          )}
+          <Bell className="h-5 w-5" />
+          {/* Tiny red dot indicator */}
+          <span
+            className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500"
+            aria-hidden="true"
+          />
         </button>
 
-        {/* Theme toggle */}
-        <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className={cn(
-            "flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground",
-            "transition-colors duration-150",
-            "hover:bg-muted hover:text-foreground",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1",
-          )}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        >
-          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </button>
+        {/* Divider */}
+        <div className="mx-1 h-6 w-px bg-gray-200" aria-hidden="true" />
 
-        {/* Separator */}
-        <div className="mx-0.5 h-5 w-px bg-border" aria-hidden="true" />
-
-        {/* User avatar + dropdown trigger */}
-        <button
-          className={cn(
-            "flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-1",
-            "transition-colors duration-150",
-            "hover:bg-muted",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1",
-          )}
-          aria-label="User menu"
-          aria-haspopup="true"
-        >
+        {/* User avatar + info */}
+        <div className="flex items-center gap-2.5">
           <div
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white"
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white"
             aria-hidden="true"
           >
             {initials}
           </div>
-          <ChevronDown className="h-3 w-3 text-muted-foreground" aria-hidden="true" />
-        </button>
+          <div className="hidden md:block">
+            <div className="text-[14px] font-medium leading-tight text-gray-900">{displayName}</div>
+            <div className="text-[12px] leading-tight text-gray-500">{roleBadge}</div>
+          </div>
+        </div>
       </div>
     </header>
   );

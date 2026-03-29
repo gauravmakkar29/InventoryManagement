@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { NavLink, useLocation } from "react-router";
 import {
   LayoutDashboard,
@@ -7,13 +7,11 @@ import {
   Shield,
   ClipboardList,
   BarChart3,
-  ChevronLeft,
-  ChevronRight,
+  X,
+  LogOut,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
-
-const STORAGE_KEY = "ims-sidebar-collapsed";
 
 interface NavItem {
   label: string;
@@ -63,166 +61,161 @@ function getUserInitials(
   return "U";
 }
 
-export function Sidebar() {
-  const [collapsed, setCollapsed] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === "true";
-    } catch {
-      return false;
-    }
-  });
+interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
+}
 
+export function Sidebar({ open, onClose }: SidebarProps) {
   const location = useLocation();
-  const { user, email } = useAuth();
+  const { user, email, signOut } = useAuth();
 
-  const toggle = useCallback(() => {
-    setCollapsed((prev) => !prev);
-  }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, String(collapsed));
-    } catch {
-      // Storage unavailable
+  const handleNavClick = useCallback(() => {
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 1024) {
+      onClose();
     }
-  }, [collapsed]);
+  }, [onClose]);
 
   const displayName = user?.name ?? email ?? "User";
+  const displayEmail = email ?? "";
   const initials = getUserInitials(user?.name, email);
   const roleBadge = user?.groups?.[0] ?? "Operator";
 
   return (
-    <aside
-      className={cn(
-        "relative flex flex-col bg-[#0f172a] select-none",
-        "transition-[width] duration-200",
-        collapsed ? "w-14" : "w-[220px]",
+    <>
+      {/* Backdrop — visible on mobile when sidebar open */}
+      {open && (
+        <div
+          className="sidebar-backdrop fixed inset-0 z-40 bg-black/20"
+          onClick={onClose}
+          aria-hidden="true"
+        />
       )}
-      style={{ transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)" }}
-      aria-label="Primary navigation"
-    >
-      {/* ---- Logo ---- */}
-      <div className="flex h-12 items-center overflow-hidden border-b border-slate-700/50 px-3">
-        {collapsed ? (
-          <span className="mx-auto text-[13px] font-bold tracking-tight text-white">IMS</span>
-        ) : (
-          <div className="flex flex-col justify-center">
-            <span className="text-[13px] font-bold leading-tight text-white">
-              IMS <span className="text-blue-400">Gen2</span>
-            </span>
-            <span className="text-[10px] leading-tight text-slate-500">
-              Hardware Lifecycle Management
-            </span>
-          </div>
-        )}
-      </div>
 
-      {/* ---- Navigation groups ---- */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3" aria-label="Main navigation">
-        {NAV_GROUPS.map((group, groupIdx) => (
-          <div key={group.label} className={cn(groupIdx > 0 && "mt-4")}>
-            {/* Section label */}
-            {!collapsed && (
-              <div className="mb-1 px-4 text-[10px] font-medium uppercase tracking-wider text-slate-500">
+      {/* Sidebar Panel */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 flex h-full w-[260px] flex-col bg-white",
+          "sidebar-panel",
+          "shadow-[4px_0_24px_rgba(0,0,0,0.06)]",
+        )}
+        data-state={open ? "open" : "closed"}
+        style={{
+          borderRight: "1px solid #e5e7eb",
+        }}
+        aria-label="Primary navigation"
+        aria-hidden={!open}
+      >
+        {/* Logo + Close */}
+        <div className="flex h-14 items-center justify-between px-5">
+          <div className="flex flex-col">
+            <span className="text-[15px] font-bold leading-tight tracking-tight text-gray-900">
+              IMS <span className="text-[#FF7900]">Gen2</span>
+            </span>
+            <span className="text-[10px] leading-tight text-gray-400">Hardware Lifecycle Mgmt</span>
+          </div>
+          <button
+            onClick={onClose}
+            className={cn(
+              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
+              "hover:bg-gray-100 hover:text-gray-600",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
+            )}
+            aria-label="Close navigation"
+          >
+            <X className="h-[18px] w-[18px]" />
+          </button>
+        </div>
+
+        {/* Navigation groups */}
+        <nav
+          className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4"
+          aria-label="Main navigation"
+        >
+          {NAV_GROUPS.map((group, groupIdx) => (
+            <div key={group.label} className={cn(groupIdx > 0 && "mt-5")}>
+              {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-gray-100" />}
+              <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400">
                 {group.label}
               </div>
-            )}
-            {collapsed && groupIdx > 0 && (
-              <div className="mx-3 mb-2 border-t border-slate-700/50" />
-            )}
 
-            <ul className="space-y-0.5 px-2">
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = item.end
-                  ? location.pathname === item.path
-                  : location.pathname.startsWith(item.path);
+              <ul className="space-y-0.5">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = item.end
+                    ? location.pathname === item.path
+                    : location.pathname.startsWith(item.path);
 
-                return (
-                  <li key={item.path} className="relative">
-                    <NavLink
-                      to={item.path}
-                      end={item.end}
-                      aria-label={item.label}
-                      aria-current={isActive ? "page" : undefined}
-                      className={cn(
-                        "group relative flex h-10 cursor-pointer items-center gap-3 rounded px-2.5 text-[13px] font-medium",
-                        "transition-colors duration-150",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0",
-                        isActive
-                          ? "border-l-2 border-[#2563eb] bg-[rgba(37,99,235,0.1)] text-white"
-                          : "border-l-2 border-transparent text-slate-400 hover:bg-[rgba(255,255,255,0.08)] hover:text-slate-100",
-                      )}
-                    >
-                      <Icon className="h-[18px] w-[18px] shrink-0" />
-                      {!collapsed && <span className="truncate">{item.label}</span>}
-
-                      {/* Tooltip (collapsed state) */}
-                      {collapsed && (
-                        <span
-                          role="tooltip"
+                  return (
+                    <li key={item.path} className="relative">
+                      <NavLink
+                        to={item.path}
+                        end={item.end}
+                        onClick={handleNavClick}
+                        aria-label={item.label}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "group relative flex h-[44px] cursor-pointer items-center gap-3 rounded-lg px-3 text-[14px] font-medium",
+                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-0",
+                          isActive
+                            ? "bg-orange-50 font-semibold text-[#FF7900]"
+                            : "text-gray-600 hover:bg-orange-50 hover:text-[#FF7900]",
+                        )}
+                      >
+                        {/* Active left indicator bar */}
+                        {isActive && (
+                          <div className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-[#FF7900]" />
+                        )}
+                        <Icon
                           className={cn(
-                            "pointer-events-none absolute left-full z-50 ml-2 whitespace-nowrap rounded bg-slate-800 px-2.5 py-1.5 text-[12px] font-medium text-white shadow-lg",
-                            "opacity-0 transition-opacity duration-150 delay-200 group-hover:opacity-100",
+                            "h-[18px] w-[18px] shrink-0",
+                            isActive
+                              ? "text-[#FF7900]"
+                              : "text-gray-400 group-hover:text-[#FF7900]",
                           )}
-                        >
-                          {item.label}
-                        </span>
-                      )}
-                    </NavLink>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </nav>
+                        />
+                        <span className="truncate">{item.label}</span>
+                      </NavLink>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
 
-      {/* ---- User section ---- */}
-      <div
-        className={cn(
-          "border-t border-slate-700/50 px-2 py-2",
-          collapsed ? "flex justify-center" : "",
-        )}
-      >
-        <div
-          className={cn(
-            "flex items-center gap-2.5 rounded px-2 py-1.5",
-            collapsed && "justify-center px-0",
-          )}
-        >
-          <div
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-semibold text-white"
-            aria-hidden="true"
-          >
-            {initials}
-          </div>
-          {!collapsed && (
+        {/* User section at bottom */}
+        <div className="border-t border-gray-100 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FF7900] text-[12px] font-semibold text-white"
+              aria-hidden="true"
+            >
+              {initials}
+            </div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[12px] font-medium leading-tight text-slate-200">
+              <div className="truncate text-[13px] font-medium leading-tight text-gray-900">
                 {displayName}
               </div>
-              <div className="truncate text-[10px] leading-tight text-slate-500">{roleBadge}</div>
+              <div className="truncate text-[11px] leading-tight text-gray-400">
+                {displayEmail || roleBadge}
+              </div>
             </div>
-          )}
+          </div>
+          <button
+            onClick={signOut}
+            className={cn(
+              "mt-3 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-500",
+              "hover:bg-gray-50 hover:text-gray-700",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
+            )}
+          >
+            <LogOut className="h-4 w-4" />
+            Sign Out
+          </button>
         </div>
-      </div>
-
-      {/* ---- Collapse toggle ---- */}
-      <div className="border-t border-slate-700/50 px-2 py-2">
-        <button
-          onClick={toggle}
-          className={cn(
-            "flex h-8 w-full cursor-pointer items-center justify-center rounded text-slate-400",
-            "transition-colors duration-150",
-            "hover:bg-[rgba(255,255,255,0.08)] hover:text-slate-200",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
-          )}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </button>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
