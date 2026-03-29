@@ -53,8 +53,8 @@ public class AuthTests extends NovusGuiTestBase {
         step("Enter invalid credentials");
         actor.attemptsTo(
                 (a) -> a.is(Waiting.on(LoginPage.EMAIL_INPUT)),
-                Enter.text(Login.ADMIN_EMAIL).into(LoginPage.EMAIL_INPUT),
-                Enter.text("WrongPassword@123").into(LoginPage.PASSWORD_INPUT),
+                Enter.text(Login.ADMIN_EMAIL).on(LoginPage.EMAIL_INPUT),
+                Enter.text("WrongPassword@123").on(LoginPage.PASSWORD_INPUT),
                 Click.on(LoginPage.SIGN_IN_BUTTON)
         );
         step("Verify error message is displayed");
