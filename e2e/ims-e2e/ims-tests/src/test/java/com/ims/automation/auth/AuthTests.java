@@ -2,7 +2,9 @@ package com.ims.automation.auth;
 
 import com.ims.NovusGuiTestBase;
 import com.ims.actor.Actor;
+import com.ims.annotations.Description;
 import com.ims.annotations.MetaData;
+import com.ims.annotations.Outcome;
 import com.ims.automation.constants.TestGroups;
 import com.ims.automation.macros.Login;
 import com.ims.automation.pages.common.LoginPage;
@@ -29,6 +31,8 @@ public class AuthTests extends NovusGuiTestBase {
         actor.setBrowser(browser);
     }
 
+    @Description("Verify login with valid admin credentials redirects to dashboard")
+    @Outcome("User is authenticated and dashboard is displayed")
     @MetaData(testCaseId = "IMS-AUTH-001", author = "ims-automation", category = "auth")
     @Test(description = "Verify login with valid admin credentials")
     public void verifyLoginWithValidCredentials() {
@@ -45,6 +49,8 @@ public class AuthTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
+    @Description("Verify login with invalid credentials shows error banner")
+    @Outcome("Error message 'Invalid email or password' is displayed")
     @MetaData(testCaseId = "IMS-AUTH-002", author = "ims-automation", category = "auth")
     @Test(description = "Verify login with invalid credentials shows error")
     public void verifyLoginWithInvalidCredentials() {
@@ -65,6 +71,8 @@ public class AuthTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
+    @Description("Verify sign out clears session and redirects to login page")
+    @Outcome("User is logged out and login page is displayed")
     @MetaData(testCaseId = "IMS-AUTH-003", author = "ims-automation", category = "auth")
     @Test(description = "Verify sign out redirects to login")
     public void verifySignOut() {
@@ -87,6 +95,8 @@ public class AuthTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
+    @Description("Verify admin user sees all 7 navigation items including User Management")
+    @Outcome("All navigation links are visible in sidebar for Admin role")
     @MetaData(testCaseId = "IMS-AUTH-004", author = "ims-automation", category = "auth")
     @Test(description = "Verify admin sees all navigation items including User Management")
     public void verifyRbacAdminSeesAllNavItems() {
@@ -108,6 +118,8 @@ public class AuthTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
+    @Description("Verify technician role sees only Dashboard, Inventory, and Service Orders")
+    @Outcome("Only 3 navigation links are visible for Technician role")
     @MetaData(testCaseId = "IMS-AUTH-005", author = "ims-automation", category = "auth")
     @Test(description = "Verify technician sees limited navigation")
     public void verifyRbacTechnicianSeesLimitedNav() {

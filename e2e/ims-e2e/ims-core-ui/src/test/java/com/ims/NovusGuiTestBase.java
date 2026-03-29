@@ -68,7 +68,7 @@ public class NovusGuiTestBase extends AbstractTestNGSpringContextTests {
             }
             reportingService.attachResult(result, ssPath.toAbsolutePath().toString());
         } else if (result.getStatus() == ITestResult.SUCCESS) {
-            reportingService.attachResult(result, null);
+            reportingService.attachResult(result);
         }
     }
 

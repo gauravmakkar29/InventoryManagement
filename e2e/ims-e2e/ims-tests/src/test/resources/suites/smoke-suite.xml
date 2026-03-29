@@ -5,15 +5,8 @@
         <listener class-name="com.ims.automation.listeners.ImsTestListener"/>
     </listeners>
     <test name="Smoke Tests">
-        <groups>
-            <run>
-                <include name="smoke"/>
-            </run>
-        </groups>
-        <packages>
-            <package name="com.ims.automation.*"/>
-        </packages>
         <classes>
+            <class name="com.ims.automation.smoke.SmokeTests"/>
             <class name="com.ims.automation.auth.AuthTests"/>
         </classes>
     </test>
