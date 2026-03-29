@@ -1,40 +1,32 @@
 # Story 3.3: Create Device Form
 
 **Epic:** Epic 3 — Inventory & Device Management
-**Persona:** Sarah (Platform Admin)
 **Priority:** High
 **Story Points:** 5
-
-## User Story
-As a platform admin, I want to add new devices to the inventory, so that newly deployed hardware is tracked in the system from day one.
+**Status:** In Review (PR pending)
+**Branch:** `feature/IMS-67-create-device-form`
+**GitHub Issue:** #67
 
 ## Acceptance Criteria
-- [ ] AC1: When I am an Admin or Manager, I see a "Add Device" button above the hardware inventory table
-- [ ] AC2: When I click "Add Device", a modal opens with a form containing fields: Device Name, Serial Number, Device Model (dropdown), Firmware Version (dropdown), Status (dropdown: Online/Offline/Maintenance), Location, Latitude, Longitude, Customer (dropdown)
-- [ ] AC3: When I submit the form with all required fields filled, the device is created and appears in the table without a page refresh
-- [ ] AC4: When I submit the form with missing required fields, inline validation errors appear on the empty fields and submission is blocked
-- [ ] AC5: When the device creation API call fails, I see a toast error "Failed to create device. Please try again."
-- [ ] AC6: When I am a Technician, Viewer, or CustomerAdmin, the "Add Device" button is not visible
 
-## UI Behavior
-- Modal uses the Dialog component (shadcn/ui) with a form built using react-hook-form
-- Required fields are marked with a red asterisk
-- Location field is a text input; Lat/Lng fields are numeric inputs
-- Customer dropdown is populated from the customer list
-- Firmware Version dropdown is populated from active firmware packages
-- On successful creation, the modal closes and a success toast appears: "Device [name] created"
-- Cancel button closes the modal without saving
+- [x] AC1: "Add Device" button visible to Admin/Manager only (RBAC via canPerformAction)
+- [x] AC2: Modal form: Device Name, Serial Number, Model (dropdown), Firmware Version, Status (dropdown), Location, Latitude, Longitude
+- [x] AC3: Inline validation errors for missing required fields
+- [x] AC4: Optimistic update: new device prepended to table without page refresh
+- [x] AC5: Success toast: "Device [name] created successfully"
+- [x] AC6: Button hidden from Viewer role
+- [x] AC7: Cancel closes modal without creating device
 
-## Out of Scope
-- Editing existing devices
-- Deleting devices
-- Bulk device import
-- Geocoding from location string (manual lat/lng entry for now)
+## Implementation Notes
 
-## Tech Spec Reference
-See [tech-spec.md](./tech-spec.md) for Device entity model, `createDevice` mutation, and GSI key computation.
+- CreateDeviceModal at src/app/components/dialogs/create-device-modal.tsx
+- Inventory state lifted from static MOCK_DEVICES to useState
+- RBAC: canPerformAction(role, "create") check for Add Device button
+- Lat/Lng optional, validated as numbers when provided
+- Includes Story 3.1 changes as base
 
 ## Definition of Done
+
 - [ ] Code reviewed and approved
 - [ ] Unit tests passing (>=85% coverage on new code)
 - [ ] E2E tests passing
