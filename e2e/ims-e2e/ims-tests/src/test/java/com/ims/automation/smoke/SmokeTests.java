@@ -28,7 +28,7 @@ public class SmokeTests extends NovusGuiTestBase {
         actor.setBrowser(browser);
     }
 
-    @MetaData(testCaseId = "IMS-SM-001", author = "ims-automation", category = "smoke")
+    @MetaData(testCaseId = "IMS-SM-001", author = "ims-automation", category = "smoke", stories = {"#2", "#25"})
     @Test(description = "Verify application loads and login page is accessible")
     public void verifyApplicationLoads() {
         step("Navigate to the application login page");
@@ -42,7 +42,7 @@ public class SmokeTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
-    @MetaData(testCaseId = "IMS-SM-002", author = "ims-automation", category = "smoke")
+    @MetaData(testCaseId = "IMS-SM-002", author = "ims-automation", category = "smoke", stories = {"#2", "#31"})
     @Test(description = "Verify dashboard loads after login")
     public void verifyDashboardLoadsAfterLogin() {
         step("Navigate to login page and authenticate");
@@ -59,7 +59,7 @@ public class SmokeTests extends NovusGuiTestBase {
         softly.assertAll();
     }
 
-    @MetaData(testCaseId = "IMS-SM-003", author = "ims-automation", category = "smoke")
+    @MetaData(testCaseId = "IMS-SM-003", author = "ims-automation", category = "smoke", stories = {"#25"})
     @Test(description = "Verify all sidebar navigation links are present")
     public void verifySidebarLinksArePresent() {
         step("Open sidebar navigation");

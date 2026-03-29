@@ -3,6 +3,7 @@
     <parameter name="report-name" value="IMS-Smoke-Report"/>
     <listeners>
         <listener class-name="com.ims.automation.listeners.ImsTestListener"/>
+        <listener class-name="com.ims.automation.listeners.RetryTransformer"/>
     </listeners>
     <test name="Smoke Tests">
         <classes>
