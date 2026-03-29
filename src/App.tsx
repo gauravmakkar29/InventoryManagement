@@ -7,6 +7,7 @@ import { AccountService } from "./app/components/account-service";
 import { Deployment } from "./app/components/deployment";
 import { CompliancePage } from "./app/components/compliance";
 import { Analytics } from "./app/components/analytics";
+import { AccessDenied } from "./app/components/access-denied";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="/deployment" element={<Deployment />} />
         <Route path="/compliance" element={<CompliancePage />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/access-denied" element={<AccessDenied />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
