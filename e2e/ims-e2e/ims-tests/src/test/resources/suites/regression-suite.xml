@@ -4,6 +4,11 @@
     <listeners>
         <listener class-name="com.ims.automation.listeners.ImsTestListener"/>
     </listeners>
+    <test name="Auth Tests">
+        <classes>
+            <class name="com.ims.automation.auth.AuthTests"/>
+        </classes>
+    </test>
     <test name="Dashboard Tests">
         <classes>
             <class name="com.ims.automation.dashboard.DashboardTests"/>

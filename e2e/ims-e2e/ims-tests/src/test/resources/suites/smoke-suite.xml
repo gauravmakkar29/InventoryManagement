@@ -13,5 +13,8 @@
         <packages>
             <package name="com.ims.automation.*"/>
         </packages>
+        <classes>
+            <class name="com.ims.automation.auth.AuthTests"/>
+        </classes>
     </test>
 </suite>

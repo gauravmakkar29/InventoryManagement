@@ -5,10 +5,11 @@ import com.ims.actor.Actor;
 import com.ims.annotations.MetaData;
 import com.ims.automation.constants.TestGroups;
 import com.ims.automation.macros.Login;
-import com.ims.automation.macros.Navigate;
+import com.ims.automation.pages.common.LoginPage;
 import com.ims.automation.pages.common.SidebarPage;
 import com.ims.automation.pages.dashboard.DashboardPage;
 import com.ims.automation.services.UrlService;
+import com.ims.actions.Click;
 import com.ims.actions.Launch;
 import com.ims.actions.Waiting;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class SmokeTests extends NovusGuiTestBase {
 
         step("Verify the login page title is visible");
         softly.assertTrue(
-                actor.is(Waiting.on(com.ims.automation.pages.common.LoginPage.PAGE_TITLE)),
+                actor.is(Waiting.on(LoginPage.PAGE_TITLE)),
                 "Login page title should be visible"
         );
         softly.assertAll();
@@ -47,7 +48,7 @@ public class SmokeTests extends NovusGuiTestBase {
         step("Navigate to login page and authenticate");
         actor.attemptsTo(
                 Launch.app(urlService.login()),
-                Login.withCredentials("admin@ims.com", "password")
+                Login.asAdmin()
         );
 
         step("Verify dashboard heading is visible");
@@ -61,6 +62,9 @@ public class SmokeTests extends NovusGuiTestBase {
     @MetaData(testCaseId = "IMS-SM-003", author = "ims-automation", category = "smoke")
     @Test(description = "Verify all sidebar navigation links are present")
     public void verifySidebarLinksArePresent() {
+        step("Open sidebar navigation");
+        actor.attemptsTo(Click.on(SidebarPage.HAMBURGER_BUTTON));
+
         step("Verify Dashboard link exists in sidebar");
         softly.assertTrue(
                 actor.is(Waiting.on(SidebarPage.DASHBOARD_LINK)),
@@ -85,10 +89,10 @@ public class SmokeTests extends NovusGuiTestBase {
                 "Compliance sidebar link should be visible"
         );
 
-        step("Verify Account Service link exists in sidebar");
+        step("Verify Service Orders link exists in sidebar");
         softly.assertTrue(
-                actor.is(Waiting.on(SidebarPage.ACCOUNT_SERVICE_LINK)),
-                "Account Service sidebar link should be visible"
+                actor.is(Waiting.on(SidebarPage.SERVICE_ORDERS_LINK)),
+                "Service Orders sidebar link should be visible"
         );
 
         step("Verify Analytics link exists in sidebar");

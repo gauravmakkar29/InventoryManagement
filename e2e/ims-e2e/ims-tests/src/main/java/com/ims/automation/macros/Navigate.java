@@ -51,7 +51,7 @@ public class Navigate {
 
     public Performable accountService() {
         return Perform.actions(
-                SidebarImpl.navigateToAccountService(),
+                SidebarImpl.navigateToServiceOrders(),
                 (actor) -> actor.is(Waiting.on(AccountServicePage.PAGE_HEADING))
         ).log("Navigate.to.accountService", "Navigating to Account Service page via sidebar");
     }

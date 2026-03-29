@@ -9,4 +9,5 @@ public class TestGroups {
     public static final String COMPLIANCE = "compliance";
     public static final String ACCOUNT_SERVICE = "account-service";
     public static final String ANALYTICS = "analytics";
+    public static final String AUTH = "auth";
 }
