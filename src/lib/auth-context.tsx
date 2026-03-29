@@ -1,14 +1,23 @@
-import { useState, useEffect, useCallback, type ReactNode } from "react";
+import { useState, useEffect, useCallback, useRef, type ReactNode } from "react";
+import { toast } from "sonner";
 import { AuthContext } from "./auth-context-instance";
 import type { User } from "./types";
 
 const STORAGE_KEY = "ims-auth";
+
+/** Token expiry constants (mock — mirrors Cognito config) */
+const ACCESS_TOKEN_TTL_MS = 15 * 60 * 1000; // 15 minutes
+const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+const REFRESH_CHECK_INTERVAL_MS = 30 * 1000; // check every 30s
+const REFRESH_THRESHOLD_MS = 60 * 1000; // refresh when <1 min left
 
 interface StoredAuth {
   user: User;
   email: string;
   groups: string[];
   customerId: string | null;
+  accessTokenExpiresAt: number;
+  refreshTokenExpiresAt: number;
 }
 
 function loadStoredAuth(): StoredAuth | null {
@@ -29,30 +38,149 @@ function clearAuth(): void {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+/** Mock credential store — replaced by Cognito in production. */
+const MOCK_CREDENTIALS: Record<string, string> = {
+  "admin@company.com": "Admin@12345678",
+  "manager@company.com": "Manager@12345678",
+  "tech@company.com": "Tech@123456789",
+  "viewer@company.com": "Viewer@12345678",
+  "customer@tenant.com": "Customer@123456",
+};
+
+/** Derive role from email for mock auth. */
+function deriveRole(email: string): string {
+  const local = email.split("@")[0]?.toLowerCase() ?? "";
+  if (local.includes("admin")) return "Admin";
+  if (local.includes("manager")) return "Manager";
+  if (local.includes("tech")) return "Technician";
+  if (local.includes("viewer")) return "Viewer";
+  if (local.includes("customer")) return "CustomerAdmin";
+  return "Viewer";
+}
+
 /**
- * Mock AuthProvider — simulates authentication with localStorage persistence.
+ * AuthProvider with session management — token refresh loop,
+ * session expiry detection, and sign-out cleanup.
  * Replace with Cognito / real IdP integration in production.
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [signInError, setSignInError] = useState<string | null>(null);
+  const storedAuthRef = useRef<StoredAuth | null>(null);
+  const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  /** Clear refresh interval. */
+  const stopRefreshLoop = useCallback(() => {
+    if (refreshIntervalRef.current) {
+      clearInterval(refreshIntervalRef.current);
+      refreshIntervalRef.current = null;
+    }
+  }, []);
+
+  /** Force logout and redirect. */
+  const forceLogout = useCallback(
+    (message?: string) => {
+      stopRefreshLoop();
+      clearAuth();
+      storedAuthRef.current = null;
+      setUser(null);
+      if (message) {
+        toast.warning(message);
+      }
+    },
+    [stopRefreshLoop],
+  );
+
+  /** Simulate token refresh — extends access token. */
+  const refreshAccessToken = useCallback(() => {
+    const stored = storedAuthRef.current ?? loadStoredAuth();
+    if (!stored) return;
+
+    const now = Date.now();
+
+    // Check refresh token expiry first
+    if (now >= stored.refreshTokenExpiresAt) {
+      forceLogout("Session expired. Please sign in again.");
+      return;
+    }
+
+    // Check if access token needs refreshing
+    const timeLeft = stored.accessTokenExpiresAt - now;
+    if (timeLeft > REFRESH_THRESHOLD_MS) return; // still fresh
+
+    // Simulate refresh — in production this calls Cognito
+    try {
+      const updated: StoredAuth = {
+        ...stored,
+        accessTokenExpiresAt: now + ACCESS_TOKEN_TTL_MS,
+      };
+      persistAuth(updated);
+      storedAuthRef.current = updated;
+    } catch {
+      toast.warning("Unable to refresh session");
+    }
+  }, [forceLogout]);
+
+  /** Start the background refresh loop. */
+  const startRefreshLoop = useCallback(() => {
+    stopRefreshLoop();
+    refreshIntervalRef.current = setInterval(refreshAccessToken, REFRESH_CHECK_INTERVAL_MS);
+  }, [refreshAccessToken, stopRefreshLoop]);
+
+  // Restore session on mount
   useEffect(() => {
     const stored = loadStoredAuth();
     if (stored) {
-      setUser(stored.user);
+      const now = Date.now();
+      // If refresh token expired, force logout
+      if (now >= stored.refreshTokenExpiresAt) {
+        clearAuth();
+        toast.warning("Session expired. Please sign in again.");
+      } else {
+        // Refresh access token if needed
+        if (now >= stored.accessTokenExpiresAt) {
+          stored.accessTokenExpiresAt = now + ACCESS_TOKEN_TTL_MS;
+          persistAuth(stored);
+        }
+        storedAuthRef.current = stored;
+        setUser(stored.user);
+      }
     }
     setIsLoading(false);
   }, []);
 
-  const signIn = useCallback(async (email: string, _password: string) => {
-    // Mock: accept any email/password combo
+  // Start/stop refresh loop based on auth state
+  useEffect(() => {
+    if (user) {
+      startRefreshLoop();
+    } else {
+      stopRefreshLoop();
+    }
+    return stopRefreshLoop;
+  }, [user, startRefreshLoop, stopRefreshLoop]);
+
+  const signIn = useCallback(async (email: string, password: string) => {
+    setSignInError(null);
+
+    // Simulate network delay
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    // Check credentials against mock store
+    const storedPassword = MOCK_CREDENTIALS[email.toLowerCase()];
+    if (!storedPassword || storedPassword !== password) {
+      setSignInError("Invalid email or password. Please try again.");
+      throw new Error("Invalid credentials");
+    }
+
+    const role = deriveRole(email);
+    const now = Date.now();
     const mockUser: User = {
-      id: "usr-001",
-      email,
+      id: `usr-${now.toString(36)}`,
+      email: email.toLowerCase(),
       name: email.split("@")[0] ?? email,
-      groups: ["admin", "operator"],
-      customerId: "cust-001",
+      groups: [role],
+      customerId: role === "CustomerAdmin" ? "cust-001" : undefined,
       lastLogin: new Date().toISOString(),
       isActive: true,
     };
@@ -62,16 +190,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: mockUser.email,
       groups: mockUser.groups,
       customerId: mockUser.customerId ?? null,
+      accessTokenExpiresAt: now + ACCESS_TOKEN_TTL_MS,
+      refreshTokenExpiresAt: now + REFRESH_TOKEN_TTL_MS,
     };
 
     persistAuth(authData);
+    storedAuthRef.current = authData;
     setUser(mockUser);
+    setSignInError(null);
   }, []);
 
   const signOut = useCallback(() => {
+    stopRefreshLoop();
     clearAuth();
+    storedAuthRef.current = null;
     setUser(null);
-  }, []);
+    setSignInError(null);
+  }, [stopRefreshLoop]);
 
   return (
     <AuthContext.Provider
@@ -82,6 +217,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         isLoading,
         customerId: user?.customerId ?? null,
+        signInError,
         signIn,
         signOut,
       }}

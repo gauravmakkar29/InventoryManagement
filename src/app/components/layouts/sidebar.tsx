@@ -12,10 +12,12 @@ import {
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
+import { getPrimaryRole, canAccessPage } from "../../../lib/rbac";
 
 interface NavItem {
   label: string;
   path: string;
+  page: string;
   icon: React.ComponentType<{ className?: string }>;
   end?: boolean;
 }
@@ -29,17 +31,22 @@ const NAV_GROUPS: NavGroup[] = [
   {
     label: "Main",
     items: [
-      { label: "Dashboard", path: "/", icon: LayoutDashboard, end: true },
-      { label: "Inventory", path: "/inventory", icon: Package },
+      { label: "Dashboard", path: "/", page: "dashboard", icon: LayoutDashboard, end: true },
+      { label: "Inventory", path: "/inventory", page: "inventory", icon: Package },
     ],
   },
   {
     label: "Operations",
     items: [
-      { label: "Deployment", path: "/deployment", icon: Rocket },
-      { label: "Compliance", path: "/compliance", icon: Shield },
-      { label: "Service Orders", path: "/account-service", icon: ClipboardList },
-      { label: "Analytics", path: "/analytics", icon: BarChart3 },
+      { label: "Deployment", path: "/deployment", page: "deployment", icon: Rocket },
+      { label: "Compliance", path: "/compliance", page: "compliance", icon: Shield },
+      {
+        label: "Service Orders",
+        path: "/account-service",
+        page: "account-service",
+        icon: ClipboardList,
+      },
+      { label: "Analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
     ],
   },
 ];
@@ -68,7 +75,8 @@ interface SidebarProps {
 
 export function Sidebar({ open, onClose }: SidebarProps) {
   const location = useLocation();
-  const { user, email, signOut } = useAuth();
+  const { user, email, groups, signOut } = useAuth();
+  const role = getPrimaryRole(groups);
 
   const handleNavClick = useCallback(() => {
     // Close sidebar on mobile after navigation
@@ -80,7 +88,13 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const displayName = user?.name ?? email ?? "User";
   const displayEmail = email ?? "";
   const initials = getUserInitials(user?.name, email);
-  const roleBadge = user?.groups?.[0] ?? "Operator";
+  const roleBadge = role;
+
+  // Filter nav groups by role permissions
+  const filteredGroups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => canAccessPage(role, item.page)),
+  })).filter((group) => group.items.length > 0);
 
   return (
     <>
@@ -133,7 +147,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4"
           aria-label="Main navigation"
         >
-          {NAV_GROUPS.map((group, groupIdx) => (
+          {filteredGroups.map((group, groupIdx) => (
             <div key={group.label} className={cn(groupIdx > 0 && "mt-5")}>
               {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-gray-100" />}
               <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400">
