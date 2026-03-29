@@ -39,10 +39,7 @@
       "WebFetch(domain:en.isolarcloud.com)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(for f:*)",
-      "Bash(do echo:*)",
-      "Bash(git show:*)",
-      "Bash(done)",
+      "Bash(git checkout:*)",
       "Bash(npm run:*)",
       "Bash(GIT_EDITOR=true git rebase --continue)",
       "Bash(git push:*)"
