@@ -1,0 +1,27 @@
+version: "2"
+dynamodb-pipeline:
+  source:
+    dynamodb:
+      acknowledgments: true
+      tables:
+        - table_arn: "${table_arn}"
+          stream:
+            start_position: "LATEST"
+          export:
+            s3_bucket: "${export_bucket}"
+            s3_region: "${region}"
+      aws:
+        sts_role_arn: "${role_arn}"
+        region: "${region}"
+  sink:
+    - opensearch:
+        hosts:
+          - "${collection_endpoint}"
+        index: "${index_name}"
+        index_type: "custom"
+        document_id: "$${getMetadata(\"primary_key\")}"
+        action: "$${getMetadata(\"opensearch_action\")}"
+        aws:
+          sts_role_arn: "${role_arn}"
+          region: "${region}"
+          serverless: true

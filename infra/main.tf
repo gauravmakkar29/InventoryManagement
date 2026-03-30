@@ -36,12 +36,14 @@ module "appsync" {
   cognito_user_pool_id = module.cognito.user_pool_id
   dynamodb_table_name  = module.dynamodb.table_name
   appsync_role_arn     = module.iam.appsync_role_arn
+  opensearch_endpoint  = module.opensearch.endpoint
 }
 
 module "s3_firmware" {
-  source       = "./modules/s3-firmware"
-  environment  = var.environment
-  project_name = var.project_name
+  source             = "./modules/s3-firmware"
+  environment        = var.environment
+  project_name       = var.project_name
+  enable_object_lock = var.s3_firmware_object_lock
 }
 
 module "s3_frontend" {
@@ -56,6 +58,10 @@ module "cloudfront" {
   project_name           = var.project_name
   frontend_bucket_arn    = module.s3_frontend.bucket_arn
   frontend_bucket_domain = module.s3_frontend.bucket_domain
+  acm_certificate_arn    = var.enable_custom_domain ? module.dns[0].certificate_arn : ""
+  enable_custom_domain   = var.enable_custom_domain
+  domain_name            = var.domain_name
+  waf_web_acl_arn        = var.enable_waf ? module.waf[0].web_acl_arn : ""
 }
 
 module "lambda_audit" {
@@ -69,41 +75,52 @@ module "lambda_audit" {
 }
 
 # -----------------------------------------------------------------------------
-# Optional modules — uncomment when ready
+# Conditional modules
 # -----------------------------------------------------------------------------
 
-# module "waf" {
-#   source       = "./modules/waf"
-#   environment  = var.environment
-#   project_name = var.project_name
-#   resource_arn = module.appsync.api_id
-# }
+module "waf" {
+  count        = var.enable_waf ? 1 : 0
+  source       = "./modules/waf"
+  environment  = var.environment
+  project_name = var.project_name
+  resource_arn = module.appsync.api_arn
+  waf_mode     = var.waf_default_action
+}
 
-# module "dns" {
-#   source       = "./modules/dns"
-#   environment  = var.environment
-#   project_name = var.project_name
-#   domain_name  = var.domain_name
-# }
+module "dns" {
+  count        = var.enable_custom_domain ? 1 : 0
+  source       = "./modules/dns"
+  environment  = var.environment
+  project_name = var.project_name
+  domain_name  = var.domain_name
+}
 
-# module "opensearch" {
-#   source              = "./modules/opensearch"
-#   environment         = var.environment
-#   project_name        = var.project_name
-#   dynamodb_table_arn  = module.dynamodb.table_arn
-#   dynamodb_stream_arn = module.dynamodb.stream_arn
-#   osis_role_arn       = module.iam.osis_role_arn
-# }
+module "opensearch" {
+  source              = "./modules/opensearch"
+  environment         = var.environment
+  project_name        = var.project_name
+  opensearch_type     = var.opensearch_type
+  dynamodb_table_arn  = module.dynamodb.table_arn
+  dynamodb_stream_arn = module.dynamodb.stream_arn
+  osis_role_arn       = module.iam.osis_role_arn
+}
 
-# module "monitoring" {
-#   source       = "./modules/monitoring"
-#   environment  = var.environment
-#   project_name = var.project_name
-# }
+module "monitoring" {
+  source               = "./modules/monitoring"
+  environment          = var.environment
+  project_name         = var.project_name
+  dynamodb_table_name  = module.dynamodb.table_name
+  lambda_function_name = module.lambda_audit.function_name
+  appsync_api_id       = module.appsync.api_id
+}
 
-# module "alerting" {
-#   source       = "./modules/alerting"
-#   environment  = var.environment
-#   project_name = var.project_name
-#   budget_limit = var.budget_limit
-# }
+module "alerting" {
+  source               = "./modules/alerting"
+  environment          = var.environment
+  project_name         = var.project_name
+  budget_limit         = var.budget_limit
+  alert_email          = var.alert_email
+  dynamodb_table_name  = module.dynamodb.table_name
+  lambda_function_name = module.lambda_audit.function_name
+  appsync_api_id       = module.appsync.api_id
+}

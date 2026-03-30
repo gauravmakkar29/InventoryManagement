@@ -112,6 +112,12 @@ resource "aws_dynamodb_table" "data_table" {
     kms_key_arn = aws_kms_key.dynamodb.arn
   }
 
+  # TTL attribute for automatic item expiration
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
   tags = {
     Name = "${var.project_name}-${var.environment}-DataTable"
   }

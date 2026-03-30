@@ -1,6 +1,6 @@
 # =============================================================================
 # Alerting — SNS topics + CloudWatch alarms + budget alerts
-# Error rate, throttling, latency thresholds
+# Error rate, throttling, latency thresholds per Story 17.6
 # =============================================================================
 
 data "aws_region" "current" {}
@@ -15,63 +15,74 @@ resource "aws_sns_topic" "alerts" {
   }
 }
 
+# SNS email subscription (when alert_email is provided)
+resource "aws_sns_topic_subscription" "email" {
+  count     = var.alert_email != "" ? 1 : 0
+  topic_arn = aws_sns_topic.alerts.arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+
 # --- CloudWatch Alarms ---
 
-# Lambda error rate alarm
+# DynamoDB throttling alarm (> 0 in 5 min per spec)
+resource "aws_cloudwatch_metric_alarm" "dynamodb_throttles" {
+  alarm_name          = "${var.project_name}-${var.environment}-dynamodb-throttles"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "ThrottledRequests"
+  namespace           = "AWS/DynamoDB"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 0
+  alarm_description   = "DynamoDB throttled requests detected"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+
+  dimensions = {
+    TableName = var.dynamodb_table_name
+  }
+}
+
+# Lambda error rate alarm (> 5 in 5 min)
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${var.project_name}-${var.environment}-lambda-errors"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 2
+  evaluation_periods  = 1
   metric_name         = "Errors"
   namespace           = "AWS/Lambda"
   period              = 300
   statistic           = "Sum"
   threshold           = 5
-  alarm_description   = "Lambda audit processor error rate exceeded threshold"
+  alarm_description   = "Lambda audit processor error rate exceeded threshold (>5 in 5min)"
   alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
 
   dimensions = {
-    FunctionName = "${var.project_name}-${var.environment}-audit-processor"
+    FunctionName = var.lambda_function_name
   }
 }
 
-# DynamoDB throttling alarm
-resource "aws_cloudwatch_metric_alarm" "dynamodb_throttles" {
-  alarm_name          = "${var.project_name}-${var.environment}-dynamodb-throttles"
+# Lambda duration alarm (p99 > 10,000 ms)
+resource "aws_cloudwatch_metric_alarm" "lambda_duration" {
+  alarm_name          = "${var.project_name}-${var.environment}-lambda-duration"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 2
-  metric_name         = "ThrottledRequests"
-  namespace           = "AWS/DynamoDB"
+  evaluation_periods  = 1
+  metric_name         = "Duration"
+  namespace           = "AWS/Lambda"
   period              = 300
-  statistic           = "Sum"
-  threshold           = 10
-  alarm_description   = "DynamoDB throttled requests exceeded threshold"
+  extended_statistic  = "p99"
+  threshold           = 10000
+  alarm_description   = "Lambda audit processor p99 duration exceeded 10s"
   alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
 
   dimensions = {
-    TableName = "${var.project_name}-${var.environment}-DataTable"
+    FunctionName = var.lambda_function_name
   }
 }
 
-# AppSync latency alarm
-resource "aws_cloudwatch_metric_alarm" "appsync_latency" {
-  alarm_name          = "${var.project_name}-${var.environment}-appsync-latency"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = 3
-  metric_name         = "Latency"
-  namespace           = "AWS/AppSync"
-  period              = 300
-  statistic           = "Average"
-  threshold           = 1000
-  alarm_description   = "AppSync average latency exceeded 1000ms"
-  alarm_actions       = [aws_sns_topic.alerts.arn]
-
-  dimensions = {
-    GraphQLAPIId = "${var.project_name}-${var.environment}-api"
-  }
-}
-
-# AppSync 5XX error alarm
+# AppSync 5XX error alarm (> 10 in 5 min)
 resource "aws_cloudwatch_metric_alarm" "appsync_5xx" {
   alarm_name          = "${var.project_name}-${var.environment}-appsync-5xx"
   comparison_operator = "GreaterThanThreshold"
@@ -80,12 +91,32 @@ resource "aws_cloudwatch_metric_alarm" "appsync_5xx" {
   namespace           = "AWS/AppSync"
   period              = 300
   statistic           = "Sum"
-  threshold           = 0
-  alarm_description   = "AppSync 5XX errors detected"
+  threshold           = 10
+  alarm_description   = "AppSync 5XX errors exceeded threshold (>10 in 5min)"
   alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
 
   dimensions = {
-    GraphQLAPIId = "${var.project_name}-${var.environment}-api"
+    GraphQLAPIId = var.appsync_api_id
+  }
+}
+
+# AppSync latency alarm (p95 > 1000 ms)
+resource "aws_cloudwatch_metric_alarm" "appsync_latency" {
+  alarm_name          = "${var.project_name}-${var.environment}-appsync-latency"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Latency"
+  namespace           = "AWS/AppSync"
+  period              = 300
+  extended_statistic  = "p95"
+  threshold           = 1000
+  alarm_description   = "AppSync p95 latency exceeded 1000ms"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+  ok_actions          = [aws_sns_topic.alerts.arn]
+
+  dimensions = {
+    GraphQLAPIId = var.appsync_api_id
   }
 }
 

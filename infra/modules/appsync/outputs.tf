@@ -7,3 +7,8 @@ output "api_id" {
   description = "AppSync GraphQL API ID"
   value       = aws_appsync_graphql_api.main.id
 }
+
+output "api_arn" {
+  description = "AppSync GraphQL API ARN"
+  value       = aws_appsync_graphql_api.main.arn
+}

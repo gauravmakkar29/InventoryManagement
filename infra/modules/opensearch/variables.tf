@@ -8,6 +8,12 @@ variable "project_name" {
   type        = string
 }
 
+variable "opensearch_type" {
+  description = "OpenSearch deployment type: managed or serverless"
+  type        = string
+  default     = "managed"
+}
+
 variable "dynamodb_table_arn" {
   description = "ARN of the DynamoDB DataTable"
   type        = string

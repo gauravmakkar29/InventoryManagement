@@ -1,0 +1,317 @@
+# =============================================================================
+# IMS Gen2 — GraphQL Schema
+# Full SDL for HLM Platform queries, mutations, and subscriptions
+# =============================================================================
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+type Query {
+  # Device queries
+  getDevice(PK: String!, SK: String!): Device
+  listDevices(limit: Int, nextToken: String): DeviceConnection
+  listDevicesByStatus(status: String!, limit: Int, nextToken: String): DeviceConnection
+  listDevicesByLocation(locationId: String!, limit: Int, nextToken: String): DeviceConnection
+
+  # Location queries
+  getLocation(PK: String!, SK: String!): Location
+  listLocations(limit: Int, nextToken: String): LocationConnection
+
+  # Work order queries
+  getWorkOrder(PK: String!, SK: String!): WorkOrder
+  listWorkOrders(limit: Int, nextToken: String): WorkOrderConnection
+  listWorkOrdersByStatus(status: String!, limit: Int, nextToken: String): WorkOrderConnection
+
+  # Firmware queries
+  getFirmware(PK: String!, SK: String!): Firmware
+  listFirmware(limit: Int, nextToken: String): FirmwareConnection
+  listFirmwareByStatus(status: String!, limit: Int, nextToken: String): FirmwareConnection
+
+  # Audit queries
+  getAuditTrail(entityId: String!, limit: Int, nextToken: String): AuditConnection
+
+  # Dashboard queries
+  getDashboardKPIs: DashboardKPIs
+  getComplianceStatus(entityId: String!): ComplianceStatus
+
+  # Vulnerability queries
+  getVulnerability(PK: String!, SK: String!): Vulnerability
+  listVulnerabilities(limit: Int, nextToken: String): VulnerabilityConnection
+
+  # Search queries (OpenSearch)
+  searchGlobal(query: String!, limit: Int): SearchResults
+  searchDevices(query: String!, filters: SearchFilters, limit: Int): DeviceConnection
+  searchVulnerabilities(query: String!, filters: SearchFilters, limit: Int): VulnerabilityConnection
+  getAggregations(field: String!, filters: SearchFilters): AggregationResults
+}
+
+type Mutation {
+  # Device mutations
+  createDevice(input: CreateDeviceInput!): Device
+  updateDevice(input: UpdateDeviceInput!): Device
+  updateDeviceStatus(PK: String!, SK: String!, status: String!): Device
+
+  # Work order mutations
+  createWorkOrder(input: CreateWorkOrderInput!): WorkOrder
+  updateWorkOrder(input: UpdateWorkOrderInput!): WorkOrder
+
+  # Firmware mutations
+  approveFirmware(PK: String!, SK: String!, approverUserId: String!): Firmware
+  advanceFirmwareStage(PK: String!, SK: String!, targetStage: String!): Firmware
+
+  # Vulnerability mutations
+  updateVulnerabilityStatus(PK: String!, SK: String!, status: String!, notes: String): Vulnerability
+
+  # Entity mutations (generic)
+  createEntity(input: CreateEntityInput!): Entity
+}
+
+type Subscription {
+  onDeviceUpdated(PK: String): Device
+    @aws_subscribe(mutations: ["updateDevice", "updateDeviceStatus"])
+  onWorkOrderUpdated(PK: String): WorkOrder
+    @aws_subscribe(mutations: ["updateWorkOrder"])
+}
+
+# --- Types ---
+
+type Device {
+  PK: String!
+  SK: String!
+  entityType: String
+  deviceId: String
+  serialNumber: String
+  model: String
+  manufacturer: String
+  status: String
+  locationId: String
+  firmwareVersion: String
+  ipAddress: String
+  macAddress: String
+  lastSeen: String
+  createdAt: String
+  updatedAt: String
+  createdBy: String
+  GSI1PK: String
+  GSI1SK: String
+}
+
+type DeviceConnection {
+  items: [Device]
+  nextToken: String
+}
+
+type Location {
+  PK: String!
+  SK: String!
+  entityType: String
+  locationId: String
+  name: String
+  address: String
+  parentLocationId: String
+  locationType: String
+  createdAt: String
+  updatedAt: String
+}
+
+type LocationConnection {
+  items: [Location]
+  nextToken: String
+}
+
+type WorkOrder {
+  PK: String!
+  SK: String!
+  entityType: String
+  workOrderId: String
+  title: String
+  description: String
+  status: String
+  priority: String
+  assignedTo: String
+  deviceId: String
+  locationId: String
+  scheduledDate: String
+  completedDate: String
+  createdAt: String
+  updatedAt: String
+  createdBy: String
+}
+
+type WorkOrderConnection {
+  items: [WorkOrder]
+  nextToken: String
+}
+
+type Firmware {
+  PK: String!
+  SK: String!
+  entityType: String
+  firmwareId: String
+  version: String
+  deviceModel: String
+  status: String
+  stage: String
+  s3Key: String
+  checksum: String
+  uploadedBy: String
+  approvedBy: String
+  releaseNotes: String
+  createdAt: String
+  updatedAt: String
+}
+
+type FirmwareConnection {
+  items: [Firmware]
+  nextToken: String
+}
+
+type AuditEntry {
+  PK: String!
+  SK: String!
+  entityType: String
+  action: String
+  entityId: String
+  userId: String
+  timestamp: String
+  oldValues: String
+  newValues: String
+  ipAddress: String
+}
+
+type AuditConnection {
+  items: [AuditEntry]
+  nextToken: String
+}
+
+type Vulnerability {
+  PK: String!
+  SK: String!
+  entityType: String
+  vulnerabilityId: String
+  cveId: String
+  severity: String
+  status: String
+  affectedDevices: Int
+  description: String
+  remediation: String
+  discoveredAt: String
+  resolvedAt: String
+  updatedAt: String
+}
+
+type VulnerabilityConnection {
+  items: [Vulnerability]
+  nextToken: String
+}
+
+type DashboardKPIs {
+  totalDevices: Int
+  activeDevices: Int
+  offlineDevices: Int
+  openWorkOrders: Int
+  criticalVulnerabilities: Int
+  complianceRate: Float
+  firmwarePending: Int
+}
+
+type ComplianceStatus {
+  entityId: String
+  compliant: Boolean
+  lastAuditDate: String
+  findings: [String]
+  score: Float
+}
+
+type Entity {
+  PK: String!
+  SK: String!
+  entityType: String
+  data: String
+  createdAt: String
+  updatedAt: String
+}
+
+type SearchResults {
+  items: [SearchHit]
+  total: Int
+}
+
+type SearchHit {
+  entityType: String
+  PK: String
+  SK: String
+  highlight: String
+  score: Float
+}
+
+type AggregationResults {
+  buckets: [AggregationBucket]
+  total: Int
+}
+
+type AggregationBucket {
+  key: String
+  count: Int
+}
+
+# --- Inputs ---
+
+input CreateDeviceInput {
+  deviceId: String!
+  serialNumber: String!
+  model: String!
+  manufacturer: String!
+  status: String
+  locationId: String
+  firmwareVersion: String
+  ipAddress: String
+  macAddress: String
+}
+
+input UpdateDeviceInput {
+  PK: String!
+  SK: String!
+  status: String
+  locationId: String
+  firmwareVersion: String
+  ipAddress: String
+  macAddress: String
+}
+
+input CreateWorkOrderInput {
+  title: String!
+  description: String
+  priority: String!
+  deviceId: String
+  locationId: String
+  assignedTo: String
+  scheduledDate: String
+}
+
+input UpdateWorkOrderInput {
+  PK: String!
+  SK: String!
+  status: String
+  assignedTo: String
+  scheduledDate: String
+  completedDate: String
+}
+
+input CreateEntityInput {
+  PK: String!
+  SK: String!
+  entityType: String!
+  data: String
+}
+
+input SearchFilters {
+  status: String
+  location: String
+  dateFrom: String
+  dateTo: String
+  severity: String
+}
