@@ -278,7 +278,7 @@ function SortHeader({
   const active = sortField === field;
   return (
     <th
-      className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400 cursor-pointer select-none hover:text-gray-600"
+      className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-[#f1f3f5]"
       onClick={() => onSort(field)}
     >
       <div className="flex items-center gap-1">
@@ -383,7 +383,7 @@ function GeoLocationView({ devices }: { devices: MockDevice[] }) {
         <div className="space-y-5">
           {groupedByLocation.map(([location, locationDevices]) => (
             <div key={location} className="card-elevated overflow-hidden">
-              <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50/50 px-4 py-3">
+              <div className="flex items-center gap-2 border-b-2 border-gray-200 bg-[#f1f3f5] px-4 py-3">
                 <MapPin className="h-4 w-4 text-[#FF7900]" />
                 <h3 className="text-[13px] font-semibold text-gray-700">{location}</h3>
                 <span className="text-[11px] text-gray-400">
@@ -673,7 +673,7 @@ export function Inventory() {
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-100 bg-gray-50/50">
+                  <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
                     <SortHeader
                       label="Device Name"
                       field="name"
@@ -717,7 +717,7 @@ export function Inventory() {
                       onSort={handleSort}
                     />
                     {canEdit && (
-                      <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]">
                         Actions
                       </th>
                     )}
