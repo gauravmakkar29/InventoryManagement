@@ -6,6 +6,7 @@ import { Inventory } from "./app/components/inventory";
 import { AccountService } from "./app/components/account-service";
 import { Deployment } from "./app/components/deployment";
 import { CompliancePage } from "./app/components/compliance";
+import { SBOMPage } from "./app/components/sbom";
 import { Analytics } from "./app/components/analytics";
 import { AccessDenied } from "./app/components/access-denied";
 import { UserManagement } from "./app/components/user-management";
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/account-service" element={<AccountService />} />
         <Route path="/deployment" element={<Deployment />} />
         <Route path="/compliance" element={<CompliancePage />} />
+        <Route path="/sbom" element={<SBOMPage />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/user-management" element={<UserManagement />} />
         <Route path="/access-denied" element={<AccessDenied />} />
