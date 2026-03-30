@@ -8,8 +8,8 @@ import {
   ClipboardList,
   BarChart3,
   Users,
-  ChevronsLeft,
-  ChevronsRight,
+  PanelLeftClose,
+  PanelLeftOpen,
   LogOut,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
@@ -108,22 +108,39 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       )}
       aria-label="Primary navigation"
     >
-      {/* Logo */}
+      {/* Logo + Toggle */}
       <div
         className={cn(
-          "flex h-14 items-center shrink-0",
-          collapsed ? "justify-center px-2" : "px-5",
+          "flex h-14 items-center shrink-0 border-b border-gray-100",
+          collapsed ? "justify-center px-2" : "justify-between px-4",
         )}
       >
         {collapsed ? (
-          <span className="text-[15px] font-bold text-[#FF7900]">G2</span>
+          <button
+            onClick={onToggle}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+            aria-label="Expand sidebar"
+          >
+            <PanelLeftOpen className="h-[18px] w-[18px]" />
+          </button>
         ) : (
-          <div className="flex flex-col">
-            <span className="text-[15px] font-bold leading-tight tracking-tight text-gray-900">
-              IMS <span className="text-[#FF7900]">Gen2</span>
-            </span>
-            <span className="text-[10px] leading-tight text-gray-400">Hardware Lifecycle Mgmt</span>
-          </div>
+          <>
+            <div className="flex flex-col">
+              <span className="text-[15px] font-bold leading-tight tracking-tight text-gray-900">
+                IMS <span className="text-[#FF7900]">Gen2</span>
+              </span>
+              <span className="text-[10px] leading-tight text-gray-400">
+                Hardware Lifecycle Mgmt
+              </span>
+            </div>
+            <button
+              onClick={onToggle}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+              aria-label="Collapse sidebar"
+            >
+              <PanelLeftClose className="h-[18px] w-[18px]" />
+            </button>
+          </>
         )}
       </div>
 
@@ -183,28 +200,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           </div>
         ))}
       </nav>
-
-      {/* Collapse toggle */}
-      <div className="border-t border-gray-100 px-2 py-2">
-        <button
-          onClick={onToggle}
-          className={cn(
-            "flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[12px] font-medium text-gray-400",
-            "hover:bg-gray-50 hover:text-gray-600",
-            collapsed && "justify-center px-0",
-          )}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? (
-            <ChevronsRight className="h-4 w-4" />
-          ) : (
-            <>
-              <ChevronsLeft className="h-4 w-4" />
-              <span>Collapse</span>
-            </>
-          )}
-        </button>
-      </div>
 
       {/* User section */}
       <div className={cn("border-t border-gray-100 py-3", collapsed ? "px-2" : "px-3")}>

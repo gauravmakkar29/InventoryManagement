@@ -1,8 +1,8 @@
 import {
-  Monitor,
-  Rocket,
+  Server,
+  Cpu,
   ShieldCheck,
-  Activity,
+  HeartPulse,
   RefreshCw,
   ArrowRight,
   ChevronRight,
@@ -14,6 +14,8 @@ import {
   BarChart3,
   ClipboardList,
   Users,
+  Rocket,
+  Monitor,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
@@ -185,34 +187,44 @@ function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       {METRIC_CARDS.map((card) => {
         const Icon = card.icon;
         return (
-          <div key={card.label} className="card-elevated p-5">
-            <div className="flex items-start justify-between">
+          <div key={card.label} className="card-elevated px-4 py-3.5">
+            <div className="flex items-center gap-3">
               <div
-                className={cn("flex h-10 w-10 items-center justify-center rounded-xl", card.iconBg)}
+                className={cn(
+                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
+                  card.iconBg,
+                )}
               >
-                <Icon className={cn("h-5 w-5", card.iconColor)} />
+                <Icon className={cn("h-[18px] w-[18px]", card.iconColor)} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[12px] text-gray-500 truncate">{card.label}</p>
+                <p className="text-[22px] font-bold leading-tight text-gray-900 tabular-nums">
+                  {card.value}
+                </p>
               </div>
             </div>
-            <div className="mt-4">
-              <p className="text-[30px] font-bold leading-none text-gray-900 tabular-nums">
-                {card.value}
-              </p>
-              <p className="mt-1.5 text-[13px] text-gray-500">{card.label}</p>
-            </div>
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-2.5 flex items-center gap-2 pl-12">
               <Sparkline data={card.spark} color={card.sparkColor} />
               <div className="flex items-center gap-1">
                 {card.trendUp ? (
                   <TrendingUp className="h-3 w-3 text-emerald-500" />
                 ) : (
-                  <TrendingDown className="h-3 w-3 text-emerald-500" />
+                  <TrendingDown className="h-3 w-3 text-red-500" />
                 )}
-                <span className="text-[11px] font-medium text-emerald-600">{card.trend}</span>
-                <span className="text-[11px] text-gray-400">{card.trendLabel}</span>
+                <span
+                  className={cn(
+                    "text-[11px] font-medium",
+                    card.trendUp ? "text-emerald-600" : "text-red-600",
+                  )}
+                >
+                  {card.trend}
+                </span>
+                <span className="text-[10px] text-gray-400">{card.trendLabel}</span>
               </div>
             </div>
           </div>
@@ -233,9 +245,9 @@ const METRIC_CARDS = [
     trendUp: true,
     trendLabel: "vs last week",
     spark: [820, 870, 910, 980, 1050, 1180, 1247],
-    icon: Monitor,
+    icon: Server,
     iconBg: "bg-blue-50",
-    iconColor: "text-blue-500",
+    iconColor: "text-blue-600",
     sparkColor: "#3b82f6",
   },
   {
@@ -245,7 +257,7 @@ const METRIC_CARDS = [
     trendUp: true,
     trendLabel: "this week",
     spark: [8, 12, 10, 14, 15, 16, 18],
-    icon: Rocket,
+    icon: Cpu,
     iconBg: "bg-orange-50",
     iconColor: "text-[#FF7900]",
     sparkColor: "#FF7900",
@@ -259,7 +271,7 @@ const METRIC_CARDS = [
     spark: [12, 11, 9, 10, 8, 9, 7],
     icon: ShieldCheck,
     iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
+    iconColor: "text-amber-600",
     sparkColor: "#f59e0b",
   },
   {
@@ -269,9 +281,9 @@ const METRIC_CARDS = [
     trendUp: true,
     trendLabel: "vs last month",
     spark: [91.2, 92.0, 92.8, 93.1, 93.5, 93.9, 94.2],
-    icon: Activity,
+    icon: HeartPulse,
     iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-500",
+    iconColor: "text-emerald-600",
     sparkColor: "#10b981",
   },
 ];
@@ -634,18 +646,18 @@ export function Dashboard() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-t border-gray-100">
-                  <th className="px-5 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-gray-400" />
-                  <th className="px-3 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-gray-400">
+                <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+                  <th className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600" />
+                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
                     Description
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-gray-400">
+                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
                     Module
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-medium uppercase tracking-wider text-gray-400">
+                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
                     User
                   </th>
-                  <th className="px-5 py-2.5 text-right text-[11px] font-medium uppercase tracking-wider text-gray-400">
+                  <th className="px-5 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600">
                     Time
                   </th>
                 </tr>
