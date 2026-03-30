@@ -1,13 +1,10 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router";
-import { Bell, Search, Menu } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import { useAuth } from "../../../lib/use-auth";
 import { cn } from "../../../lib/utils";
 import { NotificationPanel, useNotificationCount } from "../notification-panel";
 
-/**
- * Route-to-title mapping for the header.
- */
 const ROUTE_META: Record<string, { title: string }> = {
   "/": { title: "Dashboard" },
   "/inventory": { title: "Inventory & Assets" },
@@ -47,11 +44,7 @@ function getUserInitials(
   return "U";
 }
 
-interface HeaderProps {
-  onToggleSidebar: () => void;
-}
-
-export function Header({ onToggleSidebar }: HeaderProps) {
+export function Header() {
   const { user, email } = useAuth();
   const title = usePageTitle();
   const [notifOpen, setNotifOpen] = useState(false);
@@ -64,34 +57,17 @@ export function Header({ onToggleSidebar }: HeaderProps) {
   return (
     <>
       <header
-        className="flex h-14 shrink-0 items-center justify-between bg-white px-5"
-        style={{
-          boxShadow: "0 1px 0 rgba(0,0,0,0.05)",
-        }}
+        className="flex h-14 shrink-0 items-center justify-between bg-white px-5 border-b border-gray-200"
         role="banner"
       >
-        {/* Left: Hamburger + Page title */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onToggleSidebar}
-            className={cn(
-              "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-gray-500",
-              "hover:bg-gray-100 hover:text-gray-700",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
-            )}
-            aria-label="Toggle navigation"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <h1 className="text-[18px] font-semibold leading-tight text-gray-900">{title}</h1>
-        </div>
+        {/* Left: Page title */}
+        <h1 className="text-[17px] font-semibold leading-tight text-gray-900">{title}</h1>
 
         {/* Right: Search + Bell + Divider + User */}
         <div className="flex items-center gap-2">
-          {/* Search bar — pill shape */}
           <button
             className={cn(
-              "flex h-9 w-[240px] cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3.5",
+              "flex h-9 w-[220px] cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-3.5",
               "hover:border-gray-300",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-1",
             )}
@@ -99,13 +75,12 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             title="Search (Cmd+K)"
           >
             <Search className="h-4 w-4 text-gray-400 shrink-0" />
-            <span className="flex-1 text-left text-[13px] text-gray-400">Search anything...</span>
+            <span className="flex-1 text-left text-[13px] text-gray-400">Search...</span>
             <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-gray-200 bg-white px-1.5 text-[10px] font-medium text-gray-400">
-              Cmd+K
+              /
             </kbd>
           </button>
 
-          {/* Notification bell */}
           <button
             onClick={() => setNotifOpen(true)}
             className={cn(
@@ -115,7 +90,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             )}
             aria-label={`Notifications (${unreadCount} unread)`}
           >
-            <Bell className="h-5 w-5" />
+            <Bell className="h-[18px] w-[18px]" />
             {unreadCount > 0 && (
               <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
                 {unreadCount > 99 ? "99+" : unreadCount}
@@ -123,28 +98,22 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             )}
           </button>
 
-          {/* Divider */}
           <div className="mx-1 h-6 w-px bg-gray-200" aria-hidden="true" />
 
-          {/* User avatar + info */}
           <div className="flex items-center gap-2.5">
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white"
-              aria-hidden="true"
-            >
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white">
               {initials}
             </div>
             <div className="hidden md:block">
-              <div className="text-[14px] font-medium leading-tight text-gray-900">
+              <div className="text-[13px] font-medium leading-tight text-gray-900">
                 {displayName}
               </div>
-              <div className="text-[12px] leading-tight text-gray-500">{roleBadge}</div>
+              <div className="text-[11px] leading-tight text-gray-500">{roleBadge}</div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Notification slide-out panel */}
       <NotificationPanel open={notifOpen} onClose={() => setNotifOpen(false)} />
     </>
   );
