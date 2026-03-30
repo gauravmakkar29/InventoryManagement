@@ -14,6 +14,7 @@ import {
   LogOut,
   Thermometer,
   ShieldAlert,
+  Fingerprint,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
@@ -55,6 +56,7 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
       { label: "Telemetry", path: "/telemetry", page: "telemetry", icon: Thermometer },
       { label: "Incidents", path: "/incidents", page: "incidents", icon: ShieldAlert },
+      { label: "Digital Twin", path: "/digital-twin", page: "digital-twin", icon: Fingerprint },
     ],
   },
   {
