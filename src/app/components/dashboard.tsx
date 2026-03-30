@@ -52,41 +52,49 @@ function Sparkline({ data, color = "#10b981" }: { data: number[]; color?: string
 // ---------------------------------------------------------------------------
 // Donut Chart — SVG ring
 // ---------------------------------------------------------------------------
-function DonutChart({
-  value,
-  size = 140,
-  strokeWidth = 10,
-}: {
-  value: number;
-  size?: number;
-  strokeWidth?: number;
-}) {
+function GaugeChart({ value, size = 160 }: { value: number; size?: number }) {
+  const strokeWidth = 14;
   const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (value / 100) * circumference;
+  // Semi-circle: half circumference
+  const halfCircumference = Math.PI * radius;
+  const offset = halfCircumference - (value / 100) * halfCircumference;
+  const color = value >= 90 ? "#10b981" : value >= 70 ? "#f59e0b" : "#ef4444";
 
   return (
-    <svg width={size} height={size}>
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
+    <svg width={size} height={size / 2 + 20} viewBox={`0 0 ${size} ${size / 2 + 20}`}>
+      <defs>
+        <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#ef4444" />
+          <stop offset="40%" stopColor="#f59e0b" />
+          <stop offset="70%" stopColor="#FF7900" />
+          <stop offset="100%" stopColor="#10b981" />
+        </linearGradient>
+      </defs>
+      {/* Background arc */}
+      <path
+        d={`M ${strokeWidth / 2} ${size / 2} A ${radius} ${radius} 0 0 1 ${size - strokeWidth / 2} ${size / 2}`}
         fill="none"
         stroke="#e5e7eb"
         strokeWidth={strokeWidth}
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        fill="none"
-        stroke="#FF7900"
-        strokeWidth={strokeWidth}
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
         strokeLinecap="round"
-        transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
+      {/* Value arc with gradient */}
+      <path
+        d={`M ${strokeWidth / 2} ${size / 2} A ${radius} ${radius} 0 0 1 ${size - strokeWidth / 2} ${size / 2}`}
+        fill="none"
+        stroke="url(#gaugeGradient)"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeDasharray={halfCircumference}
+        strokeDashoffset={offset}
+      />
+      {/* Needle dot */}
+      {(() => {
+        const angle = Math.PI - (value / 100) * Math.PI;
+        const cx = size / 2 + radius * Math.cos(angle);
+        const cy = size / 2 - radius * Math.sin(angle);
+        return <circle cx={cx} cy={cy} r={6} fill={color} stroke="white" strokeWidth={2} />;
+      })()}
     </svg>
   );
 }
@@ -508,19 +516,21 @@ export function Dashboard() {
         {/* Quick Actions */}
         <div className="card-elevated px-5 py-4">
           <h3 className="text-[14px] font-semibold text-gray-900 mb-3">Quick Actions</h3>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2.5">
             {QUICK_ACTIONS.map((action) => {
               const Icon = action.icon;
               return (
                 <a
                   key={action.label}
                   href={action.path}
-                  className="relative flex flex-col items-center gap-1.5 rounded-lg px-2 py-3 text-center hover:bg-gray-50"
+                  className="relative flex flex-col items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3.5 text-center shadow-sm hover:border-[#FF7900]/30 hover:shadow-md transition-all"
                 >
-                  <Icon className="h-5 w-5 text-gray-400" />
-                  <span className="text-[12px] text-gray-600">{action.label}</span>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50">
+                    <Icon className="h-[18px] w-[18px] text-gray-500" />
+                  </div>
+                  <span className="text-[12px] font-medium text-gray-700">{action.label}</span>
                   {action.badge > 0 && (
-                    <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
+                    <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white shadow-sm">
                       {action.badge}
                     </span>
                   )}
@@ -603,28 +613,52 @@ export function Dashboard() {
         <div className="col-span-2 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-gray-900">Health Score</h3>
+            <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+              Healthy
+            </span>
           </div>
 
           <div className="flex flex-col items-center px-5 pb-5">
-            {/* Donut */}
+            {/* Gauge */}
             <div className="relative">
-              <DonutChart value={94.2} />
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-[24px] font-bold tabular-nums text-gray-900">94.2%</span>
+              <GaugeChart value={94.2} />
+              <div className="absolute inset-x-0 bottom-2 flex flex-col items-center">
+                <span className="text-[28px] font-bold tabular-nums text-gray-900">94.2%</span>
+                <span className="text-[11px] text-gray-400">Overall Fleet Health</span>
               </div>
             </div>
-            <p className="mt-3 text-[13px] text-gray-500">Overall Fleet Health</p>
+
+            {/* Scale labels */}
+            <div className="flex w-full justify-between px-2 -mt-1 mb-4">
+              <span className="text-[10px] font-medium text-red-400">0%</span>
+              <span className="text-[10px] font-medium text-amber-400">50%</span>
+              <span className="text-[10px] font-medium text-emerald-400">100%</span>
+            </div>
 
             {/* Mini stats 2x2 grid */}
-            <div className="mt-5 grid w-full grid-cols-2 gap-3">
-              {HEALTH_MINI_STATS.map((stat) => (
-                <div key={stat.label} className="rounded-lg bg-gray-50 px-3 py-2.5 text-center">
-                  <p className="text-[15px] font-semibold text-gray-900 tabular-nums">
-                    {stat.value}
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-gray-400">{stat.label}</p>
-                </div>
-              ))}
+            <div className="grid w-full grid-cols-2 gap-2.5">
+              {HEALTH_MINI_STATS.map((stat) => {
+                const isAlert = stat.label === "Critical Alerts" && parseInt(stat.value) > 0;
+                return (
+                  <div
+                    key={stat.label}
+                    className={cn(
+                      "rounded-xl border px-3 py-2.5 text-center",
+                      isAlert ? "border-red-200 bg-red-50" : "border-gray-100 bg-gray-50",
+                    )}
+                  >
+                    <p
+                      className={cn(
+                        "text-[16px] font-bold tabular-nums",
+                        isAlert ? "text-red-600" : "text-gray-900",
+                      )}
+                    >
+                      {stat.value}
+                    </p>
+                    <p className="mt-0.5 text-[10px] font-medium text-gray-500">{stat.label}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
