@@ -5,6 +5,7 @@ import {
   Package,
   Rocket,
   Shield,
+  FileBox,
   ClipboardList,
   BarChart3,
   Users,
@@ -42,6 +43,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Deployment", path: "/deployment", page: "deployment", icon: Rocket },
       { label: "Compliance", path: "/compliance", page: "compliance", icon: Shield },
+      { label: "SBOM", path: "/sbom", page: "sbom", icon: FileBox },
       {
         label: "Service Orders",
         path: "/account-service",
