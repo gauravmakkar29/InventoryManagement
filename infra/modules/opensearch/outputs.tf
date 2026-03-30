@@ -30,3 +30,13 @@ output "pipeline_arn" {
   description = "OSIS pipeline ARN"
   value       = aws_osis_pipeline.dynamodb_to_opensearch.pipeline_arn
 }
+
+output "pipeline_name" {
+  description = "OSIS pipeline name for status monitoring"
+  value       = aws_osis_pipeline.dynamodb_to_opensearch.pipeline_name
+}
+
+output "index_name" {
+  description = "OpenSearch index name used by the pipeline"
+  value       = "ims-entities"
+}

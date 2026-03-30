@@ -1,0 +1,141 @@
+{
+  "description": "OpenSearch geospatial query templates for IMS Gen2 Map Features (Story 18.6)",
+  "queries": {
+    "geo_bounding_box": {
+      "description": "Find devices within map viewport bounds",
+      "template": {
+        "size": 200,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Device" } }
+            ],
+            "filter": [
+              {
+                "geo_bounding_box": {
+                  "geoLocation": {
+                    "top_left": {
+                      "lat": "{{top_lat}}",
+                      "lon": "{{left_lon}}"
+                    },
+                    "bottom_right": {
+                      "lat": "{{bottom_lat}}",
+                      "lon": "{{right_lon}}"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "_source": ["deviceName", "serialNumber", "status", "healthScore", "geoLocation", "location", "deviceModel"]
+      }
+    },
+    "geo_distance": {
+      "description": "Find devices within radius of a point (blast radius / nearby)",
+      "template": {
+        "size": 100,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Device" } }
+            ],
+            "filter": [
+              {
+                "geo_distance": {
+                  "distance": "{{radius_km}}km",
+                  "geoLocation": {
+                    "lat": "{{center_lat}}",
+                    "lon": "{{center_lon}}"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "sort": [
+          {
+            "_geo_distance": {
+              "geoLocation": {
+                "lat": "{{center_lat}}",
+                "lon": "{{center_lon}}"
+              },
+              "order": "asc",
+              "unit": "km"
+            }
+          }
+        ],
+        "_source": ["deviceName", "serialNumber", "status", "healthScore", "geoLocation", "location"]
+      }
+    },
+    "geohash_grid_aggregation": {
+      "description": "Cluster devices by geohash grid for map clustering and heatmap",
+      "template": {
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Device" } }
+            ]
+          }
+        },
+        "aggs": {
+          "device_clusters": {
+            "geohash_grid": {
+              "field": "geoLocation",
+              "precision": "{{precision}}"
+            },
+            "aggs": {
+              "center": {
+                "geo_centroid": {
+                  "field": "geoLocation"
+                }
+              },
+              "status_breakdown": {
+                "terms": {
+                  "field": "status",
+                  "size": 5
+                }
+              },
+              "avg_health": {
+                "avg": {
+                  "field": "healthScore"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "geo_bounding_box_with_status": {
+      "description": "Viewport query filtered by device status",
+      "template": {
+        "size": 200,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Device" } },
+              { "term": { "status": "{{status}}" } }
+            ],
+            "filter": [
+              {
+                "geo_bounding_box": {
+                  "geoLocation": {
+                    "top_left": {
+                      "lat": "{{top_lat}}",
+                      "lon": "{{left_lon}}"
+                    },
+                    "bottom_right": {
+                      "lat": "{{bottom_lat}}",
+                      "lon": "{{right_lon}}"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

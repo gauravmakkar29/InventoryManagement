@@ -24,6 +24,20 @@ import type {
   FailureType,
 } from "./types";
 
+import type {
+  GlobalSearchResponse,
+  GlobalSearchResult,
+  DeviceSearchFilters,
+  AggregationMetric,
+  AggregationResponse,
+  TimeRange,
+  GeoBoundingBox,
+  GeoDistanceQuery,
+  GeoDeviceResult,
+  GeoCluster,
+  PipelineHealthStatus,
+} from "./opensearch-types";
+
 function stub<T>(name: string, fallback: T): T {
   console.warn(`[hlm-api] ${name}() — returning mock data`);
   return fallback;
@@ -226,3 +240,93 @@ export async function getTelemetryPipelineStatus(): Promise<TelemetryPipelineSta
     lastSuccessfulIngestion: new Date().toISOString(),
   });
 }
+
+// =============================================================================
+// OpenSearch — Global Search, Advanced Search, Aggregations, Geo — Epic 18
+// =============================================================================
+
+/** Story 18.2: Global search across all entity types with fuzzy matching */
+export async function searchGlobal(
+  _query: string,
+  _entityTypes?: string[],
+  _limit?: number,
+): Promise<GlobalSearchResponse> {
+  return stub("searchGlobal", { total: 0, results: [] });
+}
+
+/** Story 18.3: Advanced device search with combined text + filter criteria */
+export async function searchDevicesAdvanced(
+  _query: string,
+  _filters?: DeviceSearchFilters,
+): Promise<SearchResult<Device>> {
+  return stub("searchDevicesAdvanced", emptySearch<Device>());
+}
+
+/** Story 18.4: Vulnerability search by CVE ID, component, or description */
+export async function searchVulnerabilities(
+  _query: string,
+  _severity?: string,
+): Promise<SearchResult<Vulnerability>> {
+  return stub("searchVulnerabilities", emptySearch<Vulnerability>());
+}
+
+/** Story 18.5: Server-side aggregations for analytics charts */
+export async function getAggregation(
+  _metric: AggregationMetric,
+  _timeRange?: TimeRange,
+): Promise<AggregationResponse> {
+  return stub("getAggregation", { metric: _metric, data: {} });
+}
+
+/** Story 18.6: Geo bounding box query — devices in map viewport */
+export async function searchDevicesByBounds(
+  _bounds: GeoBoundingBox,
+  _status?: string,
+): Promise<GeoDeviceResult[]> {
+  return stub("searchDevicesByBounds", []);
+}
+
+/** Story 18.6: Geo distance query — devices within radius of a point */
+export async function searchDevicesByDistance(
+  _params: GeoDistanceQuery,
+): Promise<GeoDeviceResult[]> {
+  return stub("searchDevicesByDistance", []);
+}
+
+/** Story 18.6: Geo clustering — geohash_grid aggregation for map clusters */
+export async function getDeviceGeoClusters(
+  _bounds?: GeoBoundingBox,
+  _precision?: number,
+): Promise<GeoCluster[]> {
+  return stub("getDeviceGeoClusters", []);
+}
+
+/** Story 18.1: OSIS pipeline health status */
+export async function getOsisPipelineHealth(): Promise<PipelineHealthStatus> {
+  return stub("getOsisPipelineHealth", {
+    state: "Running" as const,
+    recordsSyncedLastHour: 0,
+    currentLagSeconds: 0,
+    lastUpdated: new Date().toISOString(),
+  });
+}
+
+/** Story 18.1: Trigger full re-index from DynamoDB (Admin only) */
+export async function triggerReindex(): Promise<boolean> {
+  return stub("triggerReindex", true);
+}
+
+// Re-export OpenSearch types for convenience
+export type {
+  GlobalSearchResponse,
+  GlobalSearchResult,
+  DeviceSearchFilters,
+  AggregationMetric,
+  AggregationResponse,
+  TimeRange,
+  GeoBoundingBox,
+  GeoDistanceQuery,
+  GeoDeviceResult,
+  GeoCluster,
+  PipelineHealthStatus,
+};

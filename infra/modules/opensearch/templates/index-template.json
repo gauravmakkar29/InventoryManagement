@@ -1,0 +1,77 @@
+{
+  "index_patterns": ["ims-data*"],
+  "template": {
+    "settings": {
+      "number_of_shards": 2,
+      "number_of_replicas": 1,
+      "analysis": {
+        "analyzer": {
+          "ims_analyzer": {
+            "type": "custom",
+            "tokenizer": "standard",
+            "filter": ["lowercase", "asciifolding", "edge_ngram_filter"]
+          }
+        },
+        "filter": {
+          "edge_ngram_filter": {
+            "type": "edge_ngram",
+            "min_gram": 2,
+            "max_gram": 20
+          }
+        }
+      }
+    },
+    "mappings": {
+      "properties": {
+        "entityType": { "type": "keyword" },
+        "deviceName": {
+          "type": "text",
+          "analyzer": "ims_analyzer",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "name": {
+          "type": "text",
+          "analyzer": "ims_analyzer",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "title": {
+          "type": "text",
+          "analyzer": "ims_analyzer",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "serialNumber": { "type": "keyword" },
+        "vulnCveId": { "type": "keyword" },
+        "description": { "type": "text" },
+        "vulnAffectedComponent": { "type": "text" },
+        "status": { "type": "keyword" },
+        "vulnSeverity": { "type": "keyword" },
+        "approvalStage": { "type": "keyword" },
+        "location": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "geoLocation": { "type": "geo_point" },
+        "createdAt": { "type": "date" },
+        "timestamp": { "type": "date" },
+        "scheduledDate": { "type": "date" },
+        "releaseDate": { "type": "date" },
+        "healthScore": { "type": "float" },
+        "vulnerabilityCount": { "type": "integer" },
+        "deviceModel": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "version": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "email": {
+          "type": "text",
+          "fields": { "keyword": { "type": "keyword" } }
+        },
+        "customerId": { "type": "keyword" },
+        "organizationId": { "type": "keyword" }
+      }
+    }
+  }
+}
