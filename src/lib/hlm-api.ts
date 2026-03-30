@@ -17,6 +17,11 @@ import type {
   PaginatedResponse,
   SearchResult,
   AggregationResult,
+  TelemetryReading,
+  HeatmapAggregation,
+  BlastRadiusResult,
+  TelemetryPipelineStatus,
+  FailureType,
 } from "./types";
 
 function stub<T>(name: string, fallback: T): T {
@@ -163,4 +168,61 @@ export async function submitComplianceReview(_id: string): Promise<Compliance | 
 
 export async function acknowledgeNotification(_id: string): Promise<boolean> {
   return stub("acknowledgeNotification", true);
+}
+
+// =============================================================================
+// Telemetry & Environmental Monitoring — Epic 13
+// =============================================================================
+
+export async function getDeviceTelemetry(
+  _deviceId: string,
+  _startDate: string,
+  _endDate: string,
+): Promise<TelemetryReading[]> {
+  return stub("getDeviceTelemetry", []);
+}
+
+export async function getHeatmapAggregation(
+  _bounds?: { northLat: number; southLat: number; eastLng: number; westLng: number },
+  _precision?: number,
+  _riskThreshold?: number,
+): Promise<HeatmapAggregation> {
+  return stub("getHeatmapAggregation", { cells: [], totalDevices: 0 });
+}
+
+export async function getBlastRadius(
+  _lat: number,
+  _lng: number,
+  _radiusKm: number,
+  _includeOffline?: boolean,
+): Promise<BlastRadiusResult | null> {
+  return stub("getBlastRadius", null);
+}
+
+export async function getBlastRadiusHistory(_deviceId?: string): Promise<BlastRadiusResult[]> {
+  return stub("getBlastRadiusHistory", []);
+}
+
+export async function ingestTelemetry(
+  _deviceId: string,
+  _metrics: Partial<TelemetryReading>,
+): Promise<TelemetryReading | null> {
+  return stub("ingestTelemetry", null);
+}
+
+export async function runBlastRadiusSimulation(
+  _deviceId: string,
+  _radiusKm: number,
+  _failureType: FailureType,
+  _severity?: number,
+): Promise<BlastRadiusResult | null> {
+  return stub("runBlastRadiusSimulation", null);
+}
+
+export async function getTelemetryPipelineStatus(): Promise<TelemetryPipelineStatus> {
+  return stub("getTelemetryPipelineStatus", {
+    recordsIngestedLastHour: 0,
+    health: "healthy" as const,
+    lastSuccessfulIngestion: new Date().toISOString(),
+  });
 }

@@ -10,6 +10,7 @@ import { SBOMPage } from "./app/components/sbom";
 import { Analytics } from "./app/components/analytics";
 import { AccessDenied } from "./app/components/access-denied";
 import { UserManagement } from "./app/components/user-management";
+import { TelemetryHeatmapPage } from "./app/components/telemetry/telemetry-heatmap-page";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/compliance" element={<CompliancePage />} />
         <Route path="/sbom" element={<SBOMPage />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/telemetry" element={<TelemetryHeatmapPage />} />
         <Route path="/user-management" element={<UserManagement />} />
         <Route path="/access-denied" element={<AccessDenied />} />
       </Route>

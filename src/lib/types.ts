@@ -188,6 +188,90 @@ export interface Notification {
   createdAt: string; // ISO date
 }
 
+// --- Telemetry & Environmental Monitoring (Epic 13) ---
+
+export enum RiskLevel {
+  Critical = "Critical",
+  High = "High",
+  Medium = "Medium",
+  Low = "Low",
+}
+
+export enum SimulationType {
+  Actual = "actual",
+  Simulated = "simulated",
+}
+
+export enum FailureType {
+  PowerLoss = "Power Loss",
+  NetworkFailure = "Network Failure",
+  Overheating = "Overheating",
+  FirmwareCrash = "Firmware Crash",
+}
+
+export interface TelemetryReading {
+  deviceId: string;
+  temperature: number;
+  cpuLoad: number;
+  memoryUsage: number;
+  networkLatency: number;
+  errorRate: number;
+  powerOutput: number;
+  ambientTemperature: number;
+  humidity: number;
+  riskScore: number;
+  lat: number;
+  lng: number;
+  timestamp: string;
+}
+
+export interface HeatmapCell {
+  geohash: string;
+  centerLat: number;
+  centerLng: number;
+  deviceCount: number;
+  avgRiskScore: number;
+  maxRiskScore: number;
+  criticalCount: number;
+  regionName: string;
+}
+
+export interface HeatmapAggregation {
+  cells: HeatmapCell[];
+  totalDevices: number;
+}
+
+export interface BlastRadiusDevice {
+  id: string;
+  name: string;
+  distanceKm: number;
+  status: DeviceStatus;
+  riskScore: number;
+  estimatedDowntimeMinutes: number;
+}
+
+export interface BlastRadiusResult {
+  id: string;
+  originDeviceId: string;
+  originDeviceName: string;
+  radiusKm: number;
+  affectedDevices: BlastRadiusDevice[];
+  affectedDeviceCount: number;
+  estimatedDowntimeMinutes: number;
+  riskLevel: RiskLevel;
+  simulationType: SimulationType;
+  failureType?: FailureType;
+  severity?: number;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface TelemetryPipelineStatus {
+  recordsIngestedLastHour: number;
+  health: "healthy" | "degraded" | "failed";
+  lastSuccessfulIngestion: string;
+}
+
 // --- Search & Aggregation (OpenSearch) ---
 
 export interface SearchResult<T> {
