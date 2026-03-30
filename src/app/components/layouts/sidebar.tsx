@@ -12,6 +12,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   LogOut,
+  Thermometer,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
@@ -51,6 +52,7 @@ const NAV_GROUPS: NavGroup[] = [
         icon: ClipboardList,
       },
       { label: "Analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
+      { label: "Telemetry", path: "/telemetry", page: "telemetry", icon: Thermometer },
     ],
   },
   {
