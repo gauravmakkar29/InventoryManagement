@@ -49,14 +49,9 @@ export enum VulnerabilitySeverity {
 }
 
 export enum AuditAction {
-  Create = "create",
-  Update = "update",
-  Delete = "delete",
-  Login = "login",
-  Logout = "logout",
-  Approve = "approve",
-  Reject = "reject",
-  Deploy = "deploy",
+  Created = "Created",
+  Modified = "Modified",
+  Deleted = "Deleted",
 }
 
 export enum NotificationType {
@@ -152,14 +147,12 @@ export interface Vulnerability {
 export interface AuditLog {
   id: string;
   action: AuditAction;
-  entityType: string;
-  entityId: string;
+  resourceType: string;
+  resourceId: string;
   userId: string;
-  userEmail: string;
-  details: string;
   ipAddress: string;
   timestamp: string; // ISO date
-  metadata: Record<string, string>;
+  status: "Success";
 }
 
 export interface Customer {

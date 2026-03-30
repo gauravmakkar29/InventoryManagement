@@ -26,5 +26,5 @@ variable "lambda_role_arn" {
 variable "log_retention_days" {
   description = "CloudWatch log retention in days"
   type        = number
-  default     = 7
+  default     = 90
 }
