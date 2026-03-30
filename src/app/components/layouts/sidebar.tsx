@@ -15,6 +15,7 @@ import {
   Thermometer,
   ShieldAlert,
   Fingerprint,
+  FileText,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
@@ -57,6 +58,12 @@ const NAV_GROUPS: NavGroup[] = [
       { label: "Telemetry", path: "/telemetry", page: "telemetry", icon: Thermometer },
       { label: "Incidents", path: "/incidents", page: "incidents", icon: ShieldAlert },
       { label: "Digital Twin", path: "/digital-twin", page: "digital-twin", icon: Fingerprint },
+      {
+        label: "Executive Summary",
+        path: "/executive-summary",
+        page: "executive-summary",
+        icon: FileText,
+      },
     ],
   },
   {
@@ -111,7 +118,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-full flex-col bg-white border-r border-gray-200 shrink-0 transition-[width] duration-200 ease-in-out overflow-hidden",
+        "flex h-full flex-col bg-card border-r border-border shrink-0 transition-[width] duration-200 ease-in-out overflow-hidden",
         collapsed ? "w-[68px]" : "w-[240px]",
       )}
       aria-label="Primary navigation"
@@ -119,14 +126,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Logo + Toggle */}
       <div
         className={cn(
-          "flex h-14 items-center shrink-0 border-b border-gray-100",
+          "flex h-14 items-center shrink-0 border-b border-border/50",
           collapsed ? "justify-center px-2" : "justify-between px-4",
         )}
       >
         {collapsed ? (
           <button
             onClick={onToggle}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
             aria-label="Expand sidebar"
           >
             <PanelLeftOpen className="h-[18px] w-[18px]" />
@@ -134,16 +141,16 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ) : (
           <>
             <div className="flex flex-col">
-              <span className="text-[15px] font-bold leading-tight tracking-tight text-gray-900">
-                IMS <span className="text-[#FF7900]">Gen2</span>
+              <span className="text-[15px] font-bold leading-tight tracking-tight text-foreground">
+                IMS <span className="text-accent">Gen2</span>
               </span>
-              <span className="text-[10px] leading-tight text-gray-400">
+              <span className="text-[10px] leading-tight text-muted-foreground">
                 Hardware Lifecycle Mgmt
               </span>
             </div>
             <button
               onClick={onToggle}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
               aria-label="Collapse sidebar"
             >
               <PanelLeftClose className="h-[18px] w-[18px]" />
@@ -159,9 +166,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       >
         {filteredGroups.map((group, groupIdx) => (
           <div key={group.label} className={cn(groupIdx > 0 && "mt-4")}>
-            {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-gray-100" />}
+            {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-border/50" />}
             {!collapsed && (
-              <div className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400">
+              <div className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                 {group.label}
               </div>
             )}
@@ -184,19 +191,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       className={cn(
                         "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[13px] font-medium",
                         collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-0",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0",
                         isActive
-                          ? "bg-orange-50 font-semibold text-[#FF7900]"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                          ? "bg-accent/10 font-semibold text-accent"
+                          : "text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[#FF7900]" />
+                        <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />
                       )}
                       <Icon
                         className={cn(
                           "h-[18px] w-[18px] shrink-0",
-                          isActive ? "text-[#FF7900]" : "text-gray-400 group-hover:text-gray-600",
+                          isActive
+                            ? "text-accent"
+                            : "text-muted-foreground/60 group-hover:text-foreground",
                         )}
                       />
                       {!collapsed && <span className="truncate">{item.label}</span>}
@@ -210,11 +219,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       </nav>
 
       {/* User section */}
-      <div className={cn("border-t border-gray-100 py-3", collapsed ? "px-2" : "px-3")}>
+      <div className={cn("border-t border-border/50 py-3", collapsed ? "px-2" : "px-3")}>
         {collapsed ? (
           <div className="flex flex-col items-center gap-2">
             <div
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white"
               title={`${displayName} (${roleBadge})`}
             >
               {initials}
@@ -222,7 +231,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <button
               onClick={handleSignOut}
               title="Sign Out"
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 cursor-pointer"
+              aria-label="Sign Out"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
             </button>
@@ -230,14 +240,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ) : (
           <>
             <div className="flex items-center gap-2.5 px-1">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">
                 {initials}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-medium leading-tight text-gray-900">
+                <div className="truncate text-[13px] font-medium leading-tight text-foreground">
                   {displayName}
                 </div>
-                <div className="truncate text-[11px] leading-tight text-gray-400">
+                <div className="truncate text-[11px] leading-tight text-muted-foreground">
                   {displayEmail || roleBadge}
                 </div>
               </div>
@@ -245,8 +255,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <button
               onClick={handleSignOut}
               className={cn(
-                "mt-2 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-1.5 text-[12px] font-medium text-gray-400",
-                "hover:bg-gray-50 hover:text-gray-600",
+                "mt-2 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-1.5 text-[12px] font-medium text-muted-foreground",
+                "hover:bg-muted hover:text-foreground",
               )}
             >
               <LogOut className="h-3.5 w-3.5" />

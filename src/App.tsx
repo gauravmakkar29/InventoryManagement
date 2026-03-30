@@ -13,6 +13,7 @@ import { UserManagement } from "./app/components/user-management";
 import { TelemetryHeatmapPage } from "./app/components/telemetry/telemetry-heatmap-page";
 import { IncidentResponsePage } from "./app/components/incidents/incident-response-page";
 import { DigitalTwinPage } from "./app/components/digital-twin/digital-twin-page";
+import { ExecutiveSummaryPage } from "./app/components/executive/executive-summary-page";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/telemetry" element={<TelemetryHeatmapPage />} />
         <Route path="/incidents" element={<IncidentResponsePage />} />
         <Route path="/digital-twin" element={<DigitalTwinPage />} />
+        <Route path="/executive-summary" element={<ExecutiveSummaryPage />} />
         <Route path="/user-management" element={<UserManagement />} />
         <Route path="/access-denied" element={<AccessDenied />} />
       </Route>
