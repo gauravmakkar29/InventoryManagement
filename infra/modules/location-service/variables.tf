@@ -47,8 +47,8 @@ variable "tags" {
   description = "Resource tags"
   type        = map(string)
   default = {
-    Project     = "IMS-Gen2"
-    ManagedBy   = "Terraform"
-    Epic        = "Epic-10"
+    Project   = "IMS-Gen2"
+    ManagedBy = "Terraform"
+    Epic      = "Epic-10"
   }
 }

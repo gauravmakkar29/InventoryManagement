@@ -1,6 +1,29 @@
 # =============================================================================
 # WAF v2 — WebACL with AWS Managed Rules + rate limiting
+# Environment-specific: count mode (staging) or block mode (prod)
 # =============================================================================
+
+locals {
+  # When waf_mode is "count", use count override (staging - logging only)
+  # When waf_mode is "none", use none override (prod - blocking)
+  managed_rules = [
+    {
+      name     = "AWSManagedRulesCommonRuleSet"
+      priority = 1
+      metric   = "common-rules"
+    },
+    {
+      name     = "AWSManagedRulesKnownBadInputsRuleSet"
+      priority = 2
+      metric   = "bad-inputs"
+    },
+    {
+      name     = "AWSManagedRulesSQLiRuleSet"
+      priority = 3
+      metric   = "sqli-rules"
+    },
+  ]
+}
 
 resource "aws_wafv2_web_acl" "main" {
   name        = "${var.project_name}-${var.environment}-waf"
@@ -11,56 +34,42 @@ resource "aws_wafv2_web_acl" "main" {
     allow {}
   }
 
-  # AWS Managed Rules — Common Rule Set
-  rule {
-    name     = "AWSManagedRulesCommonRuleSet"
-    priority = 1
+  dynamic "rule" {
+    for_each = local.managed_rules
+    content {
+      name     = rule.value.name
+      priority = rule.value.priority
 
-    override_action {
-      none {}
-    }
-
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesCommonRuleSet"
-        vendor_name = "AWS"
+      override_action {
+        dynamic "count" {
+          for_each = var.waf_mode == "count" ? [1] : []
+          content {}
+        }
+        dynamic "none" {
+          for_each = var.waf_mode == "none" ? [1] : []
+          content {}
+        }
       }
-    }
 
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "${var.project_name}-${var.environment}-common-rules"
-      sampled_requests_enabled   = true
+      statement {
+        managed_rule_group_statement {
+          name        = rule.value.name
+          vendor_name = "AWS"
+        }
+      }
+
+      visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name                = "${var.project_name}-${var.environment}-${rule.value.metric}"
+        sampled_requests_enabled   = true
+      }
     }
   }
 
-  # AWS Managed Rules — Known Bad Inputs
-  rule {
-    name     = "AWSManagedRulesKnownBadInputsRuleSet"
-    priority = 2
-
-    override_action {
-      none {}
-    }
-
-    statement {
-      managed_rule_group_statement {
-        name        = "AWSManagedRulesKnownBadInputsRuleSet"
-        vendor_name = "AWS"
-      }
-    }
-
-    visibility_config {
-      cloudwatch_metrics_enabled = true
-      metric_name                = "${var.project_name}-${var.environment}-bad-inputs"
-      sampled_requests_enabled   = true
-    }
-  }
-
-  # Rate limiting — 2000 requests per 5-minute window
+  # Rate limiting — 2000 requests per 5-minute window per IP
   rule {
     name     = "RateLimit"
-    priority = 3
+    priority = 4
 
     action {
       block {}
@@ -91,7 +100,7 @@ resource "aws_wafv2_web_acl" "main" {
   }
 }
 
-# Associate WAF with the target resource (AppSync API, ALB, etc.)
+# Associate WAF with the target resource (AppSync API)
 resource "aws_wafv2_web_acl_association" "main" {
   resource_arn = var.resource_arn
   web_acl_arn  = aws_wafv2_web_acl.main.arn

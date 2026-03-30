@@ -1,3 +1,8 @@
+# =============================================================================
+# IMS Gen2 — Root Variables
+# Global input variables for all modules
+# =============================================================================
+
 variable "aws_region" {
   description = "AWS region for all resources"
   type        = string
@@ -31,6 +36,16 @@ variable "enable_waf" {
   default     = false
 }
 
+variable "waf_default_action" {
+  description = "WAF managed rule override action: count (staging) or none/block (prod)"
+  type        = string
+  default     = "count"
+  validation {
+    condition     = contains(["count", "none"], var.waf_default_action)
+    error_message = "waf_default_action must be count or none."
+  }
+}
+
 variable "enable_pitr" {
   description = "Enable DynamoDB Point-in-Time Recovery"
   type        = bool
@@ -48,7 +63,7 @@ variable "cognito_mfa" {
 }
 
 variable "token_expiry_minutes" {
-  description = "Cognito token expiry in minutes"
+  description = "Cognito access/ID token expiry in minutes"
   type        = number
   default     = 60
 }
@@ -63,4 +78,32 @@ variable "budget_limit" {
   description = "Monthly budget alert threshold in USD"
   type        = number
   default     = 50
+}
+
+variable "alert_email" {
+  description = "Email address for SNS alert subscriptions"
+  type        = string
+  default     = ""
+}
+
+variable "opensearch_type" {
+  description = "OpenSearch deployment type: managed (dev/staging) or serverless (prod)"
+  type        = string
+  default     = "managed"
+  validation {
+    condition     = contains(["managed", "serverless"], var.opensearch_type)
+    error_message = "opensearch_type must be managed or serverless."
+  }
+}
+
+variable "s3_firmware_object_lock" {
+  description = "Enable S3 Object Lock (WORM) on firmware bucket"
+  type        = bool
+  default     = false
+}
+
+variable "enable_custom_domain" {
+  description = "Whether to enable custom domain (Route53 + ACM)"
+  type        = bool
+  default     = false
 }

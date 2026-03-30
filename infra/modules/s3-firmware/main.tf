@@ -75,7 +75,7 @@ resource "aws_s3_bucket_policy" "firmware_ssl" {
   })
 }
 
-# Lifecycle rule: transition old firmware versions to Glacier
+# Lifecycle rule: transition old firmware versions to Glacier after 365 days
 resource "aws_s3_bucket_lifecycle_configuration" "firmware" {
   bucket = aws_s3_bucket.firmware.id
 
@@ -86,26 +86,26 @@ resource "aws_s3_bucket_lifecycle_configuration" "firmware" {
     filter {}
 
     transition {
-      days          = 90
+      days          = 365
       storage_class = "GLACIER"
     }
 
     noncurrent_version_transition {
-      noncurrent_days = 30
+      noncurrent_days = 90
       storage_class   = "GLACIER"
     }
   }
 }
 
-# TODO: Configure Object Lock default retention based on environment:
-# - staging: governance mode
-# - prod: compliance mode (immutable)
-# resource "aws_s3_bucket_object_lock_configuration" "firmware" {
-#   bucket = aws_s3_bucket.firmware.id
-#   rule {
-#     default_retention {
-#       mode = var.environment == "prod" ? "COMPLIANCE" : "GOVERNANCE"
-#       days = 365
-#     }
-#   }
-# }
+# Object Lock default retention (staging: governance, prod: compliance)
+resource "aws_s3_bucket_object_lock_configuration" "firmware" {
+  count  = var.enable_object_lock ? 1 : 0
+  bucket = aws_s3_bucket.firmware.id
+
+  rule {
+    default_retention {
+      mode = var.environment == "prod" ? "COMPLIANCE" : "GOVERNANCE"
+      days = 365
+    }
+  }
+}

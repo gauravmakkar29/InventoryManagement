@@ -20,10 +20,10 @@ locals {
   region     = data.aws_region.current.id
 
   # Construct ARNs for resources that may not export them directly
-  map_arn               = "arn:aws:geo:${local.region}:${local.account_id}:map/${var.project_prefix}-map"
-  place_index_arn       = "arn:aws:geo:${local.region}:${local.account_id}:place-index/${var.project_prefix}-places"
+  map_arn                 = "arn:aws:geo:${local.region}:${local.account_id}:map/${var.project_prefix}-map"
+  place_index_arn         = "arn:aws:geo:${local.region}:${local.account_id}:place-index/${var.project_prefix}-places"
   geofence_collection_arn = "arn:aws:geo:${local.region}:${local.account_id}:geofence-collection/${var.project_prefix}-geofences"
-  tracker_arn           = "arn:aws:geo:${local.region}:${local.account_id}:tracker/${var.project_prefix}-tracker"
+  tracker_arn             = "arn:aws:geo:${local.region}:${local.account_id}:tracker/${var.project_prefix}-tracker"
 }
 
 # --- Map Resource (Story 10.1) ---

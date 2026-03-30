@@ -1,0 +1,15 @@
+environment               = "dev"
+aws_region                = "us-east-1"
+project_name              = "ims-gen2"
+enable_pitr               = false
+enable_waf                = false
+waf_default_action        = "count"
+cognito_mfa               = "OPTIONAL"
+token_expiry_minutes      = 60
+lambda_log_retention_days = 7
+budget_limit              = 50
+alert_email               = ""
+opensearch_type           = "managed"
+s3_firmware_object_lock   = false
+enable_custom_domain      = false
+domain_name               = ""

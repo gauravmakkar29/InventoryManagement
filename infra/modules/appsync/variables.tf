@@ -22,3 +22,9 @@ variable "appsync_role_arn" {
   description = "IAM role ARN for AppSync to access DynamoDB"
   type        = string
 }
+
+variable "opensearch_endpoint" {
+  description = "OpenSearch collection/domain endpoint for HTTP data source"
+  type        = string
+  default     = ""
+}

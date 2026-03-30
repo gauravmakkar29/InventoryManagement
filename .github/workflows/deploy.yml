@@ -1,0 +1,111 @@
+name: Deploy
+
+on:
+  push:
+    branches: [dev, staging]
+  release:
+    types: [published]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  determine-env:
+    name: Determine Environment
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.env.outputs.environment }}
+      tfvars_file: ${{ steps.env.outputs.tfvars_file }}
+    steps:
+      - name: Set environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "environment=prod" >> "$GITHUB_OUTPUT"
+            echo "tfvars_file=environments/prod.tfvars" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "environment=staging" >> "$GITHUB_OUTPUT"
+            echo "tfvars_file=environments/staging.tfvars" >> "$GITHUB_OUTPUT"
+          else
+            echo "environment=dev" >> "$GITHUB_OUTPUT"
+            echo "tfvars_file=environments/dev.tfvars" >> "$GITHUB_OUTPUT"
+          fi
+
+  terraform:
+    name: Terraform Apply (${{ needs.determine-env.outputs.environment }})
+    needs: determine-env
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-env.outputs.environment }}
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=ims-tfstate-${{ needs.determine-env.outputs.environment }}" \
+            -backend-config="key=ims-gen2/terraform.tfstate" \
+            -backend-config="region=us-east-1" \
+            -backend-config="dynamodb_table=ims-tfstate-lock-${{ needs.determine-env.outputs.environment }}"
+
+      - name: Terraform Plan
+        run: terraform plan -var-file="${{ needs.determine-env.outputs.tfvars_file }}" -out=tfplan -input=false
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false tfplan
+
+  frontend:
+    name: Build & Deploy Frontend (${{ needs.determine-env.outputs.environment }})
+    needs: [determine-env, terraform]
+    runs-on: ubuntu-latest
+    environment: ${{ needs.determine-env.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          VITE_ENVIRONMENT: ${{ needs.determine-env.outputs.environment }}
+          VITE_API_ENDPOINT: ${{ secrets.APPSYNC_ENDPOINT }}
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+          VITE_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+
+      - name: Sync to S3
+        run: aws s3 sync dist/ s3://${{ secrets.FRONTEND_BUCKET }} --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"

@@ -48,6 +48,26 @@ resource "aws_cognito_user_pool" "main" {
     }
   }
 
+  schema {
+    name                = "department"
+    attribute_data_type = "String"
+    mutable             = true
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 256
+    }
+  }
+
+  schema {
+    name                = "customerId"
+    attribute_data_type = "String"
+    mutable             = true
+    string_attribute_constraints {
+      min_length = 1
+      max_length = 256
+    }
+  }
+
   # Account recovery
   account_recovery_setting {
     recovery_mechanism {
