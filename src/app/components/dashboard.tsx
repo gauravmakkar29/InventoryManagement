@@ -99,7 +99,62 @@ function GaugeChart({ value, size = 160 }: { value: number; size?: number }) {
   );
 }
 
-// (SegmentedBar removed — replaced by inline stacked bar in Fleet Status)
+// ---------------------------------------------------------------------------
+// Fleet Donut — ring chart with gap segments
+// ---------------------------------------------------------------------------
+function FleetDonut({
+  segments,
+  size = 140,
+}: {
+  segments: { label: string; value: number; color: string; pct: number }[];
+  size?: number;
+}) {
+  const strokeWidth = 16;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const gap = 4; // gap in degrees between segments
+  const totalGap = gap * segments.length;
+  const availableDeg = 360 - totalGap;
+
+  let cumulativeAngle = -90; // start from top
+
+  return (
+    <svg width={size} height={size}>
+      {/* Background ring */}
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke="#f1f3f5"
+        strokeWidth={strokeWidth}
+      />
+      {/* Segments */}
+      {segments.map((seg) => {
+        const segDeg = (seg.pct / 100) * availableDeg;
+        const segLength = (segDeg / 360) * circumference;
+        const rotation = cumulativeAngle;
+        cumulativeAngle += segDeg + gap;
+
+        return (
+          <circle
+            key={seg.label}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            fill="none"
+            stroke={seg.color}
+            strokeWidth={strokeWidth}
+            strokeDasharray={`${segLength} ${circumference - segLength}`}
+            strokeDashoffset={0}
+            strokeLinecap="round"
+            transform={`rotate(${rotation} ${size / 2} ${size / 2})`}
+          />
+        );
+      })}
+    </svg>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Skeleton KPI Card
@@ -519,54 +574,41 @@ export function Dashboard() {
           </div>
 
           <div className="px-5 pb-5 space-y-5">
-            {/* Visual stacked bar with labels inside */}
-            <div className="space-y-1.5">
-              <div className="flex h-10 overflow-hidden rounded-xl">
-                {FLEET_SEGMENTS.map((seg) => (
-                  <div
-                    key={seg.label}
-                    className="flex items-center justify-center text-[11px] font-bold text-white"
-                    style={{ width: `${seg.pct}%`, backgroundColor: seg.color }}
-                  >
-                    {seg.pct >= 10 && `${seg.value}`}
-                  </div>
-                ))}
+            {/* Donut chart + legend side by side */}
+            <div className="flex items-center gap-6">
+              {/* Donut */}
+              <div className="relative shrink-0">
+                <FleetDonut segments={FLEET_SEGMENTS} size={140} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-[22px] font-bold tabular-nums text-gray-900">1,247</span>
+                  <span className="text-[10px] text-gray-400">Total</span>
+                </div>
               </div>
-              {/* Legend */}
-              <div className="flex items-center gap-4">
+              {/* Legend + values */}
+              <div className="flex-1 space-y-3">
                 {FLEET_SEGMENTS.map((seg) => (
-                  <div key={seg.label} className="flex items-center gap-1.5">
+                  <div key={seg.label} className="flex items-center gap-3">
                     <span
-                      className="h-2.5 w-2.5 rounded-sm shrink-0"
+                      className="h-3 w-3 shrink-0 rounded-sm"
                       style={{ backgroundColor: seg.color }}
                     />
-                    <span className="text-[12px] font-medium text-gray-600">{seg.label}</span>
-                    <span className="text-[12px] font-bold text-gray-900 tabular-nums">
-                      {seg.pct}%
-                    </span>
+                    <div className="flex-1">
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-[13px] font-medium text-gray-700">{seg.label}</span>
+                        <span className="text-[14px] font-bold tabular-nums text-gray-900">
+                          {seg.value.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                        <div
+                          className="h-full rounded-full"
+                          style={{ width: `${seg.pct}%`, backgroundColor: seg.color }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-
-            {/* Status breakdown cards */}
-            <div className="grid grid-cols-3 gap-3">
-              {FLEET_SEGMENTS.map((seg) => (
-                <div
-                  key={seg.label}
-                  className="rounded-xl border px-3.5 py-3"
-                  style={{ borderColor: `${seg.color}30`, backgroundColor: `${seg.color}08` }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[12px] font-medium text-gray-600">{seg.label}</span>
-                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: seg.color }} />
-                  </div>
-                  <p className="mt-1 text-[22px] font-bold tabular-nums text-gray-900">
-                    {seg.value.toLocaleString()}
-                  </p>
-                  <p className="text-[11px] text-gray-400">{seg.pct}% of fleet</p>
-                </div>
-              ))}
             </div>
 
             {/* Top Regions */}
