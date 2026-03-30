@@ -8,7 +8,8 @@ import {
   ClipboardList,
   BarChart3,
   Users,
-  X,
+  ChevronsLeft,
+  ChevronsRight,
   LogOut,
 } from "lucide-react";
 import { cn } from "../../../lib/utils";
@@ -76,167 +77,181 @@ function getUserInitials(
 }
 
 interface SidebarProps {
-  open: boolean;
-  onClose: () => void;
+  collapsed: boolean;
+  onToggle: () => void;
 }
 
-export function Sidebar({ open, onClose }: SidebarProps) {
+export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const location = useLocation();
   const { user, email, groups, signOut } = useAuth();
   const role = getPrimaryRole(groups);
-
-  const handleNavClick = useCallback(() => {
-    // Close sidebar on mobile after navigation
-    if (window.innerWidth < 1024) {
-      onClose();
-    }
-  }, [onClose]);
 
   const displayName = user?.name ?? email ?? "User";
   const displayEmail = email ?? "";
   const initials = getUserInitials(user?.name, email);
   const roleBadge = role;
 
-  // Filter nav groups by role permissions
   const filteredGroups = NAV_GROUPS.map((group) => ({
     ...group,
     items: group.items.filter((item) => canAccessPage(role, item.page)),
   })).filter((group) => group.items.length > 0);
 
-  return (
-    <>
-      {/* Backdrop — visible on mobile when sidebar open */}
-      {open && (
-        <div
-          className="sidebar-backdrop fixed inset-0 z-40 bg-black/20"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+  const handleSignOut = useCallback(() => {
+    signOut();
+  }, [signOut]);
 
-      {/* Sidebar Panel */}
-      <aside
+  return (
+    <aside
+      className={cn(
+        "flex h-full flex-col bg-white border-r border-gray-200 shrink-0 transition-[width] duration-200 ease-in-out overflow-hidden",
+        collapsed ? "w-[68px]" : "w-[240px]",
+      )}
+      aria-label="Primary navigation"
+    >
+      {/* Logo */}
+      <div
         className={cn(
-          "fixed left-0 top-0 z-50 flex h-full w-[260px] flex-col bg-white",
-          "sidebar-panel",
-          "shadow-[4px_0_24px_rgba(0,0,0,0.06)]",
+          "flex h-14 items-center shrink-0",
+          collapsed ? "justify-center px-2" : "px-5",
         )}
-        data-state={open ? "open" : "closed"}
-        style={{
-          borderRight: "1px solid #e5e7eb",
-        }}
-        aria-label="Primary navigation"
-        aria-hidden={!open}
       >
-        {/* Logo + Close */}
-        <div className="flex h-14 items-center justify-between px-5">
+        {collapsed ? (
+          <span className="text-[15px] font-bold text-[#FF7900]">G2</span>
+        ) : (
           <div className="flex flex-col">
             <span className="text-[15px] font-bold leading-tight tracking-tight text-gray-900">
               IMS <span className="text-[#FF7900]">Gen2</span>
             </span>
             <span className="text-[10px] leading-tight text-gray-400">Hardware Lifecycle Mgmt</span>
           </div>
-          <button
-            onClick={onClose}
-            className={cn(
-              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
-              "hover:bg-gray-100 hover:text-gray-600",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
-            )}
-            aria-label="Close navigation"
-          >
-            <X className="h-[18px] w-[18px]" />
-          </button>
-        </div>
+        )}
+      </div>
 
-        {/* Navigation groups */}
-        <nav
-          className="sidebar-nav flex-1 overflow-y-auto overflow-x-hidden px-3 py-4"
-          aria-label="Main navigation"
-        >
-          {filteredGroups.map((group, groupIdx) => (
-            <div key={group.label} className={cn(groupIdx > 0 && "mt-5")}>
-              {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-gray-100" />}
-              <div className="mb-1.5 px-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400">
+      {/* Navigation */}
+      <nav
+        className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-3"
+        aria-label="Main navigation"
+      >
+        {filteredGroups.map((group, groupIdx) => (
+          <div key={group.label} className={cn(groupIdx > 0 && "mt-4")}>
+            {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-gray-100" />}
+            {!collapsed && (
+              <div className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-400">
                 {group.label}
               </div>
+            )}
 
-              <ul className="space-y-0.5">
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = item.end
-                    ? location.pathname === item.path
-                    : location.pathname.startsWith(item.path);
+            <ul className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = item.end
+                  ? location.pathname === item.path
+                  : location.pathname.startsWith(item.path);
 
-                  return (
-                    <li key={item.path} className="relative">
-                      <NavLink
-                        to={item.path}
-                        end={item.end}
-                        onClick={handleNavClick}
-                        aria-label={item.label}
-                        aria-current={isActive ? "page" : undefined}
+                return (
+                  <li key={item.path} className="relative">
+                    <NavLink
+                      to={item.path}
+                      end={item.end}
+                      title={collapsed ? item.label : undefined}
+                      aria-label={item.label}
+                      aria-current={isActive ? "page" : undefined}
+                      className={cn(
+                        "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[13px] font-medium",
+                        collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",
+                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-0",
+                        isActive
+                          ? "bg-orange-50 font-semibold text-[#FF7900]"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                      )}
+                    >
+                      {isActive && (
+                        <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[#FF7900]" />
+                      )}
+                      <Icon
                         className={cn(
-                          "group relative flex h-[44px] cursor-pointer items-center gap-3 rounded-lg px-3 text-[14px] font-medium",
-                          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-0",
-                          isActive
-                            ? "bg-orange-50 font-semibold text-[#FF7900]"
-                            : "text-gray-600 hover:bg-orange-50 hover:text-[#FF7900]",
+                          "h-[18px] w-[18px] shrink-0",
+                          isActive ? "text-[#FF7900]" : "text-gray-400 group-hover:text-gray-600",
                         )}
-                      >
-                        {/* Active left indicator bar */}
-                        {isActive && (
-                          <div className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-[#FF7900]" />
-                        )}
-                        <Icon
-                          className={cn(
-                            "h-[18px] w-[18px] shrink-0",
-                            isActive
-                              ? "text-[#FF7900]"
-                              : "text-gray-400 group-hover:text-[#FF7900]",
-                          )}
-                        />
-                        <span className="truncate">{item.label}</span>
-                      </NavLink>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </nav>
+                      />
+                      {!collapsed && <span className="truncate">{item.label}</span>}
+                    </NavLink>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </nav>
 
-        {/* User section at bottom */}
-        <div className="border-t border-gray-100 px-4 py-3">
-          <div className="flex items-center gap-3">
+      {/* Collapse toggle */}
+      <div className="border-t border-gray-100 px-2 py-2">
+        <button
+          onClick={onToggle}
+          className={cn(
+            "flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[12px] font-medium text-gray-400",
+            "hover:bg-gray-50 hover:text-gray-600",
+            collapsed && "justify-center px-0",
+          )}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? (
+            <ChevronsRight className="h-4 w-4" />
+          ) : (
+            <>
+              <ChevronsLeft className="h-4 w-4" />
+              <span>Collapse</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* User section */}
+      <div className={cn("border-t border-gray-100 py-3", collapsed ? "px-2" : "px-3")}>
+        {collapsed ? (
+          <div className="flex flex-col items-center gap-2">
             <div
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#FF7900] text-[12px] font-semibold text-white"
-              aria-hidden="true"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white"
+              title={`${displayName} (${roleBadge})`}
             >
               {initials}
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] font-medium leading-tight text-gray-900">
-                {displayName}
+            <button
+              onClick={handleSignOut}
+              title="Sign Out"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-50 hover:text-gray-600 cursor-pointer"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-2.5 px-1">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FF7900] text-[11px] font-semibold text-white">
+                {initials}
               </div>
-              <div className="truncate text-[11px] leading-tight text-gray-400">
-                {displayEmail || roleBadge}
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[13px] font-medium leading-tight text-gray-900">
+                  {displayName}
+                </div>
+                <div className="truncate text-[11px] leading-tight text-gray-400">
+                  {displayEmail || roleBadge}
+                </div>
               </div>
             </div>
-          </div>
-          <button
-            onClick={signOut}
-            className={cn(
-              "mt-3 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-[13px] font-medium text-gray-500",
-              "hover:bg-gray-50 hover:text-gray-700",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
-            )}
-          >
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </button>
-        </div>
-      </aside>
-    </>
+            <button
+              onClick={handleSignOut}
+              className={cn(
+                "mt-2 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-1.5 text-[12px] font-medium text-gray-400",
+                "hover:bg-gray-50 hover:text-gray-600",
+              )}
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              Sign Out
+            </button>
+          </>
+        )}
+      </div>
+    </aside>
   );
 }
