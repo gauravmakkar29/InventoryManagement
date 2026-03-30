@@ -313,6 +313,24 @@ export function Inventory() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 6;
+  const canEdit = canPerformAction(role, "edit");
+
+  const handleStatusChange = useCallback(
+    (deviceId: string, newStatus: DeviceStatus) => {
+      const device = devices.find((d) => d.id === deviceId);
+      setDevices((prev) =>
+        prev.map((d) =>
+          d.id === deviceId
+            ? { ...d, status: newStatus, health: newStatus === DeviceStatus.Offline ? 0 : d.health }
+            : d,
+        ),
+      );
+      if (device) {
+        toast.success(`Device ${device.name} status updated to ${newStatus}`);
+      }
+    },
+    [devices],
+  );
 
   const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
     const newDevice: MockDevice = {
@@ -578,12 +596,17 @@ export function Inventory() {
                       sortDir={sortDir}
                       onSort={handleSort}
                     />
+                    {canEdit && (
+                      <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                        Actions
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedDevices.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-16 text-center">
+                      <td colSpan={canEdit ? 7 : 6} className="py-16 text-center">
                         <Package className="mx-auto h-10 w-10 text-gray-200 mb-3" />
                         <p className="text-[14px] font-medium text-gray-500">No devices found</p>
                         <p className="mt-1 text-[12px] text-gray-400">
@@ -622,6 +645,23 @@ export function Inventory() {
                         <td className="px-4 py-2.5">
                           <HealthBar value={device.health} />
                         </td>
+                        {canEdit && (
+                          <td className="px-4 py-2.5">
+                            <select
+                              value={device.status}
+                              onChange={(e) =>
+                                handleStatusChange(device.id, e.target.value as DeviceStatus)
+                              }
+                              className="h-8 rounded-md border border-gray-200 bg-white px-2 text-[12px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]/20 cursor-pointer"
+                            >
+                              {ALL_STATUSES.map((s) => (
+                                <option key={s} value={s}>
+                                  {s}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                        )}
                       </tr>
                     ))
                   )}
