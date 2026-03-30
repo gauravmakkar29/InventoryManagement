@@ -28,7 +28,7 @@ function mapEventAction(eventName: string | undefined): string {
 }
 
 function extractEntityType(pk: string): string {
-  const prefix = pk.split("#")[0];
+  const prefix = pk.split("#")[0] as string;
   const entityMap: Record<string, string> = {
     DEV: "Device",
     FW: "Firmware",
