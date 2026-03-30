@@ -9,6 +9,8 @@ import {
   Package,
   Plus,
   Download,
+  MapPin,
+  Info,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
@@ -292,6 +294,124 @@ function SortHeader({
         )}
       </div>
     </th>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Geo Location View — Story 3.5
+// ---------------------------------------------------------------------------
+type GeoStatusFilter =
+  | "all"
+  | DeviceStatus.Online
+  | DeviceStatus.Offline
+  | DeviceStatus.Maintenance;
+const GEO_FILTER_OPTIONS: { id: GeoStatusFilter; label: string }[] = [
+  { id: "all", label: "All" },
+  { id: DeviceStatus.Online, label: "Online" },
+  { id: DeviceStatus.Offline, label: "Offline" },
+  { id: DeviceStatus.Maintenance, label: "Maintenance" },
+];
+
+function GeoLocationView({ devices }: { devices: MockDevice[] }) {
+  const [geoFilter, setGeoFilter] = useState<GeoStatusFilter>("all");
+
+  const devicesWithCoords = useMemo(
+    () => devices.filter((d) => d.lat != null && d.lng != null),
+    [devices],
+  );
+
+  const filteredGeoDevices = useMemo(() => {
+    if (geoFilter === "all") return devicesWithCoords;
+    return devicesWithCoords.filter((d) => d.status === geoFilter);
+  }, [devicesWithCoords, geoFilter]);
+
+  const groupedByLocation = useMemo(() => {
+    const locationMap: Record<string, MockDevice[]> = {};
+    for (const d of filteredGeoDevices) {
+      const existing = locationMap[d.location];
+      if (existing) {
+        existing.push(d);
+      } else {
+        locationMap[d.location] = [d];
+      }
+    }
+    return Object.entries(locationMap).sort(([a], [b]) => a.localeCompare(b));
+  }, [filteredGeoDevices]);
+
+  return (
+    <div className="space-y-4">
+      {/* Map coming soon notice */}
+      <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2.5">
+        <Info className="h-4 w-4 shrink-0 text-blue-500" />
+        <p className="text-[12px] text-blue-700">
+          Map view requires Leaflet/Mapbox — coming soon. Showing location-grouped device list
+          below.
+        </p>
+      </div>
+
+      {/* Status filter pills */}
+      <div className="flex items-center gap-2">
+        {GEO_FILTER_OPTIONS.map((opt) => (
+          <button
+            key={opt.id}
+            onClick={() => setGeoFilter(opt.id)}
+            className={cn(
+              "rounded-full px-4 py-1.5 text-[12px] font-medium cursor-pointer transition-colors",
+              geoFilter === opt.id
+                ? "bg-[#FF7900] text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+            )}
+          >
+            {opt.label}
+          </button>
+        ))}
+        <span className="ml-auto text-[12px] text-gray-400">
+          {filteredGeoDevices.length} of {devicesWithCoords.length} devices with coordinates
+        </span>
+      </div>
+
+      {/* Grouped by location */}
+      {groupedByLocation.length === 0 ? (
+        <div className="flex h-48 items-center justify-center card-elevated">
+          <div className="text-center">
+            <MapPin className="mx-auto h-10 w-10 text-gray-200 mb-3" />
+            <p className="text-[14px] font-medium text-gray-500">No devices found</p>
+            <p className="mt-1 text-[12px] text-gray-400">No devices match the selected filter</p>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-5">
+          {groupedByLocation.map(([location, locationDevices]) => (
+            <div key={location} className="card-elevated overflow-hidden">
+              <div className="flex items-center gap-2 border-b border-gray-100 bg-gray-50/50 px-4 py-3">
+                <MapPin className="h-4 w-4 text-[#FF7900]" />
+                <h3 className="text-[13px] font-semibold text-gray-700">{location}</h3>
+                <span className="text-[11px] text-gray-400">
+                  {locationDevices.length} {locationDevices.length === 1 ? "device" : "devices"}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 p-4">
+                {locationDevices.map((device) => (
+                  <div
+                    key={device.id}
+                    className="flex flex-col gap-2 rounded-lg border border-gray-100 p-3 hover:bg-gray-50/50 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[13px] font-medium text-gray-900">{device.name}</span>
+                      <StatusBadge status={device.status} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[12px] font-mono text-gray-500">{device.firmware}</span>
+                      <HealthBar value={device.health} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -721,29 +841,41 @@ export function Inventory() {
         </>
       )}
 
-      {/* Firmware Tab — placeholder */}
+      {/* Firmware Tab — Story 3.4 */}
       {activeTab === "firmware" && (
-        <div className="flex h-64 items-center justify-center card-elevated">
-          <div className="text-center">
-            <p className="text-[14px] font-medium text-gray-500">Firmware Status</p>
-            <p className="mt-1 text-[12px] text-gray-400">
-              Device firmware cards will be implemented in Story 3.4
-            </p>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[14px] font-semibold text-gray-700">Firmware Status Overview</h2>
+            <span className="text-[12px] text-gray-400">
+              {devices.length} devices — sorted by health (unhealthiest first)
+            </span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            {[...devices]
+              .sort((a, b) => a.health - b.health)
+              .map((device) => (
+                <div
+                  key={device.id}
+                  title={`Health: ${device.health}/100`}
+                  className={cn(
+                    "card-elevated p-4 space-y-3 transition-colors hover:bg-gray-50/50",
+                    device.health < 50 && "border-l-4 border-l-red-500",
+                  )}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[13px] font-medium text-gray-900">{device.name}</span>
+                    <span className="text-[11px] font-mono text-gray-400">{device.serial}</span>
+                  </div>
+                  <div className="text-[12px] font-mono text-gray-600">{device.firmware}</div>
+                  <HealthBar value={device.health} />
+                </div>
+              ))}
           </div>
         </div>
       )}
 
-      {/* Geo Tab — placeholder */}
-      {activeTab === "geo" && (
-        <div className="flex h-80 items-center justify-center card-elevated">
-          <div className="text-center">
-            <p className="text-[14px] font-medium text-gray-500">Geo Location Map</p>
-            <p className="mt-1 text-[12px] text-gray-400">
-              Interactive map will be implemented in Story 3.5
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Geo Tab — Story 3.5 */}
+      {activeTab === "geo" && <GeoLocationView devices={devices} />}
 
       {/* Create Device Modal */}
       <CreateDeviceModal
