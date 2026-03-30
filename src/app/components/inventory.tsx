@@ -1,5 +1,16 @@
 import { useState, useMemo, useCallback } from "react";
-import { Search, ChevronDown, ChevronUp, ArrowUpDown, Package, Plus } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUpDown,
+  Package,
+  Plus,
+  Download,
+} from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { DeviceStatus } from "../../lib/types";
 import { useAuth } from "../../lib/use-auth";
@@ -300,6 +311,8 @@ export function Inventory() {
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [devices, setDevices] = useState<MockDevice[]>(MOCK_DEVICES);
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 6;
 
   const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
     const newDevice: MockDevice = {
@@ -381,6 +394,48 @@ export function Inventory() {
     return result;
   }, [devices, search, statusFilter, locationFilter, sortField, sortDir]);
 
+  // Reset to page 1 when filters change
+  const totalPages = Math.max(1, Math.ceil(filteredDevices.length / PAGE_SIZE));
+  const safeCurrentPage = Math.min(page, totalPages);
+  const startIdx = (safeCurrentPage - 1) * PAGE_SIZE;
+  const endIdx = Math.min(startIdx + PAGE_SIZE, filteredDevices.length);
+  const paginatedDevices = filteredDevices.slice(startIdx, endIdx);
+
+  const exportCsv = useCallback(() => {
+    if (filteredDevices.length === 0) return;
+    const headers = [
+      "Device Name",
+      "Serial Number",
+      "Model",
+      "Status",
+      "Location",
+      "Health Score",
+      "Firmware",
+      "Last Seen",
+    ];
+    const rows = filteredDevices.map((d) => [
+      d.name,
+      d.serial,
+      d.model,
+      d.status,
+      d.location,
+      String(d.health),
+      d.firmware,
+      d.lastSeen,
+    ]);
+    const csv = [headers.join(","), ...rows.map((r) => r.map((v) => `"${v}"`).join(","))].join(
+      "\n",
+    );
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `inventory-export-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast.success(`Exported ${filteredDevices.length} devices to CSV`);
+  }, [filteredDevices]);
+
   return (
     <div className="space-y-5">
       {/* Tabs */}
@@ -446,6 +501,19 @@ export function Inventory() {
             <span className="text-[12px] text-gray-400 shrink-0">
               {filteredDevices.length} of {devices.length} devices
             </span>
+
+            <button
+              onClick={exportCsv}
+              disabled={filteredDevices.length === 0}
+              className={cn(
+                "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[13px] font-medium text-gray-700 shrink-0",
+                "hover:bg-gray-50",
+                "disabled:cursor-not-allowed disabled:opacity-40",
+              )}
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </button>
 
             {canCreate && (
               <button
@@ -513,7 +581,7 @@ export function Inventory() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredDevices.length === 0 ? (
+                  {paginatedDevices.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="py-16 text-center">
                         <Package className="mx-auto h-10 w-10 text-gray-200 mb-3" />
@@ -524,7 +592,7 @@ export function Inventory() {
                       </td>
                     </tr>
                   ) : (
-                    filteredDevices.map((device, i) => (
+                    paginatedDevices.map((device, i) => (
                       <tr
                         key={device.id}
                         className={cn(
@@ -560,6 +628,55 @@ export function Inventory() {
                 </tbody>
               </table>
             </div>
+
+            {/* Pagination */}
+            {filteredDevices.length > 0 && (
+              <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+                <span className="text-[12px] text-gray-500">
+                  Showing {startIdx + 1}–{endIdx} of {filteredDevices.length}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={safeCurrentPage <= 1}
+                    className={cn(
+                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
+                      "hover:bg-gray-100 hover:text-gray-700",
+                      "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent",
+                    )}
+                    aria-label="Previous page"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => setPage(p)}
+                      className={cn(
+                        "flex h-8 w-8 items-center justify-center rounded-lg text-[12px] font-medium cursor-pointer",
+                        p === safeCurrentPage
+                          ? "bg-[#FF7900] text-white"
+                          : "text-gray-500 hover:bg-gray-100",
+                      )}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safeCurrentPage >= totalPages}
+                    className={cn(
+                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
+                      "hover:bg-gray-100 hover:text-gray-700",
+                      "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent",
+                    )}
+                    aria-label="Next page"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}
