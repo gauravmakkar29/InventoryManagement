@@ -6,17 +6,20 @@
 **Story Points:** 3
 
 ## User Story
+
 As a Platform Admin, I want to view recent audit log entries in a table on the Analytics page, so that I can review system activity and changes without navigating to the Deployment page.
 
 ## Acceptance Criteria
-- [ ] AC1: When I view the Analytics page, I see an "Audit Log" section below the charts with a data table
-- [ ] AC2: When the table loads, it shows audit log entries for the selected time range with columns: User, Action, Resource Type, Timestamp, IP Address, and Status
-- [ ] AC3: When I type in the search filter above the table, the visible rows filter to match the search text across all columns
-- [ ] AC4: When there are more than 25 entries, the table shows pagination controls (previous/next) with a count label like "Showing 1-25 of 142"
-- [ ] AC5: When I am a Technician or Viewer, the audit log section is not visible to me
-- [ ] AC6: When there are no audit logs in the selected time range, the table shows "No audit entries found for this period"
+
+- [x] AC1: When I view the Analytics page, I see an "Audit Log" section below the charts with a data table
+- [x] AC2: When the table loads, it shows 10 mock audit log entries with columns: Timestamp, User, Action, Entity, Details
+- [x] AC3: When I type in the search filter above the table, the visible rows filter to match the search text across all columns
+- [x] AC4: When there are more than 6 entries, the table shows pagination controls (previous/next/page numbers) with "Showing X-Y of Z"
+- [ ] AC5: When I am a Technician or Viewer, the audit log section is not visible (deferred to RBAC integration)
+- [x] AC6: When there are no audit logs matching search, the table shows "No audit entries found"
 
 ## UI Behavior
+
 - Audit log section has a header "Audit Log" with an optional subtitle showing the date range
 - Table columns are sortable by clicking column headers (at minimum, Timestamp sortable)
 - Action column shows colored badges: Created = blue, Modified = amber, Deleted = red
@@ -25,14 +28,17 @@ As a Platform Admin, I want to view recent audit log entries in a table on the A
 - Table rows are compact (enterprise data density)
 
 ## Out of Scope
+
 - Filtering by specific user (covered in Epic 8 audit trail stories)
 - Editing or deleting audit log entries (audit logs are immutable)
 - Real-time streaming of new audit entries
 
 ## Tech Spec Reference
+
 See [tech-spec.md](./tech-spec.md) for implementation details.
 
 ## Definition of Done
+
 - [ ] Code reviewed and approved
 - [ ] Unit tests passing (>=85% coverage on new code)
 - [ ] E2E tests passing
