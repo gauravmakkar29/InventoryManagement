@@ -12,8 +12,8 @@ resource "aws_cloudwatch_log_group" "audit" {
   }
 }
 
-# TODO: Package and deploy the audit processor Lambda function.
-# The source code should live in src/lambda/audit-processor/index.mjs
+# Audit stream processor Lambda function.
+# Source code: src/lambda/audit-processor/index.mts
 resource "aws_lambda_function" "audit_processor" {
   function_name = "${var.project_name}-${var.environment}-audit-processor"
   runtime       = "nodejs20.x"
@@ -48,11 +48,11 @@ resource "aws_lambda_event_source_mapping" "audit_stream" {
   batch_size             = 25
   maximum_retry_attempts = 3
 
-  # Process only audit-relevant events
+  # Process INSERT, MODIFY, and REMOVE events for full audit coverage (Story 8.1 AC1-3)
   filter_criteria {
     filter {
       pattern = jsonencode({
-        eventName = ["INSERT", "MODIFY"]
+        eventName = ["INSERT", "MODIFY", "REMOVE"]
       })
     }
   }

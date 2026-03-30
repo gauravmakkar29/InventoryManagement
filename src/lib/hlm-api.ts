@@ -24,7 +24,7 @@ function stub<T>(name: string, fallback: T): T {
   return fallback;
 }
 
-const emptyPage = <T,>(): PaginatedResponse<T> => ({
+const emptyPage = <T>(): PaginatedResponse<T> => ({
   items: [],
   total: 0,
   page: 1,
@@ -32,7 +32,7 @@ const emptyPage = <T,>(): PaginatedResponse<T> => ({
   hasMore: false,
 });
 
-const emptySearch = <T,>(): SearchResult<T> => ({
+const emptySearch = <T>(): SearchResult<T> => ({
   hits: [],
   total: 0,
   took: 0,
@@ -46,7 +46,7 @@ const emptySearch = <T,>(): SearchResult<T> => ({
 export async function listDevices(
   _page?: number,
   _pageSize?: number,
-  _filters?: Record<string, string>
+  _filters?: Record<string, string>,
 ): Promise<PaginatedResponse<Device>> {
   return stub("listDevices", emptyPage<Device>());
 }
@@ -61,7 +61,7 @@ export async function searchDevices(_query: string): Promise<SearchResult<Device
 
 export async function listFirmware(
   _page?: number,
-  _pageSize?: number
+  _pageSize?: number,
 ): Promise<PaginatedResponse<Firmware>> {
   return stub("listFirmware", emptyPage<Firmware>());
 }
@@ -73,29 +73,35 @@ export async function getFirmware(_id: string): Promise<Firmware | null> {
 export async function listServiceOrders(
   _page?: number,
   _pageSize?: number,
-  _status?: string
+  _status?: string,
 ): Promise<PaginatedResponse<ServiceOrder>> {
   return stub("listServiceOrders", emptyPage<ServiceOrder>());
 }
 
 export async function listCompliance(
   _status?: string,
-  _certType?: string
+  _certType?: string,
 ): Promise<PaginatedResponse<Compliance>> {
   return stub("listCompliance", emptyPage<Compliance>());
 }
 
 export async function listVulnerabilities(
-  _severity?: string
+  _severity?: string,
 ): Promise<PaginatedResponse<Vulnerability>> {
   return stub("listVulnerabilities", emptyPage<Vulnerability>());
 }
 
 export async function listAuditLogs(
-  _page?: number,
-  _pageSize?: number
+  _startDate: string,
+  _endDate: string,
+  _limit?: number,
+  _nextToken?: string,
 ): Promise<PaginatedResponse<AuditLog>> {
   return stub("listAuditLogs", emptyPage<AuditLog>());
+}
+
+export async function getAuditLogsByUser(_userId: string): Promise<AuditLog[]> {
+  return stub("getAuditLogsByUser", []);
 }
 
 export async function getCustomer(_id: string): Promise<Customer | null> {
@@ -131,39 +137,30 @@ export async function getDashboardMetrics(): Promise<{
 // =============================================================================
 
 export async function createServiceOrder(
-  _input: Partial<ServiceOrder>
+  _input: Partial<ServiceOrder>,
 ): Promise<ServiceOrder | null> {
   return stub("createServiceOrder", null);
 }
 
 export async function updateServiceOrder(
   _id: string,
-  _input: Partial<ServiceOrder>
+  _input: Partial<ServiceOrder>,
 ): Promise<ServiceOrder | null> {
   return stub("updateServiceOrder", null);
 }
 
-export async function uploadFirmware(
-  _input: Partial<Firmware>
-): Promise<Firmware | null> {
+export async function uploadFirmware(_input: Partial<Firmware>): Promise<Firmware | null> {
   return stub("uploadFirmware", null);
 }
 
-export async function approveFirmware(
-  _id: string,
-  _stage: string
-): Promise<Firmware | null> {
+export async function approveFirmware(_id: string, _stage: string): Promise<Firmware | null> {
   return stub("approveFirmware", null);
 }
 
-export async function submitComplianceReview(
-  _id: string
-): Promise<Compliance | null> {
+export async function submitComplianceReview(_id: string): Promise<Compliance | null> {
   return stub("submitComplianceReview", null);
 }
 
-export async function acknowledgeNotification(
-  _id: string
-): Promise<boolean> {
+export async function acknowledgeNotification(_id: string): Promise<boolean> {
   return stub("acknowledgeNotification", true);
 }

@@ -14,11 +14,19 @@ import {
   AlertTriangle,
   RotateCcw,
   Ban,
+  Calendar,
+  User,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
+import { generateCSV } from "../../lib/report-generator";
+import { Skeleton } from "../../components/skeleton";
 
 // =============================================================================
 // Types
@@ -39,14 +47,17 @@ interface FirmwareEntry {
   releaseNotes: string;
 }
 
+type AuditAction = "Created" | "Modified" | "Deleted";
+
 interface AuditEntry {
   id: string;
-  time: string;
+  timestamp: string; // ISO8601
   user: string;
-  action: string;
-  entity: string;
+  action: AuditAction;
+  resourceType: string;
+  resourceId: string;
   ipAddress: string;
-  status: "Success" | "Failed" | "Pending";
+  status: "Success";
 }
 
 // =============================================================================
@@ -145,98 +156,308 @@ const INITIAL_FIRMWARE: FirmwareEntry[] = [
 ];
 
 // =============================================================================
-// Mock Audit Data — Story 4.4 (10 entries)
+// Mock Audit Data — Epic 8 (30 entries for pagination testing)
 // =============================================================================
 
 const INITIAL_AUDIT: AuditEntry[] = [
   {
     id: "aud-01",
-    time: "Mar 28, 2026 14:32",
+    timestamp: "2026-03-28T14:32:00Z",
     user: "j.chen@hlm.com",
-    action: "Uploaded firmware v4.2.0",
-    entity: "Firmware",
+    action: "Created",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-001",
     ipAddress: "10.0.12.45",
     status: "Success",
   },
   {
     id: "aud-02",
-    time: "Mar 27, 2026 16:10",
+    timestamp: "2026-03-27T16:10:00Z",
     user: "s.kumar@hlm.com",
-    action: "Uploaded firmware v4.1.1-beta",
-    entity: "Firmware",
+    action: "Created",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-007",
     ipAddress: "10.0.12.88",
     status: "Success",
   },
   {
     id: "aud-03",
-    time: "Mar 27, 2026 09:15",
+    timestamp: "2026-03-27T09:15:00Z",
     user: "a.patel@hlm.com",
-    action: "Approved firmware v4.0.0 for deployment",
-    entity: "Approval",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-003",
     ipAddress: "10.0.12.12",
     status: "Success",
   },
   {
     id: "aud-04",
-    time: "Mar 26, 2026 16:48",
-    user: "system",
-    action: "Deployment to 1,842 devices completed",
-    entity: "Deployment",
-    ipAddress: "—",
+    timestamp: "2026-03-26T16:48:00Z",
+    user: "SYSTEM",
+    action: "Modified",
+    resourceType: "Device",
+    resourceId: "DEV#inv-3200-001",
+    ipAddress: "lambda-stream",
     status: "Success",
   },
   {
     id: "aud-05",
-    time: "Mar 25, 2026 11:20",
+    timestamp: "2026-03-25T11:20:00Z",
     user: "j.chen@hlm.com",
-    action: "Advanced v4.1.0-rc1 to Testing",
-    entity: "Approval",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-002",
     ipAddress: "10.0.12.45",
     status: "Success",
   },
   {
     id: "aud-06",
-    time: "Mar 24, 2026 08:00",
-    user: "system",
-    action: "Automated vulnerability scan completed",
-    entity: "Compliance",
-    ipAddress: "—",
+    timestamp: "2026-03-24T08:00:00Z",
+    user: "SYSTEM",
+    action: "Created",
+    resourceType: "Compliance",
+    resourceId: "COMP#scan-2026-q1",
+    ipAddress: "lambda-stream",
     status: "Success",
   },
   {
     id: "aud-07",
-    time: "Mar 23, 2026 14:05",
+    timestamp: "2026-03-23T14:05:00Z",
     user: "m.rodriguez@hlm.com",
-    action: "Deprecated firmware v3.9.1",
-    entity: "Firmware",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-005",
     ipAddress: "10.0.12.33",
     status: "Success",
   },
   {
     id: "aud-08",
-    time: "Mar 22, 2026 10:30",
+    timestamp: "2026-03-22T10:30:00Z",
     user: "m.rodriguez@hlm.com",
-    action: "Uploaded firmware v4.0.1",
-    entity: "Firmware",
+    action: "Created",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-008",
     ipAddress: "10.0.12.33",
     status: "Success",
   },
   {
     id: "aud-09",
-    time: "Mar 21, 2026 09:00",
+    timestamp: "2026-03-21T09:00:00Z",
     user: "a.patel@hlm.com",
-    action: "Failed to approve firmware v3.8.0 — missing test results",
-    entity: "Approval",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-006",
     ipAddress: "10.0.12.12",
-    status: "Failed",
+    status: "Success",
   },
   {
     id: "aud-10",
-    time: "Mar 20, 2026 15:45",
+    timestamp: "2026-03-20T15:45:00Z",
     user: "j.chen@hlm.com",
-    action: "Deprecated firmware v3.8.0",
-    entity: "Firmware",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-006",
     ipAddress: "10.0.12.45",
+    status: "Success",
+  },
+  {
+    id: "aud-11",
+    timestamp: "2026-03-19T11:30:00Z",
+    user: "a.patel@hlm.com",
+    action: "Created",
+    resourceType: "ServiceOrder",
+    resourceId: "SO#so-4421",
+    ipAddress: "10.0.12.12",
+    status: "Success",
+  },
+  {
+    id: "aud-12",
+    timestamp: "2026-03-18T09:15:00Z",
+    user: "j.chen@hlm.com",
+    action: "Modified",
+    resourceType: "Device",
+    resourceId: "DEV#inv-3100-042",
+    ipAddress: "10.0.12.45",
+    status: "Success",
+  },
+  {
+    id: "aud-13",
+    timestamp: "2026-03-17T14:22:00Z",
+    user: "m.rodriguez@hlm.com",
+    action: "Created",
+    resourceType: "Device",
+    resourceId: "DEV#inv-5000-011",
+    ipAddress: "10.0.12.33",
+    status: "Success",
+  },
+  {
+    id: "aud-14",
+    timestamp: "2026-03-16T10:00:00Z",
+    user: "SYSTEM",
+    action: "Modified",
+    resourceType: "Vulnerability",
+    resourceId: "VULN#cve-2026-1187",
+    ipAddress: "lambda-stream",
+    status: "Success",
+  },
+  {
+    id: "aud-15",
+    timestamp: "2026-03-15T16:30:00Z",
+    user: "s.kumar@hlm.com",
+    action: "Modified",
+    resourceType: "ServiceOrder",
+    resourceId: "SO#so-4418",
+    ipAddress: "10.0.12.88",
+    status: "Success",
+  },
+  {
+    id: "aud-16",
+    timestamp: "2026-03-14T08:45:00Z",
+    user: "a.patel@hlm.com",
+    action: "Deleted",
+    resourceType: "ServiceOrder",
+    resourceId: "SO#so-4410",
+    ipAddress: "10.0.12.12",
+    status: "Success",
+  },
+  {
+    id: "aud-17",
+    timestamp: "2026-03-13T13:20:00Z",
+    user: "j.chen@hlm.com",
+    action: "Created",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-009",
+    ipAddress: "10.0.12.45",
+    status: "Success",
+  },
+  {
+    id: "aud-18",
+    timestamp: "2026-03-12T11:00:00Z",
+    user: "m.rodriguez@hlm.com",
+    action: "Modified",
+    resourceType: "Device",
+    resourceId: "DEV#inv-3200-088",
+    ipAddress: "10.0.12.33",
+    status: "Success",
+  },
+  {
+    id: "aud-19",
+    timestamp: "2026-03-11T09:30:00Z",
+    user: "SYSTEM",
+    action: "Created",
+    resourceType: "Compliance",
+    resourceId: "COMP#cert-iec62443",
+    ipAddress: "lambda-stream",
+    status: "Success",
+  },
+  {
+    id: "aud-20",
+    timestamp: "2026-03-10T15:15:00Z",
+    user: "s.kumar@hlm.com",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-003",
+    ipAddress: "10.0.12.88",
+    status: "Success",
+  },
+  {
+    id: "aud-21",
+    timestamp: "2026-03-09T10:00:00Z",
+    user: "a.patel@hlm.com",
+    action: "Created",
+    resourceType: "ServiceOrder",
+    resourceId: "SO#so-4415",
+    ipAddress: "10.0.12.12",
+    status: "Success",
+  },
+  {
+    id: "aud-22",
+    timestamp: "2026-03-08T14:40:00Z",
+    user: "j.chen@hlm.com",
+    action: "Modified",
+    resourceType: "Device",
+    resourceId: "DEV#inv-3100-019",
+    ipAddress: "10.0.12.45",
+    status: "Success",
+  },
+  {
+    id: "aud-23",
+    timestamp: "2026-03-07T11:20:00Z",
+    user: "m.rodriguez@hlm.com",
+    action: "Deleted",
+    resourceType: "Device",
+    resourceId: "DEV#inv-2500-003",
+    ipAddress: "10.0.12.33",
+    status: "Success",
+  },
+  {
+    id: "aud-24",
+    timestamp: "2026-03-06T08:30:00Z",
+    user: "SYSTEM",
+    action: "Modified",
+    resourceType: "Vulnerability",
+    resourceId: "VULN#cve-2026-0988",
+    ipAddress: "lambda-stream",
+    status: "Success",
+  },
+  {
+    id: "aud-25",
+    timestamp: "2026-03-05T16:00:00Z",
+    user: "s.kumar@hlm.com",
+    action: "Created",
+    resourceType: "Device",
+    resourceId: "DEV#inv-5000-012",
+    ipAddress: "10.0.12.88",
+    status: "Success",
+  },
+  {
+    id: "aud-26",
+    timestamp: "2026-03-04T09:45:00Z",
+    user: "a.patel@hlm.com",
+    action: "Modified",
+    resourceType: "ServiceOrder",
+    resourceId: "SO#so-4412",
+    ipAddress: "10.0.12.12",
+    status: "Success",
+  },
+  {
+    id: "aud-27",
+    timestamp: "2026-03-03T13:10:00Z",
+    user: "j.chen@hlm.com",
+    action: "Created",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-010",
+    ipAddress: "10.0.12.45",
+    status: "Success",
+  },
+  {
+    id: "aud-28",
+    timestamp: "2026-03-02T10:30:00Z",
+    user: "m.rodriguez@hlm.com",
+    action: "Modified",
+    resourceType: "Device",
+    resourceId: "DEV#inv-3200-055",
+    ipAddress: "10.0.12.33",
+    status: "Success",
+  },
+  {
+    id: "aud-29",
+    timestamp: "2026-03-01T08:00:00Z",
+    user: "SYSTEM",
+    action: "Created",
+    resourceType: "Compliance",
+    resourceId: "COMP#audit-q1-2026",
+    ipAddress: "lambda-stream",
+    status: "Success",
+  },
+  {
+    id: "aud-30",
+    timestamp: "2026-02-28T15:30:00Z",
+    user: "s.kumar@hlm.com",
+    action: "Modified",
+    resourceType: "Firmware",
+    resourceId: "FW#fw-004",
+    ipAddress: "10.0.12.88",
     status: "Success",
   },
 ];
@@ -246,8 +467,54 @@ const INITIAL_AUDIT: AuditEntry[] = [
 // =============================================================================
 
 const STAGES: readonly FirmwareStage[] = ["Uploaded", "Testing", "Approved"];
-const AUDIT_PAGE_SIZE = 6;
+const AUDIT_PAGE_SIZE = 25;
 const AVAILABLE_MODELS = ["INV-3200", "INV-3100", "INV-5000", "INV-4000", "INV-2500"];
+
+// =============================================================================
+// Helpers — Epic 8
+// =============================================================================
+
+/** Format ISO timestamp to locale-readable string (e.g., "Mar 15, 2026, 10:30 AM") */
+function formatTimestamp(iso: string): string {
+  const date = new Date(iso);
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(date);
+}
+
+/** Get default date range: last 30 days */
+function getDefaultDateRange(): { start: string; end: string } {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(start.getDate() - 30);
+  return {
+    start: start.toISOString().slice(0, 10),
+    end: end.toISOString().slice(0, 10),
+  };
+}
+
+/** Sort direction type */
+type SortDirection = "asc" | "desc" | null;
+type AuditSortField = "user" | "action" | "resourceType" | "timestamp" | "ipAddress" | "status";
+
+/** Badge color for audit actions */
+function getActionBadgeClass(action: AuditAction): string {
+  switch (action) {
+    case "Created":
+      return "bg-blue-500/10 text-blue-600";
+    case "Modified":
+      return "bg-amber-500/10 text-amber-600";
+    case "Deleted":
+      return "bg-red-500/10 text-red-600";
+    default:
+      return "bg-muted text-muted-foreground";
+  }
+}
 
 // =============================================================================
 // Approval Pipeline Component — Story 4.1
@@ -477,15 +744,25 @@ export function Deployment() {
   const role = getPrimaryRole(groups);
   const canManage = canPerformAction(role, "approve");
   const isAdmin = role === "Admin";
+  const canViewAudit = role === "Admin" || role === "Manager";
 
   const [activeTab, setActiveTab] = useState<Tab>("firmware");
   const [firmware, setFirmware] = useState<FirmwareEntry[]>(INITIAL_FIRMWARE);
   const [auditLog, setAuditLog] = useState<AuditEntry[]>(INITIAL_AUDIT);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
-  // Audit state — Story 4.4
-  const [auditSearch, setAuditSearch] = useState("");
+  // Audit state — Epic 8 (Stories 8.2, 8.3, 8.4)
+  const defaultRange = useMemo(() => getDefaultDateRange(), []);
+  const [auditStartDate, setAuditStartDate] = useState(defaultRange.start);
+  const [auditEndDate, setAuditEndDate] = useState(defaultRange.end);
+  const [auditDateError, setAuditDateError] = useState("");
+  const [auditUserFilter, setAuditUserFilter] = useState("");
+  const [auditUserInput, setAuditUserInput] = useState("");
   const [auditPage, setAuditPage] = useState(1);
+  const [auditSortField, setAuditSortField] = useState<AuditSortField>("timestamp");
+  const [auditSortDir, setAuditSortDir] = useState<SortDirection>("desc");
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditError, setAuditError] = useState<string | null>(null);
 
   // ---------------------------------------------------------------------------
   // Helpers
@@ -494,22 +771,14 @@ export function Deployment() {
   const currentUser = email ?? "admin@hlm.com";
 
   const addAuditEntry = useCallback(
-    (action: string, entity: string) => {
-      const now = new Date();
-      const formatted =
-        now.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }) +
-        " " +
-        now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+    (action: AuditAction, resourceType: string, resourceId: string) => {
       const entry: AuditEntry = {
         id: `aud-${Date.now()}`,
-        time: formatted,
+        timestamp: new Date().toISOString(),
         user: currentUser,
         action,
-        entity,
+        resourceType,
+        resourceId,
         ipAddress: "10.0.12.45",
         status: "Success",
       };
@@ -540,7 +809,7 @@ export function Deployment() {
         releaseNotes: data.releaseNotes,
       };
       setFirmware((prev) => [newEntry, ...prev]);
-      addAuditEntry(`Uploaded firmware ${data.version}`, "Firmware");
+      addAuditEntry("Created", "Firmware", `FW#${newEntry.id}`);
       toast.success(`Firmware ${data.version} uploaded successfully`);
       setUploadModalOpen(false);
     },
@@ -573,7 +842,7 @@ export function Deployment() {
       if (!confirmed) return;
 
       setFirmware((prev) => prev.map((f) => (f.id === id ? { ...f, stage: next } : f)));
-      addAuditEntry(`Advanced ${fw.version} to ${next}`, "Approval");
+      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
       toast.success(`${fw.version} advanced to ${next}`);
     },
     [firmware, currentUser, addAuditEntry],
@@ -595,7 +864,7 @@ export function Deployment() {
           f.id === id ? { ...f, stage: "Deprecated" as FirmwareStage, devices: 0 } : f,
         ),
       );
-      addAuditEntry(`Deprecated firmware ${fw.version}`, "Firmware");
+      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
       toast.success(`${fw.version} deprecated`);
     },
     [firmware, addAuditEntry],
@@ -613,54 +882,134 @@ export function Deployment() {
       setFirmware((prev) =>
         prev.map((f) => (f.id === id ? { ...f, stage: "Uploaded" as FirmwareStage } : f)),
       );
-      addAuditEntry(`Reactivated firmware ${fw.version}`, "Firmware");
+      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
       toast.success(`${fw.version} reactivated`);
     },
     [firmware, addAuditEntry],
   );
 
   // ---------------------------------------------------------------------------
-  // Story 4.4 — Audit Log Filtering & Pagination
+  // Epic 8 — Audit Log Date Range, User Filter, Sorting, Pagination, Export
   // ---------------------------------------------------------------------------
 
+  /** Story 8.2: Filter by date range + Story 8.3: Filter by user */
   const filteredAudit = useMemo(() => {
-    if (!auditSearch.trim()) return auditLog;
-    const q = auditSearch.toLowerCase();
-    return auditLog.filter(
-      (e) =>
-        e.action.toLowerCase().includes(q) ||
-        e.user.toLowerCase().includes(q) ||
-        e.entity.toLowerCase().includes(q) ||
-        e.status.toLowerCase().includes(q),
-    );
-  }, [auditLog, auditSearch]);
+    let entries = auditLog;
 
-  const totalAuditPages = Math.max(1, Math.ceil(filteredAudit.length / AUDIT_PAGE_SIZE));
+    // Date range filter (Story 8.2)
+    if (auditStartDate && auditEndDate) {
+      const startISO = new Date(auditStartDate + "T00:00:00Z").toISOString();
+      const endISO = new Date(auditEndDate + "T23:59:59Z").toISOString();
+      entries = entries.filter((e) => e.timestamp >= startISO && e.timestamp <= endISO);
+    }
+
+    // User filter (Story 8.3)
+    if (auditUserFilter.trim()) {
+      const q = auditUserFilter.toLowerCase();
+      entries = entries.filter((e) => e.user.toLowerCase().includes(q));
+    }
+
+    return entries;
+  }, [auditLog, auditStartDate, auditEndDate, auditUserFilter]);
+
+  /** Story 8.4: Column sorting */
+  const sortedAudit = useMemo(() => {
+    if (!auditSortField || !auditSortDir) return filteredAudit;
+
+    return [...filteredAudit].sort((a, b) => {
+      const aVal = a[auditSortField];
+      const bVal = b[auditSortField];
+      const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+      return auditSortDir === "asc" ? cmp : -cmp;
+    });
+  }, [filteredAudit, auditSortField, auditSortDir]);
+
+  const totalAuditPages = Math.max(1, Math.ceil(sortedAudit.length / AUDIT_PAGE_SIZE));
   const paginatedAudit = useMemo(() => {
     const start = (auditPage - 1) * AUDIT_PAGE_SIZE;
-    return filteredAudit.slice(start, start + AUDIT_PAGE_SIZE);
-  }, [filteredAudit, auditPage]);
+    return sortedAudit.slice(start, start + AUDIT_PAGE_SIZE);
+  }, [sortedAudit, auditPage]);
 
+  /** Story 8.2: Date range validation and apply */
+  const handleApplyDateRange = useCallback(() => {
+    if (auditStartDate && auditEndDate && auditEndDate < auditStartDate) {
+      setAuditDateError("End date must be after start date");
+      return;
+    }
+    setAuditDateError("");
+    setAuditPage(1);
+    // Simulate loading state for UX
+    setAuditLoading(true);
+    setAuditError(null);
+    setTimeout(() => setAuditLoading(false), 300);
+  }, [auditStartDate, auditEndDate]);
+
+  /** Story 8.3: Apply user filter */
+  const handleApplyUserFilter = useCallback(() => {
+    setAuditUserFilter(auditUserInput);
+    setAuditPage(1);
+  }, [auditUserInput]);
+
+  /** Story 8.3: Clear user filter */
+  const handleClearUserFilter = useCallback(() => {
+    setAuditUserInput("");
+    setAuditUserFilter("");
+    setAuditPage(1);
+  }, []);
+
+  /** Story 8.4: Toggle column sort */
+  const handleSort = useCallback(
+    (field: AuditSortField) => {
+      setAuditSortField((prev) => {
+        if (prev !== field) return field;
+        return prev;
+      });
+      setAuditSortDir((prev) => {
+        if (auditSortField !== field) return "asc";
+        if (prev === "asc") return "desc";
+        if (prev === "desc") return null;
+        return "asc";
+      });
+    },
+    [auditSortField],
+  );
+
+  /** Story 8.4: Retry on error */
+  const handleRetryAudit = useCallback(() => {
+    setAuditError(null);
+    setAuditLoading(true);
+    setTimeout(() => setAuditLoading(false), 300);
+  }, []);
+
+  /** Story 8.5: CSV export with proper headers and filename */
   const exportAuditCsv = useCallback(() => {
-    const headers = ["Time", "User", "Action", "Entity", "IP Address", "Status"];
-    const rows = filteredAudit.map((e) => [
-      e.time,
-      e.user,
-      e.action,
-      e.entity,
-      e.ipAddress,
-      e.status,
-    ]);
-    const csv = [headers, ...rows].map((r) => r.map((c) => `"${c}"`).join(",")).join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
+    if (sortedAudit.length === 0) return;
+
+    const data = sortedAudit.map((e) => ({
+      User: e.user,
+      Action: e.action,
+      ResourceType: e.resourceType,
+      ResourceId: e.resourceId,
+      Timestamp: e.timestamp,
+      IPAddress: e.ipAddress,
+      Status: e.status,
+    }));
+
+    const csv = generateCSV(
+      data,
+      ["User", "Action", "ResourceType", "ResourceId", "Timestamp", "IPAddress", "Status"],
+      ["User", "Action", "ResourceType", "ResourceId", "Timestamp", "IPAddress", "Status"],
+    );
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "audit-log.csv";
+    a.download = `audit-log-${auditStartDate}-to-${auditEndDate}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Exported ${filteredAudit.length} audit entries to CSV`);
-  }, [filteredAudit]);
+    toast.success("Audit log exported successfully");
+  }, [sortedAudit, auditStartDate, auditEndDate]);
 
   // ---------------------------------------------------------------------------
   // Render
@@ -671,25 +1020,31 @@ export function Deployment() {
       {/* Tabs + Upload Button */}
       <div className="flex items-center justify-between">
         <div className="flex border-b border-border">
-          {(
-            [
-              { id: "firmware" as const, label: "Firmware" },
-              { id: "audit" as const, label: "Audit Log" },
-            ] as const
-          ).map((tab) => (
+          <button
+            onClick={() => setActiveTab("firmware")}
+            className={cn(
+              "px-3 py-2 text-xs font-medium transition-colors duration-150",
+              activeTab === "firmware"
+                ? "border-b-2 border-[#FF7900] text-[#FF7900]"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            Firmware
+          </button>
+          {/* Story 8.3 AC6: Audit Log tab hidden from Technician/Viewer */}
+          {canViewAudit && (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => setActiveTab("audit")}
               className={cn(
                 "px-3 py-2 text-xs font-medium transition-colors duration-150",
-                activeTab === tab.id
+                activeTab === "audit"
                   ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
-              {tab.label}
+              Audit Log
             </button>
-          ))}
+          )}
         </div>
         {activeTab === "firmware" && canManage && (
           <button
@@ -698,15 +1053,6 @@ export function Deployment() {
           >
             <Upload className="h-3 w-3" />
             Upload Firmware
-          </button>
-        )}
-        {activeTab === "audit" && (
-          <button
-            onClick={exportAuditCsv}
-            className="flex items-center gap-1 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors duration-150"
-          >
-            <Download className="h-3 w-3" />
-            Export CSV
           </button>
         )}
       </div>
@@ -870,124 +1216,269 @@ export function Deployment() {
         </>
       )}
 
-      {/* ===== Audit Log Tab — Story 4.4 ===== */}
-      {activeTab === "audit" && (
+      {/* ===== Audit Log Tab — Epic 8 (Stories 8.2, 8.3, 8.4, 8.5) ===== */}
+      {activeTab === "audit" && canViewAudit && (
         <div className="space-y-3">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
-            <input
-              type="text"
-              value={auditSearch}
-              onChange={(e) => {
-                setAuditSearch(e.target.value);
-                setAuditPage(1);
-              }}
-              placeholder="Search audit log..."
-              className="w-full rounded-sm border border-border bg-background py-1.5 pl-8 pr-3 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
-            />
-          </div>
-
-          {/* Table */}
-          <div className="overflow-auto rounded-sm border border-border">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="border-b border-border bg-muted/50">
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Time</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">User</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Action</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Entity</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">
-                    IP Address
-                  </th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedAudit.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-3 py-8 text-center text-muted-foreground">
-                      No audit entries found
-                    </td>
-                  </tr>
-                ) : (
-                  paginatedAudit.map((log) => (
-                    <tr
-                      key={log.id}
-                      className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors duration-150"
-                    >
-                      <td className="px-3 py-2 font-mono text-muted-foreground whitespace-nowrap">
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {log.time}
-                        </div>
-                      </td>
-                      <td className="px-3 py-2 text-muted-foreground">{log.user}</td>
-                      <td className="px-3 py-2 text-foreground">{log.action}</td>
-                      <td className="px-3 py-2">
-                        <span className="rounded-sm bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
-                          {log.entity}
-                        </span>
-                      </td>
-                      <td className="px-3 py-2 font-mono text-muted-foreground">{log.ipAddress}</td>
-                      <td className="px-3 py-2">
-                        <span
-                          className={cn(
-                            "rounded-sm px-1.5 py-0.5 text-[10px] font-medium",
-                            log.status === "Success"
-                              ? "bg-emerald-500/10 text-emerald-600"
-                              : log.status === "Failed"
-                                ? "bg-red-500/10 text-red-600"
-                                : "bg-amber-500/10 text-amber-600",
-                          )}
-                        >
-                          {log.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Pagination */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>
-              Showing {Math.min((auditPage - 1) * AUDIT_PAGE_SIZE + 1, filteredAudit.length)}
-              {" - "}
-              {Math.min(auditPage * AUDIT_PAGE_SIZE, filteredAudit.length)} of{" "}
-              {filteredAudit.length} entries
-            </span>
-            <div className="flex items-center gap-1">
+          {/* Filter Controls — Story 8.2 (Date Range) + Story 8.3 (User) + Story 8.5 (Export) */}
+          <div className="flex flex-wrap items-end gap-3">
+            {/* Date Range — Story 8.2 */}
+            <div className="flex items-end gap-2">
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                  From
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <input
+                    type="date"
+                    value={auditStartDate}
+                    onChange={(e) => {
+                      setAuditStartDate(e.target.value);
+                      setAuditDateError("");
+                    }}
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                  To
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <input
+                    type="date"
+                    value={auditEndDate}
+                    onChange={(e) => {
+                      setAuditEndDate(e.target.value);
+                      setAuditDateError("");
+                    }}
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                  />
+                </div>
+              </div>
               <button
-                onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
-                disabled={auditPage <= 1}
-                className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                onClick={handleApplyDateRange}
+                className="rounded-sm bg-[#FF7900] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
               >
-                <ChevronLeft className="h-3.5 w-3.5" />
-              </button>
-              {Array.from({ length: totalAuditPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setAuditPage(page)}
-                  className={cn(
-                    "rounded-sm px-2 py-1 text-[10px] font-medium",
-                    page === auditPage ? "bg-[#FF7900] text-white" : "hover:bg-muted",
-                  )}
-                >
-                  {page}
-                </button>
-              ))}
-              <button
-                onClick={() => setAuditPage((p) => Math.min(totalAuditPages, p + 1))}
-                disabled={auditPage >= totalAuditPages}
-                className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                <ChevronRight className="h-3.5 w-3.5" />
+                Apply
               </button>
             </div>
+
+            {/* User Filter — Story 8.3 */}
+            <div className="flex items-end gap-2">
+              <div>
+                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                  Filter by User
+                </label>
+                <div className="relative">
+                  <User className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <input
+                    type="text"
+                    value={auditUserInput}
+                    onChange={(e) => setAuditUserInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleApplyUserFilter();
+                    }}
+                    placeholder="User ID or email"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900] w-48"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={handleApplyUserFilter}
+                className="rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors duration-150"
+              >
+                <Search className="h-3 w-3" />
+              </button>
+              {auditUserFilter && (
+                <button
+                  onClick={handleClearUserFilter}
+                  className="flex items-center gap-1 rounded-sm bg-blue-500/10 px-2 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-500/20 transition-colors duration-150"
+                >
+                  {auditUserFilter}
+                  <X className="h-3 w-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Spacer */}
+            <div className="flex-1" />
+
+            {/* Export CSV — Story 8.5 */}
+            <button
+              onClick={exportAuditCsv}
+              disabled={sortedAudit.length === 0}
+              className="flex items-center gap-1 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Download className="h-3 w-3" />
+              Export CSV
+            </button>
           </div>
+
+          {/* Date validation error — Story 8.2 AC6 */}
+          {auditDateError && <p className="text-xs text-red-500">{auditDateError}</p>}
+
+          {/* Error state — Story 8.4 AC7 */}
+          {auditError && (
+            <div className="flex flex-col items-center justify-center rounded-sm border border-red-200 bg-red-50 py-8">
+              <AlertTriangle className="mb-2 h-6 w-6 text-red-500" />
+              <p className="text-sm font-medium text-red-600">Failed to load audit logs</p>
+              <p className="mt-1 text-xs text-red-500">{auditError}</p>
+              <button
+                onClick={handleRetryAudit}
+                className="mt-3 flex items-center gap-1 rounded-sm border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 transition-colors duration-150"
+              >
+                <RefreshCw className="h-3 w-3" />
+                Retry
+              </button>
+            </div>
+          )}
+
+          {/* Table — Story 8.4 */}
+          {!auditError && (
+            <div
+              className="overflow-auto rounded-sm border border-border"
+              style={{ maxHeight: "calc(100vh - 320px)" }}
+            >
+              <table className="w-full text-xs">
+                <thead className="sticky top-0 z-10">
+                  <tr className="border-b border-border bg-muted/50">
+                    {[
+                      { field: "user" as const, label: "User" },
+                      { field: "action" as const, label: "Action" },
+                      { field: "resourceType" as const, label: "Resource Type" },
+                      { field: "timestamp" as const, label: "Timestamp" },
+                      { field: "ipAddress" as const, label: "IP Address" },
+                      { field: "status" as const, label: "Status" },
+                    ].map(({ field, label }) => (
+                      <th
+                        key={field}
+                        onClick={() => handleSort(field)}
+                        className="px-3 py-2 text-left font-medium text-muted-foreground cursor-pointer select-none hover:text-foreground transition-colors duration-150"
+                      >
+                        <div className="flex items-center gap-1">
+                          {label}
+                          {auditSortField === field && auditSortDir === "asc" && (
+                            <ArrowUp className="h-3 w-3" />
+                          )}
+                          {auditSortField === field && auditSortDir === "desc" && (
+                            <ArrowDown className="h-3 w-3" />
+                          )}
+                          {(auditSortField !== field || !auditSortDir) && (
+                            <ArrowUpDown className="h-3 w-3 opacity-30" />
+                          )}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* Story 8.4 AC6: Skeleton loading state */}
+                  {auditLoading ? (
+                    Array.from({ length: 6 }).map((_, i) => (
+                      <tr key={`skel-${i}`} className="border-b border-border last:border-0">
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-28" />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-16" />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-20" />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-36" />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-24" />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Skeleton className="h-4 w-14" />
+                        </td>
+                      </tr>
+                    ))
+                  ) : paginatedAudit.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-3 py-8 text-center text-muted-foreground">
+                        {auditUserFilter
+                          ? "No audit entries found for this user"
+                          : "No audit entries found for the selected date range"}
+                      </td>
+                    </tr>
+                  ) : (
+                    paginatedAudit.map((log) => (
+                      <tr
+                        key={log.id}
+                        className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors duration-150"
+                      >
+                        <td className="px-3 py-2 text-muted-foreground">{log.user}</td>
+                        <td className="px-3 py-2">
+                          {/* Story 8.4 AC3: Colored action badges */}
+                          <span
+                            className={cn(
+                              "rounded-sm px-1.5 py-0.5 text-[10px] font-medium",
+                              getActionBadgeClass(log.action),
+                            )}
+                          >
+                            {log.action}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="rounded-sm bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                            {log.resourceType}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2 font-mono text-muted-foreground whitespace-nowrap">
+                          <div className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {/* Story 8.4 AC4: Human-readable locale format */}
+                            {formatTimestamp(log.timestamp)}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 font-mono text-muted-foreground">
+                          {log.ipAddress}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="rounded-sm bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-600">
+                            {log.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Pagination — Story 8.2 AC3 */}
+          {!auditError && !auditLoading && sortedAudit.length > 0 && (
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                Showing {Math.min((auditPage - 1) * AUDIT_PAGE_SIZE + 1, sortedAudit.length)}
+                {" - "}
+                {Math.min(auditPage * AUDIT_PAGE_SIZE, sortedAudit.length)} of {sortedAudit.length}{" "}
+                entries
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
+                  disabled={auditPage <= 1}
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                </button>
+                <button
+                  onClick={() => setAuditPage((p) => Math.min(totalAuditPages, p + 1))}
+                  disabled={auditPage >= totalAuditPages}
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
