@@ -1,0 +1,127 @@
+{
+  "description": "OpenSearch aggregation query templates for IMS Gen2 Analytics (Story 18.5)",
+  "aggregations": {
+    "devicesByStatus": {
+      "description": "Device count by status (Online/Offline/Maintenance) for pie chart",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Device" } },
+        "aggs": {
+          "statuses": {
+            "terms": { "field": "status", "size": 10 }
+          }
+        }
+      }
+    },
+    "deviceCount": {
+      "description": "Total device count",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Device" } },
+        "aggs": {
+          "count": { "value_count": { "field": "entityType" } }
+        }
+      }
+    },
+    "activeDeployments": {
+      "description": "Count of firmware with Active status",
+      "query": {
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Firmware" } },
+              { "term": { "status": "Active" } }
+            ]
+          }
+        }
+      }
+    },
+    "pendingApprovals": {
+      "description": "Count of firmware at Uploaded approval stage",
+      "query": {
+        "size": 0,
+        "query": {
+          "bool": {
+            "must": [
+              { "term": { "entityType": "Firmware" } },
+              { "term": { "approvalStage": "Uploaded" } }
+            ]
+          }
+        }
+      }
+    },
+    "avgHealthScore": {
+      "description": "Average health score across all devices",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Device" } },
+        "aggs": {
+          "avg_health": { "avg": { "field": "healthScore" } }
+        }
+      }
+    },
+    "complianceByStatus": {
+      "description": "Compliance record count by status for pie chart",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Compliance" } },
+        "aggs": {
+          "statuses": {
+            "terms": { "field": "status", "size": 10 }
+          }
+        }
+      }
+    },
+    "deploymentTrend": {
+      "description": "Weekly firmware release trend for bar chart",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Firmware" } },
+        "aggs": {
+          "trend": {
+            "date_histogram": {
+              "field": "releaseDate",
+              "calendar_interval": "week"
+            }
+          }
+        }
+      }
+    },
+    "topVulnerabilities": {
+      "description": "Vulnerability count by severity for breakdown chart",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Vulnerability" } },
+        "aggs": {
+          "severity": {
+            "terms": { "field": "vulnSeverity", "size": 10 }
+          }
+        }
+      }
+    },
+    "healthScoreDistribution": {
+      "description": "Device health score histogram (buckets of 10) for distribution chart",
+      "query": {
+        "size": 0,
+        "query": { "term": { "entityType": "Device" } },
+        "aggs": {
+          "scores": {
+            "histogram": { "field": "healthScore", "interval": 10 }
+          }
+        }
+      }
+    }
+  },
+  "timeRangeFilter": {
+    "description": "Apply to any aggregation query to scope by date range",
+    "template": {
+      "range": {
+        "createdAt": {
+          "gte": "{{start}}",
+          "lte": "{{end}}"
+        }
+      }
+    }
+  }
+}

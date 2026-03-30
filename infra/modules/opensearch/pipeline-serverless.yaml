@@ -10,15 +10,21 @@ dynamodb-pipeline:
           export:
             s3_bucket: "${export_bucket}"
             s3_region: "${region}"
+            s3_prefix: "ims-export/"
       aws:
         sts_role_arn: "${role_arn}"
         region: "${region}"
+  processor:
+    - date:
+        from_time_received: true
+        destination: "@timestamp"
   sink:
     - opensearch:
         hosts:
           - "${collection_endpoint}"
         index: "${index_name}"
         index_type: "custom"
+        template_file: "templates/index-template.json"
         document_id: "$${getMetadata(\"primary_key\")}"
         action: "$${getMetadata(\"opensearch_action\")}"
         aws:

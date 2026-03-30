@@ -1,10 +1,11 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router";
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { useAuth } from "../../../lib/use-auth";
 import { cn } from "../../../lib/utils";
 import { NotificationPanel, useNotificationCount } from "../notification-panel";
 import { ThemeToggle } from "../theme/theme-toggle";
+import { GlobalSearchBar } from "../search/global-search-bar";
 
 const ROUTE_META: Record<string, { title: string }> = {
   "/": { title: "Dashboard" },
@@ -67,21 +68,7 @@ export function Header() {
 
         {/* Right: Search + Theme + Bell + Divider + User */}
         <div className="flex items-center gap-2">
-          <button
-            className={cn(
-              "flex h-9 w-[220px] cursor-pointer items-center gap-2 rounded-full border border-border bg-muted px-3.5",
-              "hover:border-muted-foreground/30",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1",
-            )}
-            aria-label="Search (Ctrl+K)"
-            title="Search (Ctrl+K)"
-          >
-            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-            <span className="flex-1 text-left text-[13px] text-muted-foreground">Search...</span>
-            <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-card px-1.5 text-[10px] font-medium text-muted-foreground">
-              /
-            </kbd>
-          </button>
+          <GlobalSearchBar />
 
           <ThemeToggle />
 

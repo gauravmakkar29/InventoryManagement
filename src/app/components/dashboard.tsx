@@ -21,6 +21,7 @@ import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
 import { useDashboardData } from "../../lib/use-dashboard-data";
 import type { FetchState } from "../../lib/use-dashboard-data";
+import { PipelineStatusCard } from "./search/pipeline-status-card";
 
 // ---------------------------------------------------------------------------
 // Sparkline — micro inline chart
@@ -529,6 +530,10 @@ export function Dashboard() {
                 </div>
               </div>
             ))}
+          </div>
+          {/* Story 18.1 — OSIS Pipeline Health */}
+          <div className="mt-3">
+            <PipelineStatusCard />
           </div>
         </div>
 

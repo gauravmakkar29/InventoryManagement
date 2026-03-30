@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
 import {
-  Search,
   ChevronDown,
   ChevronUp,
   ChevronLeft,
@@ -13,11 +12,13 @@ import {
 import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { DeviceStatus } from "../../lib/types";
+import type { DeviceSearchFilters } from "../../lib/opensearch-types";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
 import { CreateDeviceModal } from "./dialogs/create-device-modal";
 import type { CreateDevicePayload } from "./dialogs/create-device-modal";
 import { GeoLocationMap } from "./geo-location-map";
+import { AdvancedDeviceSearch } from "./search/advanced-device-search";
 
 type Tab = "hardware" | "firmware" | "geo";
 type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
@@ -250,6 +251,7 @@ const ALL_STATUSES = [
   DeviceStatus.Decommissioned,
 ];
 const ALL_LOCATIONS = [...new Set(MOCK_DEVICES.map((d) => d.location))].sort();
+const ALL_MODELS = [...new Set(MOCK_DEVICES.map((d) => d.model))].sort();
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -346,8 +348,9 @@ export function Inventory() {
 
   const [activeTab, setActiveTab] = useState<Tab>("hardware");
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [locationFilter, setLocationFilter] = useState<string>("all");
+  const [statusFilter] = useState<string>("all");
+  const [locationFilter] = useState<string>("all");
+  const [advancedFilters, setAdvancedFilters] = useState<DeviceSearchFilters>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [devices, setDevices] = useState<MockDevice[]>(MOCK_DEVICES);
@@ -405,22 +408,43 @@ export function Inventory() {
   const filteredDevices = useMemo(() => {
     let result = [...devices];
 
-    // Search
+    // Search (fuzzy matching — in production powered by OpenSearch multi_match)
     if (search) {
       const q = search.toLowerCase();
       result = result.filter(
-        (d) => d.name.toLowerCase().includes(q) || d.serial.toLowerCase().includes(q),
+        (d) =>
+          d.name.toLowerCase().includes(q) ||
+          d.serial.toLowerCase().includes(q) ||
+          d.location.toLowerCase().includes(q) ||
+          d.model.toLowerCase().includes(q),
       );
     }
 
-    // Status filter
-    if (statusFilter !== "all") {
-      result = result.filter((d) => d.status === statusFilter);
+    // Status filter (from advanced filters or legacy dropdown)
+    const activeStatus =
+      advancedFilters.status ?? (statusFilter !== "all" ? statusFilter : undefined);
+    if (activeStatus) {
+      result = result.filter((d) => d.status === activeStatus);
     }
 
-    // Location filter
-    if (locationFilter !== "all") {
-      result = result.filter((d) => d.location === locationFilter);
+    // Location filter (from advanced filters or legacy dropdown)
+    const activeLocation =
+      advancedFilters.location ?? (locationFilter !== "all" ? locationFilter : undefined);
+    if (activeLocation) {
+      result = result.filter((d) => d.location === activeLocation);
+    }
+
+    // Model filter (Story 18.3)
+    if (advancedFilters.model) {
+      result = result.filter((d) => d.model === advancedFilters.model);
+    }
+
+    // Health score range filter (Story 18.3)
+    if (advancedFilters.healthScoreMin != null) {
+      result = result.filter((d) => d.health >= advancedFilters.healthScoreMin!);
+    }
+    if (advancedFilters.healthScoreMax != null) {
+      result = result.filter((d) => d.health <= advancedFilters.healthScoreMax!);
     }
 
     // Sort
@@ -451,7 +475,7 @@ export function Inventory() {
     });
 
     return result;
-  }, [devices, search, statusFilter, locationFilter, sortField, sortDir]);
+  }, [devices, search, statusFilter, locationFilter, advancedFilters, sortField, sortDir]);
 
   // Reset to page 1 when filters change
   const totalPages = Math.max(1, Math.ceil(filteredDevices.length / PAGE_SIZE));
@@ -518,75 +542,49 @@ export function Inventory() {
       {/* Hardware Tab */}
       {activeTab === "hardware" && (
         <>
-          {/* Search + Filters */}
-          <div className="flex items-center gap-3">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by device name or serial..."
-                className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder:text-gray-400 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
-              />
-            </div>
+          {/* Advanced Search + Filters (Story 18.3) */}
+          <div className="space-y-3">
+            <AdvancedDeviceSearch
+              query={search}
+              onQueryChange={setSearch}
+              filters={advancedFilters}
+              onFiltersChange={setAdvancedFilters}
+              statusOptions={ALL_STATUSES}
+              locationOptions={ALL_LOCATIONS}
+              modelOptions={ALL_MODELS}
+              totalResults={filteredDevices.length}
+              totalDevices={devices.length}
+            />
 
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-[13px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20 cursor-pointer"
-            >
-              <option value="all">All Statuses</option>
-              {ALL_STATUSES.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={locationFilter}
-              onChange={(e) => setLocationFilter(e.target.value)}
-              className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-[13px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20 cursor-pointer"
-            >
-              <option value="all">All Locations</option>
-              {ALL_LOCATIONS.map((loc) => (
-                <option key={loc} value={loc}>
-                  {loc}
-                </option>
-              ))}
-            </select>
-
-            <span className="text-[12px] text-gray-400 shrink-0">
-              {filteredDevices.length} of {devices.length} devices
-            </span>
-
-            <button
-              onClick={exportCsv}
-              disabled={filteredDevices.length === 0}
-              className={cn(
-                "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[13px] font-medium text-gray-700 shrink-0",
-                "hover:bg-gray-50",
-                "disabled:cursor-not-allowed disabled:opacity-40",
-              )}
-            >
-              <Download className="h-4 w-4" />
-              Export CSV
-            </button>
-
-            {canCreate && (
+            {/* Action buttons */}
+            <div className="flex items-center gap-2 justify-end">
               <button
-                onClick={() => setCreateModalOpen(true)}
+                onClick={exportCsv}
+                disabled={filteredDevices.length === 0}
                 className={cn(
-                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[13px] font-medium text-white shrink-0",
-                  "hover:bg-[#e86e00]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[13px] font-medium text-gray-700 shrink-0",
+                  "hover:bg-gray-50",
+                  "disabled:cursor-not-allowed disabled:opacity-40",
                 )}
               >
-                <Plus className="h-4 w-4" />
-                Add Device
+                <Download className="h-4 w-4" />
+                Export CSV
               </button>
-            )}
+
+              {canCreate && (
+                <button
+                  onClick={() => setCreateModalOpen(true)}
+                  className={cn(
+                    "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[13px] font-medium text-white shrink-0",
+                    "hover:bg-[#e86e00]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+                  )}
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Device
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Table */}

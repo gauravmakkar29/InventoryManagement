@@ -23,6 +23,7 @@ import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole } from "../../lib/rbac";
 import type { Role } from "../../lib/rbac";
+import { VulnerabilitySearch } from "./search/vulnerability-search";
 
 // =============================================================================
 // Types
@@ -1155,6 +1156,9 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
           </button>
         )}
       </div>
+
+      {/* Story 18.4 — Vulnerability Search with severity filtering */}
+      <VulnerabilitySearch />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {vulnerabilities.map((vuln) => {
