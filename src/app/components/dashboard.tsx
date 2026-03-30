@@ -99,43 +99,7 @@ function GaugeChart({ value, size = 160 }: { value: number; size?: number }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Segmented Bar — fleet status
-// ---------------------------------------------------------------------------
-function SegmentedBar({
-  segments,
-}: {
-  segments: { label: string; value: number; color: string; pct: number }[];
-}) {
-  return (
-    <div className="space-y-2">
-      {/* Percentage labels above */}
-      <div className="flex">
-        {segments.map((seg, i) => (
-          <div
-            key={i}
-            className="text-center text-[11px] font-medium text-gray-500"
-            style={{ width: `${seg.pct}%` }}
-          >
-            {seg.pct}%
-          </div>
-        ))}
-      </div>
-      {/* Bar */}
-      <div className="flex h-2.5 overflow-hidden rounded-full bg-gray-100">
-        {segments.map((seg, i) => (
-          <div
-            key={i}
-            style={{
-              width: `${seg.pct}%`,
-              backgroundColor: seg.color,
-            }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
+// (SegmentedBar removed — replaced by inline stacked bar in Fleet Status)
 
 // ---------------------------------------------------------------------------
 // Skeleton KPI Card
@@ -555,51 +519,80 @@ export function Dashboard() {
           </div>
 
           <div className="px-5 pb-5 space-y-5">
-            {/* Segmented bar */}
-            <SegmentedBar segments={FLEET_SEGMENTS} />
-
-            {/* Stat boxes */}
-            <div className="grid grid-cols-3 gap-3">
-              {FLEET_SEGMENTS.map((seg) => (
-                <div key={seg.label} className="rounded-lg bg-gray-50 px-3 py-2.5">
-                  <div className="flex items-center gap-2">
+            {/* Visual stacked bar with labels inside */}
+            <div className="space-y-1.5">
+              <div className="flex h-10 overflow-hidden rounded-xl">
+                {FLEET_SEGMENTS.map((seg) => (
+                  <div
+                    key={seg.label}
+                    className="flex items-center justify-center text-[11px] font-bold text-white"
+                    style={{ width: `${seg.pct}%`, backgroundColor: seg.color }}
+                  >
+                    {seg.pct >= 10 && `${seg.value}`}
+                  </div>
+                ))}
+              </div>
+              {/* Legend */}
+              <div className="flex items-center gap-4">
+                {FLEET_SEGMENTS.map((seg) => (
+                  <div key={seg.label} className="flex items-center gap-1.5">
                     <span
-                      className="h-2 w-2 rounded-full shrink-0"
+                      className="h-2.5 w-2.5 rounded-sm shrink-0"
                       style={{ backgroundColor: seg.color }}
                     />
-                    <span className="text-[12px] text-gray-500">{seg.label}</span>
-                  </div>
-                  <div className="mt-1 flex items-baseline gap-1.5">
-                    <span className="text-[18px] font-semibold text-gray-900 tabular-nums">
-                      {seg.value}
+                    <span className="text-[12px] font-medium text-gray-600">{seg.label}</span>
+                    <span className="text-[12px] font-bold text-gray-900 tabular-nums">
+                      {seg.pct}%
                     </span>
-                    <span className="text-[11px] text-gray-400">{seg.pct}%</span>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Status breakdown cards */}
+            <div className="grid grid-cols-3 gap-3">
+              {FLEET_SEGMENTS.map((seg) => (
+                <div
+                  key={seg.label}
+                  className="rounded-xl border px-3.5 py-3"
+                  style={{ borderColor: `${seg.color}30`, backgroundColor: `${seg.color}08` }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[12px] font-medium text-gray-600">{seg.label}</span>
+                    <span className="h-2 w-2 rounded-full" style={{ backgroundColor: seg.color }} />
+                  </div>
+                  <p className="mt-1 text-[22px] font-bold tabular-nums text-gray-900">
+                    {seg.value.toLocaleString()}
+                  </p>
+                  <p className="text-[11px] text-gray-400">{seg.pct}% of fleet</p>
                 </div>
               ))}
             </div>
 
             {/* Top Regions */}
             <div>
-              <p className="mb-3 text-[13px] font-semibold text-gray-900">Top Regions</p>
+              <p className="mb-3 text-[13px] font-semibold text-gray-900">Device Distribution</p>
               <div className="space-y-2.5">
-                {TOP_REGIONS.map((region) => (
+                {TOP_REGIONS.map((region, i) => (
                   <div key={region.name} className="flex items-center gap-3">
-                    <span className="w-[110px] truncate text-[13px] text-gray-600">
+                    <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-gray-400 bg-gray-100">
+                      {i + 1}
+                    </span>
+                    <span className="w-[100px] truncate text-[13px] font-medium text-gray-700">
                       {region.name}
                     </span>
                     <div className="flex-1">
-                      <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
+                      <div className="h-2 overflow-hidden rounded-full bg-gray-100">
                         <div
                           className="h-full rounded-full"
                           style={{
                             width: `${region.pct}%`,
-                            backgroundColor: "#10b981",
+                            background: `linear-gradient(90deg, #FF7900, #f59e0b)`,
                           }}
                         />
                       </div>
                     </div>
-                    <span className="w-[40px] text-right text-[12px] font-mono tabular-nums text-gray-500">
+                    <span className="w-[40px] text-right text-[13px] font-bold tabular-nums text-gray-700">
                       {region.count}
                     </span>
                   </div>
@@ -620,7 +613,7 @@ export function Dashboard() {
 
           <div className="flex flex-col items-center px-5 pb-5">
             {/* Gauge */}
-            <div className="relative">
+            <div className="relative mb-3">
               <GaugeChart value={94.2} />
               <div className="absolute inset-x-0 bottom-2 flex flex-col items-center">
                 <span className="text-[28px] font-bold tabular-nums text-gray-900">94.2%</span>
@@ -628,11 +621,25 @@ export function Dashboard() {
               </div>
             </div>
 
-            {/* Scale labels */}
-            <div className="flex w-full justify-between px-2 -mt-1 mb-4">
-              <span className="text-[10px] font-medium text-red-400">0%</span>
-              <span className="text-[10px] font-medium text-amber-400">50%</span>
-              <span className="text-[10px] font-medium text-emerald-400">100%</span>
+            {/* Health tiers breakdown */}
+            <div className="w-full space-y-2 mb-4">
+              {[
+                { label: "Excellent (90-100%)", count: 892, pct: 72, color: "#10b981" },
+                { label: "Good (70-89%)", count: 205, pct: 16, color: "#f59e0b" },
+                { label: "Fair (50-69%)", count: 108, pct: 9, color: "#FF7900" },
+                { label: "Critical (<50%)", count: 42, pct: 3, color: "#ef4444" },
+              ].map((tier) => (
+                <div key={tier.label} className="flex items-center gap-2.5">
+                  <span
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: tier.color }}
+                  />
+                  <span className="flex-1 text-[12px] text-gray-600">{tier.label}</span>
+                  <span className="text-[12px] font-bold tabular-nums text-gray-900">
+                    {tier.count}
+                  </span>
+                </div>
+              ))}
             </div>
 
             {/* Mini stats 2x2 grid */}
