@@ -186,8 +186,8 @@ body {
 
   /* Global table header styling */
   .table-header-row {
-    background: #f1f3f5;
-    border-bottom: 2px solid #d1d5db;
+    background: var(--color-muted);
+    border-bottom: 2px solid var(--color-border);
   }
 
   .table-header-cell {
@@ -197,12 +197,41 @@ body {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #374151;
+    color: var(--color-muted-foreground);
   }
 
   .card-flat {
     background: var(--color-card);
     border: 1px solid var(--color-border);
     border-radius: 12px;
+  }
+}
+
+/* Print styles for Executive Summary (Story 16.4) */
+@media print {
+  body {
+    background: white !important;
+    color: #111827 !important;
+  }
+
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  aside,
+  header,
+  nav[aria-label="Breadcrumb"] {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .card-elevated {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+    break-inside: avoid;
   }
 }

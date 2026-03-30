@@ -3,15 +3,20 @@ import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../../../lib/use-auth";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
+import { Breadcrumbs } from "./breadcrumbs";
+import { SkipToContent } from "./skip-to-content";
+import { CommandPalette } from "./command-palette";
+import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
+import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
 import { Skeleton } from "../../../components/skeleton";
 
 const SIDEBAR_KEY = "ims-sidebar-collapsed";
 
 function LayoutSkeleton() {
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f5f6f8]">
+    <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar skeleton */}
-      <div className="flex w-[240px] shrink-0 flex-col border-r border-gray-200 bg-white">
+      <div className="flex w-[240px] shrink-0 flex-col border-r border-border bg-card">
         <div className="flex h-14 items-center px-5">
           <Skeleton className="h-5 w-28" />
         </div>
@@ -25,15 +30,12 @@ function LayoutSkeleton() {
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header skeleton */}
-        <div
-          className="flex h-14 shrink-0 items-center justify-between bg-white px-5"
-          style={{ boxShadow: "0 1px 0 rgba(0,0,0,0.05)" }}
-        >
+        <div className="flex h-14 shrink-0 items-center justify-between bg-card px-5 border-b border-border">
           <Skeleton className="h-5 w-28" />
           <div className="flex items-center gap-2">
             <Skeleton className="h-9 w-[240px] rounded-full" />
             <Skeleton className="h-9 w-9 rounded-lg" />
-            <div className="mx-1 h-6 w-px bg-gray-200" />
+            <div className="mx-1 h-6 w-px bg-border" />
             <Skeleton className="h-8 w-8 rounded-full" />
             <div className="hidden md:flex flex-col gap-1">
               <Skeleton className="h-3.5 w-20" />
@@ -68,6 +70,7 @@ function LayoutSkeleton() {
 
 export function ProtectedLayout() {
   const { isAuthenticated, isLoading } = useAuth();
+  const connectivity = useConnectivityMonitor();
   const [collapsed, setCollapsed] = useState(() => {
     return localStorage.getItem(SIDEBAR_KEY) === "true";
   });
@@ -89,14 +92,25 @@ export function ProtectedLayout() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#f5f6f8]">
-      <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header />
-        <main className="page-enter flex-1 overflow-y-auto scroll-smooth p-6" role="main">
-          <Outlet />
-        </main>
+    <>
+      <SkipToContent />
+      <div className="flex h-screen overflow-hidden bg-background">
+        <Sidebar collapsed={collapsed} onToggle={toggleSidebar} />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Header />
+          <ConnectivityStatusBar connectivity={connectivity} />
+          <main
+            id="main-content"
+            className="page-enter flex-1 overflow-y-auto scroll-smooth p-6"
+            role="main"
+            tabIndex={-1}
+          >
+            <Breadcrumbs />
+            <Outlet />
+          </main>
+        </div>
       </div>
-    </div>
+      <CommandPalette />
+    </>
   );
 }
