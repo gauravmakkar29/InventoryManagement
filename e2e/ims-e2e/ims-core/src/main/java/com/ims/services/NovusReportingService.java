@@ -122,6 +122,17 @@ public class NovusReportingService {
         }
     }
 
+    public synchronized void attachResult(ITestResult result) {
+        if (reportingEnabled) {
+            if (testSteps == null || testSteps.get() == null) {
+                return;
+            }
+            Status testStatus = result.getStatus() == ITestResult.SUCCESS ? Status.PASS : Status.SKIP;
+            ExtentColor labelColor = result.getStatus() == ITestResult.SUCCESS ? ExtentColor.GREEN : ExtentColor.YELLOW;
+            testSteps.get().log(testStatus, MarkupHelper.createLabel("Test finished with result: " + testStatus, labelColor));
+        }
+    }
+
     public synchronized void attachResult(ITestResult result, String path) {
         if (reportingEnabled) {
             if (testSteps == null) {
