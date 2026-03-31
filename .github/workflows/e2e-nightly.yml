@@ -84,7 +84,20 @@ jobs:
       - name: Run E2E suite
         id: e2e-run
         working-directory: e2e/ims-e2e/ims-tests
-        run: mvn test -DsuiteXmlFile=src/test/resources/suites/${{ steps.suite.outputs.xml }} ${{ steps.suite.outputs.extra_args }}
+        run: |
+          SUITE="${{ steps.suite.outputs.suite_name }}"
+          SUITE_XML="${{ steps.suite.outputs.xml }}"
+          EXTRA_ARGS="${{ steps.suite.outputs.extra_args }}"
+
+          # For module suite, use the specific module's regression suite instead
+          # module-suite.xml requires Maven property interpolation which doesn't work reliably
+          if [ "$SUITE" = "module" ] && [ -n "${{ github.event.inputs.module }}" ]; then
+            MODULE="${{ github.event.inputs.module }}"
+            # Run regression suite filtered by TestNG group
+            mvn test -DsuiteXmlFile=src/test/resources/suites/regression-suite.xml -Dgroups="$MODULE"
+          else
+            mvn test -DsuiteXmlFile=src/test/resources/suites/$SUITE_XML $EXTRA_ARGS
+          fi
         env:
           AUT_DOMAIN: localhost:4173
         continue-on-error: true
@@ -239,7 +252,7 @@ jobs:
             const path = require('path');
             const suiteName = '${{ steps.suite.outputs.suite_name }}';
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/docs/e2e-reports/`;
+            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/e2e-reports/`;
 
             // 1. Extract story issue numbers from @MetaData annotations in test source files
             const testDir = 'e2e/ims-e2e/ims-tests/src/test/java/com/ims/automation';
@@ -525,7 +538,7 @@ jobs:
             const suiteName = '${{ steps.suite.outputs.suite_name }}';
             const suiteXml = '${{ steps.suite.outputs.xml }}';
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/docs/e2e-reports/`;
+            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/e2e-reports/`;
 
             const title = `[E2E Bug] ${genuineCount} genuine failure(s) in ${suiteName} suite — ${date}`;
             const body = [
