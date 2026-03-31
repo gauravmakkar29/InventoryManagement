@@ -32,3 +32,8 @@ Thumbs.db
 
 # MCP tokens
 *.token
+
+# Playwright MCP (temp files from selector discovery)
+.playwright-mcp/
+login-*.png
+*.screenshot.png
