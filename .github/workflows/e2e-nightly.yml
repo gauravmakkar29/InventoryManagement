@@ -228,6 +228,117 @@ jobs:
           destination_dir: docs/e2e-reports
           keep_files: true
 
+      # ── On Success: Update Story/QA Status on Project Board ──
+
+      - name: Extract tested stories and update status
+        if: steps.e2e-run.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const suiteName = '${{ steps.suite.outputs.suite_name }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/docs/e2e-reports/`;
+
+            // 1. Extract story issue numbers from @MetaData annotations in test source files
+            const testDir = 'e2e/ims-e2e/ims-tests/src/test/java/com/ims/automation';
+            const storyNumbers = new Set();
+            const walkDir = (dir) => {
+              if (!fs.existsSync(dir)) return;
+              for (const file of fs.readdirSync(dir, { withFileTypes: true })) {
+                const fullPath = path.join(dir, file.name);
+                if (file.isDirectory()) { walkDir(fullPath); continue; }
+                if (!file.name.endsWith('.java')) continue;
+                const content = fs.readFileSync(fullPath, 'utf8');
+                const matches = content.matchAll(/stories\s*=\s*\{([^}]+)\}/g);
+                for (const match of matches) {
+                  const nums = match[1].matchAll(/#(\d+)/g);
+                  for (const num of nums) storyNumbers.add(parseInt(num[1]));
+                }
+              }
+            };
+            walkDir(testDir);
+            console.log(`Found story references: ${[...storyNumbers].join(', ')}`);
+
+            // 2. Find QA Plan sub-issues for these stories and update their QA Status to "Passing"
+            const projectId = 'PVT_kwHOARf1_84BTD7o';
+            const qaStatusFieldId = 'PVTSSF_lAHOARf1_84BTD7ozhAadh8';
+            const passingOptionId = '8b8d5ac7'; // "Passing"
+
+            for (const storyNum of storyNumbers) {
+              try {
+                // Find QA Plan sub-issues (labeled qa-plan) that reference this story
+                const { data: issues } = await github.rest.issues.listForRepo({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: 'qa-plan',
+                  state: 'open',
+                  per_page: 50,
+                });
+
+                const qaIssues = issues.filter(i =>
+                  i.title.includes('QA Plan') &&
+                  i.body && i.body.includes(`#${storyNum}`)
+                );
+
+                for (const qaIssue of qaIssues) {
+                  console.log(`Updating QA Plan #${qaIssue.number} → QA Status: Passing`);
+
+                  // Comment on the QA Plan issue with pass result
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: qaIssue.number,
+                    body: [
+                      `### ✅ E2E Tests Passed — ${new Date().toISOString().split('T')[0]}`,
+                      ``,
+                      `| Detail | Value |`,
+                      `|--------|-------|`,
+                      `| **Suite** | ${suiteName} |`,
+                      `| **Run** | [View CI Run](${runUrl}) |`,
+                      `| **Report** | [View ExtentReport](${reportUrl}) |`,
+                      `| **Status** | All tests passed |`,
+                    ].join('\n'),
+                  });
+
+                  // Update QA Status on project board to "Passing"
+                  const nodeId = (await github.rest.issues.get({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: qaIssue.number,
+                  })).data.node_id;
+
+                  // Add to project if not already
+                  const addResult = await github.graphql(`
+                    mutation($projectId: ID!, $contentId: ID!) {
+                      addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                        item { id }
+                      }
+                    }
+                  `, { projectId, contentId: nodeId });
+
+                  const itemId = addResult.addProjectV2ItemById.item.id;
+
+                  // Set QA Status to "Passing"
+                  await github.graphql(`
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId,
+                        itemId: $itemId,
+                        fieldId: $fieldId,
+                        value: { singleSelectOptionId: $optionId }
+                      }) { projectV2Item { id } }
+                    }
+                  `, { projectId, itemId, fieldId: qaStatusFieldId, optionId: passingOptionId });
+
+                  console.log(`✅ QA Plan #${qaIssue.number} updated to Passing`);
+                }
+              } catch (err) {
+                console.log(`Warning: Could not update story #${storyNum}: ${err.message}`);
+              }
+            }
+
       # ── Smart Failure Analysis & Conditional Bug Filing ──
       #
       # Only creates a GitHub issue for GENUINE application bugs.
@@ -499,3 +610,65 @@ jobs:
                 genuineFailures,
               ].join('\n'),
             });
+
+      - name: Update QA Status to Failing on genuine failures
+        if: steps.e2e-run.outcome == 'failure' && steps.classify.outputs.should_create_issue == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const relatedStories = '${{ steps.classify.outputs.related_stories }}'.split(',').filter(Boolean);
+            const projectId = 'PVT_kwHOARf1_84BTD7o';
+            const qaStatusFieldId = 'PVTSSF_lAHOARf1_84BTD7ozhAadh8';
+            const failingOptionId = 'c11390d8'; // "Failing"
+
+            // Find QA Plan issues for related stories and set QA Status to "Failing"
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'qa-plan',
+              state: 'open',
+              per_page: 50,
+            });
+
+            for (const story of relatedStories) {
+              const storyNum = story.replace('#', '');
+              const qaIssues = issues.filter(i =>
+                i.title.includes('QA Plan') &&
+                i.body && i.body.includes(`#${storyNum}`)
+              );
+
+              for (const qaIssue of qaIssues) {
+                try {
+                  const nodeId = (await github.rest.issues.get({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: qaIssue.number,
+                  })).data.node_id;
+
+                  const addResult = await github.graphql(`
+                    mutation($projectId: ID!, $contentId: ID!) {
+                      addProjectV2ItemById(input: { projectId: $projectId, contentId: $contentId }) {
+                        item { id }
+                      }
+                    }
+                  `, { projectId, contentId: nodeId });
+
+                  await github.graphql(`
+                    mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                      updateProjectV2ItemFieldValue(input: {
+                        projectId: $projectId, itemId: $itemId, fieldId: $fieldId,
+                        value: { singleSelectOptionId: $optionId }
+                      }) { projectV2Item { id } }
+                    }
+                  `, {
+                    projectId,
+                    itemId: addResult.addProjectV2ItemById.item.id,
+                    fieldId: qaStatusFieldId,
+                    optionId: failingOptionId,
+                  });
+                  console.log(`❌ QA Plan #${qaIssue.number} updated to Failing`);
+                } catch (err) {
+                  console.log(`Warning: Could not update QA Plan #${qaIssue.number}: ${err.message}`);
+                }
+              }
+            }
