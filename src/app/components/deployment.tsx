@@ -1400,6 +1400,9 @@ export function Deployment() {
                 >
                   <ChevronLeft className="h-3.5 w-3.5" />
                 </button>
+                <span className="px-2 text-[12px] font-medium text-foreground">
+                  {auditPage} / {totalAuditPages}
+                </span>
                 <button
                   onClick={() => setAuditPage((p) => Math.min(totalAuditPages, p + 1))}
                   disabled={auditPage >= totalAuditPages}
