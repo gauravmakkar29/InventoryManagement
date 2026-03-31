@@ -833,21 +833,37 @@ export function Analytics() {
         {/* Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
+            <caption className="sr-only">Audit log entries</caption>
             <thead>
               <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-                <th className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <th
+                  scope="col"
+                  className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                >
                   Timestamp
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                >
                   User
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                >
                   Action
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                >
                   Entity
                 </th>
-                <th className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+                <th
+                  scope="col"
+                  className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                >
                   Details
                 </th>
               </tr>

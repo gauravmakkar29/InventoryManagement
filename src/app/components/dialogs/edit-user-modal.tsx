@@ -77,6 +77,16 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
     [user, role, department, onSave, onClose],
   );
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
   if (!open || !user) return null;
 
   const inputClass =

@@ -67,7 +67,10 @@ export function TelemetryIngestStatus() {
 
   if (loading || !status) {
     return (
-      <div className="card-elevated p-5">
+      <div className="card-elevated p-5" aria-busy="true">
+        <span className="sr-only" aria-live="polite">
+          Loading telemetry status...
+        </span>
         <div className="flex items-center justify-between mb-4">
           <Skeleton className="h-5 w-40" />
           <Skeleton className="h-5 w-16 rounded-full" />

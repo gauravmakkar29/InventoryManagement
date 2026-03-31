@@ -2172,21 +2172,37 @@ export function Deployment() {
           {/* Vulnerability Table — Story 11.4 */}
           <div className="overflow-auto rounded-sm border border-border">
             <table className="w-full text-xs">
+              <caption className="sr-only">Deployment vulnerability list</caption>
               <thead>
                 <tr className="border-b-2 border-border bg-muted/50">
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
                     CVE ID
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
                     Severity
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
                     Affected Component
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
                     Remediation Status
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                  >
                     Firmware Version
                   </th>
                 </tr>
@@ -2380,11 +2396,13 @@ export function Deployment() {
                 </div>
               ) : (
                 <table className="w-full text-xs">
+                  <caption className="sr-only">Deployment report data</caption>
                   <thead className="sticky top-0">
                     <tr className="border-b-2 border-border bg-muted/50">
                       {Object.keys(reportData[0] ?? {}).map((key) => (
                         <th
                           key={key}
+                          scope="col"
                           className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap"
                         >
                           {key}
@@ -2548,8 +2566,15 @@ export function Deployment() {
             <div
               className="overflow-auto rounded-sm border border-border"
               style={{ maxHeight: "calc(100vh - 320px)" }}
+              aria-busy={auditLoading}
             >
+              {auditLoading && (
+                <span className="sr-only" aria-live="polite">
+                  Loading audit log...
+                </span>
+              )}
               <table className="w-full text-xs">
+                <caption className="sr-only">Deployment audit log</caption>
                 <thead className="sticky top-0 z-10">
                   <tr className="border-b border-border bg-muted/50">
                     {[
@@ -2562,6 +2587,7 @@ export function Deployment() {
                     ].map(({ field, label }) => (
                       <th
                         key={field}
+                        scope="col"
                         onClick={() => handleSort(field)}
                         className="px-3 py-2 text-left font-medium text-muted-foreground cursor-pointer select-none hover:text-foreground transition-colors duration-150"
                       >

@@ -248,7 +248,7 @@ export function UserManagement() {
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
             )}
           >
-            <UserPlus className="h-4 w-4" />
+            <UserPlus className="h-4 w-4" aria-hidden="true" />
             Invite User
           </button>
         )}
@@ -297,28 +297,50 @@ export function UserManagement() {
       <div className="card-elevated overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
+            <caption className="sr-only">User accounts</caption>
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50/60">
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Name
                 </th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Email
                 </th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Role
                 </th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Department
                 </th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Status
                 </th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                <th
+                  scope="col"
+                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                >
                   Last Login
                 </th>
                 {isAdmin && (
-                  <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-500">
+                  <th
+                    scope="col"
+                    className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  >
                     Actions
                   </th>
                 )}

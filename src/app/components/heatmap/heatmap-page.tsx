@@ -358,7 +358,13 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
 
   if (loading) {
     return (
-      <div className="relative h-[600px] rounded-xl border border-gray-200 overflow-hidden">
+      <div
+        className="relative h-[600px] rounded-xl border border-gray-200 overflow-hidden"
+        aria-busy="true"
+      >
+        <span className="sr-only" aria-live="polite">
+          Loading heatmap...
+        </span>
         <Skeleton className="h-full w-full" />
       </div>
     );

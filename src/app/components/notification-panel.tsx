@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { X, AlertTriangle, Info, AlertCircle, CheckCircle, Bell } from "lucide-react";
 import { cn } from "../../lib/utils";
 
@@ -100,6 +100,16 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, onClose]);
+
   const markAllRead = useCallback(() => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   }, []);
@@ -122,6 +132,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           open ? "translate-x-0" : "translate-x-full",
         )}
         role="dialog"
+        aria-modal="true"
         aria-label="Notifications"
         aria-hidden={!open}
       >

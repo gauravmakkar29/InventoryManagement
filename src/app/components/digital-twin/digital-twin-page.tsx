@@ -868,18 +868,31 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {showHistory && savedSimulations.length > 0 && (
               <div className="rounded-lg border border-gray-200 overflow-hidden">
                 <table className="w-full text-[12px]">
+                  <caption className="sr-only">Digital twin simulation history</caption>
                   <thead>
                     <tr className="bg-[#f1f3f5] border-b-2 border-gray-200">
-                      <th className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600">
+                      <th
+                        scope="col"
+                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                      >
                         Date
                       </th>
-                      <th className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600">
+                      <th
+                        scope="col"
+                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                      >
                         Target FW
                       </th>
-                      <th className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600">
+                      <th
+                        scope="col"
+                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                      >
                         Compat.
                       </th>
-                      <th className="px-3 py-2 text-right font-bold uppercase text-[10px] text-gray-600">
+                      <th
+                        scope="col"
+                        className="px-3 py-2 text-right font-bold uppercase text-[10px] text-gray-600"
+                      >
                         Health Delta
                       </th>
                     </tr>

@@ -1394,30 +1394,52 @@ function IncidentListTab({
       {/* Incident Table */}
       <div className="card-elevated overflow-hidden">
         <table className="w-full">
+          <caption className="sr-only">Security incidents</caption>
           <thead>
             <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Severity
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Title
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Status
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Category
               </th>
-              <th className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Devices
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Assigned To
               </th>
-              <th className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Created
               </th>
-              <th className="w-8" />
+              <th scope="col" className="w-8" />
             </tr>
           </thead>
           <tbody>
@@ -1502,24 +1524,43 @@ function IsolatedDevicesTab({
   return (
     <div className="card-elevated overflow-hidden">
       <table className="w-full">
+        <caption className="sr-only">Isolated devices</caption>
         <thead>
           <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-            <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Device
             </th>
-            <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Incident
             </th>
-            <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Isolation Date
             </th>
-            <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Policy
             </th>
-            <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Location
             </th>
-            <th className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600">
+            <th
+              scope="col"
+              className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+            >
               Action
             </th>
           </tr>
@@ -1606,30 +1647,55 @@ function QuarantineZonesTab({
 
       <div className="card-elevated overflow-hidden">
         <table className="w-full">
+          <caption className="sr-only">Containment zones</caption>
           <thead>
             <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Zone Name
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Status
               </th>
-              <th className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Devices
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Incident
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Policy
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Radius
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Created
               </th>
-              <th className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Action
               </th>
             </tr>

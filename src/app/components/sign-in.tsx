@@ -132,7 +132,7 @@ export function SignIn() {
                 className="mb-5 flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3"
                 role="alert"
               >
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
                 <p className="text-[13px] leading-snug text-red-700">{signInError}</p>
               </div>
             )}
@@ -224,9 +224,9 @@ export function SignIn() {
                         )}
                       >
                         {rule.passed ? (
-                          <Check className="h-3 w-3 shrink-0" />
+                          <Check className="h-3 w-3 shrink-0" aria-hidden="true" />
                         ) : (
-                          <X className="h-3 w-3 shrink-0" />
+                          <X className="h-3 w-3 shrink-0" aria-hidden="true" />
                         )}
                         {rule.label}
                       </li>

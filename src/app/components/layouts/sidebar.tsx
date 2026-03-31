@@ -201,6 +201,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />
                       )}
                       <Icon
+                        aria-hidden="true"
                         className={cn(
                           "h-[18px] w-[18px] shrink-0",
                           isActive
@@ -259,7 +260,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 "hover:bg-muted hover:text-foreground",
               )}
             >
-              <LogOut className="h-3.5 w-3.5" />
+              <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
               Sign Out
             </button>
           </>

@@ -202,7 +202,10 @@ function SectionError({ message, onRetry }: { message: string; onRetry: () => vo
 function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void }) {
   if (state === "loading") {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5" aria-busy="true">
+        <span className="sr-only" aria-live="polite">
+          Loading dashboard metrics...
+        </span>
         {Array.from({ length: 4 }).map((_, i) => (
           <KpiSkeleton key={i} />
         ))}
@@ -731,25 +734,41 @@ export function Dashboard() {
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Recent Activity</h3>
             <button className="flex items-center gap-1 text-[13px] font-medium text-[#FF7900] hover:underline cursor-pointer">
-              View all activity <ArrowRight className="h-3.5 w-3.5" />
+              View all activity <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full">
+              <caption className="sr-only">Recent activity log</caption>
               <thead>
                 <tr className="border-b-2 border-border bg-muted">
-                  <th className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground" />
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                  />
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                  >
                     Description
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                  >
                     Module
                   </th>
-                  <th className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                  >
                     User
                   </th>
-                  <th className="px-5 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                  <th
+                    scope="col"
+                    className="px-5 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                  >
                     Time
                   </th>
                 </tr>
@@ -826,7 +845,7 @@ export function Dashboard() {
 
           <div className="border-t border-border/50 px-5 py-3">
             <button className="flex items-center gap-1 text-[13px] font-medium text-[#FF7900] hover:underline cursor-pointer">
-              View all <ArrowRight className="h-3.5 w-3.5" />
+              View all <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
         </div>
