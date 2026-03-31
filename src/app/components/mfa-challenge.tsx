@@ -128,21 +128,21 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
           </div>
 
           {isVerifying && (
-            <p className="mt-4 text-center text-[13px] text-gray-400">Verifying...</p>
+            <p className="mt-4 text-center text-[13px] text-gray-500">Verifying...</p>
           )}
 
           <div className="mt-6 text-center">
             <button
               type="button"
               onClick={signOut}
-              className="text-[13px] text-gray-400 hover:text-gray-600 cursor-pointer"
+              className="text-[13px] text-gray-500 hover:text-gray-600 cursor-pointer"
             >
               Cancel and sign out
             </button>
           </div>
 
           <div className="mt-4 rounded-lg bg-gray-50 px-4 py-3">
-            <p className="text-[11px] text-gray-400 leading-relaxed">
+            <p className="text-[11px] text-gray-500 leading-relaxed">
               Open your authenticator app (Google Authenticator, Authy, etc.) and enter the current
               code. The code changes every 30 seconds.
             </p>

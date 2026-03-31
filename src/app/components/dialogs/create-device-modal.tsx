@@ -153,7 +153,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
           <button
             onClick={handleClose}
             className={cn(
-              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
+              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
               "hover:bg-gray-100 hover:text-gray-600",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
             )}
@@ -178,7 +178,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
               placeholder="e.g. INV-3200A"
               className={cn(inputClass, errors.name && "border-red-400")}
             />
-            {errors.name && <p className="mt-1 text-[12px] text-red-500">{errors.name}</p>}
+            {errors.name && (
+              <p className="mt-1 text-[12px] text-red-500" role="alert">
+                {errors.name}
+              </p>
+            )}
           </div>
 
           {/* Serial Number + Device Model row */}
@@ -195,7 +199,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 placeholder="e.g. SN-4821"
                 className={cn(inputClass, errors.serial && "border-red-400")}
               />
-              {errors.serial && <p className="mt-1 text-[12px] text-red-500">{errors.serial}</p>}
+              {errors.serial && (
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.serial}
+                </p>
+              )}
             </div>
             <div>
               <label htmlFor="device-model" className={labelClass}>
@@ -214,7 +222,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   </option>
                 ))}
               </select>
-              {errors.model && <p className="mt-1 text-[12px] text-red-500">{errors.model}</p>}
+              {errors.model && (
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.model}
+                </p>
+              )}
             </div>
           </div>
 
@@ -233,7 +245,9 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 className={cn(inputClass, errors.firmware && "border-red-400")}
               />
               {errors.firmware && (
-                <p className="mt-1 text-[12px] text-red-500">{errors.firmware}</p>
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.firmware}
+                </p>
               )}
             </div>
             <div>
@@ -252,7 +266,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   </option>
                 ))}
               </select>
-              {errors.status && <p className="mt-1 text-[12px] text-red-500">{errors.status}</p>}
+              {errors.status && (
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.status}
+                </p>
+              )}
             </div>
           </div>
 
@@ -269,7 +287,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
               placeholder="e.g. Denver, CO"
               className={cn(inputClass, errors.location && "border-red-400")}
             />
-            {errors.location && <p className="mt-1 text-[12px] text-red-500">{errors.location}</p>}
+            {errors.location && (
+              <p className="mt-1 text-[12px] text-red-500" role="alert">
+                {errors.location}
+              </p>
+            )}
           </div>
 
           {/* Latitude + Longitude row */}
@@ -287,7 +309,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 placeholder="e.g. 39.74"
                 className={cn(inputClass, errors.lat && "border-red-400")}
               />
-              {errors.lat && <p className="mt-1 text-[12px] text-red-500">{errors.lat}</p>}
+              {errors.lat && (
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.lat}
+                </p>
+              )}
             </div>
             <div>
               <label htmlFor="device-lng" className={labelClass}>
@@ -302,7 +328,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 placeholder="e.g. -104.99"
                 className={cn(inputClass, errors.lng && "border-red-400")}
               />
-              {errors.lng && <p className="mt-1 text-[12px] text-red-500">{errors.lng}</p>}
+              {errors.lng && (
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.lng}
+                </p>
+              )}
             </div>
           </div>
 

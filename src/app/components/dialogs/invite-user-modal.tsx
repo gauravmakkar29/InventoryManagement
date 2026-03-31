@@ -146,7 +146,7 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
           <button
             onClick={handleClose}
             className={cn(
-              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
+              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
               "hover:bg-gray-100 hover:text-gray-600",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
             )}
@@ -171,7 +171,11 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
               placeholder="user@company.com"
               className={cn(inputClass, errors.email && "border-red-400")}
             />
-            {errors.email && <p className="mt-1 text-[12px] text-red-500">{errors.email}</p>}
+            {errors.email && (
+              <p className="mt-1 text-[12px] text-red-500" role="alert">
+                {errors.email}
+              </p>
+            )}
           </div>
 
           {/* Name row */}
@@ -189,7 +193,9 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 className={cn(inputClass, errors.firstName && "border-red-400")}
               />
               {errors.firstName && (
-                <p className="mt-1 text-[12px] text-red-500">{errors.firstName}</p>
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.firstName}
+                </p>
               )}
             </div>
             <div>
@@ -205,7 +211,9 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 className={cn(inputClass, errors.lastName && "border-red-400")}
               />
               {errors.lastName && (
-                <p className="mt-1 text-[12px] text-red-500">{errors.lastName}</p>
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.lastName}
+                </p>
               )}
             </div>
           </div>
@@ -248,7 +256,9 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
               ))}
             </select>
             {errors.department && (
-              <p className="mt-1 text-[12px] text-red-500">{errors.department}</p>
+              <p className="mt-1 text-[12px] text-red-500" role="alert">
+                {errors.department}
+              </p>
             )}
           </div>
 
@@ -267,7 +277,9 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 className={cn(inputClass, errors.customer && "border-red-400")}
               />
               {errors.customer && (
-                <p className="mt-1 text-[12px] text-red-500">{errors.customer}</p>
+                <p className="mt-1 text-[12px] text-red-500" role="alert">
+                  {errors.customer}
+                </p>
               )}
             </div>
           )}

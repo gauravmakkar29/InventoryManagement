@@ -146,7 +146,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
             )}
             <button
               onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
               aria-label="Close notifications"
             >
               <X className="h-4 w-4" />
@@ -159,7 +159,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
               <Bell className="h-10 w-10 text-gray-200 mb-3" />
-              <p className="text-[14px] text-gray-400">No notifications</p>
+              <p className="text-[14px] text-gray-500">No notifications</p>
             </div>
           ) : (
             <div>
@@ -203,7 +203,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                       <p className="mt-0.5 text-[12px] leading-snug text-gray-500 line-clamp-2">
                         {notification.message}
                       </p>
-                      <p className="mt-1 text-[11px] text-gray-400">{notification.timestamp}</p>
+                      <p className="mt-1 text-[11px] text-gray-500">{notification.timestamp}</p>
                     </div>
                   </a>
                 );

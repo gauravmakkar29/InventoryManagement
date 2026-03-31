@@ -354,7 +354,7 @@ function LocationSearchBar({
   return (
     <div className="absolute top-3 left-3 z-20 w-[240px]">
       <div className="relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
         <input
           ref={inputRef}
           type="text"
@@ -372,7 +372,7 @@ function LocationSearchBar({
         {query && (
           <button
             onClick={handleClear}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600 cursor-pointer"
             aria-label="Clear search"
           >
             <X className="h-3.5 w-3.5" />
@@ -391,7 +391,7 @@ function LocationSearchBar({
                 onMouseDown={() => handleSelect(s)}
                 className="flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] text-gray-700 hover:bg-blue-50 cursor-pointer"
               >
-                <MapPin className="h-3 w-3 shrink-0 text-gray-400" />
+                <MapPin className="h-3 w-3 shrink-0 text-gray-500" />
                 <span>{s.label}</span>
               </button>
             ))
@@ -478,7 +478,7 @@ function DeviceTooltip({
         <span className="text-[13px] font-semibold text-gray-900 truncate pr-2">{device.name}</span>
         <button
           onClick={onClose}
-          className="shrink-0 rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+          className="shrink-0 rounded p-0.5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           aria-label="Close tooltip"
         >
           <X className="h-3.5 w-3.5" />
@@ -607,9 +607,9 @@ function GeofencePanel({
           </span>
         </div>
         {expanded ? (
-          <ChevronDown className="h-4 w-4 text-gray-400" />
+          <ChevronDown className="h-4 w-4 text-gray-500" />
         ) : (
-          <ChevronRight className="h-4 w-4 text-gray-400" />
+          <ChevronRight className="h-4 w-4 text-gray-500" />
         )}
       </button>
 
@@ -650,7 +650,7 @@ function GeofencePanel({
                   <p className="text-[12px] font-medium text-gray-900 truncate">{gf.name}</p>
                   <p className="text-[10px] text-gray-500">{gf.radiusKm}km radius</p>
                 </div>
-                <span className="text-[11px] font-medium text-gray-400 tabular-nums">
+                <span className="text-[11px] font-medium text-gray-500 tabular-nums">
                   {gf.deviceCount} devices
                 </span>
               </button>
@@ -721,7 +721,7 @@ function TrailTimeline({
                       )}
                     </div>
                     <div className="flex items-center gap-1 mt-0.5">
-                      <Clock className="h-2.5 w-2.5 text-gray-400" />
+                      <Clock className="h-2.5 w-2.5 text-gray-500" />
                       <span className="text-[10px] text-gray-500">
                         {date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}{" "}
                         {date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
@@ -745,7 +745,7 @@ function MapSkeleton() {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-2">
           <MapPin className="h-8 w-8 text-gray-300 animate-pulse" />
-          <span className="text-[12px] text-gray-400">Loading map...</span>
+          <span className="text-[12px] text-gray-500">Loading map...</span>
         </div>
       </div>
     </div>
@@ -1086,14 +1086,14 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
                 <span className={cn("h-2 w-2 rounded-full", opt.dotColor)} />
               )}
               {opt.label}
-              <span className={cn("text-[11px]", isActive ? "opacity-80" : "text-gray-400")}>
+              <span className={cn("text-[11px]", isActive ? "opacity-80" : "text-gray-500")}>
                 ({count})
               </span>
             </button>
           );
         })}
         {/* Device count badge */}
-        <span className="ml-auto text-[12px] text-gray-400">
+        <span className="ml-auto text-[12px] text-gray-500">
           Showing {mappableDevices.length} of {devices.length} devices
           {clusters.length > 0 && (
             <>

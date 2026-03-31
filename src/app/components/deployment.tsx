@@ -1004,7 +1004,11 @@ function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProps) {
                 errors.version ? "border-red-500" : "border-border",
               )}
             />
-            {errors.version && <p className="mt-0.5 text-[10px] text-red-500">{errors.version}</p>}
+            {errors.version && (
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.version}
+              </p>
+            )}
           </div>
 
           {/* Name */}
@@ -1025,7 +1029,11 @@ function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProps) {
                 errors.name ? "border-red-500" : "border-border",
               )}
             />
-            {errors.name && <p className="mt-0.5 text-[10px] text-red-500">{errors.name}</p>}
+            {errors.name && (
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.name}
+              </p>
+            )}
           </div>
 
           {/* Device Model */}
@@ -1112,7 +1120,11 @@ function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProps) {
                 </div>
               )}
             </div>
-            {errors.file && <p className="mt-0.5 text-[10px] text-red-500">{errors.file}</p>}
+            {errors.file && (
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.file}
+              </p>
+            )}
           </div>
 
           {/* Checksum Display — Story 11.1 AC2 */}
@@ -1256,7 +1268,11 @@ function CreateVulnerabilityModal({
               placeholder="CVE-2026-XXXX"
               className={cn(inputClass, errors.cveId && "border-red-500")}
             />
-            {errors.cveId && <p className="mt-0.5 text-[10px] text-red-500">{errors.cveId}</p>}
+            {errors.cveId && (
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.cveId}
+              </p>
+            )}
           </div>
 
           <div>
@@ -1278,7 +1294,9 @@ function CreateVulnerabilityModal({
               <option value="Low">Low</option>
             </select>
             {errors.severity && (
-              <p className="mt-0.5 text-[10px] text-red-500">{errors.severity}</p>
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.severity}
+              </p>
             )}
           </div>
 
@@ -1297,7 +1315,9 @@ function CreateVulnerabilityModal({
               className={cn(inputClass, errors.affectedComponent && "border-red-500")}
             />
             {errors.affectedComponent && (
-              <p className="mt-0.5 text-[10px] text-red-500">{errors.affectedComponent}</p>
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.affectedComponent}
+              </p>
             )}
           </div>
 
@@ -1321,7 +1341,9 @@ function CreateVulnerabilityModal({
               ))}
             </select>
             {errors.firmwareId && (
-              <p className="mt-0.5 text-[10px] text-red-500">{errors.firmwareId}</p>
+              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+                {errors.firmwareId}
+              </p>
             )}
           </div>
         </div>

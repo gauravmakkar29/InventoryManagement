@@ -77,7 +77,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
     <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
       <div className="text-center">
         <ShieldCheck className="mx-auto h-10 w-10 text-gray-300" />
-        <p className="mt-2 text-[11px] text-gray-400">QR Code</p>
+        <p className="mt-2 text-[11px] text-gray-500">QR Code</p>
         <p className="text-[10px] text-gray-300">Scan with authenticator</p>
       </div>
     </div>
@@ -88,7 +88,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
       <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 cursor-pointer"
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-600 cursor-pointer"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -116,7 +116,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
               </code>
               <button
                 onClick={handleCopy}
-                className="shrink-0 text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="shrink-0 text-gray-500 hover:text-gray-600 cursor-pointer"
                 aria-label="Copy secret key"
               >
                 {copied ? (
@@ -160,7 +160,10 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
         </div>
 
         {error && (
-          <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
+          <div
+            className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2"
+            role="alert"
+          >
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
             <p className="text-[12px] text-red-700">{error}</p>
           </div>

@@ -102,7 +102,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
           <button
             onClick={onClose}
             className={cn(
-              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
+              "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
               "hover:bg-gray-100 hover:text-gray-600",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
             )}

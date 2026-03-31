@@ -205,7 +205,7 @@ function CreateIncidentDialog({
           <h3 className="text-[16px] font-semibold text-gray-900">Create Incident</h3>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -267,7 +267,7 @@ function CreateIncidentDialog({
               Affected Devices
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
                 value={deviceSearch}
@@ -445,7 +445,7 @@ function ReleaseDialog({
           <h3 className="text-[16px] font-semibold text-gray-900">Release Device</h3>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -592,7 +592,7 @@ function IncidentTimeline({ events }: { events: Incident["timelineEvents"] }) {
           <div className="min-w-0 flex-1 pt-0.5">
             <p className="text-[13px] font-medium text-gray-900">{getEventText(event)}</p>
             {event.note && <p className="mt-0.5 text-[12px] text-gray-600">{event.note}</p>}
-            <div className="mt-1 flex items-center gap-2 text-[11px] text-gray-400">
+            <div className="mt-1 flex items-center gap-2 text-[11px] text-gray-500">
               <span>{event.performedByName}</span>
               <span>&middot;</span>
               <span>{formatRelativeTime(event.timestamp)}</span>
@@ -672,7 +672,7 @@ function PlaybookExecutor({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold text-gray-400">#{step.stepNumber}</span>
+                  <span className="text-[11px] font-bold text-gray-500">#{step.stepNumber}</span>
                   <p
                     className={cn(
                       "text-[13px] font-medium",
@@ -689,7 +689,7 @@ function PlaybookExecutor({
                 </div>
                 <p className="mt-0.5 text-[12px] text-gray-500">{step.description}</p>
                 {step.isCompleted && step.completedByName && (
-                  <p className="mt-1 text-[11px] text-gray-400">
+                  <p className="mt-1 text-[11px] text-gray-500">
                     Completed by {step.completedByName} &middot;{" "}
                     {step.completedAt ? formatRelativeTime(step.completedAt) : ""}
                   </p>
@@ -1002,7 +1002,7 @@ function LateralMovementPanel({
         </div>
         <button
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -1016,7 +1016,7 @@ function LateralMovementPanel({
             <div key={dev.deviceId} className="rounded-lg border border-gray-200 p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-gray-400 bg-gray-100">
+                  <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-gray-500 bg-gray-100">
                     {i + 1}
                   </span>
                   <span className="text-[13px] font-medium text-gray-900">{dev.deviceName}</span>
@@ -1093,7 +1093,7 @@ function IncidentDetailPanel({
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-[12px] font-mono text-gray-400">{incident.id}</span>
+              <span className="text-[12px] font-mono text-gray-500">{incident.id}</span>
               <SeverityBadge severity={incident.severity} />
               <StatusBadge status={incident.status} />
             </div>
@@ -1103,7 +1103,7 @@ function IncidentDetailPanel({
           </div>
           <button
             onClick={onClose}
-            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 cursor-pointer"
+            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1153,7 +1153,7 @@ function IncidentDetailPanel({
                 </div>
               )}
             </div>
-            <span className="text-[11px] text-gray-400">Assigned to {incident.assignedToName}</span>
+            <span className="text-[11px] text-gray-500">Assigned to {incident.assignedToName}</span>
           </div>
         )}
       </div>
@@ -1286,7 +1286,7 @@ function IncidentDetailPanel({
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <BookOpen className="h-10 w-10 text-gray-300 mb-3" />
                 <p className="text-[14px] font-medium text-gray-700">No playbook attached</p>
-                <p className="text-[12px] text-gray-400 mt-1">
+                <p className="text-[12px] text-gray-500 mt-1">
                   Attach a playbook to track response steps
                 </p>
               </div>
@@ -1339,7 +1339,7 @@ function IncidentListTab({
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
             value={searchQuery}
@@ -1438,7 +1438,7 @@ function IncidentListTab({
                     <p className="text-[13px] font-medium text-gray-900 truncate max-w-[300px]">
                       {inc.title}
                     </p>
-                    <p className="text-[11px] text-gray-400">{inc.id}</p>
+                    <p className="text-[11px] text-gray-500">{inc.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
@@ -1451,7 +1451,7 @@ function IncidentListTab({
                   {inc.affectedDeviceCount}
                 </td>
                 <td className="px-4 text-[13px] text-gray-600">{inc.assignedToName}</td>
-                <td className="px-4 text-right text-[12px] text-gray-400">
+                <td className="px-4 text-right text-[12px] text-gray-500">
                   {formatRelativeTime(inc.createdAt)}
                 </td>
                 <td className="px-2">
@@ -1464,7 +1464,7 @@ function IncidentListTab({
                 <td colSpan={8} className="py-12 text-center">
                   <AlertTriangle className="mx-auto h-8 w-8 text-gray-300 mb-2" />
                   <p className="text-[14px] font-medium text-gray-600">No incidents found</p>
-                  <p className="text-[12px] text-gray-400">
+                  <p className="text-[12px] text-gray-500">
                     Adjust your filters or create a new incident
                   </p>
                 </td>
@@ -1535,7 +1535,7 @@ function IsolatedDevicesTab({
               </td>
               <td className="px-4">
                 <span className="text-[12px] text-blue-600 font-medium">{dev.incidentId}</span>
-                <p className="text-[11px] text-gray-400 truncate max-w-[200px]">
+                <p className="text-[11px] text-gray-500 truncate max-w-[200px]">
                   {dev.incidentTitle}
                 </p>
               </td>
@@ -1563,7 +1563,7 @@ function IsolatedDevicesTab({
               <td colSpan={6} className="py-12 text-center">
                 <Shield className="mx-auto h-8 w-8 text-emerald-300 mb-2" />
                 <p className="text-[14px] font-medium text-emerald-700">No isolated devices</p>
-                <p className="text-[12px] text-gray-400">All devices are operating normally</p>
+                <p className="text-[12px] text-gray-500">All devices are operating normally</p>
               </td>
             </tr>
           )}
@@ -1647,7 +1647,7 @@ function QuarantineZonesTab({
                 <td className="px-4">
                   <div>
                     <p className="text-[13px] font-medium text-gray-900">{zone.name}</p>
-                    <p className="text-[11px] text-gray-400">{zone.id}</p>
+                    <p className="text-[11px] text-gray-500">{zone.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
@@ -1678,7 +1678,7 @@ function QuarantineZonesTab({
                   </span>
                 </td>
                 <td className="px-4 text-[12px] text-gray-600">{zone.radiusKm} km</td>
-                <td className="px-4 text-[12px] text-gray-400">
+                <td className="px-4 text-[12px] text-gray-500">
                   {formatRelativeTime(zone.createdAt)}
                 </td>
                 <td className="px-4 text-right">
@@ -1690,7 +1690,7 @@ function QuarantineZonesTab({
                       Lift Quarantine
                     </button>
                   ) : (
-                    <span className="text-[11px] text-gray-400">
+                    <span className="text-[11px] text-gray-500">
                       Lifted {zone.liftedAt ? formatRelativeTime(zone.liftedAt) : ""}
                     </span>
                   )}
@@ -1836,7 +1836,7 @@ function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
             </div>
             <h4 className="text-[14px] font-semibold text-gray-900">{pb.name}</h4>
             <p className="mt-1 text-[12px] text-gray-500 line-clamp-2">{pb.description}</p>
-            <div className="mt-3 flex items-center gap-4 text-[11px] text-gray-400">
+            <div className="mt-3 flex items-center gap-4 text-[11px] text-gray-500">
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="h-3 w-3" /> {pb.stepCount} steps
               </span>
@@ -1869,7 +1869,7 @@ function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                   </div>
                 ))}
                 {pb.steps.length > 3 && (
-                  <p className="text-[11px] text-gray-400 pl-6">
+                  <p className="text-[11px] text-gray-500 pl-6">
                     +{pb.steps.length - 3} more steps
                   </p>
                 )}
@@ -1926,7 +1926,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.isolatedDevices}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-400">
+          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-500">
             <Lock className="h-3 w-3" /> Currently under isolation
           </span>
         </div>
@@ -1936,7 +1936,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.activeQuarantineZones}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-400">
+          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-500">
             <MapPin className="h-3 w-3" /> Geographic zones
           </span>
         </div>
@@ -1950,7 +1950,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToContainHours}
             </p>
-            <span className="text-[14px] text-gray-400">hours</span>
+            <span className="text-[14px] text-gray-500">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -1961,7 +1961,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttcTrend < 0 ? `${metrics.mttcTrend}%` : `+${metrics.mttcTrend}%`}
             </span>
-            <span className="text-[11px] text-gray-400">vs last period</span>
+            <span className="text-[11px] text-gray-500">vs last period</span>
             {metrics.mttcTrend < 0 && (
               <span className="text-[10px] text-emerald-500">(improving)</span>
             )}
@@ -1973,7 +1973,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToResolveHours}
             </p>
-            <span className="text-[14px] text-gray-400">hours</span>
+            <span className="text-[14px] text-gray-500">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -1984,7 +1984,7 @@ function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttrTrend < 0 ? `${metrics.mttrTrend}%` : `+${metrics.mttrTrend}%`}
             </span>
-            <span className="text-[11px] text-gray-400">vs last period</span>
+            <span className="text-[11px] text-gray-500">vs last period</span>
             {metrics.mttrTrend < 0 && (
               <span className="text-[10px] text-emerald-500">(improving)</span>
             )}

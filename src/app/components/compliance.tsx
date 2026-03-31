@@ -836,7 +836,7 @@ function ComplianceTab({
       {/* Search + cert filter */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
             placeholder="Search compliance items..."
@@ -846,7 +846,7 @@ function ComplianceTab({
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
           <select
             value={certFilter}
             onChange={(e) => setCertFilter(e.target.value as CertificationType | "All")}
@@ -859,7 +859,7 @@ function ComplianceTab({
               </option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
         </div>
       </div>
 
@@ -902,7 +902,7 @@ function ComplianceTab({
                     <div className="flex flex-col items-center gap-2">
                       <Shield className="h-8 w-8 text-gray-300" />
                       <p className="text-sm text-gray-500">No compliance items found</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         Try adjusting your filters or search criteria
                       </p>
                     </div>
@@ -972,13 +972,13 @@ function ComplianceRow({
           <div className="flex items-center gap-2">
             <ChevronRight
               className={cn(
-                "h-3.5 w-3.5 text-gray-400 transition-transform duration-200",
+                "h-3.5 w-3.5 text-gray-500 transition-transform duration-200",
                 isExpanded && "rotate-90",
               )}
             />
             <div>
               <div className="text-xs font-medium text-gray-900">{item.name}</div>
-              <div className="text-[10px] text-gray-400 font-mono">{item.id}</div>
+              <div className="text-[10px] text-gray-500 font-mono">{item.id}</div>
             </div>
           </div>
         </td>
@@ -1053,7 +1053,7 @@ function ComplianceRow({
                 </h3>
               </div>
               {item.vulnerabilities.length === 0 ? (
-                <p className="text-xs text-gray-400 py-3">No vulnerabilities recorded</p>
+                <p className="text-xs text-gray-500 py-3">No vulnerabilities recorded</p>
               ) : (
                 <div className="space-y-2">
                   {item.vulnerabilities.map((vuln) => {
@@ -1085,7 +1085,7 @@ function ComplianceRow({
                         </div>
                         <div className="flex items-center gap-3 ml-3">
                           {vuln.resolvedDate && (
-                            <span className="text-[10px] text-gray-400">
+                            <span className="text-[10px] text-gray-500">
                               Resolved: {vuln.resolvedDate}
                             </span>
                           )}
@@ -1210,7 +1210,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                 </div>
                 <div className="h-3 w-px bg-gray-200" />
                 <div className="flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3 text-gray-400" />
+                  <AlertTriangle className="h-3 w-3 text-gray-500" />
                   <span className="text-gray-600">
                     {vuln.affectedDevices.toLocaleString()} devices
                   </span>
@@ -1237,7 +1237,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                   {vuln.remediationStatus}
                 </span>
                 {vuln.resolvedDate && (
-                  <span className="text-[10px] text-gray-400">{vuln.resolvedDate}</span>
+                  <span className="text-[10px] text-gray-500">{vuln.resolvedDate}</span>
                 )}
               </div>
             </div>
@@ -1390,7 +1390,7 @@ function StatCard({
   return (
     <div className="card-elevated rounded-lg border border-gray-200 p-3 space-y-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3.5 w-3.5 text-gray-400" />
+        <Icon className="h-3.5 w-3.5 text-gray-500" />
         <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
           {label}
         </span>
@@ -1448,7 +1448,7 @@ function SubmitForReviewModal({
           </h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1474,7 +1474,9 @@ function SubmitForReviewModal({
               <option value="v2.8.5">v2.8.5</option>
             </select>
             {errors.firmware && (
-              <p className="mt-0.5 text-[10px] text-red-600">{errors.firmware}</p>
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.firmware}
+              </p>
             )}
           </div>
 
@@ -1496,7 +1498,11 @@ function SubmitForReviewModal({
               <option value="INV-5000">INV-5000</option>
               <option value="STR-2500">STR-2500</option>
             </select>
-            {errors.model && <p className="mt-0.5 text-[10px] text-red-600">{errors.model}</p>}
+            {errors.model && (
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.model}
+              </p>
+            )}
           </div>
 
           <div>
@@ -1519,7 +1525,9 @@ function SubmitForReviewModal({
               ))}
             </select>
             {errors.certification && (
-              <p className="mt-0.5 text-[10px] text-red-600">{errors.certification}</p>
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.certification}
+              </p>
             )}
           </div>
         </div>
@@ -1616,7 +1624,7 @@ function CreateVulnerabilityModal({
           <h2 className="text-[14px] font-semibold text-gray-900">Report Vulnerability</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1637,7 +1645,11 @@ function CreateVulnerabilityModal({
               }}
               className={inputClass}
             />
-            {errors.cveId && <p className="mt-0.5 text-[10px] text-red-600">{errors.cveId}</p>}
+            {errors.cveId && (
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.cveId}
+              </p>
+            )}
           </div>
 
           <div>
@@ -1654,7 +1666,11 @@ function CreateVulnerabilityModal({
               }}
               className={inputClass}
             />
-            {errors.title && <p className="mt-0.5 text-[10px] text-red-600">{errors.title}</p>}
+            {errors.title && (
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.title}
+              </p>
+            )}
           </div>
 
           <div>
@@ -1691,7 +1707,9 @@ function CreateVulnerabilityModal({
                 <option value="Info">Info</option>
               </select>
               {errors.severity && (
-                <p className="mt-0.5 text-[10px] text-red-600">{errors.severity}</p>
+                <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                  {errors.severity}
+                </p>
               )}
             </div>
 
@@ -1713,7 +1731,9 @@ function CreateVulnerabilityModal({
                 className={inputClass}
               />
               {errors.cvssScore && (
-                <p className="mt-0.5 text-[10px] text-red-600">{errors.cvssScore}</p>
+                <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                  {errors.cvssScore}
+                </p>
               )}
             </div>
           </div>
@@ -1734,7 +1754,9 @@ function CreateVulnerabilityModal({
               className={inputClass}
             />
             {errors.affectedDevices && (
-              <p className="mt-0.5 text-[10px] text-red-600">{errors.affectedDevices}</p>
+              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                {errors.affectedDevices}
+              </p>
             )}
           </div>
 
@@ -1801,7 +1823,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
           <h2 className="text-[14px] font-semibold text-gray-900">Generate Regulatory Report</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>

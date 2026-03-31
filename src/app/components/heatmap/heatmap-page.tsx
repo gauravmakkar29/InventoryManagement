@@ -253,7 +253,7 @@ function HeatmapLegend() {
         {scale.map((s) => (
           <div key={s.label} className="flex flex-col items-center">
             <div className="h-3 w-8 rounded-sm" style={{ backgroundColor: s.color }} />
-            <span className="mt-1 text-[8px] text-gray-400">{s.score}</span>
+            <span className="mt-1 text-[8px] text-gray-500">{s.score}</span>
           </div>
         ))}
       </div>
@@ -300,11 +300,11 @@ function HeatmapControls({
             className="w-full accent-[#FF7900]"
           />
           <div className="flex items-center justify-between mt-1">
-            <span className="text-[10px] text-gray-400">0</span>
+            <span className="text-[10px] text-gray-500">0</span>
             <span className="text-[12px] font-bold tabular-nums text-[#FF7900]">
               {riskThreshold}
             </span>
-            <span className="text-[10px] text-gray-400">100</span>
+            <span className="text-[10px] text-gray-500">100</span>
           </div>
         </div>
       )}
@@ -370,7 +370,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-[16px] font-semibold text-gray-900">Environmental Heatmap</h3>
-          <p className="text-[12px] text-gray-400">
+          <p className="text-[12px] text-gray-500">
             {totalDevices} devices across {filteredCells.length} regions
           </p>
         </div>

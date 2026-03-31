@@ -102,7 +102,7 @@ export function SignIn() {
             <div className="h-1.5 w-1.5 rounded-full bg-[#FF7900]" />
             <div className="h-px w-12 bg-gray-200" />
           </div>
-          <p className="mt-8 text-[13px] text-gray-400 max-w-xs mx-auto leading-relaxed">
+          <p className="mt-8 text-[13px] text-gray-500 max-w-xs mx-auto leading-relaxed">
             Enterprise device inventory, firmware deployment, compliance tracking & operational
             analytics.
           </p>
@@ -199,7 +199,7 @@ export function SignIn() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600 cursor-pointer"
                     tabIndex={-1}
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
@@ -220,7 +220,7 @@ export function SignIn() {
                         key={rule.label}
                         className={cn(
                           "flex items-center gap-1.5 text-[11px]",
-                          rule.passed ? "text-emerald-600" : "text-gray-400",
+                          rule.passed ? "text-emerald-600" : "text-gray-500",
                         )}
                       >
                         {rule.passed ? (
@@ -273,13 +273,13 @@ export function SignIn() {
             {/* Demo credentials hint */}
             <div className="mt-5 rounded-lg bg-gray-50 px-4 py-3">
               <p className="text-[11px] font-medium text-gray-500 mb-1.5">Demo credentials</p>
-              <p className="text-[11px] text-gray-400 leading-relaxed">
+              <p className="text-[11px] text-gray-500 leading-relaxed">
                 admin@company.com / Admin@12345678
               </p>
             </div>
           </div>
 
-          <p className="mt-8 text-center text-[11px] text-gray-400">IMS Gen2 Platform v0.1.0</p>
+          <p className="mt-8 text-center text-[11px] text-gray-500">IMS Gen2 Platform v0.1.0</p>
         </div>
       </div>
     </div>

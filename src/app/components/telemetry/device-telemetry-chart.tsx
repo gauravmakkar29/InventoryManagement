@@ -217,7 +217,7 @@ function TimeSeriesChart({
 
   if (data.length === 0 || visibleMetrics.length === 0) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-400">
+      <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-500">
         Select a metric to display the chart
       </div>
     );
@@ -356,7 +356,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
       <div className="card-elevated p-8 text-center">
         <Activity className="mx-auto h-10 w-10 text-gray-300 mb-3" />
         <p className="text-[14px] font-medium text-gray-600">No telemetry data available</p>
-        <p className="mt-1 text-[12px] text-gray-400">
+        <p className="mt-1 text-[12px] text-gray-500">
           Telemetry data will appear here once the device begins reporting
         </p>
       </div>
@@ -369,7 +369,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-[16px] font-semibold text-gray-900">Device Telemetry</h3>
-          <p className="text-[12px] text-gray-400">
+          <p className="text-[12px] text-gray-500">
             {deviceName ?? deviceId} - Real-time health metrics
           </p>
         </div>
@@ -450,7 +450,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                   >
                     {currentVal.toFixed(1)}
                   </span>
-                  <span className="ml-0.5 text-[11px] text-gray-400">{metric.unit}</span>
+                  <span className="ml-0.5 text-[11px] text-gray-500">{metric.unit}</span>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <MetricSparkline data={recentValues} color={metric.color} />
