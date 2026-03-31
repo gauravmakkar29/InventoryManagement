@@ -10,29 +10,33 @@
 
 When user says any of these commands, read the corresponding workflow file:
 
-| Command | Workflow File |
-|---------|---------------|
-| `brownfield-inspect` | `SPEC/workflows/brownfield-inspect.toon` |
-| `brownfield-deep-dive` | `SPEC/workflows/brownfield-deep-dive.toon` |
-| `brownfield-plan` | `SPEC/workflows/brownfield-plan.toon` |
+| Command                   | Workflow File                                 |
+| ------------------------- | --------------------------------------------- |
+| `brownfield-inspect`      | `SPEC/workflows/brownfield-inspect.toon`      |
+| `brownfield-deep-dive`    | `SPEC/workflows/brownfield-deep-dive.toon`    |
+| `brownfield-plan`         | `SPEC/workflows/brownfield-plan.toon`         |
 | `greenfield-requirements` | `SPEC/workflows/greenfield-requirements.toon` |
 | `greenfield-architecture` | `SPEC/workflows/greenfield-architecture.toon` |
-| `greenfield-patterns` | `SPEC/workflows/greenfield-patterns.toon` |
-| `greenfield-plan` | `SPEC/workflows/greenfield-plan.toon` |
-| `architect-design` | `SPEC/workflows/architect-design.toon` |
-| `project-kickoff` | `SPEC/workflows/project-kickoff.toon` |
-| `dev-implement` | `SPEC/workflows/dev-implement.toon` |
-| `review-code` | `SPEC/workflows/review-code.toon` |
-| `unit-test-validate` | `SPEC/workflows/unit-test-validate.toon` |
+| `greenfield-patterns`     | `SPEC/workflows/greenfield-patterns.toon`     |
+| `greenfield-plan`         | `SPEC/workflows/greenfield-plan.toon`         |
+| `architect-design`        | `SPEC/workflows/architect-design.toon`        |
+| `project-kickoff`         | `SPEC/workflows/project-kickoff.toon`         |
+| `dev-implement`           | `SPEC/workflows/dev-implement.toon`           |
+| `review-code`             | `SPEC/workflows/review-code.toon`             |
+| `unit-test-validate`      | `SPEC/workflows/unit-test-validate.toon`      |
+| `test-plan`               | `SPEC/workflows/test-plan.md`                 |
+| `generate-e2e`            | `SPEC/workflows/generate-e2e.md`              |
 
 ### Skills Available
 
 Claude Code skills are pre-configured for SPEC Method workflows:
 
-| Skill | Command | Description |
-|-------|---------|-------------|
-| implement | `/implement story-1.1` | Execute story implementation with TDD |
-| | `/implement next story` | Implement next story in sequence |
+| Skill        | Command                                  | Description                                    |
+| ------------ | ---------------------------------------- | ---------------------------------------------- |
+| implement    | `/implement story-1.1`                   | Execute story implementation with TDD          |
+|              | `/implement next story`                  | Implement next story in sequence               |
+| test-plan    | `test-plan story-1.1` or `test-plan #42` | Generate QA test plan for a story              |
+| generate-e2e | `generate-e2e story-1.1`                 | Generate E2E Java test code from approved plan |
 
 **Note**: Skills automatically load relevant workflow files and follow SPEC Method process.
 
@@ -41,6 +45,7 @@ Claude Code skills are pre-configured for SPEC Method workflows:
 **ALWAYS check `SPEC/references/` first before any design or planning task.**
 
 If reference documents exist (PRD, architecture, Figma designs, etc.):
+
 - 🔴 **STRICTLY FOLLOW** the reference - do not suggest changes
 - 🔴 **DO NOT MODIFY** existing feature definitions
 - 🔴 **IMPLEMENT** exactly as specified
@@ -57,12 +62,12 @@ If reference documents exist (PRD, architecture, Figma designs, etc.):
 
 ### Configuration Files
 
-| Type | Location |
-|------|----------|
-| Agent Definitions | `SPEC/agents/` |
-| Rulebooks | `SPEC/rulebooks/` |
-| Workflows | `SPEC/workflows/` |
-| Reference Docs | `SPEC/references/` |
+| Type              | Location           |
+| ----------------- | ------------------ |
+| Agent Definitions | `SPEC/agents/`     |
+| Rulebooks         | `SPEC/rulebooks/`  |
+| Workflows         | `SPEC/workflows/`  |
+| Reference Docs    | `SPEC/references/` |
 
 ---
 
@@ -76,4 +81,4 @@ If reference documents exist (PRD, architecture, Figma designs, etc.):
 
 ---
 
-*Built with SPEC Method*
+_Built with SPEC Method_

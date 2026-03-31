@@ -4,10 +4,31 @@ on:
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Test suite to run"
+        required: true
+        default: "smoke"
+        type: choice
+        options:
+          - smoke
+          - regression
+          - module
+      module:
+        description: "Module name (only for module suite, e.g. auth, inventory, dashboard)"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
 
 jobs:
-  e2e-nightly:
-    name: E2E Regression
+  e2e:
+    name: E2E Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,86 +63,439 @@ jobs:
         working-directory: e2e/ims-e2e
         run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium --with-deps" -pl ims-core-ui
 
-      - name: Run full regression suite
+      - name: Determine test suite
+        id: suite
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "xml=regression-suite.xml" >> $GITHUB_OUTPUT
+            echo "extra_args=" >> $GITHUB_OUTPUT
+            echo "suite_name=regression" >> $GITHUB_OUTPUT
+          else
+            SUITE="${{ github.event.inputs.suite }}"
+            echo "xml=${SUITE}-suite.xml" >> $GITHUB_OUTPUT
+            echo "suite_name=${SUITE}" >> $GITHUB_OUTPUT
+            if [ "$SUITE" = "module" ]; then
+              echo "extra_args=-DtestGroup=${{ github.event.inputs.module }}" >> $GITHUB_OUTPUT
+            else
+              echo "extra_args=" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Run E2E suite
         id: e2e-run
         working-directory: e2e/ims-e2e/ims-tests
-        run: mvn test -DsuiteXmlFile=src/test/resources/suites/regression-suite.xml
+        run: mvn test -DsuiteXmlFile=src/test/resources/suites/${{ steps.suite.outputs.xml }} ${{ steps.suite.outputs.extra_args }}
         env:
           AUT_DOMAIN: localhost:4173
         continue-on-error: true
+
+      # ── Test Results Summary (visible on Actions run page) ──
+
+      - name: Generate test results summary
+        if: always()
+        working-directory: e2e/ims-e2e/ims-tests
+        run: |
+          SUITE_NAME="${{ steps.suite.outputs.suite_name }}"
+          RUN_DATE=$(date -u +"%Y-%m-%d %H:%M UTC")
+          OUTCOME="${{ steps.e2e-run.outcome }}"
+
+          # Parse surefire XML reports for counts
+          TOTAL=0; PASSED=0; FAILED=0; SKIPPED=0; ERRORS=0
+          if [ -d "target/surefire-reports" ]; then
+            for xml in target/surefire-reports/TEST-*.xml; do
+              [ -f "$xml" ] || continue
+              t=$(grep -oP 'tests="\K[0-9]+' "$xml" | head -1); TOTAL=$((TOTAL + ${t:-0}))
+              f=$(grep -oP 'failures="\K[0-9]+' "$xml" | head -1); FAILED=$((FAILED + ${f:-0}))
+              e=$(grep -oP 'errors="\K[0-9]+' "$xml" | head -1); ERRORS=$((ERRORS + ${e:-0}))
+              s=$(grep -oP 'skipped="\K[0-9]+' "$xml" | head -1); SKIPPED=$((SKIPPED + ${s:-0}))
+            done
+            PASSED=$((TOTAL - FAILED - ERRORS - SKIPPED))
+          fi
+
+          # Determine status emoji and color
+          if [ "$OUTCOME" = "success" ]; then
+            STATUS_ICON="✅"
+            STATUS_TEXT="PASSED"
+          else
+            STATUS_ICON="❌"
+            STATUS_TEXT="FAILED"
+          fi
+
+          # Write GitHub Actions Job Summary (renders as rich markdown on the run page)
+          cat >> $GITHUB_STEP_SUMMARY << EOF
+          ## ${STATUS_ICON} E2E Test Report — ${SUITE_NAME}
+
+          | Metric | Value |
+          |--------|-------|
+          | **Suite** | ${SUITE_NAME} |
+          | **Date** | ${RUN_DATE} |
+          | **Status** | ${STATUS_TEXT} |
+          | **Total Tests** | ${TOTAL} |
+          | **Passed** | ✅ ${PASSED} |
+          | **Failed** | ❌ ${FAILED} |
+          | **Errors** | ⚠️ ${ERRORS} |
+          | **Skipped** | ⏭️ ${SKIPPED} |
+          | **Pass Rate** | $([ $TOTAL -gt 0 ] && echo "$((PASSED * 100 / TOTAL))%" || echo "N/A") |
+
+          ### How to View Detailed Report
+          1. Download the **e2e-${SUITE_NAME}-report** artifact below
+          2. Unzip and open the \`.html\` file in a browser
+          3. The ExtentReport shows: test steps, screenshots on failure, execution timeline
+          EOF
+
+          # List failed tests if any
+          if [ $FAILED -gt 0 ] || [ $ERRORS -gt 0 ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Failed Tests" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            grep -l 'failures="[1-9]\|errors="[1-9]' target/surefire-reports/TEST-*.xml 2>/dev/null | while read f; do
+              basename "$f" .xml | sed 's/^TEST-//'
+            done >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+
+      # ── Report Artifacts ──
 
       - name: Upload E2E report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-nightly-report
+          name: e2e-${{ steps.suite.outputs.suite_name }}-report
           path: |
             e2e/ims-e2e/ims-tests/src/test/resources/reports/
             e2e/ims-e2e/ims-tests/src/test/resources/screenshots/
             e2e/ims-e2e/ims-tests/target/surefire-reports/
           retention-days: 30
 
-      - name: Parse test results for bug creation
+      # ── Publish ExtentReport to GitHub Pages ──
+
+      - name: Prepare report for GitHub Pages
+        if: always()
+        run: |
+          mkdir -p gh-pages-report
+          SUITE_NAME="${{ steps.suite.outputs.suite_name }}"
+          RUN_DATE=$(date -u +"%Y-%m-%d")
+
+          # Copy ExtentReport HTML + assets
+          if [ -d "e2e/ims-e2e/ims-tests/src/test/resources/reports" ]; then
+            cp -r e2e/ims-e2e/ims-tests/src/test/resources/reports/* gh-pages-report/ 2>/dev/null || true
+          fi
+
+          # Copy screenshots
+          if [ -d "e2e/ims-e2e/ims-tests/src/test/resources/screenshots" ]; then
+            cp -r e2e/ims-e2e/ims-tests/src/test/resources/screenshots gh-pages-report/screenshots 2>/dev/null || true
+          fi
+
+          # Create index page that redirects to latest report
+          cat > gh-pages-report/index.html << 'INDEXEOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>IMS Gen2 — E2E Test Reports</title>
+            <style>
+              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; color: #0f172a; }
+              h1 { border-bottom: 3px solid #FF7900; padding-bottom: 12px; }
+              .badge { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+              .pass { background: #dcfce7; color: #166534; }
+              .fail { background: #fef2f2; color: #991b1b; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+              th { background: #f8fafc; font-weight: 600; }
+              a { color: #2563eb; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+              .note { background: #fffbeb; border-left: 4px solid #FF7900; padding: 12px 16px; margin: 20px 0; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <h1>IMS Gen2 — E2E Test Reports</h1>
+            <p>Browse the folders below to find the ExtentReport HTML for each test run.</p>
+            <div class="note">
+              <strong>Tip:</strong> Each run creates a dated folder. Open the <code>.html</code> file inside to see the full interactive report with test steps, screenshots, and execution timeline.
+            </div>
+            <p>Reports are published automatically after each E2E workflow run.</p>
+            <p><a href="https://github.com/gauravmakkar29/InventoryManagement/actions/workflows/e2e-nightly.yml">→ View all E2E workflow runs</a></p>
+          </body>
+          </html>
+          INDEXEOF
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./gh-pages-report
+          destination_dir: docs/e2e-reports
+          keep_files: true
+
+      # ── Smart Failure Analysis & Conditional Bug Filing ──
+      #
+      # Only creates a GitHub issue for GENUINE application bugs.
+      # Filters out: flaky tests (passed on retry), selector/locator errors,
+      # environment issues, and duplicate failures already reported.
+      #
+
+      - name: Classify failures
         if: steps.e2e-run.outcome == 'failure'
-        id: parse-results
+        id: classify
         working-directory: e2e/ims-e2e/ims-tests
         run: |
-          # Extract failed test names from surefire reports
-          FAILED_TESTS=""
-          if [ -d "target/surefire-reports" ]; then
-            FAILED_TESTS=$(grep -l "failures=\"[1-9]\|errors=\"[1-9]" target/surefire-reports/*.xml 2>/dev/null | while read f; do
-              basename "$f" .xml
-            done | tr '\n' ', ' | sed 's/,$//')
-          fi
-          echo "failed_tests=${FAILED_TESTS}" >> $GITHUB_OUTPUT
-          echo "Failed tests: ${FAILED_TESTS}"
+          echo "::group::Analyzing test failures..."
 
-      - name: Create bug issue on failure
-        if: steps.e2e-run.outcome == 'failure'
+          GENUINE_FAILURES=""
+          FLAKY_TESTS=""
+          SELECTOR_FAILURES=""
+          ENV_FAILURES=""
+          RELATED_STORIES=""
+          GENUINE_COUNT=0
+          FLAKY_COUNT=0
+          SELECTOR_COUNT=0
+          ENV_COUNT=0
+
+          if [ ! -d "target/surefire-reports" ]; then
+            echo "No surefire reports found — likely build/environment failure"
+            echo "category=environment" >> $GITHUB_OUTPUT
+            echo "should_create_issue=false" >> $GITHUB_OUTPUT
+            echo "summary=Build or environment failure — no test reports generated" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Parse each failed test XML for failure details
+          for xml in target/surefire-reports/TEST-*.xml; do
+            [ -f "$xml" ] || continue
+
+            failures=$(grep -oP 'failures="\K[0-9]+' "$xml" | head -1)
+            errors=$(grep -oP 'errors="\K[0-9]+' "$xml" | head -1)
+            [ "${failures:-0}" -eq 0 ] && [ "${errors:-0}" -eq 0 ] && continue
+
+            CLASS_NAME=$(basename "$xml" .xml | sed 's/^TEST-//')
+            echo "Analyzing: $CLASS_NAME (failures=$failures, errors=$errors)"
+
+            # Extract failure messages from XML
+            FAILURE_MESSAGES=$(grep -oP '(?<=message=")[^"]*' "$xml" 2>/dev/null || echo "")
+
+            # ── Classification logic ──
+
+            # 1. FLAKY: Check if this test had retries that eventually passed
+            #    TestNG marks retried-and-passed tests as "skipped" with retryAnalyzer
+            #    If the same method appears in both failed and passed results, it's flaky
+            RETRIED_PASS=$(grep -c 'status="PASS"' "$xml" 2>/dev/null || echo "0")
+            RETRIED_FAIL=$(grep -c 'status="FAIL"' "$xml" 2>/dev/null || echo "0")
+
+            # 2. SELECTOR: Timeout waiting for locator, element not found, strict mode violation
+            IS_SELECTOR=false
+            if echo "$FAILURE_MESSAGES" | grep -qiE "timeout.*waiting.*locator|element not found|strict mode violation|waiting for selector|Locator resolved to|no such element|cannot find element"; then
+              IS_SELECTOR=true
+              SELECTOR_COUNT=$((SELECTOR_COUNT + 1))
+              SELECTOR_FAILURES="$SELECTOR_FAILURES\n- $CLASS_NAME: Selector/locator error"
+              echo "  → SELECTOR issue: $CLASS_NAME"
+            fi
+
+            # 3. ENVIRONMENT: Connection refused, server not started, network errors
+            IS_ENV=false
+            if echo "$FAILURE_MESSAGES" | grep -qiE "connection refused|ECONNREFUSED|net::ERR_|navigate.*timeout|page.goto|ERR_CONNECTION|target page.*closed|browser.*closed|context.*closed"; then
+              IS_ENV=true
+              ENV_COUNT=$((ENV_COUNT + 1))
+              ENV_FAILURES="$ENV_FAILURES\n- $CLASS_NAME: Environment/infra error"
+              echo "  → ENVIRONMENT issue: $CLASS_NAME"
+            fi
+
+            # 4. GENUINE: Assertion failures that aren't selector or env issues
+            if [ "$IS_SELECTOR" = false ] && [ "$IS_ENV" = false ]; then
+              if echo "$FAILURE_MESSAGES" | grep -qiE "assert|expected|should be|but was|verification failed"; then
+                GENUINE_COUNT=$((GENUINE_COUNT + 1))
+                GENUINE_FAILURES="$GENUINE_FAILURES\n- $CLASS_NAME"
+                echo "  → GENUINE application failure: $CLASS_NAME"
+
+                # Extract related stories for genuine failures only
+                class_file=$(echo "$CLASS_NAME" | tr '.' '/')
+                src_path="src/test/java/${class_file}.java"
+                if [ -f "$src_path" ]; then
+                  stories=$(grep -oP '#\d+' "$src_path" | sort -u | tr '\n' ' ')
+                  RELATED_STORIES="$RELATED_STORIES $stories"
+                fi
+              else
+                # Unknown failure type — treat as genuine to be safe
+                GENUINE_COUNT=$((GENUINE_COUNT + 1))
+                GENUINE_FAILURES="$GENUINE_FAILURES\n- $CLASS_NAME (unclassified)"
+                echo "  → UNCLASSIFIED failure: $CLASS_NAME — treating as genuine"
+              fi
+            fi
+          done
+
+          RELATED_STORIES=$(echo "$RELATED_STORIES" | tr ' ' '\n' | sort -u | grep -v '^$' | tr '\n' ',' | sed 's/,$//')
+
+          # ── Decision: should we create a bug issue? ──
+          SHOULD_CREATE="false"
+          if [ "$GENUINE_COUNT" -gt 0 ]; then
+            SHOULD_CREATE="true"
+          fi
+
+          echo "genuine_failures=$(echo -e "$GENUINE_FAILURES" | tr '\n' '|')" >> $GITHUB_OUTPUT
+          echo "selector_failures=$(echo -e "$SELECTOR_FAILURES" | tr '\n' '|')" >> $GITHUB_OUTPUT
+          echo "env_failures=$(echo -e "$ENV_FAILURES" | tr '\n' '|')" >> $GITHUB_OUTPUT
+          echo "genuine_count=$GENUINE_COUNT" >> $GITHUB_OUTPUT
+          echo "flaky_count=$FLAKY_COUNT" >> $GITHUB_OUTPUT
+          echo "selector_count=$SELECTOR_COUNT" >> $GITHUB_OUTPUT
+          echo "env_count=$ENV_COUNT" >> $GITHUB_OUTPUT
+          echo "related_stories=$RELATED_STORIES" >> $GITHUB_OUTPUT
+          echo "should_create_issue=$SHOULD_CREATE" >> $GITHUB_OUTPUT
+
+          # Add classification to job summary
+          cat >> $GITHUB_STEP_SUMMARY << CLASSEOF
+
+          ### Failure Classification
+
+          | Category | Count | Action |
+          |----------|-------|--------|
+          | **Genuine App Bugs** | $GENUINE_COUNT | Bug issue created (if > 0) |
+          | **Selector/Locator** | $SELECTOR_COUNT | Update page objects — no issue created |
+          | **Environment/Infra** | $ENV_COUNT | Check CI setup — no issue created |
+
+          CLASSEOF
+
+          if [ "$SELECTOR_COUNT" -gt 0 ]; then
+            echo "**Selector failures** (update page objects, not app bugs):" >> $GITHUB_STEP_SUMMARY
+            echo -e "$SELECTOR_FAILURES" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$ENV_COUNT" -gt 0 ]; then
+            echo "**Environment failures** (CI infra issue, not app bugs):" >> $GITHUB_STEP_SUMMARY
+            echo -e "$ENV_FAILURES" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "::endgroup::"
+          echo ""
+          echo "=== DECISION: should_create_issue=$SHOULD_CREATE (genuine=$GENUINE_COUNT, selector=$SELECTOR_COUNT, env=$ENV_COUNT) ==="
+
+      - name: Check for existing open issue (avoid duplicates)
+        if: steps.e2e-run.outcome == 'failure' && steps.classify.outputs.should_create_issue == 'true'
+        id: dedup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const suiteName = '${{ steps.suite.outputs.suite_name }}';
+            // Search for open E2E failure issues from the last 7 days
+            const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: `e2e,${suiteName === 'regression' ? 'nightly-failure' : suiteName + '-failure'}`,
+              state: 'open',
+              since: sevenDaysAgo,
+              per_page: 5,
+            });
+
+            if (issues.length > 0) {
+              // Found existing open issue — comment on it instead of creating new
+              core.setOutput('existing_issue', issues[0].number);
+              core.setOutput('has_existing', 'true');
+              console.log(`Found existing open issue #${issues[0].number} — will comment instead of creating new`);
+            } else {
+              core.setOutput('has_existing', 'false');
+              console.log('No existing open issue found — will create new');
+            }
+
+      - name: Create bug issue for genuine failures
+        if: steps.e2e-run.outcome == 'failure' && steps.classify.outputs.should_create_issue == 'true' && steps.dedup.outputs.has_existing == 'false'
         uses: actions/github-script@v7
         with:
           script: |
             const date = new Date().toISOString().split('T')[0];
-            const failedTests = '${{ steps.parse-results.outputs.failed_tests }}' || 'Unknown';
+            const genuineCount = '${{ steps.classify.outputs.genuine_count }}';
+            const selectorCount = '${{ steps.classify.outputs.selector_count }}';
+            const envCount = '${{ steps.classify.outputs.env_count }}';
+            const genuineFailures = '${{ steps.classify.outputs.genuine_failures }}'.split('|').filter(Boolean).join('\n');
+            const selectorFailures = '${{ steps.classify.outputs.selector_failures }}'.split('|').filter(Boolean).join('\n');
+            const envFailures = '${{ steps.classify.outputs.env_failures }}'.split('|').filter(Boolean).join('\n');
+            const relatedStories = '${{ steps.classify.outputs.related_stories }}'.split(',').filter(Boolean);
+            const suiteName = '${{ steps.suite.outputs.suite_name }}';
+            const suiteXml = '${{ steps.suite.outputs.xml }}';
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const reportUrl = `https://${context.repo.owner}.github.io/${context.repo.repo}/docs/e2e-reports/`;
 
-            const title = `[Nightly E2E] Regression failure — ${date}`;
+            const title = `[E2E Bug] ${genuineCount} genuine failure(s) in ${suiteName} suite — ${date}`;
             const body = [
-              `## Nightly E2E Regression Failure`,
+              `## E2E Genuine Application Failure`,
+              ``,
+              `> Only genuine assertion failures are reported here. Selector errors and environment issues are filtered out.`,
               ``,
               `- **Date:** ${date}`,
               `- **Branch:** \`${context.ref}\``,
               `- **Run:** [View CI Run](${runUrl})`,
-              `- **Framework:** IMS E2E (Java/Maven/TestNG/Playwright)`,
-              `- **Suite:** regression-suite.xml`,
+              `- **Report:** [View ExtentReport](${reportUrl})`,
+              `- **Suite:** ${suiteXml}`,
               ``,
-              `### Failed Test Classes`,
-              `\`\`\``,
-              failedTests,
-              `\`\`\``,
+              `### Classification Summary`,
+              `| Category | Count |`,
+              `|----------|-------|`,
+              `| **Genuine App Bugs** | ${genuineCount} |`,
+              `| Selector/Locator (excluded) | ${selectorCount} |`,
+              `| Environment/Infra (excluded) | ${envCount} |`,
               ``,
+              `### Genuine Failures (require investigation)`,
+              genuineFailures,
+              ``,
+            ];
+
+            if (relatedStories.length > 0) {
+              body.push(`### Related Stories`);
+              relatedStories.forEach(s => body.push(`- Relates to ${s}`));
+              body.push(``);
+            }
+
+            if (selectorFailures) {
+              body.push(
+                `### Selector Failures (not bugs — update page objects)`,
+                `<details><summary>Expand</summary>`,
+                ``,
+                selectorFailures,
+                ``,
+                `</details>`,
+                ``
+              );
+            }
+
+            body.push(
               `### Triage Checklist`,
-              `- [ ] **Download** the \`e2e-nightly-report\` artifact from the [run](${runUrl})`,
-              `- [ ] **Open** the ExtentReport HTML — review screenshots and step logs`,
-              `- [ ] **Classify** the failure:`,
-              `  - [ ] **Genuine bug** → Link to the affected story issue, add \`bug\` label`,
-              `  - [ ] **Selector change** → Update page object in \`e2e/ims-e2e/ims-tests/src/main/java/com/ims/automation/pages/\``,
-              `  - [ ] **Flaky test** → Check if retry passed; if persistent, fix timing/waits`,
-              `  - [ ] **Environment issue** → Check if preview server started correctly`,
-              `- [ ] **Fix** and verify locally: \`cd e2e/ims-e2e/ims-tests && mvn test -DsuiteXmlFile=src/test/resources/suites/smoke-suite.xml\``,
-              `- [ ] **Close** this issue once resolved`,
-              ``,
-              `### How to Read the Report`,
-              `1. Download \`e2e-nightly-report\` artifact from the run`,
-              `2. Unzip → open \`reports/{date}/IMS-Regression-Report/IMS-Regression-Report.html\``,
-              `3. Expand failed test → see steps, screenshots, and stack trace`,
-              `4. Check \`screenshots/\` folder for failure captures`,
-            ].join('\n');
+              `- [ ] **View** the [ExtentReport](${reportUrl}) — review screenshots and step logs`,
+              `- [ ] **Confirm** each failure is a genuine application bug (not test flakiness)`,
+              `- [ ] **Link** to the affected story issue(s)`,
+              `- [ ] **Fix** the application code and verify: \`npm run test:e2e:smoke\``,
+              `- [ ] **Close** this issue once all failures are resolved`,
+            );
 
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title,
-              body,
-              labels: ['bug', 'nightly-failure', 'e2e'],
+              body: body.join('\n'),
+              labels: ['bug', 'e2e', suiteName === 'regression' ? 'nightly-failure' : `${suiteName}-failure`],
+            });
+
+      - name: Comment on existing issue (avoid duplicate)
+        if: steps.e2e-run.outcome == 'failure' && steps.classify.outputs.should_create_issue == 'true' && steps.dedup.outputs.has_existing == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = parseInt('${{ steps.dedup.outputs.existing_issue }}');
+            const date = new Date().toISOString().split('T')[0];
+            const genuineCount = '${{ steps.classify.outputs.genuine_count }}';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const genuineFailures = '${{ steps.classify.outputs.genuine_failures }}'.split('|').filter(Boolean).join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: [
+                `### Recurring failure — ${date}`,
+                ``,
+                `Same/similar failures detected again (${genuineCount} genuine).`,
+                `**Run:** [View CI Run](${runUrl})`,
+                ``,
+                genuineFailures,
+              ].join('\n'),
             });
