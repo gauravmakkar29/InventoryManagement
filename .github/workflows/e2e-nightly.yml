@@ -88,18 +88,16 @@ jobs:
           SUITE="${{ steps.suite.outputs.suite_name }}"
           SUITE_XML="${{ steps.suite.outputs.xml }}"
           EXTRA_ARGS="${{ steps.suite.outputs.extra_args }}"
+          SPRING_ARGS="-Dspring.profiles.active=test,web -Daut.domain=localhost:4173"
 
           # For module suite, use the specific module's regression suite instead
           # module-suite.xml requires Maven property interpolation which doesn't work reliably
           if [ "$SUITE" = "module" ] && [ -n "${{ github.event.inputs.module }}" ]; then
             MODULE="${{ github.event.inputs.module }}"
-            # Run regression suite filtered by TestNG group
-            mvn test -DsuiteXmlFile=src/test/resources/suites/regression-suite.xml -Dgroups="$MODULE"
+            mvn test -DsuiteXmlFile=src/test/resources/suites/regression-suite.xml -Dgroups="$MODULE" $SPRING_ARGS
           else
-            mvn test -DsuiteXmlFile=src/test/resources/suites/$SUITE_XML $EXTRA_ARGS
+            mvn test -DsuiteXmlFile=src/test/resources/suites/$SUITE_XML $EXTRA_ARGS $SPRING_ARGS
           fi
-        env:
-          AUT_DOMAIN: localhost:4173
         continue-on-error: true
 
       # ── Test Results Summary (visible on Actions run page) ──

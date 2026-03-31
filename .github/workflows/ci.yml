@@ -85,9 +85,7 @@ jobs:
 
       - name: Run E2E smoke tests
         working-directory: e2e/ims-e2e/ims-tests
-        run: mvn test -DsuiteXmlFile=src/test/resources/suites/smoke-suite.xml
-        env:
-          AUT_DOMAIN: localhost:4173
+        run: mvn test -DsuiteXmlFile=src/test/resources/suites/smoke-suite.xml -Dspring.profiles.active=test,web -Daut.domain=localhost:4173
 
       - name: Upload E2E report
         uses: actions/upload-artifact@v4
