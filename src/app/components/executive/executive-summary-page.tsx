@@ -341,6 +341,7 @@ export function ExecutiveSummaryPage() {
               View as table
             </summary>
             <table className="mt-2 w-full text-[12px]" role="table">
+              <caption className="sr-only">Device fleet status breakdown</caption>
               <thead>
                 <tr>
                   <th scope="col" className="text-left font-medium text-muted-foreground py-1">
@@ -396,6 +397,7 @@ export function ExecutiveSummaryPage() {
               View as table
             </summary>
             <table className="mt-2 w-full text-[12px]" role="table">
+              <caption className="sr-only">Compliance status summary</caption>
               <thead>
                 <tr>
                   <th scope="col" className="text-left font-medium text-muted-foreground py-1">
@@ -430,6 +432,7 @@ export function ExecutiveSummaryPage() {
               View as table
             </summary>
             <table className="mt-2 w-full text-[12px]" role="table">
+              <caption className="sr-only">Weekly deployment activity</caption>
               <thead>
                 <tr>
                   <th scope="col" className="text-left font-medium text-muted-foreground py-1">

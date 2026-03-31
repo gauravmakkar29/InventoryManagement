@@ -1287,15 +1287,28 @@ function ComponentExplorerTab({
       {/* Component table */}
       <div className="card-elevated overflow-hidden">
         <table className="w-full">
+          <caption className="sr-only">SBOM component inventory</caption>
           <thead>
             <tr className="table-header-row">
-              <th className="table-header-cell w-8" />
-              <th className="table-header-cell">Component</th>
-              <th className="table-header-cell">Version</th>
-              <th className="table-header-cell">License</th>
-              <th className="table-header-cell">Supplier</th>
-              <th className="table-header-cell">Vulnerabilities</th>
-              <th className="table-header-cell">Scope</th>
+              <th scope="col" className="table-header-cell w-8" />
+              <th scope="col" className="table-header-cell">
+                Component
+              </th>
+              <th scope="col" className="table-header-cell">
+                Version
+              </th>
+              <th scope="col" className="table-header-cell">
+                License
+              </th>
+              <th scope="col" className="table-header-cell">
+                Supplier
+              </th>
+              <th scope="col" className="table-header-cell">
+                Vulnerabilities
+              </th>
+              <th scope="col" className="table-header-cell">
+                Scope
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -1613,15 +1626,28 @@ function CVEDashboardTab({
       {/* CVE table */}
       <div className="card-elevated overflow-hidden">
         <table className="w-full">
+          <caption className="sr-only">Known vulnerabilities (CVE list)</caption>
           <thead>
             <tr className="table-header-row">
-              <th className="table-header-cell w-8" />
-              <th className="table-header-cell">CVE ID</th>
-              <th className="table-header-cell">Severity</th>
-              <th className="table-header-cell">CVSS</th>
-              <th className="table-header-cell">Affected Component</th>
-              <th className="table-header-cell">Fixed Version</th>
-              <th className="table-header-cell">Status</th>
+              <th scope="col" className="table-header-cell w-8" />
+              <th scope="col" className="table-header-cell">
+                CVE ID
+              </th>
+              <th scope="col" className="table-header-cell">
+                Severity
+              </th>
+              <th scope="col" className="table-header-cell">
+                CVSS
+              </th>
+              <th scope="col" className="table-header-cell">
+                Affected Component
+              </th>
+              <th scope="col" className="table-header-cell">
+                Fixed Version
+              </th>
+              <th scope="col" className="table-header-cell">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -1953,19 +1979,21 @@ function LicenseComplianceTab({ components }: { components: SBOMComponent[] }) {
         <div className="card-elevated p-5">
           <h3 className="mb-4 text-[13px] font-semibold text-gray-900">License Distribution</h3>
           {licenseDistribution.length > 0 ? (
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={320}>
               <PieChart>
                 <Pie
                   data={licenseDistribution}
                   cx="50%"
-                  cy="50%"
-                  outerRadius={100}
+                  cy="45%"
+                  innerRadius={50}
+                  outerRadius={90}
                   dataKey="value"
                   nameKey="name"
+                  paddingAngle={2}
                   label={({ name, percent }: { name: string; percent: number }) =>
                     `${name} (${(percent * 100).toFixed(0)}%)`
                   }
-                  labelLine={true}
+                  labelLine={{ strokeWidth: 1 }}
                 >
                   {licenseDistribution.map((_entry, index) => (
                     <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
@@ -1976,6 +2004,8 @@ function LicenseComplianceTab({ components }: { components: SBOMComponent[] }) {
                   contentStyle={{ fontSize: 12, borderRadius: 8 }}
                 />
                 <Legend
+                  verticalAlign="bottom"
+                  height={36}
                   formatter={(value: string) => (
                     <span className="text-[11px] text-gray-600">{value}</span>
                   )}
@@ -2040,13 +2070,24 @@ function LicenseComplianceTab({ components }: { components: SBOMComponent[] }) {
           </div>
           <div className="card-elevated overflow-hidden">
             <table className="w-full">
+              <caption className="sr-only">Non-compliant components requiring action</caption>
               <thead>
                 <tr className="table-header-row">
-                  <th className="table-header-cell">Component</th>
-                  <th className="table-header-cell">Version</th>
-                  <th className="table-header-cell">License</th>
-                  <th className="table-header-cell">SBOM</th>
-                  <th className="table-header-cell">Recommended Action</th>
+                  <th scope="col" className="table-header-cell">
+                    Component
+                  </th>
+                  <th scope="col" className="table-header-cell">
+                    Version
+                  </th>
+                  <th scope="col" className="table-header-cell">
+                    License
+                  </th>
+                  <th scope="col" className="table-header-cell">
+                    SBOM
+                  </th>
+                  <th scope="col" className="table-header-cell">
+                    Recommended Action
+                  </th>
                 </tr>
               </thead>
               <tbody>

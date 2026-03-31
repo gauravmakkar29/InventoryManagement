@@ -867,30 +867,55 @@ function ComplianceTab({
       <div className="card-elevated overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
+            <caption className="sr-only">Compliance certifications</caption>
             <thead>
               <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Name
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Certification
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Status
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Last Audit
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Next Audit
                 </th>
-                <th className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Findings
                 </th>
-                <th className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Assigned To
                 </th>
-                <th className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                >
                   Actions
                 </th>
               </tr>

@@ -193,7 +193,10 @@ export function SearchCommandPalette({ search }: SearchCommandPaletteProps) {
           )}
 
           {hasQuery && search.isLoading && (
-            <div className="space-y-1 p-4">
+            <div className="space-y-1 p-4" aria-busy="true">
+              <span className="sr-only" aria-live="polite">
+                Searching...
+              </span>
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="flex items-center gap-3 py-2.5">
                   <div className="h-8 w-8 rounded-lg bg-muted animate-pulse" />

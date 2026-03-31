@@ -770,18 +770,31 @@ function MapError({ devices, onRetry }: { devices: GeoDevice[]; onRetry: () => v
       </div>
       <div className="card-elevated overflow-hidden">
         <table className="w-full">
+          <caption className="sr-only">Device geo-locations</caption>
           <thead>
             <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Device
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Status
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Location
               </th>
-              <th className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600">
+              <th
+                scope="col"
+                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              >
                 Health
               </th>
             </tr>
@@ -1119,7 +1132,10 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
             >
               {/* Loading skeleton */}
               {!mapLoaded && !mapError && (
-                <div className="absolute inset-0 z-10">
+                <div className="absolute inset-0 z-10" aria-busy="true">
+                  <span className="sr-only" aria-live="polite">
+                    Loading map...
+                  </span>
                   <MapSkeleton />
                 </div>
               )}

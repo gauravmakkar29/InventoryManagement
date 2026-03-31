@@ -317,6 +317,7 @@ function SortHeader({
   const active = sortField === field;
   return (
     <th
+      scope="col"
       className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-[#f1f3f5]"
       onClick={() => onSort(field)}
     >
@@ -567,7 +568,7 @@ export function Inventory() {
                   "disabled:cursor-not-allowed disabled:opacity-40",
                 )}
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4" aria-hidden="true" />
                 Export CSV
               </button>
 
@@ -580,7 +581,7 @@ export function Inventory() {
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
                   )}
                 >
-                  <Plus className="h-4 w-4" />
+                  <Plus className="h-4 w-4" aria-hidden="true" />
                   Add Device
                 </button>
               )}
@@ -591,6 +592,7 @@ export function Inventory() {
           <div className="card-elevated overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
+                <caption className="sr-only">Device inventory list</caption>
                 <thead>
                   <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
                     <SortHeader
@@ -636,7 +638,10 @@ export function Inventory() {
                       onSort={handleSort}
                     />
                     {canEdit && (
-                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]">
+                      <th
+                        scope="col"
+                        className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]"
+                      >
                         Actions
                       </th>
                     )}

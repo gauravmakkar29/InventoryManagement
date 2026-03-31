@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
@@ -120,6 +120,16 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
     resetForm();
     onClose();
   }, [resetForm, onClose]);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open, handleClose]);
 
   if (!open) return null;
 

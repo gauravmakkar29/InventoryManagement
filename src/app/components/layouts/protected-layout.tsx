@@ -14,7 +14,10 @@ const SIDEBAR_KEY = "ims-sidebar-collapsed";
 
 function LayoutSkeleton() {
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-background" aria-busy="true">
+      <span className="sr-only" aria-live="polite">
+        Loading application...
+      </span>
       {/* Sidebar skeleton */}
       <div className="flex w-[240px] shrink-0 flex-col border-r border-border bg-card">
         <div className="flex h-14 items-center px-5">
