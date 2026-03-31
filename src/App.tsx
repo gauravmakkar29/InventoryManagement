@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router";
+import { ErrorBoundary } from "./components/error-boundary";
 import { ProtectedLayout } from "./app/components/layouts/protected-layout";
 import { SignIn } from "./app/components/sign-in";
 import { Dashboard } from "./app/components/dashboard";
@@ -17,24 +18,26 @@ import { ExecutiveSummaryPage } from "./app/components/executive/executive-summa
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<SignIn />} />
-      <Route element={<ProtectedLayout />}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/account-service" element={<AccountService />} />
-        <Route path="/deployment" element={<Deployment />} />
-        <Route path="/compliance" element={<CompliancePage />} />
-        <Route path="/sbom" element={<SBOMPage />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/telemetry" element={<TelemetryHeatmapPage />} />
-        <Route path="/incidents" element={<IncidentResponsePage />} />
-        <Route path="/digital-twin" element={<DigitalTwinPage />} />
-        <Route path="/executive-summary" element={<ExecutiveSummaryPage />} />
-        <Route path="/user-management" element={<UserManagement />} />
-        <Route path="/access-denied" element={<AccessDenied />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route path="/login" element={<SignIn />} />
+        <Route element={<ProtectedLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/account-service" element={<AccountService />} />
+          <Route path="/deployment" element={<Deployment />} />
+          <Route path="/compliance" element={<CompliancePage />} />
+          <Route path="/sbom" element={<SBOMPage />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/telemetry" element={<TelemetryHeatmapPage />} />
+          <Route path="/incidents" element={<IncidentResponsePage />} />
+          <Route path="/digital-twin" element={<DigitalTwinPage />} />
+          <Route path="/executive-summary" element={<ExecutiveSummaryPage />} />
+          <Route path="/user-management" element={<UserManagement />} />
+          <Route path="/access-denied" element={<AccessDenied />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </ErrorBoundary>
   );
 }

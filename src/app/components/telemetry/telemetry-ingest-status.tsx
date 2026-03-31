@@ -103,7 +103,7 @@ export function TelemetryIngestStatus() {
           </span>
           <button
             onClick={fetchStatus}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
             aria-label="Refresh pipeline status"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -140,7 +140,7 @@ export function TelemetryIngestStatus() {
           <AlertCircle
             className={cn(
               "mx-auto h-4 w-4 mb-1.5",
-              status.errorCount > 0 ? "text-red-500" : "text-gray-400",
+              status.errorCount > 0 ? "text-red-500" : "text-gray-500",
             )}
           />
           <p
@@ -156,7 +156,7 @@ export function TelemetryIngestStatus() {
       </div>
 
       {/* Last ingestion timestamp */}
-      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-gray-400">
+      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-gray-500">
         <Clock className="h-3 w-3" />
         <span>Last ingestion: {formatRelativeTime(status.lastSuccessfulIngestion)}</span>
       </div>

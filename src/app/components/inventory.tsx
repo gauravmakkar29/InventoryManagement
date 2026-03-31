@@ -648,7 +648,7 @@ export function Inventory() {
                       <td colSpan={canEdit ? 7 : 6} className="py-16 text-center">
                         <Package className="mx-auto h-10 w-10 text-gray-200 mb-3" />
                         <p className="text-[14px] font-medium text-gray-500">No devices found</p>
-                        <p className="mt-1 text-[12px] text-gray-400">
+                        <p className="mt-1 text-[12px] text-gray-500">
                           Try adjusting your search or filter criteria
                         </p>
                       </td>
@@ -765,7 +765,7 @@ export function Inventory() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-[14px] font-semibold text-gray-700">Firmware Status Overview</h2>
-            <span className="text-[12px] text-gray-400">
+            <span className="text-[12px] text-gray-500">
               {devices.length} devices — sorted by health (unhealthiest first)
             </span>
           </div>
@@ -783,7 +783,7 @@ export function Inventory() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[13px] font-medium text-gray-900">{device.name}</span>
-                    <span className="text-[11px] font-mono text-gray-400">{device.serial}</span>
+                    <span className="text-[11px] font-mono text-gray-500">{device.serial}</span>
                   </div>
                   <div className="text-[12px] font-mono text-gray-600">{device.firmware}</div>
                   <HealthBar value={device.health} />

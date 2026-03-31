@@ -258,7 +258,7 @@ export function UserManagement() {
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-[360px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
             value={searchQuery}
@@ -288,7 +288,7 @@ export function UserManagement() {
         </select>
 
         {/* Count */}
-        <span className="text-[13px] text-gray-400">
+        <span className="text-[13px] text-gray-500">
           {filteredUsers.length} of {users.length} users
         </span>
       </div>
@@ -329,7 +329,7 @@ export function UserManagement() {
                 <tr>
                   <td
                     colSpan={isAdmin ? 7 : 6}
-                    className="px-5 py-12 text-center text-[14px] text-gray-400"
+                    className="px-5 py-12 text-center text-[14px] text-gray-500"
                   >
                     No users match your search criteria.
                   </td>
@@ -416,7 +416,7 @@ export function UserManagement() {
                             <button
                               onClick={() => handleEdit(user)}
                               className={cn(
-                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-400",
+                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
                                 "hover:bg-gray-100 hover:text-gray-600",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
@@ -431,7 +431,7 @@ export function UserManagement() {
                                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg",
                                 user.status === "Disabled"
                                   ? "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600"
-                                  : "text-gray-400 hover:bg-red-50 hover:text-red-500",
+                                  : "text-gray-500 hover:bg-red-50 hover:text-red-500",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
                               aria-label={

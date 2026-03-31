@@ -631,7 +631,7 @@ export function Analytics() {
                 >
                   {kpi.trend}
                 </span>
-                <span className="text-[10px] text-gray-400">{kpi.trendLabel}</span>
+                <span className="text-[10px] text-gray-500">{kpi.trendLabel}</span>
               </div>
             </div>
           );
@@ -678,7 +678,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[11px] text-gray-400 w-10 text-right">{pct}%</span>
+                    <span className="text-[11px] text-gray-500 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -722,7 +722,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[11px] text-gray-400 w-10 text-right">{pct}%</span>
+                    <span className="text-[11px] text-gray-500 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -739,7 +739,7 @@ export function Analytics() {
         <div className="card-elevated">
           <div className="px-5 py-4">
             <h3 className="text-[14px] font-semibold text-gray-900">Deployment Trend</h3>
-            <p className="text-[11px] text-gray-400 mt-0.5">Monthly deployments (last 6 months)</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">Monthly deployments (last 6 months)</p>
           </div>
           <div className="px-5 pb-5">
             <BarChart data={MONTHLY_DEPLOYMENTS} height={200} />
@@ -750,7 +750,7 @@ export function Analytics() {
         <div className="card-elevated">
           <div className="px-5 py-4">
             <h3 className="text-[14px] font-semibold text-gray-900">Vulnerability Breakdown</h3>
-            <p className="text-[11px] text-gray-400 mt-0.5">Open vulnerabilities by severity</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">Open vulnerabilities by severity</p>
           </div>
           <div className="px-5 pb-5">
             <HorizontalBarChart data={VULN_SEVERITY} />
@@ -765,12 +765,12 @@ export function Analytics() {
         <div className="flex items-center justify-between px-5 py-4">
           <div>
             <h3 className="text-[14px] font-semibold text-gray-900">Audit Log</h3>
-            <p className="text-[11px] text-gray-400 mt-0.5">System activity — {rangeLabel}</p>
+            <p className="text-[11px] text-gray-500 mt-0.5">System activity — {rangeLabel}</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Search Filter */}
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search audit log..."
@@ -810,7 +810,7 @@ export function Analytics() {
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-400" />
+                      <Download className="h-3.5 w-3.5 text-gray-500" />
                       Export as CSV
                     </button>
                     <button
@@ -820,7 +820,7 @@ export function Analytics() {
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-400" />
+                      <Download className="h-3.5 w-3.5 text-gray-500" />
                       Export as JSON
                     </button>
                   </div>
@@ -855,7 +855,7 @@ export function Analytics() {
             <tbody>
               {paginatedLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-[13px] text-gray-400">
+                  <td colSpan={5} className="px-5 py-8 text-center text-[13px] text-gray-500">
                     No audit entries found
                   </td>
                 </tr>

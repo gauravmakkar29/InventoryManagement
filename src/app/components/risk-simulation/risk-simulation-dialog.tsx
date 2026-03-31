@@ -236,7 +236,7 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
             >
               <div>
                 <p className="text-[13px] font-medium text-gray-900">{d.name}</p>
-                <p className="text-[11px] text-gray-400">
+                <p className="text-[11px] text-gray-500">
                   {d.distanceKm} km | {d.estimatedDowntimeMinutes}m downtime
                 </p>
               </div>
@@ -421,7 +421,7 @@ export function RiskSimulationDialog({
           </div>
           <button
             onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+            className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>

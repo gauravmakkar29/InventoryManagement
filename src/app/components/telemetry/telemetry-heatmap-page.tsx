@@ -191,7 +191,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
               {isImproving ? "+" : ""}
               {riskTrend.toFixed(1)}%
             </span>
-            <span className="text-[10px] text-gray-400">vs last 24h</span>
+            <span className="text-[10px] text-gray-500">vs last 24h</span>
             <ChevronRight className="ml-auto h-3.5 w-3.5 text-gray-300" />
           </div>
         </button>
@@ -211,7 +211,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
             <span className="text-[11px] font-medium text-red-600">+1.2&deg;</span>
-            <span className="text-[10px] text-gray-400">vs last 24h</span>
+            <span className="text-[10px] text-gray-500">vs last 24h</span>
           </div>
         </div>
 
@@ -230,7 +230,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
             <span className="text-[11px] font-medium text-emerald-600">-2.3%</span>
-            <span className="text-[10px] text-gray-400">vs last 24h</span>
+            <span className="text-[10px] text-gray-500">vs last 24h</span>
           </div>
         </div>
 
@@ -247,7 +247,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
             <span className="text-[11px] font-medium text-emerald-600">-3</span>
-            <span className="text-[10px] text-gray-400">vs yesterday</span>
+            <span className="text-[10px] text-gray-500">vs yesterday</span>
           </div>
         </div>
       </div>
@@ -287,7 +287,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-[13px] font-medium text-gray-900">{r.originDevice}</p>
-                    <p className="text-[11px] text-gray-400">{r.affectedCount} affected devices</p>
+                    <p className="text-[11px] text-gray-500">{r.affectedCount} affected devices</p>
                   </div>
                   <div className="text-right shrink-0">
                     <span
@@ -296,7 +296,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
                     >
                       {r.riskLevel}
                     </span>
-                    <p className="mt-0.5 text-[10px] text-gray-400">{r.time}</p>
+                    <p className="mt-0.5 text-[10px] text-gray-500">{r.time}</p>
                   </div>
                 </div>
               ))}
@@ -369,7 +369,7 @@ function RiskDistributionChart() {
               <p className="text-[11px] text-gray-600">{seg.label}</p>
               <p className="text-[13px] font-bold tabular-nums text-gray-900">
                 {seg.count}{" "}
-                <span className="text-[10px] font-medium text-gray-400">({seg.pct}%)</span>
+                <span className="text-[10px] font-medium text-gray-500">({seg.pct}%)</span>
               </p>
             </div>
           </div>

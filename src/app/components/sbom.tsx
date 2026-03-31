@@ -768,7 +768,7 @@ function UploadSBOMModal({
           <h2 className="text-[15px] font-semibold text-gray-900">Upload SBOM</h2>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -806,7 +806,7 @@ function UploadSBOMModal({
                 </button>
               ))}
               {filteredFirmware.length === 0 && (
-                <div className="px-3 py-4 text-center text-[13px] text-gray-400">
+                <div className="px-3 py-4 text-center text-[13px] text-gray-500">
                   No firmware found
                 </div>
               )}
@@ -888,15 +888,15 @@ function UploadSBOMModal({
                 <>
                   <FileText className="mb-2 h-8 w-8 text-green-500" />
                   <span className="text-[13px] font-medium text-green-700">{fileName}</span>
-                  <span className="mt-1 text-[11px] text-gray-400">Click to change file</span>
+                  <span className="mt-1 text-[11px] text-gray-500">Click to change file</span>
                 </>
               ) : (
                 <>
-                  <Upload className="mb-2 h-8 w-8 text-gray-400" />
+                  <Upload className="mb-2 h-8 w-8 text-gray-500" />
                   <span className="text-[13px] text-gray-600">
                     Drop JSON file here or click to browse
                   </span>
-                  <span className="mt-1 text-[11px] text-gray-400">
+                  <span className="mt-1 text-[11px] text-gray-500">
                     Supports CycloneDX and SPDX JSON formats
                   </span>
                 </>
@@ -971,7 +971,7 @@ function SBOMManagementTab({
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+            <Filter className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
             <select
               value={modelFilter}
               onChange={(e) => setModelFilter(e.target.value)}
@@ -984,7 +984,7 @@ function SBOMManagementTab({
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
           </div>
         </div>
 
@@ -1010,7 +1010,7 @@ function SBOMManagementTab({
         <div className="flex flex-col items-center justify-center py-16">
           <FileBox className="mb-3 h-10 w-10 text-gray-300" />
           <p className="text-[14px] font-medium text-gray-500">No SBOMs found</p>
-          <p className="text-[12px] text-gray-400">Upload an SBOM to get started</p>
+          <p className="text-[12px] text-gray-500">Upload an SBOM to get started</p>
         </div>
       )}
 
@@ -1031,7 +1031,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
             {sbom.firmwareName}{" "}
             <span className="font-normal text-gray-500">v{sbom.firmwareVersion}</span>
           </h3>
-          <p className="mt-0.5 text-[11px] text-gray-400">
+          <p className="mt-0.5 text-[11px] text-gray-500">
             Uploaded {formatDate(sbom.uploadedDate)} by {sbom.uploadedBy}
           </p>
         </div>
@@ -1160,7 +1160,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
       )}
 
       {sbom.status === "Processing" && (
-        <div className="flex items-center justify-center py-6 text-[13px] text-gray-400">
+        <div className="flex items-center justify-center py-6 text-[13px] text-gray-500">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Parsing SBOM file...
         </div>
@@ -1242,7 +1242,7 @@ function ComponentExplorerTab({
       {/* Search and filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
             placeholder="Search components..."
@@ -1356,9 +1356,9 @@ function ComponentRow({
       >
         <td className="px-4 py-3">
           {isExpanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+            <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-gray-400" />
+            <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
           )}
         </td>
         <td className="px-4 py-3 text-[13px] font-medium text-gray-900">{comp.name}</td>
@@ -1389,7 +1389,7 @@ function ComponentRow({
               {comp.vulnerabilityCount}
             </span>
           ) : (
-            <span className="text-[12px] text-gray-400">0</span>
+            <span className="text-[12px] text-gray-500">0</span>
           )}
         </td>
         <td className="px-4 py-3 text-[12px] text-gray-500">{comp.scope}</td>
@@ -1557,7 +1557,7 @@ function CVEDashboardTab({
               <div className={cn("mt-1 text-[28px] font-bold leading-tight", cfg.color)}>
                 {counts[sev]}
               </div>
-              <div className="mt-0.5 text-[11px] text-gray-400">
+              <div className="mt-0.5 text-[11px] text-gray-500">
                 {counts[sev] === 1 ? "vulnerability" : "vulnerabilities"}
               </div>
             </button>
@@ -1568,7 +1568,7 @@ function CVEDashboardTab({
       {/* Filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex gap-1.5">
-          <span className="self-center text-[11px] font-semibold uppercase text-gray-400 mr-1">
+          <span className="self-center text-[11px] font-semibold uppercase text-gray-500 mr-1">
             Severity:
           </span>
           {(["all", "Critical", "High", "Medium", "Low"] as (SeverityLevel | "all")[]).map((f) => (
@@ -1588,7 +1588,7 @@ function CVEDashboardTab({
         </div>
         <div className="h-5 w-px bg-gray-200" />
         <div className="flex gap-1.5">
-          <span className="self-center text-[11px] font-semibold uppercase text-gray-400 mr-1">
+          <span className="self-center text-[11px] font-semibold uppercase text-gray-500 mr-1">
             Status:
           </span>
           {(
@@ -1699,9 +1699,9 @@ function CVERow({
       >
         <td className="px-4 py-3">
           {isExpanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+            <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-gray-400" />
+            <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
           )}
         </td>
         <td className="px-4 py-3">
@@ -1735,7 +1735,7 @@ function CVERow({
           <span className="font-mono text-gray-500">{vuln.componentVersion}</span>
         </td>
         <td className="px-4 py-3 text-[13px] text-gray-600">
-          {vuln.fixedVersion ?? <span className="text-gray-400 italic">No fix available</span>}
+          {vuln.fixedVersion ?? <span className="text-gray-500 italic">No fix available</span>}
         </td>
         <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
           {canEdit ? (
@@ -1983,7 +1983,7 @@ function LicenseComplianceTab({ components }: { components: SBOMComponent[] }) {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-400">
+            <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-500">
               No license data available
             </div>
           )}

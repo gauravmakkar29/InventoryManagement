@@ -174,7 +174,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
         >
           <div className="relative">
             <MapPin
-              className={cn("h-4 w-4", device.riskScore <= 30 ? "text-red-500" : "text-gray-400")}
+              className={cn("h-4 w-4", device.riskScore <= 30 ? "text-red-500" : "text-gray-500")}
             />
             <span
               className={cn(
@@ -185,7 +185,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-medium text-gray-900 truncate">{device.name}</p>
-            <p className="text-[11px] text-gray-400">{device.distanceKm.toFixed(1)} km away</p>
+            <p className="text-[11px] text-gray-500">{device.distanceKm.toFixed(1)} km away</p>
           </div>
           <div className="text-right shrink-0">
             <p
@@ -202,7 +202,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
             >
               {device.riskScore}
             </p>
-            <p className="text-[10px] text-gray-400">{device.estimatedDowntimeMinutes}m</p>
+            <p className="text-[10px] text-gray-500">{device.estimatedDowntimeMinutes}m</p>
           </div>
         </div>
       ))}
@@ -286,7 +286,7 @@ export function BlastRadiusPanel({
         </div>
         <button
           onClick={onClose}
-          className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+          className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -298,7 +298,7 @@ export function BlastRadiusPanel({
           Origin Device
         </p>
         <p className="mt-1 text-[14px] font-semibold text-gray-900">{originDeviceName}</p>
-        <p className="text-[11px] text-gray-400">
+        <p className="text-[11px] text-gray-500">
           {originLat.toFixed(4)}, {originLng.toFixed(4)}
         </p>
       </div>
@@ -330,7 +330,7 @@ export function BlastRadiusPanel({
             onChange={(e) => setRadiusKm(Number(e.target.value))}
             className="w-full accent-[#FF7900]"
           />
-          <div className="flex justify-between text-[10px] text-gray-400 mt-0.5">
+          <div className="flex justify-between text-[10px] text-gray-500 mt-0.5">
             <span>1 km</span>
             <span>100 km</span>
           </div>
