@@ -296,7 +296,7 @@ export function Analytics() {
                 className={cn(
                   "rounded-md px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                   range === opt.value
-                    ? "bg-[#FF7900] text-white shadow-sm"
+                    ? "bg-accent text-white shadow-sm"
                     : "text-gray-600 hover:text-gray-700 hover:bg-gray-50",
                 )}
               >
@@ -491,7 +491,7 @@ export function Analytics() {
                 aria-label="Search audit log"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="h-8 w-56 rounded-lg border border-gray-300 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-[#c2410c] focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
+                className="h-8 w-56 rounded-lg border border-gray-300 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </div>
 
@@ -547,7 +547,7 @@ export function Analytics() {
           <table className="w-full">
             <caption className="sr-only">Audit log entries</caption>
             <thead>
-              <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
+              <tr className="border-b-2 border-gray-300 bg-table-header">
                 <th
                   scope="col"
                   className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
@@ -647,7 +647,7 @@ export function Analytics() {
                   className={cn(
                     "flex h-7 min-w-9 items-center justify-center rounded-md px-2 text-[13px] font-medium cursor-pointer",
                     currentPage === i + 1
-                      ? "bg-[#FF7900] text-white"
+                      ? "bg-accent text-white"
                       : "border border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
                   )}
                 >

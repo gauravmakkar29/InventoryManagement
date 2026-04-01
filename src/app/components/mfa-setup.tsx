@@ -150,7 +150,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 disabled={isVerifying}
                 className={cn(
                   "h-11 w-10 rounded-lg border border-gray-300 bg-white text-center text-[16px] font-semibold text-gray-900",
-                  "focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20",
+                  "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                   "disabled:opacity-60",
                 )}
                 aria-label={`Digit ${i + 1}`}
@@ -173,8 +173,8 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
           onClick={handleVerify}
           disabled={isVerifying || digits.join("").length !== 6}
           className={cn(
-            "flex h-11 w-full items-center justify-center rounded-lg bg-[#FF7900] text-[15px] font-semibold text-white",
-            "hover:bg-[#e66d00] cursor-pointer",
+            "flex h-11 w-full items-center justify-center rounded-lg bg-accent text-[15px] font-semibold text-white",
+            "hover:bg-accent-hover cursor-pointer",
             "disabled:cursor-not-allowed disabled:opacity-60",
           )}
         >

@@ -26,7 +26,7 @@ export function QuarantineZonesTab({
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as "All" | "Active" | "Lifted")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Zones</option>
           <option value="Active">Active</option>
@@ -38,7 +38,7 @@ export function QuarantineZonesTab({
         <table className="w-full">
           <caption className="sr-only">Containment zones</caption>
           <thead>
-            <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
+            <tr className="border-b-2 border-gray-300 bg-table-header">
               <th
                 scope="col"
                 className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"

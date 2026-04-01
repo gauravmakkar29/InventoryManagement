@@ -14,7 +14,7 @@ export function AccessDenied() {
       </p>
       <Link
         to="/"
-        className="mt-2 rounded-lg bg-[#FF7900] px-5 py-2.5 text-[15px] font-medium text-white hover:bg-[#e66d00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
+        className="mt-2 rounded-lg bg-accent px-5 py-2.5 text-[15px] font-medium text-white hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         Back to Dashboard
       </Link>

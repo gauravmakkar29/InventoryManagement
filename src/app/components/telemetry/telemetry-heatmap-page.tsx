@@ -76,7 +76,7 @@ export function TelemetryHeatmapPage() {
               className={cn(
                 "flex items-center gap-1.5 border-b-2 px-4 py-2.5 text-[14px] font-medium cursor-pointer",
                 activeTab === tab.id
-                  ? "border-[#c2410c] text-[#c2410c]"
+                  ? "border-accent-text text-accent-text"
                   : "border-transparent text-gray-600 hover:text-gray-700 hover:border-gray-300",
               )}
             >
@@ -172,7 +172,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
         >
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-50">
-              <Thermometer className="h-[18px] w-[18px] text-[#c2410c]" />
+              <Thermometer className="h-[18px] w-[18px] text-accent-text" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[14px] text-gray-600 truncate">Environmental Risk</p>
@@ -259,7 +259,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
         <div className="card-elevated p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-[#c2410c]" />
+              <Target className="h-4 w-4 text-accent-text" />
               <h3 className="text-[15px] font-semibold text-gray-900">Recent Impact Analysis</h3>
             </div>
           </div>
@@ -268,7 +268,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
             <div className="py-6 text-center">
               <Target className="mx-auto h-8 w-8 text-gray-600 mb-2" />
               <p className="text-[14px] text-gray-600">No recent impact analyses</p>
-              <button className="mt-2 text-[14px] font-medium text-[#c2410c] hover:underline cursor-pointer">
+              <button className="mt-2 text-[14px] font-medium text-accent-text hover:underline cursor-pointer">
                 Run Simulation
               </button>
             </div>

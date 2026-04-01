@@ -216,7 +216,7 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
           <p className="text-[12px] text-gray-600">Blast Radius</p>
         </div>
         <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
-          <p className="text-[18px] font-bold tabular-nums text-[#c2410c]">
+          <p className="text-[18px] font-bold tabular-nums text-accent-text">
             {result.severity ?? "N/A"}
           </p>
           <p className="text-[12px] text-gray-600">Severity</p>
@@ -346,7 +346,7 @@ function SimulationHistory({
             <span>{item.failureType}</span>
             <span>{item.affectedDeviceCount} affected</span>
           </div>
-          <div className="mt-2 flex items-center gap-1 text-[13px] text-[#c2410c] font-medium">
+          <div className="mt-2 flex items-center gap-1 text-[13px] text-accent-text font-medium">
             <Eye className="h-3 w-3" />
             View Details
           </div>
@@ -435,7 +435,7 @@ export function RiskSimulationDialog({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="h-4 w-4 text-[#c2410c]" />
+            <AlertTriangle className="h-4 w-4 text-accent-text" />
             <h2 className="text-[16px] font-semibold text-gray-900">Risk Simulation</h2>
           </div>
           <button
@@ -455,7 +455,7 @@ export function RiskSimulationDialog({
               type="text"
               value={params.deviceName}
               onChange={(e) => setParams((p) => ({ ...p, deviceName: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none"
             />
           </div>
 
@@ -474,7 +474,7 @@ export function RiskSimulationDialog({
                     className={cn(
                       "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[14px] font-medium cursor-pointer",
                       params.failureType === ft.id
-                        ? "border-[#c2410c] bg-orange-50 text-gray-900"
+                        ? "border-accent-text bg-orange-50 text-gray-900"
                         : "border-gray-300 text-gray-600 hover:border-gray-300",
                     )}
                   >
@@ -491,7 +491,7 @@ export function RiskSimulationDialog({
             <div>
               <label className="flex items-center justify-between text-[13px] font-semibold text-gray-600 mb-1">
                 Radius
-                <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">
+                <span className="text-[14px] font-bold tabular-nums text-accent-text">
                   {params.radiusKm} km
                 </span>
               </label>
@@ -509,7 +509,7 @@ export function RiskSimulationDialog({
             <div>
               <label className="flex items-center justify-between text-[13px] font-semibold text-gray-600 mb-1">
                 Severity
-                <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">
+                <span className="text-[14px] font-bold tabular-nums text-accent-text">
                   {params.severity}/10
                 </span>
               </label>
@@ -530,7 +530,7 @@ export function RiskSimulationDialog({
             disabled={isRunning}
             className={cn(
               "w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-[14px] font-medium text-white cursor-pointer",
-              isRunning ? "bg-gray-400 cursor-not-allowed" : "bg-[#FF7900] hover:bg-[#e66d00]",
+              isRunning ? "bg-gray-400 cursor-not-allowed" : "bg-accent hover:bg-accent-hover",
             )}
           >
             {isRunning ? (
@@ -554,7 +554,7 @@ export function RiskSimulationDialog({
             className={cn(
               "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer",
               activeTab === "results"
-                ? "border-b-2 border-[#c2410c] text-[#c2410c]"
+                ? "border-b-2 border-accent-text text-accent-text"
                 : "text-gray-600 hover:text-gray-700",
             )}
           >
@@ -565,7 +565,7 @@ export function RiskSimulationDialog({
             className={cn(
               "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer flex items-center justify-center gap-1",
               activeTab === "history"
-                ? "border-b-2 border-[#c2410c] text-[#c2410c]"
+                ? "border-b-2 border-accent-text text-accent-text"
                 : "text-gray-600 hover:text-gray-700",
             )}
           >

@@ -150,7 +150,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-[14px] font-medium text-[#c2410c] hover:text-[#9a3412] cursor-pointer"
+                className="text-[14px] font-medium text-accent-text hover:text-accent-text-hover cursor-pointer"
               >
                 Mark all read
               </button>
@@ -208,7 +208,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                           {notification.title}
                         </p>
                         {!notification.read && (
-                          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#FF7900]" />
+                          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
                         )}
                       </div>
                       <p className="mt-0.5 text-[14px] leading-snug text-gray-600 line-clamp-2">

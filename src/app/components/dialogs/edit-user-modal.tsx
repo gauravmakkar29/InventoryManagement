@@ -116,7 +116,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
               className={cn(
                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
                 "hover:bg-gray-100 hover:text-gray-600",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               )}
               aria-label="Close"
             >
@@ -179,7 +179,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
                 className={cn(
                   "h-10 cursor-pointer rounded-lg border border-gray-300 bg-white px-5 text-[15px] font-medium text-gray-700",
                   "hover:bg-gray-50",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 )}
               >
                 Cancel

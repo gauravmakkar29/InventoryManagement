@@ -49,13 +49,13 @@ export function IncidentListTab({
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search incidents..."
             aria-label="Search incidents"
-            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as IncidentStatus | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Status</option>
           <option value="Open">Open</option>
@@ -67,7 +67,7 @@ export function IncidentListTab({
         <select
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value as IncidentSeverity | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Severity</option>
           <option value="Critical">Critical</option>
@@ -78,7 +78,7 @@ export function IncidentListTab({
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as IncidentCategory | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Categories</option>
           <option value="Security">Security</option>
@@ -89,7 +89,7 @@ export function IncidentListTab({
         </select>
         <button
           onClick={onCreateIncident}
-          className="ml-auto rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+          className="ml-auto rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer"
         >
           <Plus className="mr-1.5 inline h-3.5 w-3.5" /> Create Incident
         </button>
@@ -100,7 +100,7 @@ export function IncidentListTab({
         <table className="w-full">
           <caption className="sr-only">Security incidents</caption>
           <thead>
-            <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
+            <tr className="border-b-2 border-gray-300 bg-table-header">
               <th
                 scope="col"
                 className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"

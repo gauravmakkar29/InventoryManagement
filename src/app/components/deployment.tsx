@@ -232,7 +232,7 @@ export function Deployment() {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors duration-150",
                 activeTab === tab.id
-                  ? "border-b-2 border-[#c2410c] text-[#c2410c]"
+                  ? "border-b-2 border-accent-text text-accent-text"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -244,7 +244,7 @@ export function Deployment() {
         {activeTab === "firmware" && canManage && (
           <button
             onClick={() => setUploadModalOpen(true)}
-            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+            className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
           >
             <Upload className="h-3 w-3" />
             Upload Firmware
@@ -253,7 +253,7 @@ export function Deployment() {
         {activeTab === "vulnerabilities" && canManageVulns && (
           <button
             onClick={() => setVulnModalOpen(true)}
-            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+            className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
           >
             <Plus className="h-3 w-3" />
             Add Vulnerability
@@ -280,7 +280,7 @@ export function Deployment() {
                     className={cn(
                       "rounded-full px-2.5 py-1 text-[12px] font-medium transition-colors duration-150",
                       fwStatusFilter === s
-                        ? "bg-[#FF7900] text-white"
+                        ? "bg-accent text-white"
                         : "bg-muted text-muted-foreground hover:bg-muted/80",
                     )}
                   >
@@ -296,7 +296,7 @@ export function Deployment() {
               <select
                 value={fwModelFilter}
                 onChange={(e) => setFwModelFilter(e.target.value)}
-                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[12px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
+                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[12px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
               >
                 <option value="All">All Models</option>
                 {AVAILABLE_MODELS.map((m) => (
@@ -325,7 +325,7 @@ export function Deployment() {
               {firmware.length === 0 && canManage && (
                 <button
                   onClick={() => setUploadModalOpen(true)}
-                  className="mt-4 flex items-center gap-1 rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90"
+                  className="mt-4 flex items-center gap-1 rounded-sm bg-accent px-3 py-1.5 text-sm font-medium text-white hover:bg-accent/90"
                 >
                   <Upload className="h-3 w-3" />
                   Upload Firmware
@@ -527,7 +527,7 @@ export function Deployment() {
                   className={cn(
                     "rounded-full px-2.5 py-1 text-[12px] font-medium transition-colors duration-150",
                     vulnSeverityFilter === s
-                      ? "bg-[#FF7900] text-white"
+                      ? "bg-accent text-white"
                       : s === "All"
                         ? "bg-muted text-muted-foreground hover:bg-muted/80"
                         : pillColor,
@@ -624,7 +624,7 @@ export function Deployment() {
                                 )
                               }
                               className={cn(
-                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#c2410c]",
+                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-ring",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -721,7 +721,7 @@ export function Deployment() {
             </div>
             <button
               onClick={generateReport}
-              className="flex items-center gap-1.5 rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded-sm bg-accent px-3 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
             >
               <FileText className="h-3 w-3" />
               Generate
@@ -836,7 +836,7 @@ export function Deployment() {
                       setAuditStartDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -853,13 +853,13 @@ export function Deployment() {
                       setAuditEndDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
                   />
                 </div>
               </div>
               <button
                 onClick={handleApplyDateRange}
-                className="rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+                className="rounded-sm bg-accent px-3 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
               >
                 Apply
               </button>
@@ -881,7 +881,7 @@ export function Deployment() {
                       if (e.key === "Enter") handleApplyUserFilter();
                     }}
                     placeholder="User ID or email"
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c] w-48"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring w-48"
                   />
                 </div>
               </div>

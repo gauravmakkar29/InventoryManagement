@@ -93,16 +93,16 @@ function SortHeader({
   return (
     <th
       scope="col"
-      className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-[#f1f3f5]"
+      className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-table-header"
       onClick={() => onSort(field)}
     >
       <div className="flex items-center gap-1">
         {label}
         {active ? (
           sortDir === "asc" ? (
-            <ChevronUp className="h-3 w-3 text-[#c2410c]" />
+            <ChevronUp className="h-3 w-3 text-accent-text" />
           ) : (
-            <ChevronDown className="h-3 w-3 text-[#c2410c]" />
+            <ChevronDown className="h-3 w-3 text-accent-text" />
           )
         ) : (
           <ArrowUpDown className="h-3 w-3 text-gray-600" />
@@ -156,7 +156,7 @@ export function Inventory() {
             className={cn(
               "px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
-                ? "border-b-2 border-[#c2410c] text-[#c2410c]"
+                ? "border-b-2 border-accent-text text-accent-text"
                 : "text-gray-600 hover:text-gray-700",
             )}
           >
@@ -201,9 +201,9 @@ export function Inventory() {
                 <button
                   onClick={() => setCreateModalOpen(true)}
                   className={cn(
-                    "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[14px] font-medium text-white shrink-0",
-                    "hover:bg-[#e86e00]",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
+                    "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-accent px-4 text-[14px] font-medium text-white shrink-0",
+                    "hover:bg-accent-hover",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   )}
                 >
                   <Plus className="h-4 w-4" aria-hidden="true" />
@@ -219,7 +219,7 @@ export function Inventory() {
               <table className="w-full">
                 <caption className="sr-only">Device inventory list</caption>
                 <thead>
-                  <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
+                  <tr className="border-b-2 border-gray-300 bg-table-header">
                     <SortHeader
                       label="Device Name"
                       field="name"
@@ -265,7 +265,7 @@ export function Inventory() {
                     {canEdit && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]"
+                        className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 bg-table-header"
                       >
                         Actions
                       </th>
@@ -321,7 +321,7 @@ export function Inventory() {
                               onChange={(e) =>
                                 handleStatusChange(device.id, e.target.value as DeviceStatus)
                               }
-                              className="h-8 rounded-md border border-gray-300 bg-white px-2 text-[14px] text-gray-700 focus:border-[#c2410c] focus:outline-none focus:ring-1 focus:ring-[#c2410c]/20 cursor-pointer"
+                              className="h-8 rounded-md border border-gray-300 bg-white px-2 text-[14px] text-gray-700 focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-ring/20 cursor-pointer"
                             >
                               {ALL_STATUSES.map((s) => (
                                 <option key={s} value={s}>
@@ -364,7 +364,7 @@ export function Inventory() {
                       className={cn(
                         "flex h-8 w-8 items-center justify-center rounded-lg text-[14px] font-medium cursor-pointer",
                         p === safeCurrentPage
-                          ? "bg-[#FF7900] text-white"
+                          ? "bg-accent text-white"
                           : "text-gray-600 hover:bg-gray-100",
                       )}
                     >

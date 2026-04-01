@@ -90,7 +90,7 @@ export function TelemetryIngestStatus() {
     <div className="card-elevated p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Activity className="h-4 w-4 text-[#c2410c]" />
+          <Activity className="h-4 w-4 text-accent-text" />
           <h3 className="text-[15px] font-semibold text-gray-900">Telemetry Pipeline</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -126,7 +126,7 @@ export function TelemetryIngestStatus() {
 
         {/* Average latency */}
         <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
-          <Clock className="mx-auto h-4 w-4 text-[#c2410c] mb-1.5" />
+          <Clock className="mx-auto h-4 w-4 text-accent-text mb-1.5" />
           <p className="text-[16px] font-bold tabular-nums text-gray-900">
             {status.avgLatencyMs}ms
           </p>

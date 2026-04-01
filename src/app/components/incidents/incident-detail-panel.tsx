@@ -98,7 +98,7 @@ export function IncidentDetailPanel({
                       placeholder="Optional note..."
                       value={statusNote}
                       onChange={(e) => setStatusNote(e.target.value)}
-                      className="w-full rounded border border-gray-300 px-2 py-1 text-[13px] focus:outline-none focus:border-[#c2410c]"
+                      className="w-full rounded border border-gray-300 px-2 py-1 text-[13px] focus:outline-none focus:border-accent-text"
                     />
                   </div>
                 </div>
@@ -118,7 +118,7 @@ export function IncidentDetailPanel({
             className={cn(
               "px-3 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer capitalize",
               activeSection === section
-                ? "border-[#c2410c] text-[#c2410c]"
+                ? "border-accent-text text-accent-text"
                 : "border-transparent text-gray-600 hover:text-gray-700",
             )}
           >

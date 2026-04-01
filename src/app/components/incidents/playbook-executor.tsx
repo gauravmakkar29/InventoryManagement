@@ -40,7 +40,7 @@ export function PlaybookExecutor({
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-gray-100">
           <div
-            className="h-full rounded-full bg-[#FF7900] transition-all duration-300"
+            className="h-full rounded-full bg-accent transition-all duration-300"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -62,7 +62,7 @@ export function PlaybookExecutor({
                 ) : (
                   <button
                     onClick={() => onStepComplete(step.stepNumber)}
-                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 hover:border-[#c2410c] cursor-pointer"
+                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 hover:border-accent-text cursor-pointer"
                     title="Mark as complete"
                   >
                     <span className="sr-only">Complete step {step.stepNumber}</span>

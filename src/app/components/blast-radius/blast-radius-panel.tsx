@@ -281,7 +281,7 @@ export function BlastRadiusPanel({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
         <div className="flex items-center gap-2">
-          <Target className="h-4 w-4 text-[#c2410c]" />
+          <Target className="h-4 w-4 text-accent-text" />
           <h3 className="text-[15px] font-semibold text-gray-900">Blast Radius</h3>
         </div>
         <button
@@ -320,7 +320,9 @@ export function BlastRadiusPanel({
               <SlidersHorizontal className="h-3 w-3" />
               Radius
             </span>
-            <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">{radiusKm} km</span>
+            <span className="text-[14px] font-bold tabular-nums text-accent-text">
+              {radiusKm} km
+            </span>
           </label>
           <input
             type="range"
@@ -358,7 +360,7 @@ export function BlastRadiusPanel({
       <div className="border-t border-gray-200 px-5 py-3 flex gap-2">
         <button
           onClick={onRunSimulation}
-          className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-[#FF7900] px-4 py-2.5 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+          className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer"
         >
           <Play className="h-3.5 w-3.5" />
           Run Simulation

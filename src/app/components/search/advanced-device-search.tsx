@@ -161,7 +161,7 @@ export function AdvancedDeviceSearch({
           className={cn(
             "flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-[14px] font-medium cursor-pointer",
             "hover:bg-muted transition-colors",
-            showFilters && "bg-accent/10 border-accent text-[#c2410c]",
+            showFilters && "bg-accent/10 border-accent text-accent-text",
           )}
         >
           <SlidersHorizontal className="h-4 w-4" />

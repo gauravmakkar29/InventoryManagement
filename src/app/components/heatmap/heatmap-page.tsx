@@ -301,7 +301,7 @@ function HeatmapControls({
           />
           <div className="flex items-center justify-between mt-1">
             <span className="text-[12px] text-gray-600">0</span>
-            <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">
+            <span className="text-[14px] font-bold tabular-nums text-accent-text">
               {riskThreshold}
             </span>
             <span className="text-[12px] text-gray-600">100</span>
