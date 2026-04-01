@@ -3,13 +3,23 @@ import { createMockApiProvider } from "./mock/mock-api-provider";
 import { createMockStorageProvider } from "./mock/mock-storage-provider";
 import { MockAuthProvider } from "./mock/mock-auth-provider";
 
+const VALID_PLATFORMS: PlatformId[] = ["mock", "aws-amplify", "aws-cdk", "aws-terraform", "azure"];
+
 /**
- * Detect which platform to use based on VITE_PLATFORM env var.
- * Defaults to "mock" for local development.
+ * Detect and validate the platform from VITE_PLATFORM env var.
+ * Fails fast with a clear error if the value is invalid.
  */
 function detectPlatform(): PlatformId {
-  const platform = import.meta.env.VITE_PLATFORM as PlatformId | undefined;
-  return platform ?? "mock";
+  const raw = import.meta.env.VITE_PLATFORM as string | undefined;
+  const platform = (raw ?? "mock") as PlatformId;
+
+  if (!VALID_PLATFORMS.includes(platform)) {
+    throw new Error(
+      `Invalid VITE_PLATFORM="${raw}". ` + `Valid values: ${VALID_PLATFORMS.join(", ")}`,
+    );
+  }
+
+  return platform;
 }
 
 /**

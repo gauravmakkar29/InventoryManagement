@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../../../lib/use-auth";
+import { useUIStore } from "../../../stores/ui-store";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { Breadcrumbs } from "./breadcrumbs";
@@ -9,8 +9,6 @@ import { CommandPalette } from "./command-palette";
 import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
 import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
 import { Skeleton } from "../../../components/skeleton";
-
-const SIDEBAR_KEY = "ims-sidebar-collapsed";
 
 function LayoutSkeleton() {
   return (
@@ -74,17 +72,8 @@ function LayoutSkeleton() {
 export function ProtectedLayout() {
   const { isAuthenticated, isLoading } = useAuth();
   const connectivity = useConnectivityMonitor();
-  const [collapsed, setCollapsed] = useState(() => {
-    return localStorage.getItem(SIDEBAR_KEY) === "true";
-  });
-
-  const toggleSidebar = useCallback(() => {
-    setCollapsed((prev) => {
-      const next = !prev;
-      localStorage.setItem(SIDEBAR_KEY, String(next));
-      return next;
-    });
-  }, []);
+  const collapsed = useUIStore((s) => s.sidebarCollapsed);
+  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
 
   if (isLoading) {
     return <LayoutSkeleton />;
