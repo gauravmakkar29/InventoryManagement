@@ -1,5 +1,8 @@
 /**
- * Mock Auth Provider — re-exports the existing AuthProvider component.
- * The existing auth-context.tsx IS the mock adapter. No logic is duplicated.
+ * Mock Auth Provider — combines MockAuthAdapter with the generic AuthProvider.
+ * This is the default auth provider used when VITE_PLATFORM=mock.
  */
-export { AuthProvider as MockAuthProvider } from "../../auth-context";
+import { createAuthProvider } from "../auth-provider";
+import { createMockAuthAdapter } from "./mock-auth-adapter";
+
+export const MockAuthProvider = createAuthProvider(createMockAuthAdapter());

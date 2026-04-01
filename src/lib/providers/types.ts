@@ -7,7 +7,6 @@
 
 import type { ComponentType, ReactNode } from "react";
 import type {
-  AuthState,
   Device,
   Firmware,
   ServiceOrder,
@@ -39,16 +38,10 @@ import type {
 } from "../opensearch-types";
 
 // =============================================================================
-// Auth Provider
+// Auth Adapter (re-exported for convenience)
 // =============================================================================
 
-/**
- * Auth provider interface — identical to AuthState.
- * The existing useAuth() hook returns this shape. Future adapters (Cognito,
- * Azure AD, Auth0) must provide a React component that populates AuthContext
- * with this exact shape.
- */
-export type IAuthProvider = AuthState;
+export type { IAuthAdapter, AuthSession, SignInResult } from "./auth-adapter";
 
 // =============================================================================
 // API Provider
