@@ -9,4 +9,8 @@ public class NovusConfigException extends RuntimeException {
     public NovusConfigException(Throwable cause) {
         super(cause);
     }
+
+    public NovusConfigException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

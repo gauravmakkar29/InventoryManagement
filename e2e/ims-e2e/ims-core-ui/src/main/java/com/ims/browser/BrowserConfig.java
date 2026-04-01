@@ -47,7 +47,7 @@ public class BrowserConfig {
             options.setViewportSize(null);
         } else options.setViewportSize(width, height);
         if (!StringUtils.isAllEmpty(ignoreArgs)) launchOptions.setIgnoreDefaultArgs(List.of(ignoreArgs));
-        var chrome = driver.chromium().launch(launchOptions.setHeadless(false).setSlowMo(slowMo).setArgs(args));
+        var chrome = driver.chromium().launch(launchOptions.setHeadless(headless).setSlowMo(slowMo).setArgs(args));
         var tab = chrome.newContext(options);
         return tab.newPage();
     }
