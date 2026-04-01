@@ -86,7 +86,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
               <ShieldCheck className="h-9 w-9 text-[#FF7900]" />
             </div>
             <h2 className="text-[22px] font-semibold text-gray-900">Verification Required</h2>
-            <p className="mt-1.5 text-[15px] text-gray-500">
+            <p className="mt-1.5 text-[15px] text-gray-600">
               Enter the 6-digit code from your authenticator app
             </p>
           </div>
@@ -128,21 +128,21 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
           </div>
 
           {isVerifying && (
-            <p className="mt-4 text-center text-[14px] text-gray-500">Verifying...</p>
+            <p className="mt-4 text-center text-[14px] text-gray-600">Verifying...</p>
           )}
 
           <div className="mt-6 text-center">
             <button
               type="button"
               onClick={signOut}
-              className="text-[14px] text-gray-500 hover:text-gray-600 cursor-pointer"
+              className="text-[14px] text-gray-600 hover:text-gray-600 cursor-pointer"
             >
               Cancel and sign out
             </button>
           </div>
 
           <div className="mt-4 rounded-lg bg-gray-50 px-4 py-3">
-            <p className="text-[13px] text-gray-500 leading-relaxed">
+            <p className="text-[13px] text-gray-600 leading-relaxed">
               Open your authenticator app (Google Authenticator, Authy, etc.) and enter the current
               code. The code changes every 30 seconds.
             </p>

@@ -51,7 +51,7 @@ export function UploadSBOMModal({
           <h2 className="text-base font-semibold text-gray-900">Upload SBOM</h2>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -60,7 +60,7 @@ export function UploadSBOMModal({
         <div className="space-y-5 px-6 py-5">
           {/* Firmware selector */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-600">
               Firmware
             </label>
             <input
@@ -69,7 +69,7 @@ export function UploadSBOMModal({
               aria-label="Search firmware"
               value={firmwareSearch}
               onChange={(e) => setFirmwareSearch(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+              className="mb-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
             />
             <div className="max-h-[120px] overflow-y-auto rounded-lg border border-gray-200">
               {filteredFirmware.map((fw) => (
@@ -90,7 +90,7 @@ export function UploadSBOMModal({
                 </button>
               ))}
               {filteredFirmware.length === 0 && (
-                <div className="px-3 py-4 text-center text-[14px] text-gray-500">
+                <div className="px-3 py-4 text-center text-[14px] text-gray-600">
                   No firmware found
                 </div>
               )}
@@ -99,7 +99,7 @@ export function UploadSBOMModal({
 
           {/* Format selector */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-600">
               Format
             </label>
             <div className="flex gap-3">
@@ -132,7 +132,7 @@ export function UploadSBOMModal({
 
           {/* File upload zone */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-600">
               SBOM File (.json)
             </label>
             <div
@@ -172,15 +172,15 @@ export function UploadSBOMModal({
                 <>
                   <FileText className="mb-2 h-8 w-8 text-green-500" />
                   <span className="text-[14px] font-medium text-green-700">{fileName}</span>
-                  <span className="mt-1 text-[13px] text-gray-500">Click to change file</span>
+                  <span className="mt-1 text-[13px] text-gray-600">Click to change file</span>
                 </>
               ) : (
                 <>
-                  <Upload className="mb-2 h-8 w-8 text-gray-500" />
+                  <Upload className="mb-2 h-8 w-8 text-gray-600" />
                   <span className="text-[14px] text-gray-600">
                     Drop JSON file here or click to browse
                   </span>
-                  <span className="mt-1 text-[13px] text-gray-500">
+                  <span className="mt-1 text-[13px] text-gray-600">
                     Supports CycloneDX and SPDX JSON formats
                   </span>
                 </>

@@ -283,7 +283,7 @@ export function Analytics() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-[20px] font-semibold text-gray-900">Analytics</h1>
-          <p className="mt-0.5 text-[14px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-600">
             Platform health and operational insights — {rangeLabel}
           </p>
         </div>
@@ -297,7 +297,7 @@ export function Analytics() {
                   "rounded-md px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                   range === opt.value
                     ? "bg-[#FF7900] text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
+                    : "text-gray-600 hover:text-gray-700 hover:bg-gray-50",
                 )}
               >
                 {opt.label}
@@ -325,7 +325,7 @@ export function Analytics() {
                   <Icon className={cn("h-[18px] w-[18px]", kpi.iconColor)} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] text-gray-500 truncate">{kpi.label}</p>
+                  <p className="text-[14px] text-gray-600 truncate">{kpi.label}</p>
                   <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
                     {kpi.value}
                   </p>
@@ -345,7 +345,7 @@ export function Analytics() {
                 >
                   {kpi.trend}
                 </span>
-                <span className="text-[12px] text-gray-500">{kpi.trendLabel}</span>
+                <span className="text-[12px] text-gray-600">{kpi.trendLabel}</span>
               </div>
             </div>
           );
@@ -392,7 +392,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[13px] text-gray-500 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-gray-600 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -436,7 +436,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[13px] text-gray-500 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-gray-600 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -453,7 +453,7 @@ export function Analytics() {
         <div className="card-elevated">
           <div className="px-5 py-4">
             <h3 className="text-[15px] font-semibold text-gray-900">Deployment Trend</h3>
-            <p className="text-[13px] text-gray-500 mt-0.5">Monthly deployments (last 6 months)</p>
+            <p className="text-[13px] text-gray-600 mt-0.5">Monthly deployments (last 6 months)</p>
           </div>
           <div className="px-5 pb-5">
             <BarChart data={MONTHLY_DEPLOYMENTS} height={200} />
@@ -464,7 +464,7 @@ export function Analytics() {
         <div className="card-elevated">
           <div className="px-5 py-4">
             <h3 className="text-[15px] font-semibold text-gray-900">Vulnerability Breakdown</h3>
-            <p className="text-[13px] text-gray-500 mt-0.5">Open vulnerabilities by severity</p>
+            <p className="text-[13px] text-gray-600 mt-0.5">Open vulnerabilities by severity</p>
           </div>
           <div className="px-5 pb-5">
             <HorizontalBarChart data={VULN_SEVERITY} />
@@ -479,12 +479,12 @@ export function Analytics() {
         <div className="flex items-center justify-between px-5 py-4">
           <div>
             <h3 className="text-[15px] font-semibold text-gray-900">Audit Log</h3>
-            <p className="text-[13px] text-gray-500 mt-0.5">System activity — {rangeLabel}</p>
+            <p className="text-[13px] text-gray-600 mt-0.5">System activity — {rangeLabel}</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Search Filter */}
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
               <input
                 type="text"
                 placeholder="Search audit log..."
@@ -522,7 +522,7 @@ export function Analytics() {
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-500" />
+                      <Download className="h-3.5 w-3.5 text-gray-600" />
                       Export as CSV
                     </button>
                     <button
@@ -532,7 +532,7 @@ export function Analytics() {
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-500" />
+                      <Download className="h-3.5 w-3.5 text-gray-600" />
                       Export as JSON
                     </button>
                   </div>
@@ -583,14 +583,14 @@ export function Analytics() {
             <tbody>
               {paginatedLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-[14px] text-gray-500">
+                  <td colSpan={5} className="px-5 py-8 text-center text-[14px] text-gray-600">
                     No audit entries found
                   </td>
                 </tr>
               ) : (
                 paginatedLogs.map((entry, i) => (
                   <tr key={entry.id} className={cn("h-[44px]", i % 2 === 1 && "bg-gray-50/50")}>
-                    <td className="px-5 text-[14px] font-mono text-gray-500 whitespace-nowrap">
+                    <td className="px-5 text-[14px] font-mono text-gray-600 whitespace-nowrap">
                       {new Date(entry.timestamp).toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",
@@ -612,7 +612,7 @@ export function Analytics() {
                       </span>
                     </td>
                     <td className="px-3 text-[14px] font-medium text-gray-700">{entry.entity}</td>
-                    <td className="px-5 text-[14px] text-gray-500 max-w-[300px] truncate">
+                    <td className="px-5 text-[14px] text-gray-600 max-w-[300px] truncate">
                       {entry.details}
                     </td>
                   </tr>
@@ -625,7 +625,7 @@ export function Analytics() {
         {/* Pagination */}
         {filteredAuditLogs.length > pageSize && (
           <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
-            <p className="text-[14px] text-gray-500">
+            <p className="text-[14px] text-gray-600">
               Showing {(currentPage - 1) * pageSize + 1}
               {"-"}
               {Math.min(currentPage * pageSize, filteredAuditLogs.length)} of{" "}
@@ -635,7 +635,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -657,7 +657,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Next page"
               >
                 <ChevronRight className="h-3.5 w-3.5" />

@@ -71,7 +71,7 @@ function HealthBar({ value }: { value: number }) {
           style={{ width: `${value}%` }}
         />
       </div>
-      <span className="text-[14px] font-mono tabular-nums text-gray-500">{value}%</span>
+      <span className="text-[14px] font-mono tabular-nums text-gray-600">{value}%</span>
     </div>
   );
 }
@@ -105,7 +105,7 @@ function SortHeader({
             <ChevronDown className="h-3 w-3 text-[#FF7900]" />
           )
         ) : (
-          <ArrowUpDown className="h-3 w-3 text-gray-500" />
+          <ArrowUpDown className="h-3 w-3 text-gray-600" />
         )}
       </div>
     </th>
@@ -157,7 +157,7 @@ export function Inventory() {
               "px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
-                : "text-gray-500 hover:text-gray-700",
+                : "text-gray-600 hover:text-gray-700",
             )}
           >
             {tab.label}
@@ -277,8 +277,8 @@ export function Inventory() {
                     <tr>
                       <td colSpan={canEdit ? 7 : 6} className="py-16 text-center">
                         <Package className="mx-auto h-10 w-10 text-gray-200 mb-3" />
-                        <p className="text-[15px] font-medium text-gray-500">No devices found</p>
-                        <p className="mt-1 text-[14px] text-gray-500">
+                        <p className="text-[15px] font-medium text-gray-600">No devices found</p>
+                        <p className="mt-1 text-[14px] text-gray-600">
                           Try adjusting your search or filter criteria
                         </p>
                       </td>
@@ -298,7 +298,7 @@ export function Inventory() {
                           </span>
                         </td>
                         <td className="px-4 py-2.5">
-                          <span className="text-[14px] font-mono text-gray-500">
+                          <span className="text-[14px] font-mono text-gray-600">
                             {device.serial}
                           </span>
                         </td>
@@ -341,7 +341,7 @@ export function Inventory() {
             {/* Pagination */}
             {filteredDevices.length > 0 && (
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
-                <span className="text-[14px] text-gray-500">
+                <span className="text-[14px] text-gray-600">
                   Showing {startIdx + 1}–{endIdx} of {filteredDevices.length}
                 </span>
                 <div className="flex items-center gap-1">
@@ -349,7 +349,7 @@ export function Inventory() {
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={safeCurrentPage <= 1}
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
+                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 cursor-pointer",
                       "hover:bg-gray-100 hover:text-gray-700",
                       "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent",
                     )}
@@ -365,7 +365,7 @@ export function Inventory() {
                         "flex h-8 w-8 items-center justify-center rounded-lg text-[14px] font-medium cursor-pointer",
                         p === safeCurrentPage
                           ? "bg-[#FF7900] text-white"
-                          : "text-gray-500 hover:bg-gray-100",
+                          : "text-gray-600 hover:bg-gray-100",
                       )}
                     >
                       {p}
@@ -375,7 +375,7 @@ export function Inventory() {
                     onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                     disabled={safeCurrentPage >= totalPages}
                     className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
+                      "flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 cursor-pointer",
                       "hover:bg-gray-100 hover:text-gray-700",
                       "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent",
                     )}
@@ -395,7 +395,7 @@ export function Inventory() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-[15px] font-semibold text-gray-700">Firmware Status Overview</h2>
-            <span className="text-[14px] text-gray-500">
+            <span className="text-[14px] text-gray-600">
               {devices.length} devices — sorted by health (unhealthiest first)
             </span>
           </div>
@@ -413,7 +413,7 @@ export function Inventory() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[14px] font-medium text-gray-900">{device.name}</span>
-                    <span className="text-[13px] font-mono text-gray-500">{device.serial}</span>
+                    <span className="text-[13px] font-mono text-gray-600">{device.serial}</span>
                   </div>
                   <div className="text-[14px] font-mono text-gray-600">{device.firmware}</div>
                   <HealthBar value={device.health} />

@@ -203,23 +203,23 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
           <p className="text-[18px] font-bold tabular-nums text-gray-900">
             {result.affectedDeviceCount}
           </p>
-          <p className="text-[12px] text-gray-500">Affected Devices</p>
+          <p className="text-[12px] text-gray-600">Affected Devices</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">
             {result.estimatedDowntimeMinutes}m
           </p>
-          <p className="text-[12px] text-gray-500">Cascade Downtime</p>
+          <p className="text-[12px] text-gray-600">Cascade Downtime</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">{result.radiusKm}km</p>
-          <p className="text-[12px] text-gray-500">Blast Radius</p>
+          <p className="text-[12px] text-gray-600">Blast Radius</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-[#FF7900]">
             {result.severity ?? "N/A"}
           </p>
-          <p className="text-[12px] text-gray-500">Severity</p>
+          <p className="text-[12px] text-gray-600">Severity</p>
         </div>
       </div>
 
@@ -236,7 +236,7 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
             >
               <div>
                 <p className="text-[14px] font-medium text-gray-900">{d.name}</p>
-                <p className="text-[13px] text-gray-500">
+                <p className="text-[13px] text-gray-600">
                   {d.distanceKm} km | {d.estimatedDowntimeMinutes}m downtime
                 </p>
               </div>
@@ -288,8 +288,8 @@ function SimulationHistory({
   if (history.length === 0) {
     return (
       <div className="py-12 text-center">
-        <History className="mx-auto h-8 w-8 text-gray-500 mb-2" />
-        <p className="text-[14px] text-gray-500">No simulation history</p>
+        <History className="mx-auto h-8 w-8 text-gray-600 mb-2" />
+        <p className="text-[14px] text-gray-600">No simulation history</p>
       </div>
     );
   }
@@ -338,7 +338,7 @@ function SimulationHistory({
               {item.riskLevel}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-[13px] text-gray-500">
+          <div className="flex items-center gap-4 text-[13px] text-gray-600">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {formatDateTime(item.createdAt)}
@@ -440,7 +440,7 @@ export function RiskSimulationDialog({
           </div>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -555,7 +555,7 @@ export function RiskSimulationDialog({
               "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer",
               activeTab === "results"
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
-                : "text-gray-500 hover:text-gray-700",
+                : "text-gray-600 hover:text-gray-700",
             )}
           >
             Results
@@ -566,7 +566,7 @@ export function RiskSimulationDialog({
               "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer flex items-center justify-center gap-1",
               activeTab === "history"
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
-                : "text-gray-500 hover:text-gray-700",
+                : "text-gray-600 hover:text-gray-700",
             )}
           >
             <History className="h-3 w-3" />
@@ -581,8 +581,8 @@ export function RiskSimulationDialog({
               <SimulationResultsPanel result={result} />
             ) : (
               <div className="py-12 text-center">
-                <AlertTriangle className="mx-auto h-8 w-8 text-gray-500 mb-2" />
-                <p className="text-[14px] text-gray-500">Configure parameters and click Simulate</p>
+                <AlertTriangle className="mx-auto h-8 w-8 text-gray-600 mb-2" />
+                <p className="text-[14px] text-gray-600">Configure parameters and click Simulate</p>
               </div>
             )
           ) : (

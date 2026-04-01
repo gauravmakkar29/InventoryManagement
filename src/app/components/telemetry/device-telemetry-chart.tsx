@@ -217,7 +217,7 @@ function TimeSeriesChart({
 
   if (data.length === 0 || visibleMetrics.length === 0) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-500">
+      <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-600">
         Select a metric to display the chart
       </div>
     );
@@ -354,9 +354,9 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
   if (!latestReading) {
     return (
       <div className="card-elevated p-8 text-center">
-        <Activity className="mx-auto h-10 w-10 text-gray-500 mb-3" />
+        <Activity className="mx-auto h-10 w-10 text-gray-600 mb-3" />
         <p className="text-[15px] font-medium text-gray-600">No telemetry data available</p>
-        <p className="mt-1 text-[14px] text-gray-500">
+        <p className="mt-1 text-[14px] text-gray-600">
           Telemetry data will appear here once the device begins reporting
         </p>
       </div>
@@ -369,14 +369,14 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-[16px] font-semibold text-gray-900">Device Telemetry</h3>
-          <p className="text-[14px] text-gray-500">
+          <p className="text-[14px] text-gray-600">
             {deviceName ?? deviceId} - Real-time health metrics
           </p>
         </div>
         <button
           onClick={handleRefresh}
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer",
+            "flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer",
             isRefreshing && "animate-spin",
           )}
           aria-label="Refresh telemetry"
@@ -433,7 +433,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                 >
                   <Icon className={cn("h-3.5 w-3.5", metric.iconColor)} />
                 </div>
-                <span className="text-[13px] text-gray-500 truncate">{metric.label}</span>
+                <span className="text-[13px] text-gray-600 truncate">{metric.label}</span>
               </div>
 
               <div className="flex items-end justify-between">
@@ -450,7 +450,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                   >
                     {currentVal.toFixed(1)}
                   </span>
-                  <span className="ml-0.5 text-[13px] text-gray-500">{metric.unit}</span>
+                  <span className="ml-0.5 text-[13px] text-gray-600">{metric.unit}</span>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <MetricSparkline data={recentValues} color={metric.color} />
@@ -460,7 +460,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                     ) : trend === "down" ? (
                       <TrendingDown className="h-2.5 w-2.5 text-emerald-400" />
                     ) : (
-                      <Minus className="h-2.5 w-2.5 text-gray-500" />
+                      <Minus className="h-2.5 w-2.5 text-gray-600" />
                     )}
                   </div>
                 </div>
@@ -494,7 +494,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                   "rounded-md px-3 py-1 text-[13px] font-medium cursor-pointer",
                   timeRange === tr.id
                     ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700",
+                    : "text-gray-600 hover:text-gray-700",
                 )}
               >
                 {tr.label}

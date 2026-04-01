@@ -143,15 +143,15 @@ function BlastRadiusSummary({
       <div className="grid grid-cols-3 gap-3">
         <div className="text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">{affectedCount}</p>
-          <p className="text-[12px] text-gray-500">Affected</p>
+          <p className="text-[12px] text-gray-600">Affected</p>
         </div>
         <div className="text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">{estimatedDowntime}m</p>
-          <p className="text-[12px] text-gray-500">Est. Downtime</p>
+          <p className="text-[12px] text-gray-600">Est. Downtime</p>
         </div>
         <div className="text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">{radiusKm}km</p>
-          <p className="text-[12px] text-gray-500">Radius</p>
+          <p className="text-[12px] text-gray-600">Radius</p>
         </div>
       </div>
     </div>
@@ -174,7 +174,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
         >
           <div className="relative">
             <MapPin
-              className={cn("h-4 w-4", device.riskScore <= 30 ? "text-red-500" : "text-gray-500")}
+              className={cn("h-4 w-4", device.riskScore <= 30 ? "text-red-500" : "text-gray-600")}
             />
             <span
               className={cn(
@@ -185,7 +185,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[14px] font-medium text-gray-900 truncate">{device.name}</p>
-            <p className="text-[13px] text-gray-500">{device.distanceKm.toFixed(1)} km away</p>
+            <p className="text-[13px] text-gray-600">{device.distanceKm.toFixed(1)} km away</p>
           </div>
           <div className="text-right shrink-0">
             <p
@@ -202,7 +202,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
             >
               {device.riskScore}
             </p>
-            <p className="text-[12px] text-gray-500">{device.estimatedDowntimeMinutes}m</p>
+            <p className="text-[12px] text-gray-600">{device.estimatedDowntimeMinutes}m</p>
           </div>
         </div>
       ))}
@@ -286,7 +286,7 @@ export function BlastRadiusPanel({
         </div>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -294,11 +294,11 @@ export function BlastRadiusPanel({
 
       {/* Origin device */}
       <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
-        <p className="text-[13px] font-medium text-gray-500 uppercase tracking-wider">
+        <p className="text-[13px] font-medium text-gray-600 uppercase tracking-wider">
           Origin Device
         </p>
         <p className="mt-1 text-[15px] font-semibold text-gray-900">{originDeviceName}</p>
-        <p className="text-[13px] text-gray-500">
+        <p className="text-[13px] text-gray-600">
           {originLat.toFixed(4)}, {originLng.toFixed(4)}
         </p>
       </div>
@@ -330,7 +330,7 @@ export function BlastRadiusPanel({
             onChange={(e) => setRadiusKm(Number(e.target.value))}
             className="w-full accent-[#FF7900]"
           />
-          <div className="flex justify-between text-[12px] text-gray-500 mt-0.5">
+          <div className="flex justify-between text-[12px] text-gray-600 mt-0.5">
             <span>1 km</span>
             <span>100 km</span>
           </div>
@@ -345,8 +345,8 @@ export function BlastRadiusPanel({
           </div>
           {affectedDevices.length === 0 ? (
             <div className="py-8 text-center">
-              <Activity className="mx-auto h-8 w-8 text-gray-500 mb-2" />
-              <p className="text-[14px] text-gray-500">No devices within radius</p>
+              <Activity className="mx-auto h-8 w-8 text-gray-600 mb-2" />
+              <p className="text-[14px] text-gray-600">No devices within radius</p>
             </div>
           ) : (
             <BlastRadiusDeviceList devices={affectedDevices} />

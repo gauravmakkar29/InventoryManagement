@@ -62,14 +62,14 @@ export function ComponentExplorerTab({
       {/* Search and filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             placeholder="Search components..."
             aria-label="Search components"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+            className="h-9 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
           />
         </div>
         <div className="flex gap-1.5">
@@ -154,8 +154,8 @@ export function ComponentExplorerTab({
 
         {pagination.total === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
-            <Package className="mb-2 h-8 w-8 text-gray-500" />
-            <p className="text-[14px] text-gray-500">No components found</p>
+            <Package className="mb-2 h-8 w-8 text-gray-600" />
+            <p className="text-[14px] text-gray-600">No components found</p>
           </div>
         )}
       </div>
@@ -190,9 +190,9 @@ function ComponentRow({
       >
         <td className="px-4 py-3">
           {isExpanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
+            <ChevronDown className="h-3.5 w-3.5 text-gray-600" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
+            <ChevronRight className="h-3.5 w-3.5 text-gray-600" />
           )}
         </td>
         <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
@@ -223,10 +223,10 @@ function ComponentRow({
               {comp.vulnerabilityCount}
             </span>
           ) : (
-            <span className="text-[14px] text-gray-500">0</span>
+            <span className="text-[14px] text-gray-600">0</span>
           )}
         </td>
-        <td className="px-4 py-3 text-[14px] text-gray-500">{comp.scope}</td>
+        <td className="px-4 py-3 text-[14px] text-gray-600">{comp.scope}</td>
       </tr>
       {isExpanded && (
         <tr className="border-b border-gray-100">
@@ -234,17 +234,17 @@ function ComponentRow({
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-4 text-[14px]">
                 <div>
-                  <span className="font-semibold text-gray-500">Package URL</span>
+                  <span className="font-semibold text-gray-600">Package URL</span>
                   <p className="mt-0.5 font-mono text-gray-700 break-all">{comp.purl}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-500">License Status</span>
+                  <span className="font-semibold text-gray-600">License Status</span>
                   <p className={cn("mt-0.5 font-medium", complianceCfg.color)}>
                     {complianceCfg.label}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-500">SBOM</span>
+                  <span className="font-semibold text-gray-600">SBOM</span>
                   <p className="mt-0.5 text-gray-700">{comp.sbomId}</p>
                 </div>
               </div>

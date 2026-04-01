@@ -354,7 +354,7 @@ function LocationSearchBar({
   return (
     <div className="absolute top-3 left-3 z-20 w-[240px]">
       <div className="relative">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-500" />
+        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-600" />
         <input
           ref={inputRef}
           type="text"
@@ -366,13 +366,13 @@ function LocationSearchBar({
           }}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder="Search location..."
-          className="w-full rounded-md border border-gray-200 bg-white/95 py-1.5 pl-8 pr-8 text-[14px] text-gray-900 shadow-sm backdrop-blur-sm placeholder:text-gray-500 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="w-full rounded-md border border-gray-200 bg-white/95 py-1.5 pl-8 pr-8 text-[14px] text-gray-900 shadow-sm backdrop-blur-sm placeholder:text-gray-600 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
           aria-label="Search location"
         />
         {query && (
           <button
             onClick={handleClear}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600 cursor-pointer"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-600 cursor-pointer"
             aria-label="Clear search"
           >
             <X className="h-3.5 w-3.5" />
@@ -383,7 +383,7 @@ function LocationSearchBar({
       {showSuggestions && (suggestions.length > 0 || noResults) && (
         <div className="mt-1 rounded-md border border-gray-200 bg-white shadow-lg overflow-hidden">
           {noResults ? (
-            <div className="px-3 py-2 text-[13px] text-gray-500">Location not found</div>
+            <div className="px-3 py-2 text-[13px] text-gray-600">Location not found</div>
           ) : (
             suggestions.map((s) => (
               <button
@@ -391,7 +391,7 @@ function LocationSearchBar({
                 onMouseDown={() => handleSelect(s)}
                 className="flex w-full items-center gap-2 px-3 py-2 text-left text-[14px] text-gray-700 hover:bg-blue-50 cursor-pointer"
               >
-                <MapPin className="h-3 w-3 shrink-0 text-gray-500" />
+                <MapPin className="h-3 w-3 shrink-0 text-gray-600" />
                 <span>{s.label}</span>
               </button>
             ))
@@ -478,7 +478,7 @@ function DeviceTooltip({
         <span className="text-[14px] font-semibold text-gray-900 truncate pr-2">{device.name}</span>
         <button
           onClick={onClose}
-          className="shrink-0 rounded p-0.5 text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+          className="shrink-0 rounded p-0.5 text-gray-600 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           aria-label="Close tooltip"
         >
           <X className="h-3.5 w-3.5" />
@@ -486,21 +486,21 @@ function DeviceTooltip({
       </div>
       <div className="space-y-2 px-3 py-2.5">
         <div className="flex items-center justify-between">
-          <span className="text-[13px] text-gray-500">Status</span>
+          <span className="text-[13px] text-gray-600">Status</span>
           <StatusBadge status={device.status} />
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[13px] text-gray-500">Health</span>
+          <span className="text-[13px] text-gray-600">Health</span>
           <span className={cn("text-[14px] font-semibold tabular-nums", healthColor)}>
             {device.health}%
           </span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[13px] text-gray-500">Firmware</span>
+          <span className="text-[13px] text-gray-600">Firmware</span>
           <span className="text-[13px] font-mono text-gray-700">{device.firmware}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[13px] text-gray-500">Location</span>
+          <span className="text-[13px] text-gray-600">Location</span>
           <span className="text-[13px] text-gray-700 text-right truncate max-w-[120px]">
             {device.location}
           </span>
@@ -607,9 +607,9 @@ function GeofencePanel({
           </span>
         </div>
         {expanded ? (
-          <ChevronDown className="h-4 w-4 text-gray-500" />
+          <ChevronDown className="h-4 w-4 text-gray-600" />
         ) : (
-          <ChevronRight className="h-4 w-4 text-gray-500" />
+          <ChevronRight className="h-4 w-4 text-gray-600" />
         )}
       </button>
 
@@ -620,7 +620,7 @@ function GeofencePanel({
               onClick={onToggleGeofences}
               className={cn(
                 "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer transition-colors",
-                showGeofences ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500",
+                showGeofences ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600",
               )}
             >
               {showGeofences ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
@@ -648,9 +648,9 @@ function GeofencePanel({
                 />
                 <div className="flex-1 min-w-0">
                   <p className="text-[14px] font-medium text-gray-900 truncate">{gf.name}</p>
-                  <p className="text-[12px] text-gray-500">{gf.radiusKm}km radius</p>
+                  <p className="text-[12px] text-gray-600">{gf.radiusKm}km radius</p>
                 </div>
-                <span className="text-[13px] font-medium text-gray-500 tabular-nums">
+                <span className="text-[13px] font-medium text-gray-600 tabular-nums">
                   {gf.deviceCount} devices
                 </span>
               </button>
@@ -680,13 +680,13 @@ function TrailTimeline({
           <span className="text-[14px] font-semibold text-gray-900">
             Position Trail — {device.name}
           </span>
-          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[12px] font-medium text-gray-500">
+          <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[12px] font-medium text-gray-600">
             {trail.length} points
           </span>
         </div>
         <button
           onClick={onHideTrail}
-          className="rounded-md px-2.5 py-1 text-[13px] font-medium text-gray-500 hover:bg-gray-100 cursor-pointer transition-colors"
+          className="rounded-md px-2.5 py-1 text-[13px] font-medium text-gray-600 hover:bg-gray-100 cursor-pointer transition-colors"
         >
           Hide Trail
         </button>
@@ -721,8 +721,8 @@ function TrailTimeline({
                       )}
                     </div>
                     <div className="flex items-center gap-1 mt-0.5">
-                      <Clock className="h-2.5 w-2.5 text-gray-500" />
-                      <span className="text-[12px] text-gray-500">
+                      <Clock className="h-2.5 w-2.5 text-gray-600" />
+                      <span className="text-[12px] text-gray-600">
                         {date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}{" "}
                         {date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                       </span>
@@ -744,8 +744,8 @@ function MapSkeleton() {
       <Skeleton className="h-full w-full" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-2">
-          <MapPin className="h-8 w-8 text-gray-500 animate-pulse" />
-          <span className="text-[14px] text-gray-500">Loading map...</span>
+          <MapPin className="h-8 w-8 text-gray-600 animate-pulse" />
+          <span className="text-[14px] text-gray-600">Loading map...</span>
         </div>
       </div>
     </div>
@@ -813,7 +813,7 @@ function MapError({ devices, onRetry }: { devices: GeoDevice[]; onRetry: () => v
                   <StatusBadge status={device.status} />
                 </td>
                 <td className="px-4 py-2 text-[14px] text-gray-600">{device.location}</td>
-                <td className="px-4 py-2 text-[14px] font-mono text-gray-500">{device.health}%</td>
+                <td className="px-4 py-2 text-[14px] font-mono text-gray-600">{device.health}%</td>
               </tr>
             ))}
           </tbody>
@@ -1099,14 +1099,14 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
                 <span className={cn("h-2 w-2 rounded-full", opt.dotColor)} />
               )}
               {opt.label}
-              <span className={cn("text-[13px]", isActive ? "opacity-80" : "text-gray-500")}>
+              <span className={cn("text-[13px]", isActive ? "opacity-80" : "text-gray-600")}>
                 ({count})
               </span>
             </button>
           );
         })}
         {/* Device count badge */}
-        <span className="ml-auto text-[14px] text-gray-500">
+        <span className="ml-auto text-[14px] text-gray-600">
           Showing {mappableDevices.length} of {devices.length} devices
           {clusters.length > 0 && (
             <>
@@ -1333,7 +1333,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
               <div className="flex h-32 items-center justify-center card-elevated">
                 <div className="text-center">
                   <MapPin className="mx-auto h-8 w-8 text-gray-200 mb-2" />
-                  <p className="text-[14px] font-medium text-gray-500">
+                  <p className="text-[14px] font-medium text-gray-600">
                     No devices match the selected filter
                   </p>
                 </div>

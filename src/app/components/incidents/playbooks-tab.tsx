@@ -50,15 +50,15 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                     ? "bg-emerald-50 text-emerald-700"
                     : pb.status === "Draft"
                       ? "bg-amber-50 text-amber-700"
-                      : "bg-gray-50 text-gray-500",
+                      : "bg-gray-50 text-gray-600",
                 )}
               >
                 {pb.status}
               </span>
             </div>
             <h4 className="text-[15px] font-semibold text-gray-900">{pb.name}</h4>
-            <p className="mt-1 text-[14px] text-gray-500 line-clamp-2">{pb.description}</p>
-            <div className="mt-3 flex items-center gap-4 text-[13px] text-gray-500">
+            <p className="mt-1 text-[14px] text-gray-600 line-clamp-2">{pb.description}</p>
+            <div className="mt-3 flex items-center gap-4 text-[13px] text-gray-600">
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="h-3 w-3" /> {pb.stepCount} steps
               </span>
@@ -70,7 +70,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
               </span>
             </div>
             <div className="mt-3 border-t border-gray-100 pt-3">
-              <h5 className="text-[13px] font-semibold text-gray-500 uppercase mb-2">
+              <h5 className="text-[13px] font-semibold text-gray-600 uppercase mb-2">
                 Steps Preview
               </h5>
               <div className="space-y-1">
@@ -79,7 +79,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                     key={step.stepNumber}
                     className="flex items-center gap-2 text-[14px] text-gray-600"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100 text-[12px] font-bold text-gray-500">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100 text-[12px] font-bold text-gray-600">
                       {step.stepNumber}
                     </span>
                     <span className="truncate">{step.title}</span>
@@ -91,7 +91,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                   </div>
                 ))}
                 {pb.steps.length > 3 && (
-                  <p className="text-[13px] text-gray-500 pl-6">
+                  <p className="text-[13px] text-gray-600 pl-6">
                     +{pb.steps.length - 3} more steps
                   </p>
                 )}

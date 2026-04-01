@@ -81,7 +81,7 @@ export function IsolatedDevicesTab({
               </td>
               <td className="px-4">
                 <span className="text-[14px] text-blue-600 font-medium">{dev.incidentId}</span>
-                <p className="text-[13px] text-gray-500 truncate max-w-[200px]">
+                <p className="text-[13px] text-gray-600 truncate max-w-[200px]">
                   {dev.incidentTitle}
                 </p>
               </td>
@@ -109,7 +109,7 @@ export function IsolatedDevicesTab({
               <td colSpan={6} className="py-12 text-center">
                 <Shield className="mx-auto h-8 w-8 text-emerald-300 mb-2" />
                 <p className="text-[15px] font-medium text-emerald-700">No isolated devices</p>
-                <p className="text-[14px] text-gray-500">All devices are operating normally</p>
+                <p className="text-[14px] text-gray-600">All devices are operating normally</p>
               </td>
             </tr>
           )}

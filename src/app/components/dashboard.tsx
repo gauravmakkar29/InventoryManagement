@@ -184,7 +184,7 @@ function KpiSkeleton() {
 function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
     <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
-      <RefreshCw className="h-8 w-8 text-muted-foreground/70 mb-3" />
+      <RefreshCw className="h-8 w-8 text-muted-foreground mb-3" />
       <p className="text-[15px] font-medium text-foreground/80">{message}</p>
       <button
         onClick={onRetry}
@@ -255,7 +255,7 @@ function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void
                 >
                   {card.trend}
                 </span>
-                <span className="text-[12px] text-muted-foreground/70">{card.trendLabel}</span>
+                <span className="text-[12px] text-muted-foreground">{card.trendLabel}</span>
               </div>
             </div>
           </div>
@@ -479,9 +479,9 @@ export function Dashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[14px] text-muted-foreground/70">{dateStr}</span>
+          <span className="text-[14px] text-muted-foreground">{dateStr}</span>
           {dashData?.lastUpdated && (
-            <span className="text-[13px] text-muted-foreground/70">
+            <span className="text-[13px] text-muted-foreground">
               Updated {dashData.lastUpdated.toLocaleTimeString()}
             </span>
           )}
@@ -529,7 +529,7 @@ export function Dashboard() {
                 />
                 <div className="min-w-0">
                   <p className="truncate text-[14px] font-medium text-foreground/80">{svc.name}</p>
-                  <p className="text-[13px] text-muted-foreground/70">{svc.lastChecked}</p>
+                  <p className="text-[13px] text-muted-foreground">{svc.lastChecked}</p>
                 </div>
               </div>
             ))}
@@ -589,7 +589,7 @@ export function Dashboard() {
                 <FleetDonut segments={FLEET_SEGMENTS} size={140} />
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-[22px] font-bold tabular-nums text-foreground">1,247</span>
-                  <span className="text-[12px] text-muted-foreground/70">Total</span>
+                  <span className="text-[12px] text-muted-foreground">Total</span>
                 </div>
               </div>
               {/* Legend + values */}
@@ -627,7 +627,7 @@ export function Dashboard() {
               <div className="space-y-2.5">
                 {TOP_REGIONS.map((region, i) => (
                   <div key={region.name} className="flex items-center gap-3">
-                    <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-muted-foreground/70 bg-muted">
+                    <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-muted-foreground bg-muted">
                       {i + 1}
                     </span>
                     <span className="w-[100px] truncate text-[14px] font-medium text-foreground/80">
@@ -669,7 +669,7 @@ export function Dashboard() {
               <GaugeChart value={94.2} />
               <div className="absolute inset-x-0 bottom-2 flex flex-col items-center">
                 <span className="text-[28px] font-bold tabular-nums text-foreground">94.2%</span>
-                <span className="text-[13px] text-muted-foreground/70">Overall Fleet Health</span>
+                <span className="text-[13px] text-muted-foreground">Overall Fleet Health</span>
               </div>
             </div>
 
@@ -801,7 +801,7 @@ export function Dashboard() {
                         <span className="text-[14px] text-muted-foreground">{row.userName}</span>
                       </div>
                     </td>
-                    <td className="px-5 text-right text-[14px] text-muted-foreground/70">
+                    <td className="px-5 text-right text-[14px] text-muted-foreground">
                       {row.time}
                     </td>
                   </tr>
@@ -835,9 +835,9 @@ export function Dashboard() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-[15px] font-medium text-foreground">{item.title}</p>
-                    <p className="text-[14px] text-muted-foreground/70 truncate">{item.subtitle}</p>
+                    <p className="text-[14px] text-muted-foreground truncate">{item.subtitle}</p>
                   </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                 </div>
               );
             })}

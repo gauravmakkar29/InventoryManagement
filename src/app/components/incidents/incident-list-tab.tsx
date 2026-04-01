@@ -42,14 +42,14 @@ export function IncidentListTab({
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px] max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search incidents..."
             aria-label="Search incidents"
-            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
           />
         </div>
         <select
@@ -164,7 +164,7 @@ export function IncidentListTab({
                     <p className="text-[14px] font-medium text-gray-900 truncate max-w-[300px]">
                       {inc.title}
                     </p>
-                    <p className="text-[13px] text-gray-500">{inc.id}</p>
+                    <p className="text-[13px] text-gray-600">{inc.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
@@ -177,20 +177,20 @@ export function IncidentListTab({
                   {inc.affectedDeviceCount}
                 </td>
                 <td className="px-4 text-[14px] text-gray-600">{inc.assignedToName}</td>
-                <td className="px-4 text-right text-[14px] text-gray-500">
+                <td className="px-4 text-right text-[14px] text-gray-600">
                   {formatRelativeTime(inc.createdAt)}
                 </td>
                 <td className="px-2">
-                  <ChevronRight className="h-4 w-4 text-gray-500" />
+                  <ChevronRight className="h-4 w-4 text-gray-600" />
                 </td>
               </tr>
             ))}
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={8} className="py-12 text-center">
-                  <AlertTriangle className="mx-auto h-8 w-8 text-gray-500 mb-2" />
+                  <AlertTriangle className="mx-auto h-8 w-8 text-gray-600 mb-2" />
                   <p className="text-[15px] font-medium text-gray-600">No incidents found</p>
-                  <p className="text-[14px] text-gray-500">
+                  <p className="text-[14px] text-gray-600">
                     Adjust your filters or create a new incident
                   </p>
                 </td>

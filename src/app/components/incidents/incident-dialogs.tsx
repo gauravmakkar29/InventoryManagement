@@ -82,7 +82,7 @@ export function CreateIncidentDialog({
           <h3 className="text-[16px] font-semibold text-gray-900">Create Incident</h3>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -95,7 +95,7 @@ export function CreateIncidentDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Brief incident description..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ export function CreateIncidentDialog({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Detailed description of the incident..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -144,14 +144,14 @@ export function CreateIncidentDialog({
               Affected Devices
             </label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
               <input
                 type="text"
                 value={deviceSearch}
                 onChange={(e) => setDeviceSearch(e.target.value)}
                 placeholder="Search devices to add..."
                 aria-label="Search devices to add"
-                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
               />
             </div>
           </div>
@@ -237,7 +237,7 @@ export function IsolationDialog({
         <div className="space-y-4 px-6 py-5">
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="text-[14px] font-medium text-gray-900">{device.name}</p>
-            <p className="text-[14px] text-gray-500">
+            <p className="text-[14px] text-gray-600">
               {device.location} &middot; {device.firmwareVersion}
             </p>
           </div>
@@ -265,7 +265,7 @@ export function IsolationDialog({
                   />
                   <div>
                     <p className="text-[14px] font-medium text-gray-900">{p.label}</p>
-                    <p className="text-[13px] text-gray-500">{p.description}</p>
+                    <p className="text-[13px] text-gray-600">{p.description}</p>
                   </div>
                 </label>
               ))}
@@ -323,7 +323,7 @@ export function ReleaseDialog({
           <h3 className="text-[16px] font-semibold text-gray-900">Release Device</h3>
           <button
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -331,7 +331,7 @@ export function ReleaseDialog({
         <div className="space-y-4 px-6 py-5">
           <div className="rounded-lg bg-gray-50 p-3">
             <p className="text-[14px] font-medium text-gray-900">{device.name}</p>
-            <p className="text-[14px] text-gray-500">
+            <p className="text-[14px] text-gray-600">
               Currently isolated since{" "}
               {device.isolatedAt ? formatDateTime(device.isolatedAt) : "N/A"}
             </p>
@@ -345,7 +345,7 @@ export function ReleaseDialog({
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               placeholder="Provide a reason for releasing this device from isolation..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
             />
           </div>
         </div>

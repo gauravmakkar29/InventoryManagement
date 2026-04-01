@@ -57,7 +57,7 @@ const STATUS_CONFIG: Record<ComplianceStatus, { bg: string; text: string; icon: 
   Approved: { bg: "bg-emerald-50", text: "text-emerald-700", icon: ShieldCheck },
   Pending: { bg: "bg-amber-50", text: "text-amber-700", icon: Clock },
   "In Review": { bg: "bg-blue-50", text: "text-blue-700", icon: Shield },
-  Deprecated: { bg: "bg-gray-100", text: "text-gray-500", icon: Archive },
+  Deprecated: { bg: "bg-gray-100", text: "text-gray-600", icon: Archive },
   "Non-Compliant": { bg: "bg-red-50", text: "text-red-700", icon: ShieldX },
 };
 
@@ -66,7 +66,7 @@ const SEVERITY_CONFIG: Record<VulnSeverity, { bg: string; text: string; border: 
   High: { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
   Medium: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
   Low: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  Info: { bg: "bg-gray-50", text: "text-gray-500", border: "border-gray-200" },
+  Info: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-200" },
 };
 
 const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
@@ -199,7 +199,7 @@ export function CompliancePage() {
               "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
-                : "text-gray-500 hover:text-gray-700",
+                : "text-gray-600 hover:text-gray-700",
             )}
           >
             <tab.icon className="h-3.5 w-3.5" />
@@ -398,18 +398,18 @@ function ComplianceTab({
       {/* Search + cert filter */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             placeholder="Search compliance items..."
             aria-label="Search compliance items"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
+            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
+          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
           <select
             value={certFilter}
             onChange={(e) => setCertFilter(e.target.value as CertificationType | "All")}
@@ -422,7 +422,7 @@ function ComplianceTab({
               </option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-500" />
+          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
         </div>
       </div>
 
@@ -488,9 +488,9 @@ function ComplianceTab({
                 <tr>
                   <td colSpan={8} className="px-3 py-12 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <Shield className="h-8 w-8 text-gray-500" />
-                      <p className="text-sm text-gray-500">No compliance items found</p>
-                      <p className="text-sm text-gray-500">
+                      <Shield className="h-8 w-8 text-gray-600" />
+                      <p className="text-sm text-gray-600">No compliance items found</p>
+                      <p className="text-sm text-gray-600">
                         Try adjusting your filters or search criteria
                       </p>
                     </div>
@@ -560,13 +560,13 @@ function ComplianceRow({
           <div className="flex items-center gap-2">
             <ChevronRight
               className={cn(
-                "h-3.5 w-3.5 text-gray-500 transition-transform duration-200",
+                "h-3.5 w-3.5 text-gray-600 transition-transform duration-200",
                 isExpanded && "rotate-90",
               )}
             />
             <div>
               <div className="text-sm font-medium text-gray-900">{item.name}</div>
-              <div className="text-[12px] text-gray-500 font-mono">{item.id}</div>
+              <div className="text-[12px] text-gray-600 font-mono">{item.id}</div>
             </div>
           </div>
         </td>
@@ -593,7 +593,7 @@ function ComplianceRow({
           <span
             className={cn(
               "text-sm tabular-nums font-medium",
-              item.findings > 0 ? "text-red-600" : "text-gray-500",
+              item.findings > 0 ? "text-red-600" : "text-gray-600",
             )}
           >
             {item.findings}
@@ -641,7 +641,7 @@ function ComplianceRow({
                 </h3>
               </div>
               {item.vulnerabilities.length === 0 ? (
-                <p className="text-sm text-gray-500 py-3">No vulnerabilities recorded</p>
+                <p className="text-sm text-gray-600 py-3">No vulnerabilities recorded</p>
               ) : (
                 <div className="space-y-2">
                   {item.vulnerabilities.map((vuln) => {
@@ -673,7 +673,7 @@ function ComplianceRow({
                         </div>
                         <div className="flex items-center gap-3 ml-3">
                           {vuln.resolvedDate && (
-                            <span className="text-[12px] text-gray-500">
+                            <span className="text-[12px] text-gray-600">
                               Resolved: {vuln.resolvedDate}
                             </span>
                           )}
@@ -731,7 +731,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-600">
           {vulnerabilities.length} vulnerabilities sorted by CVSS score (highest first)
         </p>
         {canCreateVulnerability(role) && (
@@ -798,7 +798,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                 </div>
                 <div className="h-3 w-px bg-gray-200" />
                 <div className="flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3 text-gray-500" />
+                  <AlertTriangle className="h-3 w-3 text-gray-600" />
                   <span className="text-gray-600">
                     {vuln.affectedDevices.toLocaleString()} devices
                   </span>
@@ -825,7 +825,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                   {vuln.remediationStatus}
                 </span>
                 {vuln.resolvedDate && (
-                  <span className="text-[12px] text-gray-500">{vuln.resolvedDate}</span>
+                  <span className="text-[12px] text-gray-600">{vuln.resolvedDate}</span>
                 )}
               </div>
             </div>
@@ -899,7 +899,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
           label="Deprecated"
           value={stats.deprecated}
           icon={Archive}
-          valueClass="text-gray-500"
+          valueClass="text-gray-600"
         />
         <StatCard label="Total Vulnerabilities" value={stats.totalVulns} icon={Bug} />
         <StatCard
@@ -933,7 +933,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
                   <FileText className="h-4 w-4 text-[#FF7900]" />
                   <span className="text-[14px] font-semibold text-gray-900">{type}</span>
                 </div>
-                <p className="text-[13px] text-gray-500">{itemCount} compliance items applicable</p>
+                <p className="text-[13px] text-gray-600">{itemCount} compliance items applicable</p>
                 <button
                   onClick={() => {
                     const reportItems = allItems.filter((i) => i.certType === type);
@@ -978,8 +978,8 @@ function StatCard({
   return (
     <div className="card-elevated rounded-lg border border-gray-200 p-3 space-y-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3.5 w-3.5 text-gray-500" />
-        <span className="text-[12px] font-medium text-gray-500 uppercase tracking-wider">
+        <Icon className="h-3.5 w-3.5 text-gray-600" />
+        <span className="text-[12px] font-medium text-gray-600 uppercase tracking-wider">
           {label}
         </span>
       </div>
@@ -1025,7 +1025,7 @@ function SubmitForReviewModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
 
   return (
     <ModalOverlay onClose={onClose}>
@@ -1036,7 +1036,7 @@ function SubmitForReviewModal({
           </h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1203,7 +1203,7 @@ function CreateVulnerabilityModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
 
   return (
     <ModalOverlay onClose={onClose}>
@@ -1212,7 +1212,7 @@ function CreateVulnerabilityModal({
           <h2 className="text-[15px] font-semibold text-gray-900">Report Vulnerability</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1411,7 +1411,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
           <h2 className="text-[15px] font-semibold text-gray-900">Generate Regulatory Report</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1419,7 +1419,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
 
         <div className="space-y-4 p-5">
           {items.length === 0 ? (
-            <p className="text-sm text-gray-500">No data available for report generation</p>
+            <p className="text-sm text-gray-600">No data available for report generation</p>
           ) : (
             <>
               <p className="text-sm text-gray-600">

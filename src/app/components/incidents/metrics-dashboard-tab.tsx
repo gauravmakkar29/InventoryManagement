@@ -14,7 +14,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
         <div className="card-elevated px-5 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[14px] text-gray-500">Open Incidents</p>
+              <p className="text-[14px] text-gray-600">Open Incidents</p>
               <p className="text-[28px] font-bold text-gray-900 tabular-nums">
                 {metrics.openIncidents}
               </p>
@@ -43,21 +43,21 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-500">Isolated Devices</p>
+          <p className="text-[14px] text-gray-600">Isolated Devices</p>
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.isolatedDevices}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-500">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-600">
             <Lock className="h-3 w-3" /> Currently under isolation
           </span>
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-500">Active Quarantine Zones</p>
+          <p className="text-[14px] text-gray-600">Active Quarantine Zones</p>
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.activeQuarantineZones}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-500">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-600">
             <MapPin className="h-3 w-3" /> Geographic zones
           </span>
         </div>
@@ -66,12 +66,12 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
       {/* MTTC / MTTR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-500">Mean Time to Contain (MTTC)</p>
+          <p className="text-[14px] text-gray-600">Mean Time to Contain (MTTC)</p>
           <div className="mt-2 flex items-baseline gap-3">
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToContainHours}
             </p>
-            <span className="text-[15px] text-gray-500">hours</span>
+            <span className="text-[15px] text-gray-600">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -82,19 +82,19 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttcTrend < 0 ? `${metrics.mttcTrend}%` : `+${metrics.mttcTrend}%`}
             </span>
-            <span className="text-[13px] text-gray-500">vs last period</span>
+            <span className="text-[13px] text-gray-600">vs last period</span>
             {metrics.mttcTrend < 0 && (
               <span className="text-[12px] text-emerald-500">(improving)</span>
             )}
           </div>
         </div>
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-500">Mean Time to Resolve (MTTR)</p>
+          <p className="text-[14px] text-gray-600">Mean Time to Resolve (MTTR)</p>
           <div className="mt-2 flex items-baseline gap-3">
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToResolveHours}
             </p>
-            <span className="text-[15px] text-gray-500">hours</span>
+            <span className="text-[15px] text-gray-600">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -105,7 +105,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttrTrend < 0 ? `${metrics.mttrTrend}%` : `+${metrics.mttrTrend}%`}
             </span>
-            <span className="text-[13px] text-gray-500">vs last period</span>
+            <span className="text-[13px] text-gray-600">vs last period</span>
             {metrics.mttrTrend < 0 && (
               <span className="text-[12px] text-emerald-500">(improving)</span>
             )}

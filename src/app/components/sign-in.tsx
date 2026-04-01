@@ -134,7 +134,7 @@ export function SignIn() {
           <div className="rounded-2xl bg-white p-8 shadow-lg">
             <div className="mb-7">
               <h2 className="text-[24px] font-semibold text-gray-900">Sign in</h2>
-              <p className="mt-1.5 text-[15px] text-gray-500">Enter your credentials to continue</p>
+              <p className="mt-1.5 text-[15px] text-gray-600">Enter your credentials to continue</p>
             </div>
 
             {/* Auth error banner */}
@@ -163,7 +163,7 @@ export function SignIn() {
                   autoComplete="email"
                   placeholder="admin@company.com"
                   className={cn(
-                    "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 text-[15px] text-gray-900 placeholder:text-gray-500",
+                    "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 text-[15px] text-gray-900 placeholder:text-gray-600",
                     "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
                     errors.email && "border-red-400 focus:border-red-500 focus:ring-red-500/20",
                   )}
@@ -197,7 +197,7 @@ export function SignIn() {
                     autoComplete="current-password"
                     placeholder="Enter your password"
                     className={cn(
-                      "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 pr-10 text-[15px] text-gray-900 placeholder:text-gray-500",
+                      "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 pr-10 text-[15px] text-gray-900 placeholder:text-gray-600",
                       "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
                       errors.password &&
                         "border-red-400 focus:border-red-500 focus:ring-red-500/20",
@@ -209,7 +209,7 @@ export function SignIn() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-600 cursor-pointer"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -250,14 +250,14 @@ export function SignIn() {
 
             {/* Demo credentials hint */}
             <div className="mt-5 rounded-lg bg-gray-50 px-4 py-3">
-              <p className="text-[13px] font-medium text-gray-500 mb-1.5">Demo credentials</p>
-              <p className="text-[13px] text-gray-500 leading-relaxed">
+              <p className="text-[13px] font-medium text-gray-600 mb-1.5">Demo credentials</p>
+              <p className="text-[13px] text-gray-600 leading-relaxed">
                 admin@company.com / Admin@12345678
               </p>
             </div>
           </div>
 
-          <p className="mt-8 text-center text-[13px] text-gray-500">IMS Gen2 Platform v0.1.0</p>
+          <p className="mt-8 text-center text-[13px] text-gray-600">IMS Gen2 Platform v0.1.0</p>
         </div>
       </div>
     </div>

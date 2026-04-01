@@ -44,7 +44,7 @@ export function IncidentDetailPanel({
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-[14px] font-mono text-gray-500">{incident.id}</span>
+              <span className="text-[14px] font-mono text-gray-600">{incident.id}</span>
               <SeverityBadge severity={incident.severity} />
               <StatusBadge status={incident.status} />
             </div>
@@ -54,7 +54,7 @@ export function IncidentDetailPanel({
           </div>
           <button
             onClick={onClose}
-            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
+            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -104,7 +104,7 @@ export function IncidentDetailPanel({
                 </div>
               )}
             </div>
-            <span className="text-[13px] text-gray-500">Assigned to {incident.assignedToName}</span>
+            <span className="text-[13px] text-gray-600">Assigned to {incident.assignedToName}</span>
           </div>
         )}
       </div>
@@ -119,7 +119,7 @@ export function IncidentDetailPanel({
               "px-3 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer capitalize",
               activeSection === section
                 ? "border-[#FF7900] text-[#FF7900]"
-                : "border-transparent text-gray-500 hover:text-gray-700",
+                : "border-transparent text-gray-600 hover:text-gray-700",
             )}
           >
             {section}
@@ -132,32 +132,32 @@ export function IncidentDetailPanel({
         {activeSection === "details" && (
           <div className="space-y-4">
             <div>
-              <h4 className="text-[14px] font-semibold text-gray-500 uppercase mb-1">
+              <h4 className="text-[14px] font-semibold text-gray-600 uppercase mb-1">
                 Description
               </h4>
               <p className="text-[14px] text-gray-700 leading-relaxed">{incident.description}</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-500">Category</p>
+                <p className="text-[13px] font-semibold text-gray-600">Category</p>
                 <div className="mt-1">
                   <CategoryBadge category={incident.category} />
                 </div>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-500">Affected Devices</p>
+                <p className="text-[13px] font-semibold text-gray-600">Affected Devices</p>
                 <p className="mt-1 text-[16px] font-bold text-gray-900">
                   {incident.affectedDeviceCount}
                 </p>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-500">Reported By</p>
+                <p className="text-[13px] font-semibold text-gray-600">Reported By</p>
                 <p className="mt-1 text-[14px] font-medium text-gray-900">
                   {incident.reportedByName}
                 </p>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-500">Created</p>
+                <p className="text-[13px] font-semibold text-gray-600">Created</p>
                 <p className="mt-1 text-[14px] font-medium text-gray-900">
                   {formatDateTime(incident.createdAt)}
                 </p>
@@ -189,7 +189,7 @@ export function IncidentDetailPanel({
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-[14px] font-medium text-gray-900">{device.name}</p>
-                    <p className="text-[13px] text-gray-500">
+                    <p className="text-[13px] text-gray-600">
                       {device.location} &middot; {device.firmwareVersion} &middot; Risk:{" "}
                       {device.riskScore}
                     </p>
@@ -235,9 +235,9 @@ export function IncidentDetailPanel({
               />
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <BookOpen className="h-10 w-10 text-gray-500 mb-3" />
+                <BookOpen className="h-10 w-10 text-gray-600 mb-3" />
                 <p className="text-[15px] font-medium text-gray-700">No playbook attached</p>
-                <p className="text-[14px] text-gray-500 mt-1">
+                <p className="text-[14px] text-gray-600 mt-1">
                   Attach a playbook to track response steps
                 </p>
               </div>
