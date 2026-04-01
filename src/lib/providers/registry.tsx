@@ -47,7 +47,7 @@ export function ProviderRegistry({ api, storage, AuthProvider, children }: Provi
       <ProviderRegistryContext.Provider value={{ api, storage }}>
         <AuthProvider>{children}</AuthProvider>
       </ProviderRegistryContext.Provider>
-      {import.meta.env.DEV && (
+      {import.meta.env.VITE_SHOW_DEVTOOLS === "true" && (
         <Suspense fallback={null}>
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
         </Suspense>
