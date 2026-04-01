@@ -1,4 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "./query-keys";
 
 export type FetchState = "loading" | "success" | "error";
 
@@ -78,23 +80,18 @@ async function fetchDashboardData(): Promise<DashboardData> {
 }
 
 export function useDashboardData() {
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [state, setState] = useState<FetchState>("loading");
+  const { data, status, refetch } = useQuery({
+    queryKey: queryKeys.dashboard.metrics(),
+    queryFn: fetchDashboardData,
+  });
+
+  // Map TanStack Query status to FetchState for backward compatibility
+  const state: FetchState =
+    status === "pending" ? "loading" : status === "error" ? "error" : "success";
 
   const refresh = useCallback(async () => {
-    setState("loading");
-    try {
-      const result = await fetchDashboardData();
-      setData(result);
-      setState("success");
-    } catch {
-      setState("error");
-    }
-  }, []);
+    await refetch();
+  }, [refetch]);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
-  return { data, state, refresh };
+  return { data: data ?? null, state, refresh };
 }
