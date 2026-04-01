@@ -1,4 +1,7 @@
 import { createContext, useContext, type ReactNode, type ComponentType } from "react";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { queryClient } from "../query-client";
 import type { IApiProvider, IStorageProvider } from "./types";
 
 // =============================================================================
@@ -30,9 +33,12 @@ interface ProviderRegistryProps {
  */
 export function ProviderRegistry({ api, storage, AuthProvider, children }: ProviderRegistryProps) {
   return (
-    <ProviderRegistryContext.Provider value={{ api, storage }}>
-      <AuthProvider>{children}</AuthProvider>
-    </ProviderRegistryContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <ProviderRegistryContext.Provider value={{ api, storage }}>
+        <AuthProvider>{children}</AuthProvider>
+      </ProviderRegistryContext.Provider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
