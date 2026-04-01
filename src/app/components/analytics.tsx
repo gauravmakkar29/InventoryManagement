@@ -1,12 +1,5 @@
-import { useState, useMemo } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 import {
-  Server,
-  Cpu,
-  ShieldCheck,
-  HeartPulse,
-  AlertTriangle,
-  Wrench,
   TrendingUp,
   TrendingDown,
   Search,
@@ -16,236 +9,21 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-type TimeRange = "7d" | "30d" | "90d" | "ytd" | "custom";
-
-interface KpiCard {
-  label: string;
-  value: string;
-  icon: typeof Server;
-  iconBg: string;
-  iconColor: string;
-  trend: string;
-  trendUp: boolean;
-  trendLabel: string;
-}
-
-interface RingSegment {
-  label: string;
-  value: number;
-  color: string;
-}
-
-interface AuditEntry {
-  id: string;
-  timestamp: string;
-  user: string;
-  action: "Created" | "Modified" | "Deleted";
-  entity: string;
-  details: string;
-}
-
-interface MonthlyDeployment {
-  month: string;
-  count: number;
-}
-
-interface VulnSeverity {
-  severity: string;
-  count: number;
-  color: string;
-}
-
-// ---------------------------------------------------------------------------
-// Mock Data
-// ---------------------------------------------------------------------------
-const TIME_RANGE_OPTIONS: { label: string; value: TimeRange }[] = [
-  { label: "Last 7 Days", value: "7d" },
-  { label: "Last 30 Days", value: "30d" },
-  { label: "Last 90 Days", value: "90d" },
-  { label: "Year to Date", value: "ytd" },
-  { label: "Custom", value: "custom" },
-];
-
-const KPI_DATA: KpiCard[] = [
-  {
-    label: "Total Devices",
-    value: "2,847",
-    icon: Server,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
-    trend: "+12%",
-    trendUp: true,
-    trendLabel: "vs last period",
-  },
-  {
-    label: "Active Deployments",
-    value: "18",
-    icon: Cpu,
-    iconBg: "bg-orange-50",
-    iconColor: "text-[#FF7900]",
-    trend: "+3",
-    trendUp: true,
-    trendLabel: "this period",
-  },
-  {
-    label: "Compliance Score",
-    value: "96.4%",
-    icon: ShieldCheck,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-    trend: "+1.2%",
-    trendUp: true,
-    trendLabel: "vs last period",
-  },
-  {
-    label: "Open Vulnerabilities",
-    value: "23",
-    icon: AlertTriangle,
-    iconBg: "bg-red-50",
-    iconColor: "text-red-500",
-    trend: "-5",
-    trendUp: false,
-    trendLabel: "vs last period",
-  },
-  {
-    label: "Service Orders (MTD)",
-    value: "142",
-    icon: Wrench,
-    iconBg: "bg-purple-50",
-    iconColor: "text-purple-600",
-    trend: "+8%",
-    trendUp: true,
-    trendLabel: "vs last month",
-  },
-  {
-    label: "Avg Device Health",
-    value: "94.2%",
-    icon: HeartPulse,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-    trend: "+0.8%",
-    trendUp: true,
-    trendLabel: "vs last period",
-  },
-];
-
-const DEVICE_STATUS_SEGMENTS: RingSegment[] = [
-  { label: "Online", value: 1973, color: "#10b981" },
-  { label: "Offline", value: 412, color: "#ef4444" },
-  { label: "Maintenance", value: 287, color: "#f59e0b" },
-  { label: "Decommissioned", value: 175, color: "#6b7280" },
-];
-
-const COMPLIANCE_SEGMENTS: RingSegment[] = [
-  { label: "Approved", value: 2104, color: "#10b981" },
-  { label: "Pending", value: 389, color: "#f59e0b" },
-  { label: "Non-Compliant", value: 218, color: "#ef4444" },
-  { label: "Deprecated", value: 136, color: "#6b7280" },
-];
-
-const MONTHLY_DEPLOYMENTS: MonthlyDeployment[] = [
-  { month: "Oct", count: 24 },
-  { month: "Nov", count: 31 },
-  { month: "Dec", count: 18 },
-  { month: "Jan", count: 42 },
-  { month: "Feb", count: 35 },
-  { month: "Mar", count: 28 },
-];
-
-const VULN_SEVERITY: VulnSeverity[] = [
-  { severity: "Critical", count: 3, color: "#ef4444" },
-  { severity: "High", count: 8, color: "#f97316" },
-  { severity: "Medium", count: 15, color: "#f59e0b" },
-  { severity: "Low", count: 22, color: "#10b981" },
-  { severity: "Info", count: 47, color: "#6b7280" },
-];
-
-const AUDIT_LOG_DATA: AuditEntry[] = [
-  {
-    id: "AUD-001",
-    timestamp: "2026-03-29T14:32:00Z",
-    user: "j.chen@hlm.com",
-    action: "Created",
-    entity: "Firmware v3.2.1",
-    details: "Uploaded new firmware package for SG-INV cluster",
-  },
-  {
-    id: "AUD-002",
-    timestamp: "2026-03-29T11:15:00Z",
-    user: "a.patel@hlm.com",
-    action: "Modified",
-    entity: "Deployment D-1842",
-    details: "Approved firmware v4.0.0 for production rollout",
-  },
-  {
-    id: "AUD-003",
-    timestamp: "2026-03-28T16:48:00Z",
-    user: "system",
-    action: "Modified",
-    entity: "Device SN-7821",
-    details: "Deployment completed: firmware v3.1.0 applied",
-  },
-  {
-    id: "AUD-004",
-    timestamp: "2026-03-28T09:20:00Z",
-    user: "j.chen@hlm.com",
-    action: "Created",
-    entity: "Firmware v4.1.0-rc1",
-    details: "Submitted release candidate for testing",
-  },
-  {
-    id: "AUD-005",
-    timestamp: "2026-03-27T15:00:00Z",
-    user: "system",
-    action: "Modified",
-    entity: "Vulnerability CVE-2026-1234",
-    details: "Vulnerability scan completed on 1,247 devices",
-  },
-  {
-    id: "AUD-006",
-    timestamp: "2026-03-27T10:30:00Z",
-    user: "m.rodriguez@hlm.com",
-    action: "Created",
-    entity: "Service Order SO-1043",
-    details: "Created maintenance order for Denver DC",
-  },
-  {
-    id: "AUD-007",
-    timestamp: "2026-03-26T14:45:00Z",
-    user: "s.kumar@hlm.com",
-    action: "Modified",
-    entity: "Compliance NIST-800-53",
-    details: "Updated compliance status for Q1 audit",
-  },
-  {
-    id: "AUD-008",
-    timestamp: "2026-03-26T08:10:00Z",
-    user: "a.patel@hlm.com",
-    action: "Deleted",
-    entity: "Firmware v2.9.0",
-    details: "Deprecated firmware removed from active registry",
-  },
-  {
-    id: "AUD-009",
-    timestamp: "2026-03-25T17:22:00Z",
-    user: "j.chen@hlm.com",
-    action: "Created",
-    entity: "Device SN-9102",
-    details: "Registered new inverter at Shanghai HQ",
-  },
-  {
-    id: "AUD-010",
-    timestamp: "2026-03-25T13:05:00Z",
-    user: "system",
-    action: "Modified",
-    entity: "Deployment D-1840",
-    details: "Rollback triggered for firmware v3.0.2 on 42 devices",
-  },
-];
+import { useAnalyticsData } from "../../lib/hooks/use-analytics-data";
+import type {
+  RingSegment,
+  MonthlyDeployment,
+  VulnSeverity,
+  AnalyticsAuditEntry,
+} from "../../lib/mock-data/analytics-data";
+import {
+  TIME_RANGE_OPTIONS,
+  KPI_DATA,
+  DEVICE_STATUS_SEGMENTS,
+  COMPLIANCE_SEGMENTS,
+  MONTHLY_DEPLOYMENTS,
+  VULN_SEVERITY,
+} from "../../lib/mock-data/analytics-data";
 
 // ---------------------------------------------------------------------------
 // Ring Chart Component (SVG donut)
@@ -462,59 +240,9 @@ function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Export Helpers
-// ---------------------------------------------------------------------------
-function generateCSV(entries: AuditEntry[], timeRange: TimeRange): void {
-  const headers = ["Timestamp", "User", "Action", "Entity", "Details"];
-  const rows = entries.map((e) => [
-    new Date(e.timestamp).toLocaleString("en-US"),
-    e.user,
-    e.action,
-    e.entity,
-    `"${e.details.replace(/"/g, '""')}"`,
-  ]);
-
-  const csvContent = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const dateStr = new Date().toISOString().split("T")[0];
-  link.href = url;
-  link.download = `audit-log-${timeRange}-${dateStr}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
-  toast.success("Audit log exported successfully");
-}
-
-function generateJSON(entries: AuditEntry[], kpis: KpiCard[], timeRange: TimeRange): void {
-  const payload = {
-    exportDate: new Date().toISOString(),
-    timeRange,
-    kpis: kpis.map((k) => ({ label: k.label, value: k.value, trend: k.trend })),
-    auditLog: entries.map((e) => ({
-      timestamp: e.timestamp,
-      user: e.user,
-      action: e.action,
-      entity: e.entity,
-      details: e.details,
-    })),
-  };
-
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  const dateStr = new Date().toISOString().split("T")[0];
-  link.href = url;
-  link.download = `analytics-export-${timeRange}-${dateStr}.json`;
-  link.click();
-  URL.revokeObjectURL(url);
-  toast.success("Analytics data exported successfully");
-}
-
-// ---------------------------------------------------------------------------
 // Action Badge Colors
 // ---------------------------------------------------------------------------
-function actionBadgeClass(action: AuditEntry["action"]): string {
+function actionBadgeClass(action: AnalyticsAuditEntry["action"]): string {
   switch (action) {
     case "Created":
       return "bg-blue-50 text-blue-700";
@@ -529,34 +257,23 @@ function actionBadgeClass(action: AuditEntry["action"]): string {
 // Analytics Page
 // ---------------------------------------------------------------------------
 export function Analytics() {
-  const [range, setRange] = useState<TimeRange>("30d");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    range,
+    rangeLabel,
+    searchQuery,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    filteredAuditLogs,
+    paginatedLogs,
+    pageSize,
+    handleSearchChange,
+    handleRangeChange,
+    handleExportCSV,
+    handleExportJSON,
+  } = useAnalyticsData();
+
   const [exportOpen, setExportOpen] = useState(false);
-  const pageSize = 6;
-
-  // Filtered audit log
-  const filteredAuditLogs = useMemo(() => {
-    if (!searchQuery.trim()) return AUDIT_LOG_DATA;
-    const q = searchQuery.toLowerCase();
-    return AUDIT_LOG_DATA.filter(
-      (entry) =>
-        entry.user.toLowerCase().includes(q) ||
-        entry.action.toLowerCase().includes(q) ||
-        entry.entity.toLowerCase().includes(q) ||
-        entry.details.toLowerCase().includes(q) ||
-        new Date(entry.timestamp).toLocaleString("en-US").toLowerCase().includes(q),
-    );
-  }, [searchQuery]);
-
-  // Pagination
-  const totalPages = Math.max(1, Math.ceil(filteredAuditLogs.length / pageSize));
-  const paginatedLogs = filteredAuditLogs.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
-
-  const rangeLabel = TIME_RANGE_OPTIONS.find((o) => o.value === range)?.label ?? range;
 
   return (
     <div className="space-y-6">
@@ -575,10 +292,7 @@ export function Analytics() {
             {TIME_RANGE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
-                onClick={() => {
-                  setRange(opt.value);
-                  setCurrentPage(1);
-                }}
+                onClick={() => handleRangeChange(opt.value)}
                 className={cn(
                   "rounded-md px-3 py-1.5 text-[12px] font-medium cursor-pointer",
                   range === opt.value
@@ -775,10 +489,7 @@ export function Analytics() {
                 type="text"
                 placeholder="Search audit log..."
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(1);
-                }}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="h-8 w-56 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-[12px] text-gray-700 placeholder-gray-400 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
               />
             </div>
@@ -805,7 +516,7 @@ export function Analytics() {
                   <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
                     <button
                       onClick={() => {
-                        generateCSV(filteredAuditLogs, range);
+                        handleExportCSV();
                         setExportOpen(false);
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
@@ -815,7 +526,7 @@ export function Analytics() {
                     </button>
                     <button
                       onClick={() => {
-                        generateJSON(filteredAuditLogs, KPI_DATA, range);
+                        handleExportJSON();
                         setExportOpen(false);
                       }}
                       className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"

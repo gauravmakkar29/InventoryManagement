@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -9,249 +9,24 @@ import {
   Plus,
   Download,
 } from "lucide-react";
-import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { DeviceStatus } from "../../lib/types";
-import type { DeviceSearchFilters } from "../../lib/opensearch-types";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
+import { useDeviceInventory } from "../../lib/hooks/use-device-inventory";
+import type { SortField, SortDir } from "../../lib/hooks/use-device-inventory";
+import { ALL_STATUSES, ALL_LOCATIONS, ALL_MODELS } from "../../lib/mock-data/inventory-data";
 import { CreateDeviceModal } from "./dialogs/create-device-modal";
-import type { CreateDevicePayload } from "./dialogs/create-device-modal";
 import { GeoLocationMap } from "./geo-location-map";
 import { AdvancedDeviceSearch } from "./search/advanced-device-search";
 
 type Tab = "hardware" | "firmware" | "geo";
-type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
-type SortDir = "asc" | "desc";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "hardware", label: "Hardware Inventory" },
   { id: "firmware", label: "Firmware Status" },
   { id: "geo", label: "Geo Location" },
 ];
-
-// ---------------------------------------------------------------------------
-// Mock device data — replaced by API calls in production
-// ---------------------------------------------------------------------------
-interface MockDevice {
-  id: string;
-  name: string;
-  serial: string;
-  model: string;
-  status: DeviceStatus;
-  location: string;
-  health: number;
-  firmware: string;
-  lastSeen: string;
-  lat?: number;
-  lng?: number;
-}
-
-const MOCK_DEVICES: MockDevice[] = [
-  {
-    id: "d1",
-    name: "INV-3200A",
-    serial: "SN-4821",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Denver, CO",
-    health: 98,
-    firmware: "v4.0.0",
-    lastSeen: "2m ago",
-    lat: 39.74,
-    lng: -104.99,
-  },
-  {
-    id: "d2",
-    name: "INV-3200B",
-    serial: "SN-4822",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Houston, TX",
-    health: 95,
-    firmware: "v4.0.0",
-    lastSeen: "5m ago",
-    lat: 29.76,
-    lng: -95.37,
-  },
-  {
-    id: "d3",
-    name: "INV-3100C",
-    serial: "SN-3901",
-    model: "INV-3100",
-    status: DeviceStatus.Maintenance,
-    location: "Chicago, IL",
-    health: 72,
-    firmware: "v3.2.1",
-    lastSeen: "1h ago",
-    lat: 41.88,
-    lng: -87.63,
-  },
-  {
-    id: "d4",
-    name: "INV-3200D",
-    serial: "SN-4892",
-    model: "INV-3200",
-    status: DeviceStatus.Offline,
-    location: "Denver, CO",
-    health: 0,
-    firmware: "v4.0.0",
-    lastSeen: "30m ago",
-    lat: 39.74,
-    lng: -104.99,
-  },
-  {
-    id: "d5",
-    name: "INV-3100E",
-    serial: "SN-3455",
-    model: "INV-3100",
-    status: DeviceStatus.Online,
-    location: "New York, NY",
-    health: 91,
-    firmware: "v3.2.1",
-    lastSeen: "1m ago",
-    lat: 40.71,
-    lng: -74.01,
-  },
-  {
-    id: "d6",
-    name: "INV-3200F",
-    serial: "SN-5001",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Dallas, TX",
-    health: 99,
-    firmware: "v4.0.0",
-    lastSeen: "3m ago",
-    lat: 32.78,
-    lng: -96.8,
-  },
-  {
-    id: "d7",
-    name: "INV-3100G",
-    serial: "SN-3102",
-    model: "INV-3100",
-    status: DeviceStatus.Decommissioned,
-    location: "Phoenix, AZ",
-    health: 0,
-    firmware: "v3.1.0",
-    lastSeen: "7d ago",
-    lat: 33.45,
-    lng: -112.07,
-  },
-  {
-    id: "d8",
-    name: "INV-3200H",
-    serial: "SN-5102",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Shanghai, CN",
-    health: 97,
-    firmware: "v4.0.0",
-    lastSeen: "1m ago",
-    lat: 31.23,
-    lng: 121.47,
-  },
-  {
-    id: "d9",
-    name: "INV-3100J",
-    serial: "SN-3210",
-    model: "INV-3100",
-    status: DeviceStatus.Maintenance,
-    location: "Munich, DE",
-    health: 65,
-    firmware: "v3.2.1",
-    lastSeen: "2h ago",
-    lat: 48.14,
-    lng: 11.58,
-  },
-  {
-    id: "d10",
-    name: "INV-3200K",
-    serial: "SN-5201",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Singapore, SG",
-    health: 94,
-    firmware: "v4.0.0",
-    lastSeen: "4m ago",
-    lat: 1.35,
-    lng: 103.82,
-  },
-  {
-    id: "d11",
-    name: "INV-3100L",
-    serial: "SN-3301",
-    model: "INV-3100",
-    status: DeviceStatus.Offline,
-    location: "Sao Paulo, BR",
-    health: 0,
-    firmware: "v3.1.0",
-    lastSeen: "45m ago",
-    lat: -23.55,
-    lng: -46.63,
-  },
-  {
-    id: "d12",
-    name: "INV-3200M",
-    serial: "SN-5301",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Denver, CO",
-    health: 88,
-    firmware: "v4.0.0",
-    lastSeen: "8m ago",
-    lat: 39.74,
-    lng: -104.99,
-  },
-  {
-    id: "d13",
-    name: "INV-3200N",
-    serial: "SN-5401",
-    model: "INV-3200",
-    status: DeviceStatus.Online,
-    location: "Sydney",
-    health: 92,
-    firmware: "v4.0.0",
-    lastSeen: "6m ago",
-    // No lat/lng — Story 9.5 fallback to location name lookup
-  },
-  {
-    id: "d14",
-    name: "INV-3100P",
-    serial: "SN-3401",
-    model: "INV-3100",
-    status: DeviceStatus.Offline,
-    location: "Tokyo",
-    health: 0,
-    firmware: "v3.2.1",
-    lastSeen: "1h ago",
-    lat: 0,
-    lng: 0,
-    // lat/lng are 0,0 — Story 9.5 AC4: treated as missing, fallback to lookup
-  },
-  {
-    id: "d15",
-    name: "INV-3100Q",
-    serial: "SN-3501",
-    model: "INV-3100",
-    status: DeviceStatus.Maintenance,
-    location: "Unknown Base",
-    health: 55,
-    firmware: "v3.1.0",
-    lastSeen: "3h ago",
-    // No coordinates, location not in lookup — Story 9.5 AC3: excluded from map
-  },
-];
-
-const ALL_STATUSES = [
-  DeviceStatus.Online,
-  DeviceStatus.Offline,
-  DeviceStatus.Maintenance,
-  DeviceStatus.Decommissioned,
-];
-const ALL_LOCATIONS = [...new Set(MOCK_DEVICES.map((d) => d.location))].sort();
-const ALL_MODELS = [...new Set(MOCK_DEVICES.map((d) => d.model))].sort();
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -337,8 +112,6 @@ function SortHeader({
   );
 }
 
-// GeoLocationView replaced by GeoLocationMap component (Epic 9)
-
 // ---------------------------------------------------------------------------
 // Main Component
 // ---------------------------------------------------------------------------
@@ -346,179 +119,31 @@ export function Inventory() {
   const { groups } = useAuth();
   const role = getPrimaryRole(groups);
   const canCreate = canPerformAction(role, "create");
-
-  const [activeTab, setActiveTab] = useState<Tab>("hardware");
-  const [search, setSearch] = useState("");
-  const [statusFilter] = useState<string>("all");
-  const [locationFilter] = useState<string>("all");
-  const [advancedFilters, setAdvancedFilters] = useState<DeviceSearchFilters>({});
-  const [sortField, setSortField] = useState<SortField>("name");
-  const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [devices, setDevices] = useState<MockDevice[]>(MOCK_DEVICES);
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const PAGE_SIZE = 6;
   const canEdit = canPerformAction(role, "edit");
 
-  const handleStatusChange = useCallback(
-    (deviceId: string, newStatus: DeviceStatus) => {
-      const device = devices.find((d) => d.id === deviceId);
-      setDevices((prev) =>
-        prev.map((d) =>
-          d.id === deviceId
-            ? { ...d, status: newStatus, health: newStatus === DeviceStatus.Offline ? 0 : d.health }
-            : d,
-        ),
-      );
-      if (device) {
-        toast.success(`Device ${device.name} status updated to ${newStatus}`);
-      }
-    },
-    [devices],
-  );
+  const [activeTab, setActiveTab] = useState<Tab>("hardware");
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
-  const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
-    const newDevice: MockDevice = {
-      id: `d${Date.now()}`,
-      name: payload.name,
-      serial: payload.serial,
-      model: payload.model,
-      status: payload.status,
-      location: payload.location,
-      health: payload.status === DeviceStatus.Online ? 100 : 0,
-      firmware: payload.firmware,
-      lastSeen: "just now",
-      lat: payload.lat,
-      lng: payload.lng,
-    };
-    setDevices((prev) => [newDevice, ...prev]);
-  }, []);
-
-  const handleSort = useCallback(
-    (field: SortField) => {
-      if (sortField === field) {
-        setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-      } else {
-        setSortField(field);
-        setSortDir("asc");
-      }
-    },
-    [sortField],
-  );
-
-  const filteredDevices = useMemo(() => {
-    let result = [...devices];
-
-    // Search (fuzzy matching — in production powered by OpenSearch multi_match)
-    if (search) {
-      const q = search.toLowerCase();
-      result = result.filter(
-        (d) =>
-          d.name.toLowerCase().includes(q) ||
-          d.serial.toLowerCase().includes(q) ||
-          d.location.toLowerCase().includes(q) ||
-          d.model.toLowerCase().includes(q),
-      );
-    }
-
-    // Status filter (from advanced filters or legacy dropdown)
-    const activeStatus =
-      advancedFilters.status ?? (statusFilter !== "all" ? statusFilter : undefined);
-    if (activeStatus) {
-      result = result.filter((d) => d.status === activeStatus);
-    }
-
-    // Location filter (from advanced filters or legacy dropdown)
-    const activeLocation =
-      advancedFilters.location ?? (locationFilter !== "all" ? locationFilter : undefined);
-    if (activeLocation) {
-      result = result.filter((d) => d.location === activeLocation);
-    }
-
-    // Model filter (Story 18.3)
-    if (advancedFilters.model) {
-      result = result.filter((d) => d.model === advancedFilters.model);
-    }
-
-    // Health score range filter (Story 18.3)
-    if (advancedFilters.healthScoreMin != null) {
-      result = result.filter((d) => d.health >= advancedFilters.healthScoreMin!);
-    }
-    if (advancedFilters.healthScoreMax != null) {
-      result = result.filter((d) => d.health <= advancedFilters.healthScoreMax!);
-    }
-
-    // Sort
-    result.sort((a, b) => {
-      const getValue = (d: MockDevice) => {
-        switch (sortField) {
-          case "name":
-            return d.name;
-          case "serial":
-            return d.serial;
-          case "model":
-            return d.model;
-          case "status":
-            return d.status;
-          case "location":
-            return d.location;
-          case "health":
-            return d.health;
-        }
-      };
-      const aVal = getValue(a);
-      const bVal = getValue(b);
-      if (typeof aVal === "number" && typeof bVal === "number") {
-        return sortDir === "asc" ? aVal - bVal : bVal - aVal;
-      }
-      const cmp = String(aVal).localeCompare(String(bVal));
-      return sortDir === "asc" ? cmp : -cmp;
-    });
-
-    return result;
-  }, [devices, search, statusFilter, locationFilter, advancedFilters, sortField, sortDir]);
-
-  // Reset to page 1 when filters change
-  const totalPages = Math.max(1, Math.ceil(filteredDevices.length / PAGE_SIZE));
-  const safeCurrentPage = Math.min(page, totalPages);
-  const startIdx = (safeCurrentPage - 1) * PAGE_SIZE;
-  const endIdx = Math.min(startIdx + PAGE_SIZE, filteredDevices.length);
-  const paginatedDevices = filteredDevices.slice(startIdx, endIdx);
-
-  const exportCsv = useCallback(() => {
-    if (filteredDevices.length === 0) return;
-    const headers = [
-      "Device Name",
-      "Serial Number",
-      "Model",
-      "Status",
-      "Location",
-      "Health Score",
-      "Firmware",
-      "Last Seen",
-    ];
-    const rows = filteredDevices.map((d) => [
-      d.name,
-      d.serial,
-      d.model,
-      d.status,
-      d.location,
-      String(d.health),
-      d.firmware,
-      d.lastSeen,
-    ]);
-    const csv = [headers.join(","), ...rows.map((r) => r.map((v) => `"${v}"`).join(","))].join(
-      "\n",
-    );
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `inventory-export-${new Date().toISOString().split("T")[0]}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
-    toast.success(`Exported ${filteredDevices.length} devices to CSV`);
-  }, [filteredDevices]);
+  const {
+    devices,
+    filteredDevices,
+    paginatedDevices,
+    search,
+    setSearch,
+    advancedFilters,
+    setAdvancedFilters,
+    sortField,
+    sortDir,
+    handleSort,
+    handleStatusChange,
+    handleCreateDevice,
+    exportCsv,
+    page: safeCurrentPage,
+    setPage,
+    totalPages,
+    startIdx,
+    endIdx,
+  } = useDeviceInventory();
 
   return (
     <div className="space-y-5">
