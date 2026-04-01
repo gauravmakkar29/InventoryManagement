@@ -26,6 +26,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static com.aventstack.extentreports.MediaEntityBuilder.createScreenCaptureFromBase64String;
@@ -47,7 +49,13 @@ public class NovusReportingService {
     public void init(String reportName) {
         if (reportingEnabled) {
             report = new ExtentReports();
-            var spark = new ExtentSparkReporter(System.getProperty("user.dir") + String.format("/src/test/resources/reports/%1$s/%2$s/%2$s.html", now().format(MMDDYY__WITH_DASHES), reportName));
+            var reportPath = System.getProperty("user.dir") + String.format("/src/test/resources/reports/%1$s/%2$s/%2$s.html", now().format(MMDDYY__WITH_DASHES), reportName);
+            try {
+                Files.createDirectories(Paths.get(reportPath).getParent());
+            } catch (IOException e) {
+                throw new NovusConfigException("Failed to create report directory", e);
+            }
+            var spark = new ExtentSparkReporter(reportPath);
             spark.config().setTheme(Theme.DARK);
             spark.config().setDocumentTitle("Novus Automation Report");
             spark.config().setReportName(reportName);
@@ -143,7 +151,9 @@ public class NovusReportingService {
             if (result.getStatus() == ITestResult.FAILURE) {
                 testStatus = Status.FAIL;
                 labelColor = ExtentColor.RED;
-                testSteps.get().fail(createScreenCaptureFromBase64String(base64(path), "Screenshot").build());
+                if (path != null) {
+                    testSteps.get().fail(createScreenCaptureFromBase64String(base64(path), "Screenshot").build());
+                }
             } else if (result.getStatus() == ITestResult.SUCCESS) {
                 testStatus = Status.PASS;
                 labelColor = ExtentColor.GREEN;

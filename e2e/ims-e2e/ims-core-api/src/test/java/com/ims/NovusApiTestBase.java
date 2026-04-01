@@ -6,6 +6,7 @@ import com.ims.utils.LocalCache;
 import com.ims.verification.NovusSoftAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
@@ -16,6 +17,7 @@ import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 @SpringBootTest(classes = NovusApplication.class)
+@ActiveProfiles({"web", "test"})
 public class NovusApiTestBase extends AbstractTestNGSpringContextTests {
 
     @Autowired
