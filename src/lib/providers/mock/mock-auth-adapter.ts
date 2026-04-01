@@ -19,6 +19,7 @@ const ACCESS_TOKEN_TTL_MS = 15 * 60 * 1000; // 15 minutes
 const REFRESH_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const REFRESH_CHECK_INTERVAL_MS = 30 * 1000; // check every 30s
 const REFRESH_THRESHOLD_MS = 60 * 1000; // refresh when <1 min left
+const SESSION_WARNING_MS = 2 * 60 * 1000; // warn at T-2 minutes
 
 const MOCK_TOTP_SECRET = "JBSWY3DPEHPK3PXP";
 
@@ -112,6 +113,7 @@ export function createMockAuthAdapter(options?: MockAuthAdapterOptions): IAuthAd
     // --- Config ---
     refreshIntervalMs: REFRESH_CHECK_INTERVAL_MS,
     refreshThresholdMs: REFRESH_THRESHOLD_MS,
+    sessionWarningMs: SESSION_WARNING_MS,
 
     // --- Core Auth ---
 

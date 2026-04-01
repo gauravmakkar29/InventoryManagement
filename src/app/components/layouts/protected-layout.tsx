@@ -6,6 +6,7 @@ import { Header } from "./header";
 import { Breadcrumbs } from "./breadcrumbs";
 import { SkipToContent } from "./skip-to-content";
 import { CommandPalette } from "./command-palette";
+import { SessionTimeoutWarning } from "../session-timeout-warning";
 import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
 import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
 import { Skeleton } from "../../../components/skeleton";
@@ -103,6 +104,7 @@ export function ProtectedLayout() {
         </div>
       </div>
       <CommandPalette />
+      <SessionTimeoutWarning />
     </>
   );
 }

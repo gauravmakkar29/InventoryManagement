@@ -26,6 +26,7 @@ const STORAGE_KEY = "ims-auth";
 const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000; // Cognito default: 1 hour
 const REFRESH_CHECK_INTERVAL_MS = 30 * 1000;
 const REFRESH_THRESHOLD_MS = 5 * 60 * 1000; // refresh 5 min before expiry
+const SESSION_WARNING_MS = 2 * 60 * 1000; // warn user at T-2 minutes
 
 // =============================================================================
 // Helpers
@@ -87,6 +88,7 @@ export function createCognitoAuthAdapter(options: CognitoAuthAdapterOptions): IA
   const adapter: IAuthAdapter = {
     refreshIntervalMs: REFRESH_CHECK_INTERVAL_MS,
     refreshThresholdMs: REFRESH_THRESHOLD_MS,
+    sessionWarningMs: SESSION_WARNING_MS,
 
     async signIn(email: string, password: string): Promise<SignInResult> {
       // Real implementation:

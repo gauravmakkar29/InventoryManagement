@@ -92,4 +92,7 @@ export interface IAuthAdapter {
 
   /** Refresh the token when it has fewer than this many ms remaining. */
   readonly refreshThresholdMs: number;
+
+  /** Show session expiry warning when fewer than this many ms remain. */
+  readonly sessionWarningMs: number;
 }
