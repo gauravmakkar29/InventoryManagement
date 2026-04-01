@@ -137,7 +137,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
         aria-hidden={!open}
       >
         {/* Header */}
-        <div className="flex h-14 items-center justify-between border-b border-gray-100 px-5">
+        <div className="flex h-14 items-center justify-between border-b border-gray-200 px-5">
           <div className="flex items-center gap-2">
             <h2 className="text-[16px] font-semibold text-gray-900">Notifications</h2>
             {unreadCount > 0 && (
@@ -150,7 +150,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-[14px] font-medium text-[#FF7900] hover:text-[#e66d00] cursor-pointer"
+                className="text-[14px] font-medium text-[#c2410c] hover:text-[#9a3412] cursor-pointer"
               >
                 Mark all read
               </button>

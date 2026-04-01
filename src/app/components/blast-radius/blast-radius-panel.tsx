@@ -128,7 +128,7 @@ function BlastRadiusSummary({
   radiusKm: number;
 }) {
   return (
-    <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+    <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
       <div className="flex items-center justify-between mb-3">
         <span className="text-[14px] font-semibold text-gray-700">Impact Summary</span>
         <span
@@ -277,11 +277,11 @@ export function BlastRadiusPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col border-l border-gray-200 bg-white shadow-xl">
+    <div className="fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col border-l border-gray-300 bg-white shadow-xl">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
         <div className="flex items-center gap-2">
-          <Target className="h-4 w-4 text-[#FF7900]" />
+          <Target className="h-4 w-4 text-[#c2410c]" />
           <h3 className="text-[15px] font-semibold text-gray-900">Blast Radius</h3>
         </div>
         <button
@@ -293,7 +293,7 @@ export function BlastRadiusPanel({
       </div>
 
       {/* Origin device */}
-      <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
+      <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
         <p className="text-[13px] font-medium text-gray-600 uppercase tracking-wider">
           Origin Device
         </p>
@@ -320,7 +320,7 @@ export function BlastRadiusPanel({
               <SlidersHorizontal className="h-3 w-3" />
               Radius
             </span>
-            <span className="text-[14px] font-bold tabular-nums text-[#FF7900]">{radiusKm} km</span>
+            <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">{radiusKm} km</span>
           </label>
           <input
             type="range"
@@ -355,7 +355,7 @@ export function BlastRadiusPanel({
       </div>
 
       {/* Footer actions */}
-      <div className="border-t border-gray-100 px-5 py-3 flex gap-2">
+      <div className="border-t border-gray-200 px-5 py-3 flex gap-2">
         <button
           onClick={onRunSimulation}
           className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-[#FF7900] px-4 py-2.5 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
@@ -365,7 +365,7 @@ export function BlastRadiusPanel({
         </button>
         <button
           onClick={onClose}
-          className="rounded-lg border border-gray-200 px-4 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+          className="rounded-lg border border-gray-300 px-4 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
         >
           Clear Radius
         </button>

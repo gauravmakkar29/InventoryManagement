@@ -376,7 +376,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
         <button
           onClick={handleRefresh}
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer",
+            "flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer",
             isRefreshing && "animate-spin",
           )}
           aria-label="Refresh telemetry"
@@ -472,7 +472,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
 
       {/* Time range selector + Chart */}
       <div className="card-elevated">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
           <div className="flex items-center gap-1.5">
             {METRICS.filter((m) => activeMetrics.has(m.key)).map((m) => (
               <span

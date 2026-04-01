@@ -74,7 +74,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
   // QR code rendered as a placeholder since we can't generate actual QR in mock
   const qrPlaceholder = totpUri ? (
-    <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
+    <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50">
       <div className="text-center">
         <ShieldCheck className="mx-auto h-10 w-10 text-gray-600" />
         <p className="mt-2 text-[13px] text-gray-600">QR Code</p>
@@ -149,8 +149,8 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 disabled={isVerifying}
                 className={cn(
-                  "h-11 w-10 rounded-lg border border-gray-200 bg-white text-center text-[16px] font-semibold text-gray-900",
-                  "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
+                  "h-11 w-10 rounded-lg border border-gray-300 bg-white text-center text-[16px] font-semibold text-gray-900",
+                  "focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20",
                   "disabled:opacity-60",
                 )}
                 aria-label={`Digit ${i + 1}`}

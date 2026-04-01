@@ -69,7 +69,7 @@ export function ComponentExplorerTab({
             aria-label="Search components"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+            className="h-9 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none"
           />
         </div>
         <div className="flex gap-1.5">
@@ -184,7 +184,7 @@ function ComponentRow({
       <tr
         onClick={onToggle}
         className={cn(
-          "border-b border-gray-100 cursor-pointer hover:bg-gray-50",
+          "border-b border-gray-200 cursor-pointer hover:bg-gray-50",
           isExpanded && "bg-gray-50",
         )}
       >
@@ -229,7 +229,7 @@ function ComponentRow({
         <td className="px-4 py-3 text-[14px] text-gray-600">{comp.scope}</td>
       </tr>
       {isExpanded && (
-        <tr className="border-b border-gray-100">
+        <tr className="border-b border-gray-200">
           <td colSpan={7} className="bg-gray-50 px-6 py-4">
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-4 text-[14px]">
@@ -257,7 +257,7 @@ function ComponentRow({
                     {compVulns.map((v) => (
                       <div
                         key={v.id}
-                        className="flex items-center gap-3 rounded-lg bg-white p-2.5 border border-gray-200"
+                        className="flex items-center gap-3 rounded-lg bg-white p-2.5 border border-gray-300"
                       >
                         <span
                           className={cn(

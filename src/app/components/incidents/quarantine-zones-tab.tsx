@@ -26,7 +26,7 @@ export function QuarantineZonesTab({
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as "All" | "Active" | "Lifted")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
         >
           <option value="All">All Zones</option>
           <option value="Active">Active</option>
@@ -38,7 +38,7 @@ export function QuarantineZonesTab({
         <table className="w-full">
           <caption className="sr-only">Containment zones</caption>
           <thead>
-            <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+            <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
               <th
                 scope="col"
                 className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
@@ -111,7 +111,7 @@ export function QuarantineZonesTab({
                       "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
                       zone.status === "Active"
                         ? "bg-red-50 text-red-700 border-red-200"
-                        : "bg-gray-50 text-gray-600 border-gray-200",
+                        : "bg-gray-50 text-gray-600 border-gray-300",
                     )}
                   >
                     <span
@@ -159,7 +159,7 @@ export function QuarantineZonesTab({
       {/* Quarantine Map Preview */}
       <div className="card-elevated p-5">
         <h3 className="text-[15px] font-semibold text-gray-900 mb-3">Quarantine Zone Map</h3>
-        <div className="relative h-[300px] rounded-lg bg-gray-100 border border-gray-200 overflow-hidden">
+        <div className="relative h-[300px] rounded-lg bg-gray-100 border border-gray-300 overflow-hidden">
           <svg viewBox="0 0 800 300" className="w-full h-full">
             {/* World map simple backdrop */}
             <rect width="800" height="300" fill="#f1f3f5" />

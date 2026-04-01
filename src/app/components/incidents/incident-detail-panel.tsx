@@ -38,9 +38,9 @@ export function IncidentDetailPanel({
   const validNext = VALID_TRANSITIONS[incident.status];
 
   return (
-    <div className="fixed inset-y-0 right-0 z-30 flex w-full max-w-2xl flex-col border-l border-gray-200 bg-white shadow-xl">
+    <div className="fixed inset-y-0 right-0 z-30 flex w-full max-w-2xl flex-col border-l border-gray-300 bg-white shadow-xl">
       {/* Header */}
-      <div className="shrink-0 border-b border-gray-200 px-6 py-4">
+      <div className="shrink-0 border-b border-gray-300 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ export function IncidentDetailPanel({
                 Change Status
               </button>
               {showStatusMenu && (
-                <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-lg border border-gray-300 bg-white py-1 shadow-lg">
                   {validNext.map((s) => (
                     <button
                       key={s}
@@ -98,7 +98,7 @@ export function IncidentDetailPanel({
                       placeholder="Optional note..."
                       value={statusNote}
                       onChange={(e) => setStatusNote(e.target.value)}
-                      className="w-full rounded border border-gray-200 px-2 py-1 text-[13px] focus:outline-none focus:border-[#FF7900]"
+                      className="w-full rounded border border-gray-300 px-2 py-1 text-[13px] focus:outline-none focus:border-[#c2410c]"
                     />
                   </div>
                 </div>
@@ -110,7 +110,7 @@ export function IncidentDetailPanel({
       </div>
 
       {/* Section tabs */}
-      <div className="flex shrink-0 border-b border-gray-200 px-6">
+      <div className="flex shrink-0 border-b border-gray-300 px-6">
         {(["details", "devices", "topology", "playbook", "timeline"] as const).map((section) => (
           <button
             key={section}
@@ -118,7 +118,7 @@ export function IncidentDetailPanel({
             className={cn(
               "px-3 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer capitalize",
               activeSection === section
-                ? "border-[#FF7900] text-[#FF7900]"
+                ? "border-[#c2410c] text-[#c2410c]"
                 : "border-transparent text-gray-600 hover:text-gray-700",
             )}
           >
@@ -169,7 +169,7 @@ export function IncidentDetailPanel({
         {activeSection === "devices" && (
           <div className="space-y-2">
             {incident.affectedDevices.map((device) => (
-              <div key={device.id} className="rounded-lg border border-gray-200 p-3">
+              <div key={device.id} className="rounded-lg border border-gray-300 p-3">
                 {device.status === "Isolated" && (
                   <div className="mb-2 flex items-center gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-1.5">
                     <Lock className="h-3.5 w-3.5 text-red-500" />

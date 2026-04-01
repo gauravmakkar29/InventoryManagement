@@ -63,9 +63,9 @@ export function SignIn() {
         {/* Top: Logo badge */}
         <div className="relative z-10 w-full p-8">
           <div className="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md px-4 py-2.5 border border-white/10">
-            <Sun className="h-5 w-5 text-[#FF7900]" />
+            <Sun className="h-5 w-5 text-[#c2410c]" />
             <span className="text-[15px] font-bold text-white tracking-tight">
-              IMS <span className="text-[#FF7900]">Gen2</span>
+              IMS <span className="text-[#c2410c]">Gen2</span>
             </span>
           </div>
         </div>
@@ -112,7 +112,7 @@ export function SignIn() {
                 key={label}
                 className="flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5"
               >
-                <Icon className="h-3.5 w-3.5 text-[#FF7900]" />
+                <Icon className="h-3.5 w-3.5 text-[#c2410c]" />
                 <span className="text-[13px] font-medium text-white/80">{label}</span>
               </div>
             ))}
@@ -126,7 +126,7 @@ export function SignIn() {
           {/* Mobile-only logo */}
           <div className="mb-8 lg:hidden text-center">
             <span className="text-[18px] font-bold text-gray-900">
-              IMS <span className="text-[#FF7900]">Gen2</span>
+              IMS <span className="text-[#c2410c]">Gen2</span>
             </span>
           </div>
 
@@ -163,8 +163,8 @@ export function SignIn() {
                   autoComplete="email"
                   placeholder="admin@company.com"
                   className={cn(
-                    "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 text-[15px] text-gray-900 placeholder:text-gray-600",
-                    "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
+                    "block h-11 w-full rounded-lg border border-gray-300 bg-white px-3.5 text-[15px] text-gray-900 placeholder:text-gray-600",
+                    "focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20",
                     errors.email && "border-red-400 focus:border-red-500 focus:ring-red-500/20",
                   )}
                   {...register("email", {
@@ -197,8 +197,8 @@ export function SignIn() {
                     autoComplete="current-password"
                     placeholder="Enter your password"
                     className={cn(
-                      "block h-11 w-full rounded-lg border border-gray-200 bg-white px-3.5 pr-10 text-[15px] text-gray-900 placeholder:text-gray-600",
-                      "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
+                      "block h-11 w-full rounded-lg border border-gray-300 bg-white px-3.5 pr-10 text-[15px] text-gray-900 placeholder:text-gray-600",
+                      "focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20",
                       errors.password &&
                         "border-red-400 focus:border-red-500 focus:ring-red-500/20",
                     )}
@@ -226,7 +226,7 @@ export function SignIn() {
               <div className="flex items-center justify-end">
                 <button
                   type="button"
-                  className="text-[14px] font-medium text-[#FF7900] hover:text-[#e66d00] cursor-pointer"
+                  className="text-[14px] font-medium text-[#c2410c] hover:text-[#9a3412] cursor-pointer"
                 >
                   Forgot password?
                 </button>
@@ -240,7 +240,7 @@ export function SignIn() {
                   "flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-[#FF7900] text-[15px] font-semibold text-white",
                   "shadow-sm",
                   "hover:bg-[#e66d00]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
               >

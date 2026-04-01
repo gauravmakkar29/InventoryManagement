@@ -148,7 +148,7 @@ function KanbanCard({
   onMove: (id: string, newStatus: Status) => void;
 }) {
   return (
-    <div className="rounded border border-border bg-white p-3 space-y-2 hover:border-[#FF7900]/40 transition-colors duration-150">
+    <div className="rounded border border-border bg-white p-3 space-y-2 hover:border-[#c2410c]/40 transition-colors duration-150">
       {/* Top row: ID + Priority */}
       <div className="flex items-center justify-between">
         <span className="text-[12px] font-mono text-muted-foreground">{order.id}</span>
@@ -378,7 +378,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                       "min-h-[70px] bg-white p-1.5 text-left transition-colors",
                       !cell.inMonth && "bg-gray-50 opacity-40",
                       cell.inMonth && dayOrders.length > 0 && "cursor-pointer hover:bg-orange-50",
-                      isTodayCell && "ring-2 ring-inset ring-[#FF7900]",
+                      isTodayCell && "ring-2 ring-inset ring-[#c2410c]",
                       isSelected && "bg-orange-50",
                     )}
                   >
@@ -386,7 +386,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                       className={cn(
                         "text-[13px] font-medium",
                         cell.inMonth ? "text-foreground" : "text-muted-foreground",
-                        isTodayCell && "font-bold text-[#FF7900]",
+                        isTodayCell && "font-bold text-[#c2410c]",
                       )}
                     >
                       {cell.day}
@@ -502,7 +502,7 @@ function CreateOrderModal({
   };
 
   const inputClasses =
-    "w-full rounded border border-border bg-white px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-border bg-white px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#c2410c]/50 focus:border-[#c2410c]";
   const labelClasses = "block text-[13px] font-semibold text-foreground mb-1";
 
   return (
@@ -707,7 +707,7 @@ function FilterBar({
   const hasActiveFilters = statusFilter !== "all" || priorityFilter !== "all" || searchQuery !== "";
 
   const selectClasses =
-    "rounded border border-border bg-white px-2 py-1.5 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50";
+    "rounded border border-border bg-white px-2 py-1.5 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-[#c2410c]/50";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -720,7 +720,7 @@ function FilterBar({
           aria-label="Search orders"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="rounded border border-border bg-white py-1.5 pl-7 pr-2.5 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 w-48"
+          className="rounded border border-border bg-white py-1.5 pl-7 pr-2.5 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#c2410c]/50 w-48"
         />
       </div>
 

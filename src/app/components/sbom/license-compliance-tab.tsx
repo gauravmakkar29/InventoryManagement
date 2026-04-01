@@ -87,7 +87,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-6 border-l border-gray-200 pl-6">
+            <div className="flex items-center gap-6 border-l border-gray-300 pl-6">
               <div className="text-center">
                 <div className="text-[20px] font-bold text-green-600">{stats.approved}</div>
                 <div className="text-[13px] text-gray-600">Approved</div>
@@ -193,7 +193,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
             <h3 className="text-[15px] font-semibold text-gray-900">Non-Compliant Components</h3>
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <Download className="h-3.5 w-3.5" />
               Export CSV
@@ -225,7 +225,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 {nonCompliant.map((comp) => (
                   <tr
                     key={comp.id}
-                    className="border-b border-gray-100 border-l-4 border-l-red-400"
+                    className="border-b border-gray-200 border-l-4 border-l-red-400"
                   >
                     <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
                     <td className="px-4 py-3 text-[14px] font-mono text-gray-600">

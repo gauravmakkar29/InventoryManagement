@@ -71,7 +71,7 @@ export function NetworkTopologyGraph({
     <div className="relative">
       <svg
         viewBox="0 0 800 500"
-        className="w-full rounded-lg border border-gray-200 bg-gray-50"
+        className="w-full rounded-lg border border-gray-300 bg-gray-50"
         style={{ minHeight: 400 }}
       >
         {/* Edges */}
@@ -290,8 +290,8 @@ export function LateralMovementPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed right-0 top-0 z-40 flex h-full w-[360px] flex-col border-l border-gray-200 bg-white shadow-xl">
-      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
+    <div className="fixed right-0 top-0 z-40 flex h-full w-[360px] flex-col border-l border-gray-300 bg-white shadow-xl">
+      <div className="flex items-center justify-between border-b border-gray-300 px-5 py-4">
         <div className="flex items-center gap-2">
           <Network className="h-4 w-4 text-red-500" />
           <h3 className="text-base font-semibold text-gray-900">Lateral Movement Risk</h3>
@@ -309,7 +309,7 @@ export function LateralMovementPanel({
         </p>
         <div className="space-y-2">
           {devices.map((dev, i) => (
-            <div key={dev.deviceId} className="rounded-lg border border-gray-200 p-3">
+            <div key={dev.deviceId} className="rounded-lg border border-gray-300 p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-gray-600 bg-gray-100">

@@ -366,7 +366,7 @@ function LocationSearchBar({
           }}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder="Search location..."
-          className="w-full rounded-md border border-gray-200 bg-white/95 py-1.5 pl-8 pr-8 text-[14px] text-gray-900 shadow-sm backdrop-blur-sm placeholder:text-gray-600 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="w-full rounded-md border border-gray-300 bg-white/95 py-1.5 pl-8 pr-8 text-[14px] text-gray-900 shadow-sm backdrop-blur-sm placeholder:text-gray-600 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
           aria-label="Search location"
         />
         {query && (
@@ -381,7 +381,7 @@ function LocationSearchBar({
       </div>
 
       {showSuggestions && (suggestions.length > 0 || noResults) && (
-        <div className="mt-1 rounded-md border border-gray-200 bg-white shadow-lg overflow-hidden">
+        <div className="mt-1 rounded-md border border-gray-300 bg-white shadow-lg overflow-hidden">
           {noResults ? (
             <div className="px-3 py-2 text-[13px] text-gray-600">Location not found</div>
           ) : (
@@ -471,10 +471,10 @@ function DeviceTooltip({
   return (
     <div
       ref={tooltipRef}
-      className="absolute z-50 w-[220px] rounded-lg border border-gray-200 bg-white shadow-lg animate-in fade-in duration-150"
+      className="absolute z-50 w-[220px] rounded-lg border border-gray-300 bg-white shadow-lg animate-in fade-in duration-150"
       style={{ left: adjustedPos.x, top: adjustedPos.y }}
     >
-      <div className="flex items-center justify-between border-b border-gray-100 px-3 py-2">
+      <div className="flex items-center justify-between border-b border-gray-200 px-3 py-2">
         <span className="text-[14px] font-semibold text-gray-900 truncate pr-2">{device.name}</span>
         <button
           onClick={onClose}
@@ -507,7 +507,7 @@ function DeviceTooltip({
         </div>
       </div>
       {/* Story 10.5: Show/Hide Trail button */}
-      <div className="border-t border-gray-100 px-3 py-2">
+      <div className="border-t border-gray-200 px-3 py-2">
         <button
           onClick={() => onShowTrail(device)}
           className="flex w-full items-center justify-center gap-1.5 rounded-md bg-blue-50 px-2 py-1.5 text-[13px] font-medium text-blue-700 hover:bg-blue-100 cursor-pointer transition-colors"
@@ -614,7 +614,7 @@ function GeofencePanel({
       </button>
 
       {expanded && (
-        <div className="border-t border-gray-100">
+        <div className="border-t border-gray-200">
           <div className="flex items-center justify-between px-4 py-2 border-b border-gray-50">
             <button
               onClick={onToggleGeofences}
@@ -674,7 +674,7 @@ function TrailTimeline({
 }) {
   return (
     <div className="card-elevated overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <Navigation className="h-4 w-4 text-blue-600" />
           <span className="text-[14px] font-semibold text-gray-900">
@@ -772,7 +772,7 @@ function MapError({ devices, onRetry }: { devices: GeoDevice[]; onRetry: () => v
         <table className="w-full">
           <caption className="sr-only">Device geo-locations</caption>
           <thead>
-            <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+            <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
               <th
                 scope="col"
                 className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
@@ -1150,14 +1150,14 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
               <div className="absolute top-3 right-3 z-20 flex flex-col gap-1">
                 <button
                   onClick={handleZoomIn}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer"
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer"
                   aria-label="Zoom in"
                 >
                   <ZoomIn className="h-4 w-4" />
                 </button>
                 <button
                   onClick={handleZoomOut}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer"
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer"
                   aria-label="Zoom out"
                 >
                   <ZoomOut className="h-4 w-4" />
@@ -1168,7 +1168,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
                     setCenter([0, 20]);
                     setZoom(1);
                   }}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer mt-1"
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 shadow-sm hover:bg-gray-50 cursor-pointer mt-1"
                   aria-label="Reset view"
                 >
                   <Navigation className="h-4 w-4" />

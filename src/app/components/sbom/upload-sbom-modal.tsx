@@ -47,7 +47,7 @@ export function UploadSBOMModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-full max-w-lg card-elevated p-0 mx-4">
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4">
           <h2 className="text-base font-semibold text-gray-900">Upload SBOM</h2>
           <button
             onClick={onClose}
@@ -69,9 +69,9 @@ export function UploadSBOMModal({
               aria-label="Search firmware"
               value={firmwareSearch}
               onChange={(e) => setFirmwareSearch(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+              className="mb-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none"
             />
-            <div className="max-h-[120px] overflow-y-auto rounded-lg border border-gray-200">
+            <div className="max-h-[120px] overflow-y-auto rounded-lg border border-gray-300">
               {filteredFirmware.map((fw) => (
                 <button
                   key={fw.id}
@@ -79,7 +79,7 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex w-full items-center justify-between px-3 py-2 text-left text-[14px] cursor-pointer",
                     selectedFirmware === fw.id
-                      ? "bg-orange-50 text-[#FF7900] font-medium"
+                      ? "bg-orange-50 text-[#c2410c] font-medium"
                       : "text-gray-700 hover:bg-gray-50",
                   )}
                 >
@@ -110,14 +110,14 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex items-center gap-2 rounded-lg border px-4 py-2.5 text-[14px] font-medium cursor-pointer",
                     format === f
-                      ? "border-[#FF7900] bg-orange-50 text-[#FF7900]"
-                      : "border-gray-200 text-gray-600 hover:bg-gray-50",
+                      ? "border-[#c2410c] bg-orange-50 text-[#c2410c]"
+                      : "border-gray-300 text-gray-600 hover:bg-gray-50",
                   )}
                 >
                   <div
                     className={cn(
                       "h-3.5 w-3.5 rounded-full border-2",
-                      format === f ? "border-[#FF7900] bg-[#FF7900]" : "border-gray-300",
+                      format === f ? "border-[#c2410c] bg-[#FF7900]" : "border-gray-300",
                     )}
                   >
                     {format === f && (
@@ -152,10 +152,10 @@ export function UploadSBOMModal({
               className={cn(
                 "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 cursor-pointer",
                 dragOver
-                  ? "border-[#FF7900] bg-orange-50"
+                  ? "border-[#c2410c] bg-orange-50"
                   : fileName
                     ? "border-green-300 bg-green-50"
-                    : "border-gray-200 hover:border-gray-300",
+                    : "border-gray-300 hover:border-gray-300",
               )}
               onClick={() => {
                 const input = document.createElement("input");
@@ -189,10 +189,10 @@ export function UploadSBOMModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-gray-300 px-6 py-4">
           <button
             onClick={onClose}
-            className="rounded-lg border border-gray-200 px-4 py-2 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="rounded-lg border border-gray-300 px-4 py-2 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
           >
             Cancel
           </button>

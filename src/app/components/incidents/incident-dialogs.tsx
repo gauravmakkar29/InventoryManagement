@@ -78,7 +78,7 @@ export function CreateIncidentDialog({
         className="w-full max-w-lg rounded-xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4">
           <h3 className="text-[16px] font-semibold text-gray-900">Create Incident</h3>
           <button
             onClick={onClose}
@@ -95,7 +95,7 @@ export function CreateIncidentDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Brief incident description..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ export function CreateIncidentDialog({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Detailed description of the incident..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none resize-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ export function CreateIncidentDialog({
               <select
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value as IncidentSeverity)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
               >
                 <option value="Critical">Critical</option>
                 <option value="High">High</option>
@@ -129,7 +129,7 @@ export function CreateIncidentDialog({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as IncidentCategory)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
               >
                 <option value="Security">Security</option>
                 <option value="Hardware">Hardware</option>
@@ -151,12 +151,12 @@ export function CreateIncidentDialog({
                 onChange={(e) => setDeviceSearch(e.target.value)}
                 placeholder="Search devices to add..."
                 aria-label="Search devices to add"
-                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
               />
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-gray-300 px-6 py-4">
           <button
             onClick={onClose}
             className="rounded-lg border border-gray-300 px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
@@ -252,8 +252,8 @@ export function IsolationDialog({
                   className={cn(
                     "flex cursor-pointer items-start gap-3 rounded-lg border p-3",
                     policy === p.value
-                      ? "border-[#FF7900] bg-orange-50"
-                      : "border-gray-200 hover:bg-gray-50",
+                      ? "border-[#c2410c] bg-orange-50"
+                      : "border-gray-300 hover:bg-gray-50",
                   )}
                 >
                   <input
@@ -272,7 +272,7 @@ export function IsolationDialog({
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-gray-300 px-6 py-4">
           <button
             onClick={onClose}
             className="rounded-lg border border-gray-300 px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
@@ -319,7 +319,7 @@ export function ReleaseDialog({
         className="w-full max-w-md rounded-xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-300 px-6 py-4">
           <h3 className="text-[16px] font-semibold text-gray-900">Release Device</h3>
           <button
             onClick={onClose}
@@ -345,11 +345,11 @@ export function ReleaseDialog({
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               placeholder="Provide a reason for releasing this device from isolation..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none resize-none"
             />
           </div>
         </div>
-        <div className="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-end gap-3 border-t border-gray-300 px-6 py-4">
           <button
             onClick={onClose}
             className="rounded-lg border border-gray-300 px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"

@@ -72,7 +72,7 @@ export const KPI_DATA: KpiCard[] = [
     value: "18",
     icon: Cpu,
     iconBg: "bg-orange-50",
-    iconColor: "text-[#FF7900]",
+    iconColor: "text-[#c2410c]",
     trend: "+3",
     trendUp: true,
     trendLabel: "this period",

@@ -90,7 +90,7 @@ export function TelemetryIngestStatus() {
     <div className="card-elevated p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Activity className="h-4 w-4 text-[#FF7900]" />
+          <Activity className="h-4 w-4 text-[#c2410c]" />
           <h3 className="text-[15px] font-semibold text-gray-900">Telemetry Pipeline</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -106,7 +106,7 @@ export function TelemetryIngestStatus() {
           </span>
           <button
             onClick={fetchStatus}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
             aria-label="Refresh pipeline status"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -116,7 +116,7 @@ export function TelemetryIngestStatus() {
 
       <div className="grid grid-cols-3 gap-3">
         {/* Records ingested */}
-        <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
           <Database className="mx-auto h-4 w-4 text-blue-500 mb-1.5" />
           <p className="text-[16px] font-bold tabular-nums text-gray-900">
             {status.recordsIngestedLastHour.toLocaleString()}
@@ -125,8 +125,8 @@ export function TelemetryIngestStatus() {
         </div>
 
         {/* Average latency */}
-        <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
-          <Clock className="mx-auto h-4 w-4 text-[#FF7900] mb-1.5" />
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
+          <Clock className="mx-auto h-4 w-4 text-[#c2410c] mb-1.5" />
           <p className="text-[16px] font-bold tabular-nums text-gray-900">
             {status.avgLatencyMs}ms
           </p>
@@ -137,7 +137,7 @@ export function TelemetryIngestStatus() {
         <div
           className={cn(
             "rounded-xl border px-3 py-3 text-center",
-            status.errorCount > 0 ? "border-red-200 bg-red-50" : "border-gray-100 bg-gray-50",
+            status.errorCount > 0 ? "border-red-200 bg-red-50" : "border-gray-200 bg-gray-50",
           )}
         >
           <AlertCircle
