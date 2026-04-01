@@ -94,7 +94,7 @@ function RingChart({
         x={size / 2}
         y={size / 2 + 14}
         textAnchor="middle"
-        className="fill-gray-400 text-[11px]"
+        className="fill-gray-400 text-[13px]"
       >
         Total
       </text>
@@ -141,7 +141,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={chartWidth + 18}
               y={y + 4}
               textAnchor="end"
-              className="fill-gray-400 text-[9px]"
+              className="fill-gray-400 text-[12px]"
             >
               {Math.round(maxCount * pct)}
             </text>
@@ -168,7 +168,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={x + barWidth / 2}
               y={y - 6}
               textAnchor="middle"
-              className="fill-gray-600 text-[10px] font-semibold"
+              className="fill-gray-600 text-[12px] font-semibold"
             >
               {d.count}
             </text>
@@ -176,7 +176,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={x + barWidth / 2}
               y={height - 6}
               textAnchor="middle"
-              className="fill-gray-500 text-[10px]"
+              className="fill-gray-500 text-[12px]"
             >
               {d.month}
             </text>
@@ -213,7 +213,7 @@ function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
         const barW = (d.count / maxCount) * barMaxWidth;
         return (
           <g key={d.severity}>
-            <text x={0} y={y + barHeight / 2 + 4} className="fill-gray-600 text-[11px] font-medium">
+            <text x={0} y={y + barHeight / 2 + 4} className="fill-gray-600 text-[13px] font-medium">
               {d.severity}
             </text>
             <rect
@@ -228,7 +228,7 @@ function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
             <text
               x={labelWidth + barW + 8}
               y={y + barHeight / 2 + 4}
-              className="fill-gray-700 text-[11px] font-bold"
+              className="fill-gray-700 text-[13px] font-bold"
             >
               {d.count}
             </text>
@@ -283,7 +283,7 @@ export function Analytics() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-[20px] font-semibold text-gray-900">Analytics</h1>
-          <p className="mt-0.5 text-[13px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-500">
             Platform health and operational insights — {rangeLabel}
           </p>
         </div>
@@ -294,7 +294,7 @@ export function Analytics() {
                 key={opt.value}
                 onClick={() => handleRangeChange(opt.value)}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-[12px] font-medium cursor-pointer",
+                  "rounded-md px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                   range === opt.value
                     ? "bg-[#FF7900] text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
@@ -325,8 +325,8 @@ export function Analytics() {
                   <Icon className={cn("h-[18px] w-[18px]", kpi.iconColor)} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[12px] text-gray-500 truncate">{kpi.label}</p>
-                  <p className="text-[22px] font-bold leading-tight text-gray-900 tabular-nums">
+                  <p className="text-[14px] text-gray-500 truncate">{kpi.label}</p>
+                  <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
                     {kpi.value}
                   </p>
                 </div>
@@ -339,13 +339,13 @@ export function Analytics() {
                 )}
                 <span
                   className={cn(
-                    "text-[11px] font-medium",
+                    "text-[13px] font-medium",
                     kpi.trendUp ? "text-emerald-600" : "text-red-600",
                   )}
                 >
                   {kpi.trend}
                 </span>
-                <span className="text-[10px] text-gray-500">{kpi.trendLabel}</span>
+                <span className="text-[12px] text-gray-500">{kpi.trendLabel}</span>
               </div>
             </div>
           );
@@ -359,7 +359,7 @@ export function Analytics() {
         {/* Device Status Distribution */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-gray-900">Device Status Distribution</h3>
+            <h3 className="text-[15px] font-semibold text-gray-900">Device Status Distribution</h3>
           </div>
           <div className="flex items-center gap-6 px-5 pb-5">
             <div className="shrink-0">
@@ -377,8 +377,8 @@ export function Analytics() {
                     />
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[13px] font-medium text-gray-700">{seg.label}</span>
-                        <span className="text-[13px] font-bold tabular-nums text-gray-900">
+                        <span className="text-[14px] font-medium text-gray-700">{seg.label}</span>
+                        <span className="text-[14px] font-bold tabular-nums text-gray-900">
                           {seg.value.toLocaleString()}
                         </span>
                       </div>
@@ -392,7 +392,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[11px] text-gray-500 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-gray-500 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -403,7 +403,7 @@ export function Analytics() {
         {/* Compliance Status */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-gray-900">Compliance Status</h3>
+            <h3 className="text-[15px] font-semibold text-gray-900">Compliance Status</h3>
           </div>
           <div className="flex items-center gap-6 px-5 pb-5">
             <div className="shrink-0">
@@ -421,8 +421,8 @@ export function Analytics() {
                     />
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[13px] font-medium text-gray-700">{seg.label}</span>
-                        <span className="text-[13px] font-bold tabular-nums text-gray-900">
+                        <span className="text-[14px] font-medium text-gray-700">{seg.label}</span>
+                        <span className="text-[14px] font-bold tabular-nums text-gray-900">
                           {seg.value.toLocaleString()}
                         </span>
                       </div>
@@ -436,7 +436,7 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[11px] text-gray-500 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-gray-500 w-10 text-right">{pct}%</span>
                   </div>
                 );
               })}
@@ -452,8 +452,8 @@ export function Analytics() {
         {/* Deployment Trend — Monthly Bar Chart */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-gray-900">Deployment Trend</h3>
-            <p className="text-[11px] text-gray-500 mt-0.5">Monthly deployments (last 6 months)</p>
+            <h3 className="text-[15px] font-semibold text-gray-900">Deployment Trend</h3>
+            <p className="text-[13px] text-gray-500 mt-0.5">Monthly deployments (last 6 months)</p>
           </div>
           <div className="px-5 pb-5">
             <BarChart data={MONTHLY_DEPLOYMENTS} height={200} />
@@ -463,8 +463,8 @@ export function Analytics() {
         {/* Vulnerability Breakdown — Horizontal Bar Chart */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[14px] font-semibold text-gray-900">Vulnerability Breakdown</h3>
-            <p className="text-[11px] text-gray-500 mt-0.5">Open vulnerabilities by severity</p>
+            <h3 className="text-[15px] font-semibold text-gray-900">Vulnerability Breakdown</h3>
+            <p className="text-[13px] text-gray-500 mt-0.5">Open vulnerabilities by severity</p>
           </div>
           <div className="px-5 pb-5">
             <HorizontalBarChart data={VULN_SEVERITY} />
@@ -478,8 +478,8 @@ export function Analytics() {
       <div className="card-elevated">
         <div className="flex items-center justify-between px-5 py-4">
           <div>
-            <h3 className="text-[14px] font-semibold text-gray-900">Audit Log</h3>
-            <p className="text-[11px] text-gray-500 mt-0.5">System activity — {rangeLabel}</p>
+            <h3 className="text-[15px] font-semibold text-gray-900">Audit Log</h3>
+            <p className="text-[13px] text-gray-500 mt-0.5">System activity — {rangeLabel}</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Search Filter */}
@@ -488,9 +488,10 @@ export function Analytics() {
               <input
                 type="text"
                 placeholder="Search audit log..."
+                aria-label="Search audit log"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="h-8 w-56 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-[12px] text-gray-700 placeholder-gray-400 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                className="h-8 w-56 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
               />
             </div>
 
@@ -500,9 +501,9 @@ export function Analytics() {
                 onClick={() => setExportOpen(!exportOpen)}
                 disabled={filteredAuditLogs.length === 0}
                 className={cn(
-                  "flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 text-[12px] font-medium text-gray-600 cursor-pointer",
+                  "flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 text-[14px] font-medium text-gray-600 cursor-pointer",
                   "hover:bg-gray-50 hover:text-gray-700",
-                  "disabled:cursor-not-allowed disabled:opacity-50",
+                  "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
                 title={filteredAuditLogs.length === 0 ? "No data to export" : "Export data"}
               >
@@ -519,7 +520,7 @@ export function Analytics() {
                         handleExportCSV();
                         setExportOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
                       <Download className="h-3.5 w-3.5 text-gray-500" />
                       Export as CSV
@@ -529,7 +530,7 @@ export function Analytics() {
                         handleExportJSON();
                         setExportOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
                       <Download className="h-3.5 w-3.5 text-gray-500" />
                       Export as JSON
@@ -549,31 +550,31 @@ export function Analytics() {
               <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
                 <th
                   scope="col"
-                  className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
                 >
                   Timestamp
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
                 >
                   User
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
                 >
                   Action
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
                 >
                   Entity
                 </th>
                 <th
                   scope="col"
-                  className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
                 >
                   Details
                 </th>
@@ -582,14 +583,14 @@ export function Analytics() {
             <tbody>
               {paginatedLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-[13px] text-gray-500">
+                  <td colSpan={5} className="px-5 py-8 text-center text-[14px] text-gray-500">
                     No audit entries found
                   </td>
                 </tr>
               ) : (
                 paginatedLogs.map((entry, i) => (
                   <tr key={entry.id} className={cn("h-[44px]", i % 2 === 1 && "bg-gray-50/50")}>
-                    <td className="px-5 text-[12px] font-mono text-gray-500 whitespace-nowrap">
+                    <td className="px-5 text-[14px] font-mono text-gray-500 whitespace-nowrap">
                       {new Date(entry.timestamp).toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",
@@ -599,19 +600,19 @@ export function Analytics() {
                         hour12: true,
                       })}
                     </td>
-                    <td className="px-3 text-[12px] text-gray-600">{entry.user}</td>
+                    <td className="px-3 text-[14px] text-gray-600">{entry.user}</td>
                     <td className="px-3">
                       <span
                         className={cn(
-                          "inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium",
+                          "inline-flex rounded-full px-2 py-0.5 text-[12px] font-medium",
                           actionBadgeClass(entry.action),
                         )}
                       >
                         {entry.action}
                       </span>
                     </td>
-                    <td className="px-3 text-[12px] font-medium text-gray-700">{entry.entity}</td>
-                    <td className="px-5 text-[12px] text-gray-500 max-w-[300px] truncate">
+                    <td className="px-3 text-[14px] font-medium text-gray-700">{entry.entity}</td>
+                    <td className="px-5 text-[14px] text-gray-500 max-w-[300px] truncate">
                       {entry.details}
                     </td>
                   </tr>
@@ -624,7 +625,7 @@ export function Analytics() {
         {/* Pagination */}
         {filteredAuditLogs.length > pageSize && (
           <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
-            <p className="text-[12px] text-gray-500">
+            <p className="text-[14px] text-gray-500">
               Showing {(currentPage - 1) * pageSize + 1}
               {"-"}
               {Math.min(currentPage * pageSize, filteredAuditLogs.length)} of{" "}
@@ -634,7 +635,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -644,7 +645,7 @@ export function Analytics() {
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
                   className={cn(
-                    "flex h-7 min-w-7 items-center justify-center rounded-md px-2 text-[11px] font-medium cursor-pointer",
+                    "flex h-7 min-w-9 items-center justify-center rounded-md px-2 text-[13px] font-medium cursor-pointer",
                     currentPage === i + 1
                       ? "bg-[#FF7900] text-white"
                       : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
@@ -656,7 +657,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="flex h-7 w-7 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Next page"
               >
                 <ChevronRight className="h-3.5 w-3.5" />

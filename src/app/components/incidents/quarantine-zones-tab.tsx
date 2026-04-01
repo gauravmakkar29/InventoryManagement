@@ -26,7 +26,7 @@ export function QuarantineZonesTab({
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value as "All" | "Active" | "Lifted")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[12px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
         >
           <option value="All">All Zones</option>
           <option value="Active">Active</option>
@@ -41,49 +41,49 @@ export function QuarantineZonesTab({
             <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Zone Name
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Status
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-center text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Devices
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Incident
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Policy
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Radius
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Created
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Action
               </th>
@@ -101,14 +101,14 @@ export function QuarantineZonesTab({
               >
                 <td className="px-4">
                   <div>
-                    <p className="text-[13px] font-medium text-gray-900">{zone.name}</p>
-                    <p className="text-[11px] text-gray-500">{zone.id}</p>
+                    <p className="text-[14px] font-medium text-gray-900">{zone.name}</p>
+                    <p className="text-[13px] text-gray-500">{zone.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
                   <span
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
+                      "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
                       zone.status === "Active"
                         ? "bg-red-50 text-red-700 border-red-200"
                         : "bg-gray-50 text-gray-500 border-gray-200",
@@ -123,29 +123,29 @@ export function QuarantineZonesTab({
                     {zone.status}
                   </span>
                 </td>
-                <td className="px-4 text-center text-[13px] font-medium text-gray-700">
+                <td className="px-4 text-center text-[14px] font-medium text-gray-700">
                   {zone.isolatedDeviceCount}
                 </td>
-                <td className="px-4 text-[12px] text-blue-600 font-medium">{zone.incidentId}</td>
+                <td className="px-4 text-[14px] text-blue-600 font-medium">{zone.incidentId}</td>
                 <td className="px-4">
-                  <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+                  <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-medium text-amber-700">
                     {zone.isolationPolicy}
                   </span>
                 </td>
-                <td className="px-4 text-[12px] text-gray-600">{zone.radiusKm} km</td>
-                <td className="px-4 text-[12px] text-gray-500">
+                <td className="px-4 text-[14px] text-gray-600">{zone.radiusKm} km</td>
+                <td className="px-4 text-[14px] text-gray-500">
                   {formatRelativeTime(zone.createdAt)}
                 </td>
                 <td className="px-4 text-right">
                   {zone.status === "Active" ? (
                     <button
                       onClick={() => onLift(zone.id)}
-                      className="rounded-lg border border-gray-300 px-3 py-1.5 text-[11px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="rounded-lg border border-gray-300 px-3 py-1.5 text-[13px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
                     >
                       Lift Quarantine
                     </button>
                   ) : (
-                    <span className="text-[11px] text-gray-500">
+                    <span className="text-[13px] text-gray-500">
                       Lifted {zone.liftedAt ? formatRelativeTime(zone.liftedAt) : ""}
                     </span>
                   )}
@@ -158,7 +158,7 @@ export function QuarantineZonesTab({
 
       {/* Quarantine Map Preview */}
       <div className="card-elevated p-5">
-        <h3 className="text-[14px] font-semibold text-gray-900 mb-3">Quarantine Zone Map</h3>
+        <h3 className="text-[15px] font-semibold text-gray-900 mb-3">Quarantine Zone Map</h3>
         <div className="relative h-[300px] rounded-lg bg-gray-100 border border-gray-200 overflow-hidden">
           <svg viewBox="0 0 800 300" className="w-full h-full">
             {/* World map simple backdrop */}
@@ -167,7 +167,7 @@ export function QuarantineZonesTab({
               x="400"
               y="20"
               textAnchor="middle"
-              className="text-[11px] fill-gray-400 font-medium"
+              className="text-[13px] fill-gray-400 font-medium"
             >
               Active Quarantine Zones
             </text>
@@ -186,7 +186,7 @@ export function QuarantineZonesTab({
               y="170"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[9px] fill-red-600 font-semibold"
+              className="text-[12px] fill-red-600 font-semibold"
             >
               Singapore Lab
             </text>
@@ -206,7 +206,7 @@ export function QuarantineZonesTab({
               y="100"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[9px] fill-red-600 font-semibold"
+              className="text-[12px] fill-red-600 font-semibold"
             >
               Shanghai West
             </text>
@@ -226,7 +226,7 @@ export function QuarantineZonesTab({
               y="110"
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[8px] fill-gray-400"
+              className="text-[11px] fill-gray-400"
             >
               Denver (Lifted)
             </text>

@@ -76,11 +76,11 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 </div>
               )}
               <div>
-                <h3 className="text-[14px] font-semibold text-gray-900">License Policy Status</h3>
+                <h3 className="text-[15px] font-semibold text-gray-900">License Policy Status</h3>
                 {allCompliant ? (
-                  <p className="text-[12px] text-green-600 font-medium">All Compliant</p>
+                  <p className="text-[14px] text-green-600 font-medium">All Compliant</p>
                 ) : (
-                  <p className="text-[12px] text-red-600 font-medium">
+                  <p className="text-[14px] text-red-600 font-medium">
                     {stats.restricted} non-compliant{" "}
                     {stats.restricted === 1 ? "component" : "components"} detected
                   </p>
@@ -90,15 +90,15 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
             <div className="flex items-center gap-6 border-l border-gray-200 pl-6">
               <div className="text-center">
                 <div className="text-[20px] font-bold text-green-600">{stats.approved}</div>
-                <div className="text-[11px] text-gray-500">Approved</div>
+                <div className="text-[13px] text-gray-500">Approved</div>
               </div>
               <div className="text-center">
                 <div className="text-[20px] font-bold text-red-600">{stats.restricted}</div>
-                <div className="text-[11px] text-gray-500">Restricted</div>
+                <div className="text-[13px] text-gray-500">Restricted</div>
               </div>
               <div className="text-center">
                 <div className="text-[20px] font-bold text-gray-500">{stats.unknown}</div>
-                <div className="text-[11px] text-gray-500">Unknown</div>
+                <div className="text-[13px] text-gray-500">Unknown</div>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
       {/* License distribution pie chart */}
       <div className="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="card-elevated p-5">
-          <h3 className="mb-4 text-[13px] font-semibold text-gray-900">License Distribution</h3>
+          <h3 className="mb-4 text-[14px] font-semibold text-gray-900">License Distribution</h3>
           {licenseDistribution.length > 0 ? (
             <ResponsiveContainer width="100%" height={320}>
               <PieChart>
@@ -138,13 +138,13 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                   verticalAlign="bottom"
                   height={36}
                   formatter={(value: string) => (
-                    <span className="text-[11px] text-gray-600">{value}</span>
+                    <span className="text-[13px] text-gray-600">{value}</span>
                   )}
                 />
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-500">
+            <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-500">
               No license data available
             </div>
           )}
@@ -152,7 +152,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
 
         {/* License Legend / Stats */}
         <div className="card-elevated p-5">
-          <h3 className="mb-4 text-[13px] font-semibold text-gray-900">License Breakdown</h3>
+          <h3 className="mb-4 text-[14px] font-semibold text-gray-900">License Breakdown</h3>
           <div className="space-y-2">
             {licenseDistribution.map((item, idx) => {
               const compliance = getLicenseCompliance(item.name);
@@ -167,10 +167,10 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                       className="h-3 w-3 rounded-sm"
                       style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}
                     />
-                    <span className="text-[13px] text-gray-700">{item.name}</span>
+                    <span className="text-[14px] text-gray-700">{item.name}</span>
                     <span
                       className={cn(
-                        "rounded px-1.5 py-0.5 text-[10px] font-medium",
+                        "rounded px-1.5 py-0.5 text-[12px] font-medium",
                         cfg.bg,
                         cfg.color,
                       )}
@@ -178,7 +178,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                       {cfg.label}
                     </span>
                   </div>
-                  <span className="text-[13px] font-medium text-gray-900">{item.value}</span>
+                  <span className="text-[14px] font-medium text-gray-900">{item.value}</span>
                 </div>
               );
             })}
@@ -190,10 +190,10 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
       {nonCompliant.length > 0 && (
         <div>
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-[14px] font-semibold text-gray-900">Non-Compliant Components</h3>
+            <h3 className="text-[15px] font-semibold text-gray-900">Non-Compliant Components</h3>
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-[12px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <Download className="h-3.5 w-3.5" />
               Export CSV
@@ -227,17 +227,17 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                     key={comp.id}
                     className="border-b border-gray-100 border-l-4 border-l-red-400"
                   >
-                    <td className="px-4 py-3 text-[13px] font-medium text-gray-900">{comp.name}</td>
-                    <td className="px-4 py-3 text-[13px] font-mono text-gray-600">
+                    <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
+                    <td className="px-4 py-3 text-[14px] font-mono text-gray-600">
                       {comp.version}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700">
+                      <span className="rounded-md bg-red-50 px-2 py-0.5 text-[13px] font-medium text-red-700">
                         {comp.license}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[13px] text-gray-600">{comp.sbomId}</td>
-                    <td className="px-4 py-3 text-[12px] text-amber-700">
+                    <td className="px-4 py-3 text-[14px] text-gray-600">{comp.sbomId}</td>
+                    <td className="px-4 py-3 text-[14px] text-amber-700">
                       {comp.license.startsWith("GPL") || comp.license.startsWith("AGPL")
                         ? "Replace with permissive-licensed alternative or obtain commercial license"
                         : "Review license terms and obtain legal approval"}
@@ -254,7 +254,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
         <div className="card-elevated flex items-center justify-center py-8">
           <div className="flex items-center gap-2 text-green-600">
             <ShieldCheck className="h-5 w-5" />
-            <span className="text-[14px] font-medium">No non-compliant components detected</span>
+            <span className="text-[15px] font-medium">No non-compliant components detected</span>
           </div>
         </div>
       )}

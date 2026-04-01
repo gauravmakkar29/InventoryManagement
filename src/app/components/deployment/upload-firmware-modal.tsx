@@ -134,7 +134,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
         <div className="space-y-3">
           {/* Version */}
           <div>
-            <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
               Version <span className="text-red-500">*</span>
             </label>
             <input
@@ -146,12 +146,12 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               }}
               placeholder="e.g. v4.3.0"
               className={cn(
-                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
                 errors.version ? "border-red-500" : "border-border",
               )}
             />
             {errors.version && (
-              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
                 {errors.version}
               </p>
             )}
@@ -159,7 +159,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Name */}
           <div>
-            <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
               Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -171,12 +171,12 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               }}
               placeholder="e.g. Security Patch Bundle"
               className={cn(
-                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
                 errors.name ? "border-red-500" : "border-border",
               )}
             />
             {errors.name && (
-              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
                 {errors.name}
               </p>
             )}
@@ -184,7 +184,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Device Model */}
           <div>
-            <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
               Compatible Models
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -194,7 +194,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
                   type="button"
                   onClick={() => toggleModel(model)}
                   className={cn(
-                    "rounded-sm border px-2 py-1 text-[10px] font-medium transition-colors duration-150",
+                    "rounded-sm border px-2 py-1 text-[12px] font-medium transition-colors duration-150",
                     models.includes(model)
                       ? "border-[#FF7900] bg-[#FF7900]/10 text-[#FF7900]"
                       : "border-border bg-background text-muted-foreground hover:border-foreground/30",
@@ -208,7 +208,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Release Notes */}
           <div>
-            <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
               Release Notes
             </label>
             <textarea
@@ -216,13 +216,13 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               onChange={(e) => setReleaseNotes(e.target.value)}
               rows={2}
               placeholder="Describe the changes in this firmware version..."
-              className="w-full rounded-sm border border-border bg-background px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+              className="w-full rounded-sm border border-border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
             />
           </div>
 
           {/* File Upload — Story 11.1 AC1/AC2 */}
           <div>
-            <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
               Firmware File <span className="text-red-500">*</span>
             </label>
             <div
@@ -250,7 +250,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
                 accept=".bin,.fw,.img,.hex,.zip"
               />
               {selectedFile ? (
-                <div className="flex items-center gap-2 text-[11px]">
+                <div className="flex items-center gap-2 text-[13px]">
                   <Package className="h-4 w-4 text-[#FF7900]" />
                   <span className="font-medium text-foreground">{selectedFile.name}</span>
                   <span className="text-muted-foreground">
@@ -260,14 +260,14 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               ) : (
                 <div className="flex items-center gap-2">
                   <Upload className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-[13px] text-muted-foreground">
                     Drag & drop or click to select (.bin, .fw, .img)
                   </span>
                 </div>
               )}
             </div>
             {errors.file && (
-              <p className="mt-0.5 text-[10px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
                 {errors.file}
               </p>
             )}
@@ -276,20 +276,20 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
           {/* Checksum Display — Story 11.1 AC2 */}
           {(computing || checksum) && (
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+              <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
                 SHA-256 Checksum
               </label>
               {computing ? (
                 <div className="flex items-center gap-2 rounded-sm border border-border bg-muted/50 px-2.5 py-1.5">
                   <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-                  <span className="text-[10px] text-muted-foreground">Computing checksum...</span>
+                  <span className="text-[12px] text-muted-foreground">Computing checksum...</span>
                 </div>
               ) : (
                 <input
                   type="text"
                   readOnly
                   value={checksum}
-                  className="w-full rounded-sm border border-border bg-muted/30 px-2.5 py-1.5 font-mono text-[10px] text-foreground"
+                  className="w-full rounded-sm border border-border bg-muted/30 px-2.5 py-1.5 font-mono text-[12px] text-foreground"
                 />
               )}
             </div>
@@ -299,8 +299,8 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
           {uploading && (
             <div>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[10px] text-muted-foreground">Uploading...</span>
-                <span className="text-[10px] font-medium text-foreground">{uploadProgress}%</span>
+                <span className="text-[12px] text-muted-foreground">Uploading...</span>
+                <span className="text-[12px] font-medium text-foreground">{uploadProgress}%</span>
               </div>
               <div className="h-1.5 w-full rounded-full bg-muted">
                 <div
@@ -316,14 +316,14 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
           <button
             onClick={onClose}
             disabled={uploading}
-            className="rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted disabled:opacity-50"
+            className="rounded-sm border border-border px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted disabled:opacity-60"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={uploading}
-            className="flex items-center gap-1.5 rounded-sm bg-[#FF7900] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 disabled:opacity-60"
           >
             {uploading ? (
               <>

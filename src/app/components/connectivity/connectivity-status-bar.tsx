@@ -25,7 +25,7 @@ export function ConnectivityStatusBar({ connectivity }: ConnectivityStatusBarPro
       {!isOnline && (
         <div className="flex h-8 items-center justify-center gap-2 bg-destructive px-4">
           <WifiOff className="h-3.5 w-3.5 text-white" />
-          <span className="text-[12px] font-medium text-white">
+          <span className="text-[14px] font-medium text-white">
             You are offline. Some features may be unavailable.
           </span>
         </div>
@@ -35,7 +35,7 @@ export function ConnectivityStatusBar({ connectivity }: ConnectivityStatusBarPro
       {isOnline && overallStatus !== "AllHealthy" && (
         <div className="flex h-8 items-center justify-center gap-2 bg-warning/20 border-b border-warning/30 px-4">
           <AlertTriangle className="h-3.5 w-3.5 text-warning" />
-          <span className="text-[12px] font-medium text-foreground">
+          <span className="text-[14px] font-medium text-foreground">
             {degradedServices.map((s) => `${s.service}: ${s.status}`).join(" | ")}
           </span>
         </div>
@@ -49,7 +49,7 @@ export function ConnectivityStatusBar({ connectivity }: ConnectivityStatusBarPro
           )}
         >
           <CheckCircle className="h-3.5 w-3.5 text-success" />
-          <span className="text-[12px] font-medium text-success">{recoveredService} recovered</span>
+          <span className="text-[14px] font-medium text-success">{recoveredService} recovered</span>
         </div>
       )}
     </div>

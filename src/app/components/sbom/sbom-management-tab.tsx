@@ -58,7 +58,7 @@ export function SBOMManagementTab({
             <select
               value={modelFilter}
               onChange={(e) => setModelFilter(e.target.value)}
-              className="h-9 appearance-none rounded-lg border border-gray-200 bg-white pl-9 pr-8 text-[13px] text-gray-700 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none cursor-pointer"
+              className="h-9 appearance-none rounded-lg border border-gray-200 bg-white pl-9 pr-8 text-[14px] text-gray-700 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none cursor-pointer"
             >
               <option value="all">All Firmware Models</option>
               {firmwareModels.map((m) => (
@@ -74,7 +74,7 @@ export function SBOMManagementTab({
         {canUpload && (
           <button
             onClick={() => setShowUpload(true)}
-            className="flex items-center gap-2 rounded-lg bg-[#FF7900] px-4 py-2 text-[13px] font-medium text-white hover:bg-[#e66e00] cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66e00] cursor-pointer"
           >
             <Upload className="h-4 w-4" />
             Upload SBOM
@@ -92,8 +92,8 @@ export function SBOMManagementTab({
       {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
           <FileBox className="mb-3 h-10 w-10 text-gray-300" />
-          <p className="text-[14px] font-medium text-gray-500">No SBOMs found</p>
-          <p className="text-[12px] text-gray-500">Upload an SBOM to get started</p>
+          <p className="text-[15px] font-medium text-gray-500">No SBOMs found</p>
+          <p className="text-[14px] text-gray-500">Upload an SBOM to get started</p>
         </div>
       )}
 
@@ -110,11 +110,11 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
     <div className="card-elevated p-5">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="text-[14px] font-semibold text-gray-900">
+          <h3 className="text-[15px] font-semibold text-gray-900">
             {sbom.firmwareName}{" "}
             <span className="font-normal text-gray-500">v{sbom.firmwareVersion}</span>
           </h3>
-          <p className="mt-0.5 text-[11px] text-gray-500">
+          <p className="mt-0.5 text-[13px] text-gray-500">
             Uploaded {formatDate(sbom.uploadedDate)} by {sbom.uploadedBy}
           </p>
         </div>
@@ -122,7 +122,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
           {/* Format badge */}
           <span
             className={cn(
-              "rounded-md px-2 py-0.5 text-[11px] font-medium",
+              "rounded-md px-2 py-0.5 text-[13px] font-medium",
               sbom.format === "CycloneDX"
                 ? "bg-blue-50 text-blue-700"
                 : "bg-purple-50 text-purple-700",
@@ -132,19 +132,19 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
           </span>
           {/* Status badge */}
           {sbom.status === "Complete" && (
-            <span className="rounded-md bg-green-50 px-2 py-0.5 text-[11px] font-medium text-green-700">
+            <span className="rounded-md bg-green-50 px-2 py-0.5 text-[13px] font-medium text-green-700">
               Complete
             </span>
           )}
           {sbom.status === "Processing" && (
-            <span className="flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700">
+            <span className="flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 text-[13px] font-medium text-blue-700">
               <Loader2 className="h-3 w-3 animate-spin" />
               Processing
             </span>
           )}
           {sbom.status === "Error" && (
             <span
-              className="rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700 cursor-help"
+              className="rounded-md bg-red-50 px-2 py-0.5 text-[13px] font-medium text-red-700 cursor-help"
               title={sbom.errorMessage}
             >
               Error
@@ -158,11 +158,11 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
           {/* Stats */}
           <div className="mb-3 grid grid-cols-3 gap-3">
             <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[11px] text-gray-500">Components</div>
+              <div className="text-[13px] text-gray-500">Components</div>
               <div className="text-[16px] font-semibold text-gray-900">{sbom.componentCount}</div>
             </div>
             <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[11px] text-gray-500">Vulnerabilities</div>
+              <div className="text-[13px] text-gray-500">Vulnerabilities</div>
               <div
                 className={cn(
                   "text-[16px] font-semibold",
@@ -173,7 +173,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
               </div>
             </div>
             <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[11px] text-gray-500">Licenses</div>
+              <div className="text-[13px] text-gray-500">Licenses</div>
               <div className="text-[16px] font-semibold text-gray-900">{sbom.licenseCount}</div>
             </div>
           </div>
@@ -211,7 +211,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
                   />
                 )}
               </div>
-              <div className="mt-1 flex gap-3 text-[10px] text-gray-500">
+              <div className="mt-1 flex gap-3 text-[12px] text-gray-500">
                 {sbom.criticalVulnCount > 0 && (
                   <span className="flex items-center gap-1">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -243,7 +243,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
       )}
 
       {sbom.status === "Processing" && (
-        <div className="flex items-center justify-center py-6 text-[13px] text-gray-500">
+        <div className="flex items-center justify-center py-6 text-[14px] text-gray-500">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Parsing SBOM file...
         </div>
@@ -253,7 +253,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
         <div className="mb-3 rounded-lg bg-red-50 p-3">
           <div className="flex items-start gap-2">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-            <p className="text-[12px] text-red-700">{sbom.errorMessage}</p>
+            <p className="text-[14px] text-red-700">{sbom.errorMessage}</p>
           </div>
         </div>
       )}
@@ -262,7 +262,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
         <div className="flex justify-end">
           <button
             onClick={onViewDetails}
-            className="flex items-center gap-1 text-[12px] font-medium text-[#FF7900] hover:text-[#e66e00] cursor-pointer"
+            className="flex items-center gap-1 text-[14px] font-medium text-[#FF7900] hover:text-[#e66e00] cursor-pointer"
           >
             View Details
             <ChevronRight className="h-3.5 w-3.5" />

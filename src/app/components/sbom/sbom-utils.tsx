@@ -36,7 +36,7 @@ export function PaginationControls({
   };
 }) {
   return (
-    <div className="mt-4 flex items-center justify-between text-[12px] text-gray-500">
+    <div className="mt-4 flex items-center justify-between text-[14px] text-gray-500">
       <span>
         Showing {(pagination.currentPage - 1) * PAGE_SIZE + 1} -{" "}
         {Math.min(pagination.currentPage * PAGE_SIZE, pagination.total)} of {pagination.total}
@@ -59,7 +59,7 @@ export function PaginationControls({
             key={page}
             onClick={() => pagination.goToPage(page)}
             className={cn(
-              "h-7 w-7 rounded-lg text-center cursor-pointer",
+              "h-9 w-9 rounded-lg text-center cursor-pointer",
               page === pagination.currentPage
                 ? "bg-[#FF7900] text-white font-medium"
                 : "text-gray-600 hover:bg-gray-100",

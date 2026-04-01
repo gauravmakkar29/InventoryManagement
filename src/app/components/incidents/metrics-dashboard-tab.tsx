@@ -14,7 +14,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
         <div className="card-elevated px-5 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[12px] text-gray-500">Open Incidents</p>
+              <p className="text-[14px] text-gray-500">Open Incidents</p>
               <p className="text-[28px] font-bold text-gray-900 tabular-nums">
                 {metrics.openIncidents}
               </p>
@@ -31,33 +31,33 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             )}
           </div>
           {metrics.openIncidents === 0 && (
-            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[13px] font-semibold text-emerald-700">
               <CheckCircle2 className="h-3 w-3" /> All Clear
             </span>
           )}
           {metrics.hasCritical && (
-            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-700">
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[13px] font-semibold text-red-700">
               Critical incident active
             </span>
           )}
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[12px] text-gray-500">Isolated Devices</p>
+          <p className="text-[14px] text-gray-500">Isolated Devices</p>
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.isolatedDevices}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-500">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-500">
             <Lock className="h-3 w-3" /> Currently under isolation
           </span>
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[12px] text-gray-500">Active Quarantine Zones</p>
+          <p className="text-[14px] text-gray-500">Active Quarantine Zones</p>
           <p className="text-[28px] font-bold text-gray-900 tabular-nums">
             {metrics.activeQuarantineZones}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[11px] text-gray-500">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-500">
             <MapPin className="h-3 w-3" /> Geographic zones
           </span>
         </div>
@@ -66,48 +66,48 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
       {/* MTTC / MTTR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card-elevated px-5 py-4">
-          <p className="text-[12px] text-gray-500">Mean Time to Contain (MTTC)</p>
+          <p className="text-[14px] text-gray-500">Mean Time to Contain (MTTC)</p>
           <div className="mt-2 flex items-baseline gap-3">
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToContainHours}
             </p>
-            <span className="text-[14px] text-gray-500">hours</span>
+            <span className="text-[15px] text-gray-500">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
               className={cn(
-                "text-[12px] font-medium",
+                "text-[14px] font-medium",
                 metrics.mttcTrend < 0 ? "text-emerald-600" : "text-red-600",
               )}
             >
               {metrics.mttcTrend < 0 ? `${metrics.mttcTrend}%` : `+${metrics.mttcTrend}%`}
             </span>
-            <span className="text-[11px] text-gray-500">vs last period</span>
+            <span className="text-[13px] text-gray-500">vs last period</span>
             {metrics.mttcTrend < 0 && (
-              <span className="text-[10px] text-emerald-500">(improving)</span>
+              <span className="text-[12px] text-emerald-500">(improving)</span>
             )}
           </div>
         </div>
         <div className="card-elevated px-5 py-4">
-          <p className="text-[12px] text-gray-500">Mean Time to Resolve (MTTR)</p>
+          <p className="text-[14px] text-gray-500">Mean Time to Resolve (MTTR)</p>
           <div className="mt-2 flex items-baseline gap-3">
             <p className="text-[32px] font-bold text-gray-900 tabular-nums">
               {metrics.meanTimeToResolveHours}
             </p>
-            <span className="text-[14px] text-gray-500">hours</span>
+            <span className="text-[15px] text-gray-500">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
               className={cn(
-                "text-[12px] font-medium",
+                "text-[14px] font-medium",
                 metrics.mttrTrend < 0 ? "text-emerald-600" : "text-red-600",
               )}
             >
               {metrics.mttrTrend < 0 ? `${metrics.mttrTrend}%` : `+${metrics.mttrTrend}%`}
             </span>
-            <span className="text-[11px] text-gray-500">vs last period</span>
+            <span className="text-[13px] text-gray-500">vs last period</span>
             {metrics.mttrTrend < 0 && (
-              <span className="text-[10px] text-emerald-500">(improving)</span>
+              <span className="text-[12px] text-emerald-500">(improving)</span>
             )}
           </div>
         </div>
@@ -115,7 +115,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
 
       {/* Severity Pie Chart */}
       <div className="card-elevated px-5 py-4">
-        <h3 className="text-[14px] font-semibold text-gray-900 mb-4">Incidents by Severity</h3>
+        <h3 className="text-[15px] font-semibold text-gray-900 mb-4">Incidents by Severity</h3>
         <div className="flex items-center gap-8">
           {/* SVG Pie Chart */}
           <div className="shrink-0">
@@ -160,7 +160,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
               >
                 {metrics.bySeverity.reduce((sum, s) => sum + s.count, 0)}
               </text>
-              <text x="80" y="92" textAnchor="middle" className="text-[10px] fill-gray-400">
+              <text x="80" y="92" textAnchor="middle" className="text-[12px] fill-gray-400">
                 Total
               </text>
             </svg>
@@ -173,8 +173,8 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
                   className="h-3 w-3 shrink-0 rounded-sm"
                   style={{ backgroundColor: SEVERITY_COLORS[s.severity] }}
                 />
-                <span className="flex-1 text-[13px] font-medium text-gray-700">{s.severity}</span>
-                <span className="text-[14px] font-bold tabular-nums text-gray-900">{s.count}</span>
+                <span className="flex-1 text-[14px] font-medium text-gray-700">{s.severity}</span>
+                <span className="text-[15px] font-bold tabular-nums text-gray-900">{s.count}</span>
               </div>
             ))}
           </div>

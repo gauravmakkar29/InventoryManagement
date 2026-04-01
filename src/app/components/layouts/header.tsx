@@ -64,7 +64,7 @@ export function Header() {
         role="banner"
       >
         {/* Left: Page title */}
-        <h1 className="text-[17px] font-semibold leading-tight text-foreground">{title}</h1>
+        <h1 className="text-[17px] font-semibold leading-snug text-foreground">{title}</h1>
 
         {/* Right: Search + Theme + Bell + Divider + User */}
         <div className="flex items-center gap-2">
@@ -83,7 +83,7 @@ export function Header() {
           >
             <Bell className="h-[18px] w-[18px]" />
             {unreadCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[9px] font-bold text-white">
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[12px] font-bold text-white">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
@@ -92,14 +92,14 @@ export function Header() {
           <div className="mx-1 h-6 w-px bg-border" aria-hidden="true" />
 
           <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[13px] font-semibold text-white">
               {initials}
             </div>
             <div className="hidden md:block">
-              <div className="text-[13px] font-medium leading-tight text-foreground">
+              <div className="text-[14px] font-medium leading-snug text-foreground">
                 {displayName}
               </div>
-              <div className="text-[11px] leading-tight text-muted-foreground">{roleBadge}</div>
+              <div className="text-[13px] leading-snug text-muted-foreground">{roleBadge}</div>
             </div>
           </div>
         </div>

@@ -8,13 +8,13 @@ export function AccessDenied() {
         <ShieldX className="h-8 w-8 text-red-500" />
       </div>
       <h1 className="text-[20px] font-semibold text-gray-900">Access Denied</h1>
-      <p className="max-w-sm text-center text-[14px] text-gray-500">
+      <p className="max-w-sm text-center text-[15px] text-gray-500">
         You don't have permission to view this page. Contact your administrator if you believe this
         is an error.
       </p>
       <Link
         to="/"
-        className="mt-2 rounded-lg bg-[#FF7900] px-5 py-2.5 text-[14px] font-medium text-white hover:bg-[#e66d00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2"
+        className="mt-2 rounded-lg bg-[#FF7900] px-5 py-2.5 text-[15px] font-medium text-white hover:bg-[#e66d00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2"
       >
         Back to Dashboard
       </Link>

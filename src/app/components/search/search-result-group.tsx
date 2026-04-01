@@ -37,7 +37,7 @@ export function SearchResultGroup({
       {/* Section header */}
       <div className="flex items-center gap-2 px-4 py-2 border-t border-border first:border-0">
         <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <span className="text-[13px] font-semibold uppercase tracking-wider text-muted-foreground">
           {entityType === "ServiceOrder" ? "Service Orders" : `${entityType}s`} ({results.length})
         </span>
       </div>

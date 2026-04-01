@@ -43,7 +43,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-medium",
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[13px] font-medium",
         c.bg,
         c.text,
       )}
@@ -71,7 +71,7 @@ function HealthBar({ value }: { value: number }) {
           style={{ width: `${value}%` }}
         />
       </div>
-      <span className="text-[12px] font-mono tabular-nums text-gray-500">{value}%</span>
+      <span className="text-[14px] font-mono tabular-nums text-gray-500">{value}%</span>
     </div>
   );
 }
@@ -93,7 +93,7 @@ function SortHeader({
   return (
     <th
       scope="col"
-      className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-[#f1f3f5]"
+      className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 cursor-pointer select-none hover:text-gray-900 bg-[#f1f3f5]"
       onClick={() => onSort(field)}
     >
       <div className="flex items-center gap-1">
@@ -154,7 +154,7 @@ export function Inventory() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "px-4 py-2.5 text-[13px] font-medium cursor-pointer transition-colors",
+              "px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                 : "text-gray-500 hover:text-gray-700",
@@ -188,9 +188,9 @@ export function Inventory() {
                 onClick={exportCsv}
                 disabled={filteredDevices.length === 0}
                 className={cn(
-                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[13px] font-medium text-gray-700 shrink-0",
+                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[14px] font-medium text-gray-700 shrink-0",
                   "hover:bg-gray-50",
-                  "disabled:cursor-not-allowed disabled:opacity-40",
+                  "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
               >
                 <Download className="h-4 w-4" aria-hidden="true" />
@@ -201,7 +201,7 @@ export function Inventory() {
                 <button
                   onClick={() => setCreateModalOpen(true)}
                   className={cn(
-                    "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[13px] font-medium text-white shrink-0",
+                    "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[14px] font-medium text-white shrink-0",
                     "hover:bg-[#e86e00]",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
                   )}
@@ -265,7 +265,7 @@ export function Inventory() {
                     {canEdit && (
                       <th
                         scope="col"
-                        className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]"
+                        className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600 bg-[#f1f3f5]"
                       >
                         Actions
                       </th>
@@ -277,8 +277,8 @@ export function Inventory() {
                     <tr>
                       <td colSpan={canEdit ? 7 : 6} className="py-16 text-center">
                         <Package className="mx-auto h-10 w-10 text-gray-200 mb-3" />
-                        <p className="text-[14px] font-medium text-gray-500">No devices found</p>
-                        <p className="mt-1 text-[12px] text-gray-500">
+                        <p className="text-[15px] font-medium text-gray-500">No devices found</p>
+                        <p className="mt-1 text-[14px] text-gray-500">
                           Try adjusting your search or filter criteria
                         </p>
                       </td>
@@ -293,23 +293,23 @@ export function Inventory() {
                         )}
                       >
                         <td className="px-4 py-2.5">
-                          <span className="text-[13px] font-medium text-gray-900">
+                          <span className="text-[14px] font-medium text-gray-900">
                             {device.name}
                           </span>
                         </td>
                         <td className="px-4 py-2.5">
-                          <span className="text-[12px] font-mono text-gray-500">
+                          <span className="text-[14px] font-mono text-gray-500">
                             {device.serial}
                           </span>
                         </td>
                         <td className="px-4 py-2.5">
-                          <span className="text-[12px] text-gray-600">{device.model}</span>
+                          <span className="text-[14px] text-gray-600">{device.model}</span>
                         </td>
                         <td className="px-4 py-2.5">
                           <StatusBadge status={device.status} />
                         </td>
                         <td className="px-4 py-2.5">
-                          <span className="text-[12px] text-gray-600">{device.location}</span>
+                          <span className="text-[14px] text-gray-600">{device.location}</span>
                         </td>
                         <td className="px-4 py-2.5">
                           <HealthBar value={device.health} />
@@ -321,7 +321,7 @@ export function Inventory() {
                               onChange={(e) =>
                                 handleStatusChange(device.id, e.target.value as DeviceStatus)
                               }
-                              className="h-8 rounded-md border border-gray-200 bg-white px-2 text-[12px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]/20 cursor-pointer"
+                              className="h-8 rounded-md border border-gray-200 bg-white px-2 text-[14px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]/20 cursor-pointer"
                             >
                               {ALL_STATUSES.map((s) => (
                                 <option key={s} value={s}>
@@ -341,7 +341,7 @@ export function Inventory() {
             {/* Pagination */}
             {filteredDevices.length > 0 && (
               <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
-                <span className="text-[12px] text-gray-500">
+                <span className="text-[14px] text-gray-500">
                   Showing {startIdx + 1}–{endIdx} of {filteredDevices.length}
                 </span>
                 <div className="flex items-center gap-1">
@@ -351,7 +351,7 @@ export function Inventory() {
                     className={cn(
                       "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
                       "hover:bg-gray-100 hover:text-gray-700",
-                      "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent",
+                      "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent",
                     )}
                     aria-label="Previous page"
                   >
@@ -362,7 +362,7 @@ export function Inventory() {
                       key={p}
                       onClick={() => setPage(p)}
                       className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-lg text-[12px] font-medium cursor-pointer",
+                        "flex h-8 w-8 items-center justify-center rounded-lg text-[14px] font-medium cursor-pointer",
                         p === safeCurrentPage
                           ? "bg-[#FF7900] text-white"
                           : "text-gray-500 hover:bg-gray-100",
@@ -377,7 +377,7 @@ export function Inventory() {
                     className={cn(
                       "flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 cursor-pointer",
                       "hover:bg-gray-100 hover:text-gray-700",
-                      "disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent",
+                      "disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-transparent",
                     )}
                     aria-label="Next page"
                   >
@@ -394,8 +394,8 @@ export function Inventory() {
       {activeTab === "firmware" && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-[14px] font-semibold text-gray-700">Firmware Status Overview</h2>
-            <span className="text-[12px] text-gray-500">
+            <h2 className="text-[15px] font-semibold text-gray-700">Firmware Status Overview</h2>
+            <span className="text-[14px] text-gray-500">
               {devices.length} devices — sorted by health (unhealthiest first)
             </span>
           </div>
@@ -412,10 +412,10 @@ export function Inventory() {
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-medium text-gray-900">{device.name}</span>
-                    <span className="text-[11px] font-mono text-gray-500">{device.serial}</span>
+                    <span className="text-[14px] font-medium text-gray-900">{device.name}</span>
+                    <span className="text-[13px] font-mono text-gray-500">{device.serial}</span>
                   </div>
-                  <div className="text-[12px] font-mono text-gray-600">{device.firmware}</div>
+                  <div className="text-[14px] font-mono text-gray-600">{device.firmware}</div>
                   <HealthBar value={device.health} />
                 </div>
               ))}

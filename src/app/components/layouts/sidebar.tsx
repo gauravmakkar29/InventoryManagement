@@ -141,10 +141,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ) : (
           <>
             <div className="flex flex-col">
-              <span className="text-[15px] font-bold leading-tight tracking-tight text-foreground">
+              <span className="text-base font-bold leading-snug tracking-tight text-foreground">
                 IMS <span className="text-accent">Gen2</span>
               </span>
-              <span className="text-[10px] leading-tight text-muted-foreground">
+              <span className="text-[12px] leading-snug text-muted-foreground">
                 Hardware Lifecycle Mgmt
               </span>
             </div>
@@ -168,7 +168,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <div key={group.label} className={cn(groupIdx > 0 && "mt-4")}>
             {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-border/50" />}
             {!collapsed && (
-              <div className="mb-1.5 px-3 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              <div className="mb-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
                 {group.label}
               </div>
             )}
@@ -189,7 +189,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       aria-label={item.label}
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
-                        "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[13px] font-medium",
+                        "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[14px] font-medium",
                         collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0",
                         isActive
@@ -224,7 +224,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         {collapsed ? (
           <div className="flex flex-col items-center gap-2">
             <div
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white"
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[13px] font-semibold text-white"
               title={`${displayName} (${roleBadge})`}
             >
               {initials}
@@ -241,14 +241,14 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         ) : (
           <>
             <div className="flex items-center gap-2.5 px-1">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-[13px] font-semibold text-white">
                 {initials}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-medium leading-tight text-foreground">
+                <div className="truncate text-[14px] font-medium leading-snug text-foreground">
                   {displayName}
                 </div>
-                <div className="truncate text-[11px] leading-tight text-muted-foreground">
+                <div className="truncate text-[13px] leading-snug text-muted-foreground">
                   {displayEmail || roleBadge}
                 </div>
               </div>
@@ -256,7 +256,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <button
               onClick={handleSignOut}
               className={cn(
-                "mt-2 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-1.5 text-[12px] font-medium text-muted-foreground",
+                "mt-2 flex w-full cursor-pointer items-center gap-2 rounded-lg px-3 py-1.5 text-[14px] font-medium text-muted-foreground",
                 "hover:bg-muted hover:text-foreground",
               )}
             >

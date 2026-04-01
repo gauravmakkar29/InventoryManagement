@@ -141,7 +141,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           <div className="flex items-center gap-2">
             <h2 className="text-[16px] font-semibold text-gray-900">Notifications</h2>
             {unreadCount > 0 && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[12px] font-bold text-white">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
@@ -150,7 +150,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
             {unreadCount > 0 && (
               <button
                 onClick={markAllRead}
-                className="text-[12px] font-medium text-[#FF7900] hover:text-[#e66d00] cursor-pointer"
+                className="text-[14px] font-medium text-[#FF7900] hover:text-[#e66d00] cursor-pointer"
               >
                 Mark all read
               </button>
@@ -170,7 +170,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
               <Bell className="h-10 w-10 text-gray-200 mb-3" />
-              <p className="text-[14px] text-gray-500">No notifications</p>
+              <p className="text-[15px] text-gray-500">No notifications</p>
             </div>
           ) : (
             <div>
@@ -199,7 +199,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                       <div className="flex items-start justify-between gap-2">
                         <p
                           className={cn(
-                            "text-[13px] leading-tight",
+                            "text-[14px] leading-snug",
                             notification.read
                               ? "font-medium text-gray-700"
                               : "font-semibold text-gray-900",
@@ -211,10 +211,10 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                           <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[#FF7900]" />
                         )}
                       </div>
-                      <p className="mt-0.5 text-[12px] leading-snug text-gray-500 line-clamp-2">
+                      <p className="mt-0.5 text-[14px] leading-snug text-gray-500 line-clamp-2">
                         {notification.message}
                       </p>
-                      <p className="mt-1 text-[11px] text-gray-500">{notification.timestamp}</p>
+                      <p className="mt-1 text-[13px] text-gray-500">{notification.timestamp}</p>
                     </div>
                   </a>
                 );

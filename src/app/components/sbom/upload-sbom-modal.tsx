@@ -48,7 +48,7 @@ export function UploadSBOMModal({
       <div className="fixed inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-full max-w-lg card-elevated p-0 mx-4">
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-          <h2 className="text-[15px] font-semibold text-gray-900">Upload SBOM</h2>
+          <h2 className="text-base font-semibold text-gray-900">Upload SBOM</h2>
           <button
             onClick={onClose}
             className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
@@ -60,15 +60,16 @@ export function UploadSBOMModal({
         <div className="space-y-5 px-6 py-5">
           {/* Firmware selector */}
           <div>
-            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
               Firmware
             </label>
             <input
               type="text"
               placeholder="Search firmware..."
+              aria-label="Search firmware"
               value={firmwareSearch}
               onChange={(e) => setFirmwareSearch(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[13px] text-gray-900 placeholder:text-gray-400 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+              className="mb-2 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
             />
             <div className="max-h-[120px] overflow-y-auto rounded-lg border border-gray-200">
               {filteredFirmware.map((fw) => (
@@ -76,7 +77,7 @@ export function UploadSBOMModal({
                   key={fw.id}
                   onClick={() => setSelectedFirmware(fw.id)}
                   className={cn(
-                    "flex w-full items-center justify-between px-3 py-2 text-left text-[13px] cursor-pointer",
+                    "flex w-full items-center justify-between px-3 py-2 text-left text-[14px] cursor-pointer",
                     selectedFirmware === fw.id
                       ? "bg-orange-50 text-[#FF7900] font-medium"
                       : "text-gray-700 hover:bg-gray-50",
@@ -89,7 +90,7 @@ export function UploadSBOMModal({
                 </button>
               ))}
               {filteredFirmware.length === 0 && (
-                <div className="px-3 py-4 text-center text-[13px] text-gray-500">
+                <div className="px-3 py-4 text-center text-[14px] text-gray-500">
                   No firmware found
                 </div>
               )}
@@ -98,7 +99,7 @@ export function UploadSBOMModal({
 
           {/* Format selector */}
           <div>
-            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
               Format
             </label>
             <div className="flex gap-3">
@@ -107,7 +108,7 @@ export function UploadSBOMModal({
                   key={f}
                   onClick={() => setFormat(f)}
                   className={cn(
-                    "flex items-center gap-2 rounded-lg border px-4 py-2.5 text-[13px] font-medium cursor-pointer",
+                    "flex items-center gap-2 rounded-lg border px-4 py-2.5 text-[14px] font-medium cursor-pointer",
                     format === f
                       ? "border-[#FF7900] bg-orange-50 text-[#FF7900]"
                       : "border-gray-200 text-gray-600 hover:bg-gray-50",
@@ -131,7 +132,7 @@ export function UploadSBOMModal({
 
           {/* File upload zone */}
           <div>
-            <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wide text-gray-500">
+            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-gray-500">
               SBOM File (.json)
             </label>
             <div
@@ -170,16 +171,16 @@ export function UploadSBOMModal({
               {fileName ? (
                 <>
                   <FileText className="mb-2 h-8 w-8 text-green-500" />
-                  <span className="text-[13px] font-medium text-green-700">{fileName}</span>
-                  <span className="mt-1 text-[11px] text-gray-500">Click to change file</span>
+                  <span className="text-[14px] font-medium text-green-700">{fileName}</span>
+                  <span className="mt-1 text-[13px] text-gray-500">Click to change file</span>
                 </>
               ) : (
                 <>
                   <Upload className="mb-2 h-8 w-8 text-gray-500" />
-                  <span className="text-[13px] text-gray-600">
+                  <span className="text-[14px] text-gray-600">
                     Drop JSON file here or click to browse
                   </span>
-                  <span className="mt-1 text-[11px] text-gray-500">
+                  <span className="mt-1 text-[13px] text-gray-500">
                     Supports CycloneDX and SPDX JSON formats
                   </span>
                 </>
@@ -191,7 +192,7 @@ export function UploadSBOMModal({
         <div className="flex items-center justify-end gap-3 border-t border-gray-200 px-6 py-4">
           <button
             onClick={onClose}
-            className="rounded-lg border border-gray-200 px-4 py-2 text-[13px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="rounded-lg border border-gray-200 px-4 py-2 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
           >
             Cancel
           </button>
@@ -199,7 +200,7 @@ export function UploadSBOMModal({
             onClick={handleSubmit}
             disabled={!selectedFirmware || !fileName}
             className={cn(
-              "rounded-lg px-4 py-2 text-[13px] font-medium text-white cursor-pointer",
+              "rounded-lg px-4 py-2 text-[14px] font-medium text-white cursor-pointer",
               selectedFirmware && fileName
                 ? "bg-[#FF7900] hover:bg-[#e66e00]"
                 : "bg-gray-300 cursor-not-allowed",

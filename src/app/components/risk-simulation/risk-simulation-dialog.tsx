@@ -203,29 +203,29 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
           <p className="text-[18px] font-bold tabular-nums text-gray-900">
             {result.affectedDeviceCount}
           </p>
-          <p className="text-[10px] text-gray-500">Affected Devices</p>
+          <p className="text-[12px] text-gray-500">Affected Devices</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">
             {result.estimatedDowntimeMinutes}m
           </p>
-          <p className="text-[10px] text-gray-500">Cascade Downtime</p>
+          <p className="text-[12px] text-gray-500">Cascade Downtime</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-gray-900">{result.radiusKm}km</p>
-          <p className="text-[10px] text-gray-500">Blast Radius</p>
+          <p className="text-[12px] text-gray-500">Blast Radius</p>
         </div>
         <div className="rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 text-center">
           <p className="text-[18px] font-bold tabular-nums text-[#FF7900]">
             {result.severity ?? "N/A"}
           </p>
-          <p className="text-[10px] text-gray-500">Severity</p>
+          <p className="text-[12px] text-gray-500">Severity</p>
         </div>
       </div>
 
       {/* Affected device list */}
       <div>
-        <h4 className="text-[12px] font-semibold text-gray-700 mb-2">
+        <h4 className="text-[14px] font-semibold text-gray-700 mb-2">
           Affected Devices ({result.affectedDevices.length})
         </h4>
         <div className="max-h-[240px] overflow-y-auto space-y-1">
@@ -235,14 +235,14 @@ function SimulationResultsPanel({ result }: { result: BlastRadiusResult }) {
               className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-gray-50"
             >
               <div>
-                <p className="text-[13px] font-medium text-gray-900">{d.name}</p>
-                <p className="text-[11px] text-gray-500">
+                <p className="text-[14px] font-medium text-gray-900">{d.name}</p>
+                <p className="text-[13px] text-gray-500">
                   {d.distanceKm} km | {d.estimatedDowntimeMinutes}m downtime
                 </p>
               </div>
               <span
                 className={cn(
-                  "text-[11px] font-bold tabular-nums",
+                  "text-[13px] font-bold tabular-nums",
                   d.riskScore <= 30
                     ? "text-red-600"
                     : d.riskScore <= 50
@@ -289,7 +289,7 @@ function SimulationHistory({
     return (
       <div className="py-12 text-center">
         <History className="mx-auto h-8 w-8 text-gray-300 mb-2" />
-        <p className="text-[13px] text-gray-500">No simulation history</p>
+        <p className="text-[14px] text-gray-500">No simulation history</p>
       </div>
     );
   }
@@ -300,7 +300,7 @@ function SimulationHistory({
         <button
           onClick={() => setSortField("date")}
           className={cn(
-            "rounded-md px-2.5 py-1 text-[11px] font-medium cursor-pointer",
+            "rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer",
             sortField === "date"
               ? "bg-gray-900 text-white"
               : "bg-gray-100 text-gray-600 hover:bg-gray-200",
@@ -311,7 +311,7 @@ function SimulationHistory({
         <button
           onClick={() => setSortField("risk")}
           className={cn(
-            "rounded-md px-2.5 py-1 text-[11px] font-medium cursor-pointer",
+            "rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer",
             sortField === "risk"
               ? "bg-gray-900 text-white"
               : "bg-gray-100 text-gray-600 hover:bg-gray-200",
@@ -328,17 +328,17 @@ function SimulationHistory({
           onClick={() => onView(item)}
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-medium text-gray-900">{item.originDeviceName}</span>
+            <span className="text-[14px] font-medium text-gray-900">{item.originDeviceName}</span>
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                "rounded-full px-2 py-0.5 text-[12px] font-bold",
                 getRiskLevelBg(item.riskLevel),
               )}
             >
               {item.riskLevel}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-[11px] text-gray-500">
+          <div className="flex items-center gap-4 text-[13px] text-gray-500">
             <span className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
               {formatDateTime(item.createdAt)}
@@ -346,7 +346,7 @@ function SimulationHistory({
             <span>{item.failureType}</span>
             <span>{item.affectedDeviceCount} affected</span>
           </div>
-          <div className="mt-2 flex items-center gap-1 text-[11px] text-[#FF7900] font-medium">
+          <div className="mt-2 flex items-center gap-1 text-[13px] text-[#FF7900] font-medium">
             <Eye className="h-3 w-3" />
             View Details
           </div>
@@ -440,7 +440,7 @@ export function RiskSimulationDialog({
           </div>
           <button
             onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -450,18 +450,18 @@ export function RiskSimulationDialog({
         <div className="border-b border-gray-100 px-6 py-4 space-y-4">
           {/* Device name */}
           <div>
-            <label className="block text-[11px] font-semibold text-gray-600 mb-1">Device</label>
+            <label className="block text-[13px] font-semibold text-gray-600 mb-1">Device</label>
             <input
               type="text"
               value={params.deviceName}
               onChange={(e) => setParams((p) => ({ ...p, deviceName: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-[13px] text-gray-900 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-[14px] text-gray-900 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
             />
           </div>
 
           {/* Failure type */}
           <div>
-            <label className="block text-[11px] font-semibold text-gray-600 mb-1">
+            <label className="block text-[13px] font-semibold text-gray-600 mb-1">
               Failure Type
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -472,7 +472,7 @@ export function RiskSimulationDialog({
                     key={ft.id}
                     onClick={() => setParams((p) => ({ ...p, failureType: ft.id }))}
                     className={cn(
-                      "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12px] font-medium cursor-pointer",
+                      "flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[14px] font-medium cursor-pointer",
                       params.failureType === ft.id
                         ? "border-[#FF7900] bg-orange-50 text-gray-900"
                         : "border-gray-200 text-gray-600 hover:border-gray-300",
@@ -489,9 +489,9 @@ export function RiskSimulationDialog({
           <div className="grid grid-cols-2 gap-4">
             {/* Radius */}
             <div>
-              <label className="flex items-center justify-between text-[11px] font-semibold text-gray-600 mb-1">
+              <label className="flex items-center justify-between text-[13px] font-semibold text-gray-600 mb-1">
                 Radius
-                <span className="text-[12px] font-bold tabular-nums text-[#FF7900]">
+                <span className="text-[14px] font-bold tabular-nums text-[#FF7900]">
                   {params.radiusKm} km
                 </span>
               </label>
@@ -507,9 +507,9 @@ export function RiskSimulationDialog({
 
             {/* Severity */}
             <div>
-              <label className="flex items-center justify-between text-[11px] font-semibold text-gray-600 mb-1">
+              <label className="flex items-center justify-between text-[13px] font-semibold text-gray-600 mb-1">
                 Severity
-                <span className="text-[12px] font-bold tabular-nums text-[#FF7900]">
+                <span className="text-[14px] font-bold tabular-nums text-[#FF7900]">
                   {params.severity}/10
                 </span>
               </label>
@@ -529,7 +529,7 @@ export function RiskSimulationDialog({
             onClick={handleSimulate}
             disabled={isRunning}
             className={cn(
-              "w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-[13px] font-medium text-white cursor-pointer",
+              "w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-[14px] font-medium text-white cursor-pointer",
               isRunning ? "bg-gray-400 cursor-not-allowed" : "bg-[#FF7900] hover:bg-[#e66d00]",
             )}
           >
@@ -552,7 +552,7 @@ export function RiskSimulationDialog({
           <button
             onClick={() => setActiveTab("results")}
             className={cn(
-              "flex-1 py-2.5 text-center text-[12px] font-medium cursor-pointer",
+              "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer",
               activeTab === "results"
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                 : "text-gray-500 hover:text-gray-700",
@@ -563,7 +563,7 @@ export function RiskSimulationDialog({
           <button
             onClick={() => setActiveTab("history")}
             className={cn(
-              "flex-1 py-2.5 text-center text-[12px] font-medium cursor-pointer flex items-center justify-center gap-1",
+              "flex-1 py-2.5 text-center text-[14px] font-medium cursor-pointer flex items-center justify-center gap-1",
               activeTab === "history"
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                 : "text-gray-500 hover:text-gray-700",
@@ -582,7 +582,7 @@ export function RiskSimulationDialog({
             ) : (
               <div className="py-12 text-center">
                 <AlertTriangle className="mx-auto h-8 w-8 text-gray-300 mb-2" />
-                <p className="text-[13px] text-gray-500">Configure parameters and click Simulate</p>
+                <p className="text-[14px] text-gray-500">Configure parameters and click Simulate</p>
               </div>
             )
           ) : (
@@ -595,7 +595,7 @@ export function RiskSimulationDialog({
           <div className="border-t border-gray-100 px-6 py-3 flex justify-end gap-2">
             <button
               onClick={handleSave}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-4 py-2 text-[12px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
             >
               <Save className="h-3.5 w-3.5" />
               Save Simulation

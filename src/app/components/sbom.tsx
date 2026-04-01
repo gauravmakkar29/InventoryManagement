@@ -43,7 +43,7 @@ export function SBOMPage() {
           </div>
           <div>
             <h1 className="text-[18px] font-bold text-gray-900">SBOM Management</h1>
-            <p className="text-[13px] text-gray-500">
+            <p className="text-[14px] text-gray-500">
               Software Bill of Materials &mdash; supply chain security and license compliance
             </p>
           </div>
@@ -63,7 +63,7 @@ export function SBOMPage() {
                 if (tab.id !== "components") setSbomFilter(null);
               }}
               className={cn(
-                "flex items-center gap-2 border-b-2 px-4 py-2.5 text-[13px] font-medium cursor-pointer -mb-px",
+                "flex items-center gap-2 border-b-2 px-4 py-2.5 text-[14px] font-medium cursor-pointer -mb-px",
                 isActive
                   ? "border-[#FF7900] text-[#FF7900]"
                   : "border-transparent text-gray-500 hover:text-gray-700",

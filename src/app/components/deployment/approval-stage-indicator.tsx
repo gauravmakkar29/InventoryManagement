@@ -55,7 +55,7 @@ export function ApprovalStageIndicator({
             <div className="relative group">
               <div
                 className={cn(
-                  "flex h-5 w-5 items-center justify-center rounded-full text-[8px] font-bold transition-all duration-200",
+                  "flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold transition-all duration-200",
                   isCompleted && "bg-emerald-500 text-white",
                   isCurrent && "bg-blue-600 text-white animate-pulse",
                   isFuture && "border border-gray-300 bg-white text-gray-400",
@@ -67,7 +67,7 @@ export function ApprovalStageIndicator({
               {/* Tooltip on completed/current stages */}
               {tooltipText && (
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block z-20">
-                  <div className="whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-[10px] text-white shadow-lg">
+                  <div className="whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-[12px] text-white shadow-lg">
                     {tooltipText}
                   </div>
                 </div>
@@ -85,7 +85,7 @@ export function ApprovalStageIndicator({
             <span
               key={stage.label}
               className={cn(
-                "text-[9px] font-medium",
+                "text-[12px] font-medium",
                 i > 0 && "ml-1",
                 isCompleted && "text-emerald-600",
                 isCurrent && "text-blue-600",

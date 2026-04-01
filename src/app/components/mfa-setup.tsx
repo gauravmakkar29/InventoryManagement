@@ -77,8 +77,8 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
     <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
       <div className="text-center">
         <ShieldCheck className="mx-auto h-10 w-10 text-gray-300" />
-        <p className="mt-2 text-[11px] text-gray-500">QR Code</p>
-        <p className="text-[10px] text-gray-300">Scan with authenticator</p>
+        <p className="mt-2 text-[13px] text-gray-500">QR Code</p>
+        <p className="text-[12px] text-gray-300">Scan with authenticator</p>
       </div>
     </div>
   ) : null;
@@ -96,7 +96,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
         <div className="mb-6 text-center">
           <h2 className="text-[20px] font-semibold text-gray-900">Set Up MFA</h2>
-          <p className="mt-1.5 text-[14px] text-gray-500">
+          <p className="mt-1.5 text-[15px] text-gray-500">
             Scan the QR code with your authenticator app
           </p>
         </div>
@@ -107,11 +107,11 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
         {/* Manual key */}
         {secret && (
           <div className="mb-5">
-            <p className="text-[12px] font-medium text-gray-500 mb-1.5">
+            <p className="text-[14px] font-medium text-gray-500 mb-1.5">
               Can't scan? Enter this key manually:
             </p>
             <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2.5">
-              <code className="flex-1 text-[14px] font-mono font-medium text-gray-700 tracking-widest">
+              <code className="flex-1 text-[15px] font-mono font-medium text-gray-700 tracking-widest">
                 {secret}
               </code>
               <button
@@ -131,7 +131,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
         {/* Verification code input */}
         <div className="mb-4">
-          <p className="text-[13px] font-medium text-gray-700 mb-2">
+          <p className="text-[14px] font-medium text-gray-700 mb-2">
             Enter the 6-digit verification code:
           </p>
           <div className="flex justify-center gap-2">
@@ -151,7 +151,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 className={cn(
                   "h-11 w-10 rounded-lg border border-gray-200 bg-white text-center text-[16px] font-semibold text-gray-900",
                   "focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20",
-                  "disabled:opacity-50",
+                  "disabled:opacity-60",
                 )}
                 aria-label={`Digit ${i + 1}`}
               />
@@ -165,7 +165,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
             role="alert"
           >
             <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-            <p className="text-[12px] text-red-700">{error}</p>
+            <p className="text-[14px] text-red-700">{error}</p>
           </div>
         )}
 
@@ -173,9 +173,9 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
           onClick={handleVerify}
           disabled={isVerifying || digits.join("").length !== 6}
           className={cn(
-            "flex h-11 w-full items-center justify-center rounded-lg bg-[#FF7900] text-[14px] font-semibold text-white",
+            "flex h-11 w-full items-center justify-center rounded-lg bg-[#FF7900] text-[15px] font-semibold text-white",
             "hover:bg-[#e66d00] cursor-pointer",
-            "disabled:cursor-not-allowed disabled:opacity-50",
+            "disabled:cursor-not-allowed disabled:opacity-60",
           )}
         >
           {isVerifying ? "Verifying..." : "Enable MFA"}

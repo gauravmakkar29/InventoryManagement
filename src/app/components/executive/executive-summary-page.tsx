@@ -117,7 +117,7 @@ function PieChart({ segments }: { segments: typeof DEVICE_STATUS }) {
           x={size / 2}
           y={size / 2 + 14}
           textAnchor="middle"
-          className="fill-muted-foreground text-[11px]"
+          className="fill-muted-foreground text-[13px]"
         >
           Total Devices
         </text>
@@ -131,11 +131,11 @@ function PieChart({ segments }: { segments: typeof DEVICE_STATUS }) {
               style={{ backgroundColor: seg.color }}
               aria-hidden="true"
             />
-            <span className="text-[13px] text-foreground font-medium w-24">{seg.label}</span>
-            <span className="text-[14px] font-bold tabular-nums text-foreground">
+            <span className="text-[14px] text-foreground font-medium w-24">{seg.label}</span>
+            <span className="text-[15px] font-bold tabular-nums text-foreground">
               {seg.value.toLocaleString()}
             </span>
-            <span className="text-[11px] text-muted-foreground">({seg.pct}%)</span>
+            <span className="text-[13px] text-muted-foreground">({seg.pct}%)</span>
           </div>
         ))}
       </div>
@@ -158,7 +158,7 @@ function BarChart({
       <div className="flex items-end gap-3 h-[120px]">
         {data.map((d) => (
           <div key={d.label} className="flex flex-1 flex-col items-center gap-1">
-            <span className="text-[11px] font-bold tabular-nums text-foreground">{d.value}</span>
+            <span className="text-[13px] font-bold tabular-nums text-foreground">{d.value}</span>
             <div
               className="w-full rounded-t-md"
               style={{
@@ -167,7 +167,7 @@ function BarChart({
                 minHeight: "4px",
               }}
             />
-            <span className="text-[10px] text-muted-foreground">{d.label}</span>
+            <span className="text-[12px] text-muted-foreground">{d.label}</span>
           </div>
         ))}
       </div>
@@ -249,7 +249,7 @@ export function ExecutiveSummaryPage() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[22px] font-bold text-foreground">Executive Summary</h2>
-          <p className="text-[13px] text-muted-foreground">
+          <p className="text-[14px] text-muted-foreground">
             {dateStr} | Last updated {lastRefresh.toLocaleTimeString()}
           </p>
         </div>
@@ -265,7 +265,7 @@ export function ExecutiveSummaryPage() {
                 key={range}
                 onClick={() => setTimeRange(range)}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-[12px] font-medium cursor-pointer",
+                  "rounded-md px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                   timeRange === range
                     ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground",
@@ -279,7 +279,7 @@ export function ExecutiveSummaryPage() {
 
           <button
             onClick={handleExport}
-            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:bg-muted cursor-pointer"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[14px] font-medium text-foreground hover:bg-muted cursor-pointer"
             aria-label="Export as image"
           >
             <Download className="h-3.5 w-3.5" />
@@ -287,7 +287,7 @@ export function ExecutiveSummaryPage() {
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground hover:bg-muted cursor-pointer"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[14px] font-medium text-foreground hover:bg-muted cursor-pointer"
             aria-label="Print summary"
           >
             <Printer className="h-3.5 w-3.5" />
@@ -298,7 +298,7 @@ export function ExecutiveSummaryPage() {
 
       {/* Fleet Overview KPIs (AC1) */}
       <section aria-label="Fleet Overview">
-        <h3 className="text-[15px] font-semibold text-foreground mb-3">Fleet Overview</h3>
+        <h3 className="text-base font-semibold text-foreground mb-3">Fleet Overview</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {FLEET_KPIS.map((kpi) => {
             const Icon = kpi.icon;
@@ -314,8 +314,8 @@ export function ExecutiveSummaryPage() {
                     <Icon className={cn("h-5 w-5", kpi.color)} />
                   </div>
                   <div>
-                    <p className="text-[11px] text-muted-foreground">{kpi.label}</p>
-                    <p className="text-[28px] font-bold leading-tight text-foreground tabular-nums print:text-[36px]">
+                    <p className="text-[13px] text-muted-foreground">{kpi.label}</p>
+                    <p className="text-[28px] font-bold leading-snug text-foreground tabular-nums print:text-[36px]">
                       {kpi.value}
                     </p>
                   </div>
@@ -333,14 +333,14 @@ export function ExecutiveSummaryPage() {
       {/* Charts Row 1: Device Status + Health Trend */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <section className="card-elevated px-5 py-4" aria-label="Device Status Distribution">
-          <h3 className="text-[15px] font-semibold text-foreground mb-4">Device Status</h3>
+          <h3 className="text-base font-semibold text-foreground mb-4">Device Status</h3>
           <PieChart segments={DEVICE_STATUS} />
           {/* Accessible data table alternative (Story 16.6 AC4) */}
           <details className="mt-3 print:hidden">
-            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+            <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>
-            <table className="mt-2 w-full text-[12px]" role="table">
+            <table className="mt-2 w-full text-[14px]" role="table">
               <caption className="sr-only">Device fleet status breakdown</caption>
               <thead>
                 <tr>
@@ -371,11 +371,11 @@ export function ExecutiveSummaryPage() {
         </section>
 
         <section className="card-elevated px-5 py-4" aria-label="Health Trend">
-          <h3 className="text-[15px] font-semibold text-foreground mb-4">
+          <h3 className="text-base font-semibold text-foreground mb-4">
             Health Trend ({timeRange})
           </h3>
           <AreaTrend data={HEALTH_TREND} label={`Fleet health score trend over ${timeRange}`} />
-          <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+          <div className="mt-2 flex items-center justify-between text-[13px] text-muted-foreground">
             <span>Start</span>
             <span>Current: {HEALTH_TREND[HEALTH_TREND.length - 1]}%</span>
           </div>
@@ -385,7 +385,7 @@ export function ExecutiveSummaryPage() {
       {/* Charts Row 2: Compliance + Deployment Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <section className="card-elevated px-5 py-4" aria-label="Compliance Summary">
-          <h3 className="text-[15px] font-semibold text-foreground mb-4">Compliance Summary</h3>
+          <h3 className="text-base font-semibold text-foreground mb-4">Compliance Summary</h3>
           <BarChart
             data={COMPLIANCE_DATA.map((c) => ({ label: c.label, value: c.value }))}
             color="#2563eb"
@@ -393,10 +393,10 @@ export function ExecutiveSummaryPage() {
           />
           {/* Accessible table */}
           <details className="mt-3 print:hidden">
-            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+            <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>
-            <table className="mt-2 w-full text-[12px]" role="table">
+            <table className="mt-2 w-full text-[14px]" role="table">
               <caption className="sr-only">Compliance status summary</caption>
               <thead>
                 <tr>
@@ -421,17 +421,17 @@ export function ExecutiveSummaryPage() {
         </section>
 
         <section className="card-elevated px-5 py-4" aria-label="Deployment Activity">
-          <h3 className="text-[15px] font-semibold text-foreground mb-4">Deployment Activity</h3>
+          <h3 className="text-base font-semibold text-foreground mb-4">Deployment Activity</h3>
           <BarChart
             data={DEPLOYMENT_WEEKLY.map((d) => ({ label: d.week, value: d.count }))}
             color="#FF7900"
             label="Weekly deployment counts"
           />
           <details className="mt-3 print:hidden">
-            <summary className="text-[11px] text-muted-foreground cursor-pointer hover:text-foreground">
+            <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>
-            <table className="mt-2 w-full text-[12px]" role="table">
+            <table className="mt-2 w-full text-[14px]" role="table">
               <caption className="sr-only">Weekly deployment activity</caption>
               <thead>
                 <tr>

@@ -113,7 +113,7 @@ function PriorityBadge({ priority }: { priority: Priority }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold leading-none",
+        "inline-flex items-center rounded px-1.5 py-0.5 text-[12px] font-semibold leading-none",
         PRIORITY_BG[priority],
       )}
     >
@@ -124,7 +124,7 @@ function PriorityBadge({ priority }: { priority: Priority }) {
 
 function ServiceTypeBadge({ type }: { type: ServiceType }) {
   return (
-    <span className="inline-flex items-center rounded border border-border bg-muted/50 px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground leading-none">
+    <span className="inline-flex items-center rounded border border-border bg-muted/50 px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground leading-none">
       {type}
     </span>
   );
@@ -132,7 +132,7 @@ function ServiceTypeBadge({ type }: { type: ServiceType }) {
 
 function TechnicianAvatar({ name }: { name: string }) {
   return (
-    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-700 text-[9px] font-bold text-white">
+    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-700 text-[12px] font-bold text-white">
       {getInitials(name)}
     </span>
   );
@@ -151,20 +151,20 @@ function KanbanCard({
     <div className="rounded border border-border bg-white p-3 space-y-2 hover:border-[#FF7900]/40 transition-colors duration-150">
       {/* Top row: ID + Priority */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] font-mono text-muted-foreground">{order.id}</span>
+        <span className="text-[12px] font-mono text-muted-foreground">{order.id}</span>
         <PriorityBadge priority={order.priority} />
       </div>
 
       {/* Title */}
-      <p className="text-xs font-semibold text-foreground leading-snug">{order.title}</p>
+      <p className="text-sm font-semibold text-foreground leading-snug">{order.title}</p>
 
       {/* Technician + Date */}
       <div className="flex items-center gap-2">
         <TechnicianAvatar name={order.technician} />
-        <span className="text-[11px] text-foreground">{order.technician}</span>
+        <span className="text-[13px] text-foreground">{order.technician}</span>
       </div>
 
-      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+      <div className="flex items-center gap-3 text-[12px] text-muted-foreground">
         <span className="flex items-center gap-1">
           <Clock className="h-3 w-3" />
           {formatDisplayDate(order.scheduledDate)}
@@ -183,7 +183,7 @@ function KanbanCard({
           {order.status === "Scheduled" && (
             <button
               onClick={() => onMove(order.id, "InProgress")}
-              className="flex items-center gap-0.5 rounded bg-blue-600 px-1.5 py-0.5 text-[9px] font-medium text-white hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-0.5 rounded bg-blue-600 px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-blue-700 transition-colors"
               title="Move to In Progress"
             >
               <ArrowRight className="h-2.5 w-2.5" />
@@ -193,7 +193,7 @@ function KanbanCard({
           {order.status === "InProgress" && (
             <button
               onClick={() => onMove(order.id, "Completed")}
-              className="flex items-center gap-0.5 rounded bg-green-600 px-1.5 py-0.5 text-[9px] font-medium text-white hover:bg-green-700 transition-colors"
+              className="flex items-center gap-0.5 rounded bg-green-600 px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-green-700 transition-colors"
               title="Mark as Completed"
             >
               <CheckCircle className="h-2.5 w-2.5" />
@@ -225,8 +225,8 @@ function KanbanColumn({
     <div className="flex flex-col rounded border border-border bg-gray-50 min-h-[300px]">
       {/* Column header */}
       <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
-        <h3 className="text-xs font-bold text-foreground">{STATUS_LABELS[status]}</h3>
-        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-200 px-1.5 text-[10px] font-bold text-slate-700">
+        <h3 className="text-sm font-bold text-foreground">{STATUS_LABELS[status]}</h3>
+        <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-200 px-1.5 text-[12px] font-bold text-slate-700">
           {orders.length}
         </span>
       </div>
@@ -234,7 +234,7 @@ function KanbanColumn({
       {/* Cards */}
       <div className="flex-1 space-y-2 p-2">
         {sorted.length === 0 ? (
-          <div className="flex items-center justify-center py-8 text-xs text-muted-foreground italic">
+          <div className="flex items-center justify-center py-8 text-sm text-muted-foreground italic">
             No orders
           </div>
         ) : (
@@ -327,7 +327,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
           <h3 className="text-sm font-bold text-foreground">{monthLabel}</h3>
           <button
             onClick={goToToday}
-            className="rounded border border-border px-2.5 py-1 text-[11px] font-medium text-foreground hover:bg-gray-100 transition-colors"
+            className="rounded border border-border px-2.5 py-1 text-[13px] font-medium text-foreground hover:bg-gray-100 transition-colors"
           >
             Today
           </button>
@@ -344,7 +344,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
               {DAYS_OF_WEEK.map((d) => (
                 <div
                   key={d}
-                  className="py-2 text-center text-[10px] font-semibold uppercase tracking-wider text-muted-foreground"
+                  className="py-2 text-center text-[12px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   {d}
                 </div>
@@ -384,7 +384,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                   >
                     <span
                       className={cn(
-                        "text-[11px] font-medium",
+                        "text-[13px] font-medium",
                         cell.inMonth ? "text-foreground" : "text-muted-foreground",
                         isTodayCell && "font-bold text-[#FF7900]",
                       )}
@@ -420,7 +420,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
       {selectedDay !== null && ordersForSelectedDay.length > 0 && (
         <div className="rounded border border-border bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h4 className="text-xs font-bold text-foreground">
+            <h4 className="text-sm font-bold text-foreground">
               Orders for{" "}
               {new Intl.DateTimeFormat("en-US", {
                 month: "long",
@@ -444,8 +444,8 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
               >
                 <PriorityBadge priority={o.priority} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-foreground truncate">{o.title}</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-sm font-semibold text-foreground truncate">{o.title}</p>
+                  <p className="text-[12px] text-muted-foreground">
                     {o.technician} &middot; {o.location} &middot; {STATUS_LABELS[o.status]}
                   </p>
                 </div>
@@ -502,8 +502,8 @@ function CreateOrderModal({
   };
 
   const inputClasses =
-    "w-full rounded border border-border bg-white px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
-  const labelClasses = "block text-[11px] font-semibold text-foreground mb-1";
+    "w-full rounded border border-border bg-white px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+  const labelClasses = "block text-[13px] font-semibold text-foreground mb-1";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -604,7 +604,7 @@ function CreateOrderModal({
                     onChange={() => setServiceType(t)}
                     className="accent-[#FF7900]"
                   />
-                  <span className="text-xs text-foreground">{t}</span>
+                  <span className="text-sm text-foreground">{t}</span>
                 </label>
               ))}
             </div>
@@ -662,13 +662,13 @@ function CreateOrderModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-100 transition-colors"
+              className="rounded border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-gray-100 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors"
+              className="rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors"
             >
               Create Order
             </button>
@@ -707,7 +707,7 @@ function FilterBar({
   const hasActiveFilters = statusFilter !== "all" || priorityFilter !== "all" || searchQuery !== "";
 
   const selectClasses =
-    "rounded border border-border bg-white px-2 py-1.5 text-[11px] text-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50";
+    "rounded border border-border bg-white px-2 py-1.5 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -717,9 +717,10 @@ function FilterBar({
         <input
           type="text"
           placeholder="Search orders..."
+          aria-label="Search orders"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="rounded border border-border bg-white py-1.5 pl-7 pr-2.5 text-[11px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 w-48"
+          className="rounded border border-border bg-white py-1.5 pl-7 pr-2.5 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 w-48"
         />
       </div>
 
@@ -751,7 +752,7 @@ function FilterBar({
       {hasActiveFilters && (
         <button
           onClick={onClearAll}
-          className="flex items-center gap-1 rounded border border-border px-2 py-1.5 text-[11px] font-medium text-muted-foreground hover:text-foreground hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-1 rounded border border-border px-2 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-gray-100 transition-colors"
         >
           <X className="h-3 w-3" />
           Clear all
@@ -762,14 +763,14 @@ function FilterBar({
       <div className="flex-1" />
 
       {/* Count */}
-      <span className="text-[10px] text-muted-foreground">
+      <span className="text-[12px] text-muted-foreground">
         {filteredCount} of {totalCount} orders
       </span>
 
       {/* CSV Export */}
       <button
         onClick={onExport}
-        className="flex items-center gap-1 rounded border border-border px-2.5 py-1.5 text-[11px] font-medium text-foreground hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-1 rounded border border-border px-2.5 py-1.5 text-[13px] font-medium text-foreground hover:bg-gray-100 transition-colors"
         title="Export filtered results as CSV"
       >
         <Download className="h-3.5 w-3.5" />
@@ -818,7 +819,7 @@ export function AccountService() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-base font-bold text-foreground">Service Orders</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <p className="text-sm text-muted-foreground mt-0.5">
             Manage field service operations and work orders
           </p>
         </div>
@@ -828,7 +829,7 @@ export function AccountService() {
             <button
               onClick={() => setView("kanban")}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold transition-colors duration-150",
+                "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-semibold transition-colors duration-150",
                 view === "kanban"
                   ? "bg-[#FF7900] text-white"
                   : "bg-white text-muted-foreground hover:text-foreground hover:bg-gray-50",
@@ -840,7 +841,7 @@ export function AccountService() {
             <button
               onClick={() => setView("calendar")}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold transition-colors duration-150",
+                "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-semibold transition-colors duration-150",
                 view === "calendar"
                   ? "bg-[#FF7900] text-white"
                   : "bg-white text-muted-foreground hover:text-foreground hover:bg-gray-50",
@@ -855,7 +856,7 @@ export function AccountService() {
           {canCreate && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
             >
               <Plus className="h-3.5 w-3.5" />
               Create Order

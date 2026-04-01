@@ -90,7 +90,7 @@ export function IncidentResponsePage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-[20px] font-semibold text-gray-900">Incident Response</h1>
-          <p className="mt-0.5 text-[13px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-500">
             Manage security incidents, device isolation, quarantine zones, and response playbooks
           </p>
         </div>
@@ -106,7 +106,7 @@ export function IncidentResponsePage() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-2 rounded-md px-4 py-2 text-[13px] font-medium cursor-pointer",
+                "flex items-center gap-2 rounded-md px-4 py-2 text-[14px] font-medium cursor-pointer",
                 isActive
                   ? "bg-[#FF7900] text-white shadow-sm"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -117,7 +117,7 @@ export function IncidentResponsePage() {
               {tab.id === "isolated" && isolatedCount > 0 && (
                 <span
                   className={cn(
-                    "flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold",
+                    "flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[12px] font-bold",
                     isActive ? "bg-white/20 text-white" : "bg-red-500 text-white",
                   )}
                 >

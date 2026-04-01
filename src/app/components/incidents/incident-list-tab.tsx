@@ -48,13 +48,14 @@ export function IncidentListTab({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search incidents..."
-            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[13px] text-gray-900 placeholder:text-gray-400 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+            aria-label="Search incidents"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
           />
         </div>
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as IncidentStatus | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[12px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
         >
           <option value="All">All Status</option>
           <option value="Open">Open</option>
@@ -66,7 +67,7 @@ export function IncidentListTab({
         <select
           value={severityFilter}
           onChange={(e) => setSeverityFilter(e.target.value as IncidentSeverity | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[12px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
         >
           <option value="All">All Severity</option>
           <option value="Critical">Critical</option>
@@ -77,7 +78,7 @@ export function IncidentListTab({
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as IncidentCategory | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[12px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
         >
           <option value="All">All Categories</option>
           <option value="Security">Security</option>
@@ -88,7 +89,7 @@ export function IncidentListTab({
         </select>
         <button
           onClick={onCreateIncident}
-          className="ml-auto rounded-lg bg-[#FF7900] px-4 py-2 text-[13px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+          className="ml-auto rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
         >
           <Plus className="mr-1.5 inline h-3.5 w-3.5" /> Create Incident
         </button>
@@ -102,43 +103,43 @@ export function IncidentListTab({
             <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Severity
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Title
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Status
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Category
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-center text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Devices
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Assigned To
               </th>
               <th
                 scope="col"
-                className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+                className="px-4 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-gray-600"
               >
                 Created
               </th>
@@ -160,10 +161,10 @@ export function IncidentListTab({
                 </td>
                 <td className="px-4">
                   <div>
-                    <p className="text-[13px] font-medium text-gray-900 truncate max-w-[300px]">
+                    <p className="text-[14px] font-medium text-gray-900 truncate max-w-[300px]">
                       {inc.title}
                     </p>
-                    <p className="text-[11px] text-gray-500">{inc.id}</p>
+                    <p className="text-[13px] text-gray-500">{inc.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
@@ -172,11 +173,11 @@ export function IncidentListTab({
                 <td className="px-4">
                   <CategoryBadge category={inc.category} />
                 </td>
-                <td className="px-4 text-center text-[13px] font-medium text-gray-700">
+                <td className="px-4 text-center text-[14px] font-medium text-gray-700">
                   {inc.affectedDeviceCount}
                 </td>
-                <td className="px-4 text-[13px] text-gray-600">{inc.assignedToName}</td>
-                <td className="px-4 text-right text-[12px] text-gray-500">
+                <td className="px-4 text-[14px] text-gray-600">{inc.assignedToName}</td>
+                <td className="px-4 text-right text-[14px] text-gray-500">
                   {formatRelativeTime(inc.createdAt)}
                 </td>
                 <td className="px-2">
@@ -188,8 +189,8 @@ export function IncidentListTab({
               <tr>
                 <td colSpan={8} className="py-12 text-center">
                   <AlertTriangle className="mx-auto h-8 w-8 text-gray-300 mb-2" />
-                  <p className="text-[14px] font-medium text-gray-600">No incidents found</p>
-                  <p className="text-[12px] text-gray-500">
+                  <p className="text-[15px] font-medium text-gray-600">No incidents found</p>
+                  <p className="text-[14px] text-gray-500">
                     Adjust your filters or create a new incident
                   </p>
                 </td>
