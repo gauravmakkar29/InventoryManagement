@@ -80,19 +80,19 @@ export function SearchResultItem({ result, isSelected, onClick }: SearchResultIt
       <div className="min-w-0 flex-1">
         {highlightedTitle ? (
           <div
-            className="truncate text-[13px] font-medium text-foreground [&_mark]:bg-amber-200 [&_mark]:px-0.5 [&_mark]:rounded-sm dark:[&_mark]:bg-amber-800"
+            className="truncate text-[14px] font-medium text-foreground [&_mark]:bg-amber-200 [&_mark]:px-0.5 [&_mark]:rounded-sm dark:[&_mark]:bg-amber-800"
             dangerouslySetInnerHTML={{ __html: highlightedTitle }}
           />
         ) : (
-          <div className="truncate text-[13px] font-medium text-foreground">{result.title}</div>
+          <div className="truncate text-[14px] font-medium text-foreground">{result.title}</div>
         )}
-        <div className="truncate text-[11px] text-muted-foreground">{result.subtitle}</div>
+        <div className="truncate text-[13px] text-muted-foreground">{result.subtitle}</div>
       </div>
 
       {/* Entity type badge */}
       <span
         className={cn(
-          "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium",
+          "shrink-0 rounded-full px-2 py-0.5 text-[12px] font-medium",
           config.badgeBg,
           config.badgeText,
         )}

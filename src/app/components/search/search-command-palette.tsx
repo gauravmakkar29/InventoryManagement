@@ -158,8 +158,8 @@ export function SearchCommandPalette({ search }: SearchCommandPaletteProps) {
             value={search.query}
             onChange={(e) => search.setQuery(e.target.value)}
             placeholder="Search devices, firmware, service orders, compliance, CVEs..."
-            className="flex-1 bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none"
-            aria-label="Search query"
+            className="flex-1 bg-transparent text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+            aria-label="Global search"
             autoComplete="off"
             spellCheck={false}
           />
@@ -173,7 +173,7 @@ export function SearchCommandPalette({ search }: SearchCommandPaletteProps) {
               <X className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           )}
-          <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
+          <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-muted px-1.5 text-[12px] font-medium text-muted-foreground">
             ESC
           </kbd>
         </div>
@@ -228,28 +228,28 @@ export function SearchCommandPalette({ search }: SearchCommandPaletteProps) {
 
         {/* Footer */}
         <div className="flex items-center justify-between border-t border-border px-4 py-2">
-          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-3 text-[13px] text-muted-foreground">
             <span className="flex items-center gap-1">
-              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[9px] font-medium">
+              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[12px] font-medium">
                 ↑↓
               </kbd>
               Navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[9px] font-medium">
+              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[12px] font-medium">
                 ↵
               </kbd>
               Open
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[9px] font-medium">
+              <kbd className="inline-flex h-4 items-center rounded border border-border px-1 text-[12px] font-medium">
                 esc
               </kbd>
               Close
             </span>
           </div>
           {hasQuery && hasResults && (
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[13px] text-muted-foreground">
               {search.results.length} result{search.results.length !== 1 ? "s" : ""}
             </span>
           )}

@@ -30,11 +30,11 @@ function ServiceCard({ service, showLatency }: { service: ServiceHealth; showLat
     >
       <span className={cn("h-2 w-2 shrink-0 rounded-full", style.dot)} aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-[13px] font-medium text-foreground">{service.service}</p>
+        <p className="truncate text-[14px] font-medium text-foreground">{service.service}</p>
         <div className="flex items-center gap-2">
-          <span className="text-[11px] text-muted-foreground">{style.label}</span>
+          <span className="text-[13px] text-muted-foreground">{style.label}</span>
           {showLatency && service.status !== "Down" && (
-            <span className="text-[11px] text-muted-foreground tabular-nums">
+            <span className="text-[13px] text-muted-foreground tabular-nums">
               {service.latencyMs}ms
             </span>
           )}
@@ -74,10 +74,10 @@ export function ServiceHealthPanel({
         aria-expanded={expanded}
         aria-controls="service-health-details"
       >
-        <h3 className="text-[14px] font-semibold text-foreground">System Status</h3>
+        <h3 className="text-[15px] font-semibold text-foreground">System Status</h3>
         <div className="flex items-center gap-2">
           <span className={cn("h-2.5 w-2.5 rounded-full", overallDot)} aria-hidden="true" />
-          <span className="text-[12px] font-medium text-muted-foreground">{overallLabel}</span>
+          <span className="text-[14px] font-medium text-muted-foreground">{overallLabel}</span>
         </div>
       </button>
 

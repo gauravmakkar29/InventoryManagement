@@ -168,12 +168,12 @@ export function CompliancePage() {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-[15px] font-bold text-gray-900">Compliance & Vulnerability</h1>
+        <h1 className="text-base font-bold text-gray-900">Compliance & Vulnerability</h1>
         <div className="flex items-center gap-2">
           {canSubmitForReview(role) && (
             <button
               onClick={() => setSubmitModalOpen(true)}
-              className="flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:border-[#FF7900]/50 hover:text-gray-900 transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#FF7900]/50 hover:text-gray-900 transition-colors duration-150"
             >
               <Send className="h-3.5 w-3.5" />
               Submit for Review
@@ -181,7 +181,7 @@ export function CompliancePage() {
           )}
           <button
             onClick={() => setReportModalOpen(true)}
-            className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
+            className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
           >
             <FileText className="h-3.5 w-3.5" />
             Generate Report
@@ -196,7 +196,7 @@ export function CompliancePage() {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={cn(
-              "flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-medium cursor-pointer transition-colors",
+              "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
                 ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                 : "text-gray-500 hover:text-gray-700",
@@ -384,7 +384,7 @@ function ComplianceTab({
             key={s}
             onClick={() => setStatusFilter(s)}
             className={cn(
-              "rounded-full px-3 py-1 text-[11px] font-medium transition-colors duration-150",
+              "rounded-full px-3 py-1 text-[13px] font-medium transition-colors duration-150",
               statusFilter === s
                 ? "bg-[#FF7900] text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200",
@@ -402,9 +402,10 @@ function ComplianceTab({
           <input
             type="text"
             placeholder="Search compliance items..."
+            aria-label="Search compliance items"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-xs text-gray-900 placeholder:text-gray-400 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
+            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
           />
         </div>
         <div className="relative">
@@ -412,7 +413,7 @@ function ComplianceTab({
           <select
             value={certFilter}
             onChange={(e) => setCertFilter(e.target.value as CertificationType | "All")}
-            className="appearance-none rounded border border-gray-300 bg-white py-1.5 pl-8 pr-8 text-xs text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
+            className="appearance-none rounded border border-gray-300 bg-white py-1.5 pl-8 pr-8 text-sm text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
           >
             <option value="All">All Certifications</option>
             {CERT_TYPES.map((c) => (
@@ -434,49 +435,49 @@ function ComplianceTab({
               <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Certification
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Last Audit
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Next Audit
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-right text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Findings
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Assigned To
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-right text-[11px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-right text-[13px] font-bold text-gray-600 uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -489,7 +490,7 @@ function ComplianceTab({
                     <div className="flex flex-col items-center gap-2">
                       <Shield className="h-8 w-8 text-gray-300" />
                       <p className="text-sm text-gray-500">No compliance items found</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm text-gray-500">
                         Try adjusting your filters or search criteria
                       </p>
                     </div>
@@ -564,20 +565,20 @@ function ComplianceRow({
               )}
             />
             <div>
-              <div className="text-xs font-medium text-gray-900">{item.name}</div>
-              <div className="text-[10px] text-gray-500 font-mono">{item.id}</div>
+              <div className="text-sm font-medium text-gray-900">{item.name}</div>
+              <div className="text-[12px] text-gray-500 font-mono">{item.id}</div>
             </div>
           </div>
         </td>
         <td className="px-3 py-2.5">
-          <span className="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
+          <span className="rounded bg-gray-100 px-2 py-0.5 text-[12px] font-medium text-gray-600">
             {item.certType}
           </span>
         </td>
         <td className="px-3 py-2.5">
           <span
             className={cn(
-              "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold",
+              "inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-semibold",
               statusCfg.bg,
               statusCfg.text,
             )}
@@ -586,25 +587,25 @@ function ComplianceRow({
             {item.status}
           </span>
         </td>
-        <td className="px-3 py-2.5 text-xs text-gray-600">{item.lastAudit}</td>
-        <td className="px-3 py-2.5 text-xs text-gray-600">{item.nextAudit}</td>
+        <td className="px-3 py-2.5 text-sm text-gray-600">{item.lastAudit}</td>
+        <td className="px-3 py-2.5 text-sm text-gray-600">{item.nextAudit}</td>
         <td className="px-3 py-2.5 text-right">
           <span
             className={cn(
-              "text-xs tabular-nums font-medium",
+              "text-sm tabular-nums font-medium",
               item.findings > 0 ? "text-red-600" : "text-gray-500",
             )}
           >
             {item.findings}
           </span>
         </td>
-        <td className="px-3 py-2.5 text-xs text-gray-600">{item.assignedTo}</td>
+        <td className="px-3 py-2.5 text-sm text-gray-600">{item.assignedTo}</td>
         <td className="px-3 py-2.5 text-right" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center justify-end gap-1">
             {canSubmitForReview(role) && item.status === "Pending" && (
               <button
                 onClick={() => onSubmitForReview(item.id)}
-                className="rounded px-2 py-1 text-[10px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
               >
                 Submit
               </button>
@@ -612,7 +613,7 @@ function ComplianceRow({
             {canApprove(role) && item.status === "In Review" && (
               <button
                 onClick={() => onApprove(item.id)}
-                className="rounded px-2 py-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
               >
                 Approve
               </button>
@@ -620,7 +621,7 @@ function ComplianceRow({
             {canDeprecate(role) && (item.status === "Approved" || item.status === "Pending") && (
               <button
                 onClick={() => onDeprecate(item.id)}
-                className="rounded px-2 py-1 text-[10px] font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors"
               >
                 Deprecate
               </button>
@@ -635,12 +636,12 @@ function ComplianceRow({
           <td colSpan={8} className="p-0">
             <div className="border-t border-gray-200 bg-gray-50/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[11px] font-semibold text-gray-600 uppercase tracking-wider">
+                <h3 className="text-[13px] font-semibold text-gray-600 uppercase tracking-wider">
                   Vulnerabilities ({item.vulnerabilities.length})
                 </h3>
               </div>
               {item.vulnerabilities.length === 0 ? (
-                <p className="text-xs text-gray-500 py-3">No vulnerabilities recorded</p>
+                <p className="text-sm text-gray-500 py-3">No vulnerabilities recorded</p>
               ) : (
                 <div className="space-y-2">
                   {item.vulnerabilities.map((vuln) => {
@@ -656,23 +657,23 @@ function ComplianceRow({
                         )}
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <span className="font-mono text-[11px] text-gray-900 font-medium whitespace-nowrap">
+                          <span className="font-mono text-[13px] text-gray-900 font-medium whitespace-nowrap">
                             {vuln.cveId}
                           </span>
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                              "rounded-full px-2 py-0.5 text-[12px] font-semibold",
                               sevCfg.bg,
                               sevCfg.text,
                             )}
                           >
                             {vuln.severity}
                           </span>
-                          <span className="text-xs text-gray-600 truncate">{vuln.title}</span>
+                          <span className="text-sm text-gray-600 truncate">{vuln.title}</span>
                         </div>
                         <div className="flex items-center gap-3 ml-3">
                           {vuln.resolvedDate && (
-                            <span className="text-[10px] text-gray-500">
+                            <span className="text-[12px] text-gray-500">
                               Resolved: {vuln.resolvedDate}
                             </span>
                           )}
@@ -684,7 +685,7 @@ function ComplianceRow({
                               }
                               onClick={(e) => e.stopPropagation()}
                               className={cn(
-                                "rounded px-2 py-0.5 text-[10px] font-medium border-0 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/30 cursor-pointer",
+                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/30 cursor-pointer",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -695,7 +696,7 @@ function ComplianceRow({
                           ) : (
                             <span
                               className={cn(
-                                "rounded px-2 py-0.5 text-[10px] font-medium",
+                                "rounded px-2 py-0.5 text-[12px] font-medium",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -730,13 +731,13 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-xs text-gray-500">
+        <p className="text-sm text-gray-500">
           {vulnerabilities.length} vulnerabilities sorted by CVSS score (highest first)
         </p>
         {canCreateVulnerability(role) && (
           <button
             onClick={onCreateVuln}
-            className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
+            className="flex items-center gap-1.5 rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors duration-150"
           >
             <Plus className="h-3.5 w-3.5" />
             Report Vulnerability
@@ -761,12 +762,12 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
             >
               {/* Header */}
               <div className="flex items-start justify-between">
-                <span className="font-mono text-[12px] font-semibold text-gray-900">
+                <span className="font-mono text-[14px] font-semibold text-gray-900">
                   {vuln.cveId}
                 </span>
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-[10px] font-bold",
+                    "rounded-full px-2 py-0.5 text-[12px] font-bold",
                     sevCfg.bg,
                     sevCfg.text,
                   )}
@@ -776,10 +777,10 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
               </div>
 
               {/* Title */}
-              <p className="text-xs text-gray-700 leading-relaxed line-clamp-2">{vuln.title}</p>
+              <p className="text-sm text-gray-700 leading-relaxed line-clamp-2">{vuln.title}</p>
 
               {/* Stats */}
-              <div className="flex items-center gap-3 text-[10px]">
+              <div className="flex items-center gap-3 text-[12px]">
                 <div className="flex items-center gap-1">
                   <span className="font-semibold text-gray-900">CVSS</span>
                   <span
@@ -817,14 +818,14 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
               <div className="flex items-center justify-between pt-1 border-t border-gray-100">
                 <span
                   className={cn(
-                    "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                    "rounded-full px-2 py-0.5 text-[12px] font-medium",
                     REMEDIATION_STYLES[vuln.remediationStatus],
                   )}
                 >
                   {vuln.remediationStatus}
                 </span>
                 {vuln.resolvedDate && (
-                  <span className="text-[10px] text-gray-500">{vuln.resolvedDate}</span>
+                  <span className="text-[12px] text-gray-500">{vuln.resolvedDate}</span>
                 )}
               </div>
             </div>
@@ -917,7 +918,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
 
       {/* Report types */}
       <div className="space-y-2">
-        <h3 className="text-[12px] font-semibold text-gray-700">Available Report Types</h3>
+        <h3 className="text-[14px] font-semibold text-gray-700">Available Report Types</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {REPORT_TYPES.map((type) => {
             const itemCount = allItems.filter(
@@ -930,9 +931,9 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
               >
                 <div className="flex items-center gap-2">
                   <FileText className="h-4 w-4 text-[#FF7900]" />
-                  <span className="text-[13px] font-semibold text-gray-900">{type}</span>
+                  <span className="text-[14px] font-semibold text-gray-900">{type}</span>
                 </div>
-                <p className="text-[11px] text-gray-500">{itemCount} compliance items applicable</p>
+                <p className="text-[13px] text-gray-500">{itemCount} compliance items applicable</p>
                 <button
                   onClick={() => {
                     const reportItems = allItems.filter((i) => i.certType === type);
@@ -949,7 +950,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
                     );
                     toast.success("Report downloaded");
                   }}
-                  className="flex items-center gap-1.5 rounded bg-gray-100 px-2.5 py-1 text-[11px] font-medium text-gray-700 hover:bg-gray-200 transition-colors w-full justify-center"
+                  className="flex items-center gap-1.5 rounded bg-gray-100 px-2.5 py-1 text-[13px] font-medium text-gray-700 hover:bg-gray-200 transition-colors w-full justify-center"
                 >
                   <Download className="h-3 w-3" />
                   Export JSON
@@ -978,7 +979,7 @@ function StatCard({
     <div className="card-elevated rounded-lg border border-gray-200 p-3 space-y-1">
       <div className="flex items-center gap-1.5">
         <Icon className="h-3.5 w-3.5 text-gray-500" />
-        <span className="text-[10px] font-medium text-gray-500 uppercase tracking-wider">
+        <span className="text-[12px] font-medium text-gray-500 uppercase tracking-wider">
           {label}
         </span>
       </div>
@@ -1024,13 +1025,13 @@ function SubmitForReviewModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
 
   return (
     <ModalOverlay onClose={onClose}>
       <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-200">
         <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
-          <h2 className="text-[14px] font-semibold text-gray-900">
+          <h2 className="text-[15px] font-semibold text-gray-900">
             Submit Compliance Item for Review
           </h2>
           <button
@@ -1043,7 +1044,7 @@ function SubmitForReviewModal({
 
         <div className="space-y-4 p-5">
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Firmware Version <span className="text-red-500">*</span>
             </label>
             <select
@@ -1061,14 +1062,14 @@ function SubmitForReviewModal({
               <option value="v2.8.5">v2.8.5</option>
             </select>
             {errors.firmware && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.firmware}
               </p>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Device Model <span className="text-red-500">*</span>
             </label>
             <select
@@ -1086,14 +1087,14 @@ function SubmitForReviewModal({
               <option value="STR-2500">STR-2500</option>
             </select>
             {errors.model && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.model}
               </p>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Certification <span className="text-red-500">*</span>
             </label>
             <select
@@ -1112,7 +1113,7 @@ function SubmitForReviewModal({
               ))}
             </select>
             {errors.certification && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.certification}
               </p>
             )}
@@ -1122,13 +1123,13 @@ function SubmitForReviewModal({
         <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors"
+            className="rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors"
           >
             Submit for Review
           </button>
@@ -1202,13 +1203,13 @@ function CreateVulnerabilityModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
 
   return (
     <ModalOverlay onClose={onClose}>
       <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-200">
         <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
-          <h2 className="text-[14px] font-semibold text-gray-900">Report Vulnerability</h2>
+          <h2 className="text-[15px] font-semibold text-gray-900">Report Vulnerability</h2>
           <button
             onClick={onClose}
             className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
@@ -1219,7 +1220,7 @@ function CreateVulnerabilityModal({
 
         <div className="space-y-3 p-5">
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               CVE ID <span className="text-red-500">*</span>
             </label>
             <input
@@ -1233,14 +1234,14 @@ function CreateVulnerabilityModal({
               className={inputClass}
             />
             {errors.cveId && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.cveId}
               </p>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -1254,14 +1255,14 @@ function CreateVulnerabilityModal({
               className={inputClass}
             />
             {errors.title && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.title}
               </p>
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Description
             </label>
             <textarea
@@ -1275,7 +1276,7 @@ function CreateVulnerabilityModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+              <label className="mb-1 block text-[13px] font-semibold text-gray-700">
                 Severity <span className="text-red-500">*</span>
               </label>
               <select
@@ -1294,14 +1295,14 @@ function CreateVulnerabilityModal({
                 <option value="Info">Info</option>
               </select>
               {errors.severity && (
-                <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                   {errors.severity}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+              <label className="mb-1 block text-[13px] font-semibold text-gray-700">
                 CVSS Score <span className="text-red-500">*</span>
               </label>
               <input
@@ -1318,7 +1319,7 @@ function CreateVulnerabilityModal({
                 className={inputClass}
               />
               {errors.cvssScore && (
-                <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+                <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                   {errors.cvssScore}
                 </p>
               )}
@@ -1326,7 +1327,7 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
               Affected Devices <span className="text-red-500">*</span>
             </label>
             <input
@@ -1341,7 +1342,7 @@ function CreateVulnerabilityModal({
               className={inputClass}
             />
             {errors.affectedDevices && (
-              <p className="mt-0.5 text-[10px] text-red-600" role="alert">
+              <p className="mt-0.5 text-[12px] text-red-600" role="alert">
                 {errors.affectedDevices}
               </p>
             )}
@@ -1355,7 +1356,7 @@ function CreateVulnerabilityModal({
               onChange={(e) => setPatchAvailable(e.target.checked)}
               className="accent-[#FF7900] h-3.5 w-3.5"
             />
-            <label htmlFor="patch-available" className="text-[11px] font-medium text-gray-700">
+            <label htmlFor="patch-available" className="text-[13px] font-medium text-gray-700">
               Patch available
             </label>
           </div>
@@ -1364,13 +1365,13 @@ function CreateVulnerabilityModal({
         <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="rounded bg-[#FF7900] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e06d00] transition-colors"
+            className="rounded bg-[#FF7900] px-3 py-1.5 text-sm font-semibold text-white hover:bg-[#e06d00] transition-colors"
           >
             Create Vulnerability
           </button>
@@ -1407,7 +1408,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
     <ModalOverlay onClose={onClose}>
       <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-200">
         <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
-          <h2 className="text-[14px] font-semibold text-gray-900">Generate Regulatory Report</h2>
+          <h2 className="text-[15px] font-semibold text-gray-900">Generate Regulatory Report</h2>
           <button
             onClick={onClose}
             className="rounded p-1 text-gray-500 hover:text-gray-600 hover:bg-gray-100"
@@ -1418,17 +1419,17 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
 
         <div className="space-y-4 p-5">
           {items.length === 0 ? (
-            <p className="text-xs text-gray-500">No data available for report generation</p>
+            <p className="text-sm text-gray-500">No data available for report generation</p>
           ) : (
             <>
-              <p className="text-xs text-gray-600">
+              <p className="text-sm text-gray-600">
                 This report will include <span className="font-semibold">{items.length}</span>{" "}
                 compliance items and <span className="font-semibold">{totalVulns}</span>{" "}
                 vulnerabilities.
               </p>
 
               <div className="space-y-2">
-                <label className="block text-[11px] font-semibold text-gray-700">
+                <label className="block text-[13px] font-semibold text-gray-700">
                   Export Format
                 </label>
                 <div className="flex gap-3">
@@ -1442,7 +1443,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
                         onChange={() => setFormat(f)}
                         className="accent-[#FF7900]"
                       />
-                      <span className="text-xs font-medium text-gray-700 uppercase">{f}</span>
+                      <span className="text-sm font-medium text-gray-700 uppercase">{f}</span>
                     </label>
                   ))}
                 </div>
@@ -1454,7 +1455,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
         <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
@@ -1462,7 +1463,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
             onClick={handleDownload}
             disabled={items.length === 0}
             className={cn(
-              "flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold text-white transition-colors",
+              "flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-semibold text-white transition-colors",
               items.length === 0
                 ? "bg-gray-300 cursor-not-allowed"
                 : "bg-[#FF7900] hover:bg-[#e06d00]",
@@ -1500,20 +1501,20 @@ function ConfirmDialog({
     <ModalOverlay onClose={onCancel}>
       <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-200">
         <div className="p-5 space-y-3">
-          <h2 className="text-[14px] font-semibold text-gray-900">{title}</h2>
-          <p className="text-xs text-gray-600">{message}</p>
+          <h2 className="text-[15px] font-semibold text-gray-900">{title}</h2>
+          <p className="text-sm text-gray-600">{message}</p>
         </div>
         <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
           <button
             onClick={onCancel}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             className={cn(
-              "rounded px-3 py-1.5 text-xs font-semibold text-white transition-colors",
+              "rounded px-3 py-1.5 text-sm font-semibold text-white transition-colors",
               confirmClass,
             )}
           >

@@ -43,8 +43,8 @@ export function GlobalSearchBar() {
         title="Search (Ctrl+K)"
       >
         <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-        <span className="flex-1 text-left text-[13px] text-muted-foreground">Search...</span>
-        <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-card px-1.5 text-[10px] font-medium text-muted-foreground">
+        <span className="flex-1 text-left text-[14px] text-muted-foreground">Search...</span>
+        <kbd className="hidden sm:inline-flex h-5 items-center rounded border border-border bg-card px-1.5 text-[12px] font-medium text-muted-foreground">
           Ctrl+K
         </kbd>
       </button>

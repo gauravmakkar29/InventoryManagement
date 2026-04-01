@@ -44,7 +44,7 @@ export function IncidentDetailPanel({
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-[12px] font-mono text-gray-500">{incident.id}</span>
+              <span className="text-[14px] font-mono text-gray-500">{incident.id}</span>
               <SeverityBadge severity={incident.severity} />
               <StatusBadge status={incident.status} />
             </div>
@@ -65,7 +65,7 @@ export function IncidentDetailPanel({
             <div className="relative">
               <button
                 onClick={() => setShowStatusMenu(!showStatusMenu)}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-[12px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
               >
                 Change Status
               </button>
@@ -74,7 +74,7 @@ export function IncidentDetailPanel({
                   {validNext.map((s) => (
                     <button
                       key={s}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[12px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
                       onClick={() => {
                         if (s === "Resolved" && !statusNote.trim()) {
                           setShowStatusMenu(false);
@@ -98,13 +98,13 @@ export function IncidentDetailPanel({
                       placeholder="Optional note..."
                       value={statusNote}
                       onChange={(e) => setStatusNote(e.target.value)}
-                      className="w-full rounded border border-gray-200 px-2 py-1 text-[11px] focus:outline-none focus:border-[#FF7900]"
+                      className="w-full rounded border border-gray-200 px-2 py-1 text-[13px] focus:outline-none focus:border-[#FF7900]"
                     />
                   </div>
                 </div>
               )}
             </div>
-            <span className="text-[11px] text-gray-500">Assigned to {incident.assignedToName}</span>
+            <span className="text-[13px] text-gray-500">Assigned to {incident.assignedToName}</span>
           </div>
         )}
       </div>
@@ -116,7 +116,7 @@ export function IncidentDetailPanel({
             key={section}
             onClick={() => setActiveSection(section)}
             className={cn(
-              "px-3 py-2.5 text-[12px] font-medium border-b-2 cursor-pointer capitalize",
+              "px-3 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer capitalize",
               activeSection === section
                 ? "border-[#FF7900] text-[#FF7900]"
                 : "border-transparent text-gray-500 hover:text-gray-700",
@@ -132,33 +132,33 @@ export function IncidentDetailPanel({
         {activeSection === "details" && (
           <div className="space-y-4">
             <div>
-              <h4 className="text-[12px] font-semibold text-gray-500 uppercase mb-1">
+              <h4 className="text-[14px] font-semibold text-gray-500 uppercase mb-1">
                 Description
               </h4>
-              <p className="text-[13px] text-gray-700 leading-relaxed">{incident.description}</p>
+              <p className="text-[14px] text-gray-700 leading-relaxed">{incident.description}</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[11px] font-semibold text-gray-500">Category</p>
+                <p className="text-[13px] font-semibold text-gray-500">Category</p>
                 <div className="mt-1">
                   <CategoryBadge category={incident.category} />
                 </div>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[11px] font-semibold text-gray-500">Affected Devices</p>
+                <p className="text-[13px] font-semibold text-gray-500">Affected Devices</p>
                 <p className="mt-1 text-[16px] font-bold text-gray-900">
                   {incident.affectedDeviceCount}
                 </p>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[11px] font-semibold text-gray-500">Reported By</p>
-                <p className="mt-1 text-[13px] font-medium text-gray-900">
+                <p className="text-[13px] font-semibold text-gray-500">Reported By</p>
+                <p className="mt-1 text-[14px] font-medium text-gray-900">
                   {incident.reportedByName}
                 </p>
               </div>
               <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[11px] font-semibold text-gray-500">Created</p>
-                <p className="mt-1 text-[13px] font-medium text-gray-900">
+                <p className="text-[13px] font-semibold text-gray-500">Created</p>
+                <p className="mt-1 text-[14px] font-medium text-gray-900">
                   {formatDateTime(incident.createdAt)}
                 </p>
               </div>
@@ -173,14 +173,14 @@ export function IncidentDetailPanel({
                 {device.status === "Isolated" && (
                   <div className="mb-2 flex items-center gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-1.5">
                     <Lock className="h-3.5 w-3.5 text-red-500" />
-                    <span className="text-[11px] font-semibold text-red-700">ISOLATED</span>
+                    <span className="text-[13px] font-semibold text-red-700">ISOLATED</span>
                     {device.isolatedAt && (
-                      <span className="text-[10px] text-red-500">
+                      <span className="text-[12px] text-red-500">
                         &middot; {formatRelativeTime(device.isolatedAt)}
                       </span>
                     )}
                     {device.isolationPolicy && (
-                      <span className="text-[10px] text-red-500">
+                      <span className="text-[12px] text-red-500">
                         &middot; {device.isolationPolicy}
                       </span>
                     )}
@@ -188,8 +188,8 @@ export function IncidentDetailPanel({
                 )}
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[13px] font-medium text-gray-900">{device.name}</p>
-                    <p className="text-[11px] text-gray-500">
+                    <p className="text-[14px] font-medium text-gray-900">{device.name}</p>
+                    <p className="text-[13px] text-gray-500">
                       {device.location} &middot; {device.firmwareVersion} &middot; Risk:{" "}
                       {device.riskScore}
                     </p>
@@ -198,14 +198,14 @@ export function IncidentDetailPanel({
                     {device.status !== "Isolated" ? (
                       <button
                         onClick={() => onIsolate(device)}
-                        className="rounded-lg bg-red-50 px-3 py-1.5 text-[11px] font-medium text-red-700 hover:bg-red-100 cursor-pointer"
+                        className="rounded-lg bg-red-50 px-3 py-1.5 text-[13px] font-medium text-red-700 hover:bg-red-100 cursor-pointer"
                       >
                         <Lock className="mr-1 inline h-3 w-3" /> Isolate
                       </button>
                     ) : (
                       <button
                         onClick={() => onRelease(device)}
-                        className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[11px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
+                        className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[13px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
                       >
                         <Unlock className="mr-1 inline h-3 w-3" /> Release
                       </button>
@@ -236,8 +236,8 @@ export function IncidentDetailPanel({
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <BookOpen className="h-10 w-10 text-gray-300 mb-3" />
-                <p className="text-[14px] font-medium text-gray-700">No playbook attached</p>
-                <p className="text-[12px] text-gray-500 mt-1">
+                <p className="text-[15px] font-medium text-gray-700">No playbook attached</p>
+                <p className="text-[14px] text-gray-500 mt-1">
                   Attach a playbook to track response steps
                 </p>
               </div>

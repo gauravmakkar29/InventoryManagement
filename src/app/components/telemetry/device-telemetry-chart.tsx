@@ -217,7 +217,7 @@ function TimeSeriesChart({
 
   if (data.length === 0 || visibleMetrics.length === 0) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-[13px] text-gray-500">
+      <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-500">
         Select a metric to display the chart
       </div>
     );
@@ -355,8 +355,8 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
     return (
       <div className="card-elevated p-8 text-center">
         <Activity className="mx-auto h-10 w-10 text-gray-300 mb-3" />
-        <p className="text-[14px] font-medium text-gray-600">No telemetry data available</p>
-        <p className="mt-1 text-[12px] text-gray-500">
+        <p className="text-[15px] font-medium text-gray-600">No telemetry data available</p>
+        <p className="mt-1 text-[14px] text-gray-500">
           Telemetry data will appear here once the device begins reporting
         </p>
       </div>
@@ -369,7 +369,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-[16px] font-semibold text-gray-900">Device Telemetry</h3>
-          <p className="text-[12px] text-gray-500">
+          <p className="text-[14px] text-gray-500">
             {deviceName ?? deviceId} - Real-time health metrics
           </p>
         </div>
@@ -427,20 +427,20 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
               <div className="flex items-center gap-2 mb-2">
                 <div
                   className={cn(
-                    "flex h-7 w-7 items-center justify-center rounded-lg",
+                    "flex h-9 w-9 items-center justify-center rounded-lg",
                     metric.iconBg,
                   )}
                 >
                   <Icon className={cn("h-3.5 w-3.5", metric.iconColor)} />
                 </div>
-                <span className="text-[11px] text-gray-500 truncate">{metric.label}</span>
+                <span className="text-[13px] text-gray-500 truncate">{metric.label}</span>
               </div>
 
               <div className="flex items-end justify-between">
                 <div>
                   <span
                     className={cn(
-                      "text-[18px] font-bold tabular-nums leading-tight",
+                      "text-[18px] font-bold tabular-nums leading-snug",
                       status === "critical"
                         ? "text-red-600"
                         : status === "warning"
@@ -450,7 +450,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                   >
                     {currentVal.toFixed(1)}
                   </span>
-                  <span className="ml-0.5 text-[11px] text-gray-500">{metric.unit}</span>
+                  <span className="ml-0.5 text-[13px] text-gray-500">{metric.unit}</span>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <MetricSparkline data={recentValues} color={metric.color} />
@@ -477,7 +477,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
             {METRICS.filter((m) => activeMetrics.has(m.key)).map((m) => (
               <span
                 key={m.key}
-                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[12px] font-medium"
                 style={{ backgroundColor: `${m.color}15`, color: m.color }}
               >
                 <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: m.color }} />
@@ -491,7 +491,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                 key={tr.id}
                 onClick={() => setTimeRange(tr.id)}
                 className={cn(
-                  "rounded-md px-3 py-1 text-[11px] font-medium cursor-pointer",
+                  "rounded-md px-3 py-1 text-[13px] font-medium cursor-pointer",
                   timeRange === tr.id
                     ? "bg-white text-gray-900 shadow-sm"
                     : "text-gray-500 hover:text-gray-700",

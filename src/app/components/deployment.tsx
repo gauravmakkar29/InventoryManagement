@@ -230,7 +230,7 @@ export function Deployment() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-1.5 px-3 py-2 text-xs font-medium transition-colors duration-150",
+                "flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors duration-150",
                 activeTab === tab.id
                   ? "border-b-2 border-[#FF7900] text-[#FF7900]"
                   : "text-muted-foreground hover:text-foreground",
@@ -244,7 +244,7 @@ export function Deployment() {
         {activeTab === "firmware" && canManage && (
           <button
             onClick={() => setUploadModalOpen(true)}
-            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
           >
             <Upload className="h-3 w-3" />
             Upload Firmware
@@ -253,7 +253,7 @@ export function Deployment() {
         {activeTab === "vulnerabilities" && canManageVulns && (
           <button
             onClick={() => setVulnModalOpen(true)}
-            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+            className="flex items-center gap-1 rounded-sm bg-[#FF7900] px-2.5 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
           >
             <Plus className="h-3 w-3" />
             Add Vulnerability
@@ -278,7 +278,7 @@ export function Deployment() {
                       setFwStatusFilter(s);
                     }}
                     className={cn(
-                      "rounded-full px-2.5 py-1 text-[10px] font-medium transition-colors duration-150",
+                      "rounded-full px-2.5 py-1 text-[12px] font-medium transition-colors duration-150",
                       fwStatusFilter === s
                         ? "bg-[#FF7900] text-white"
                         : "bg-muted text-muted-foreground hover:bg-muted/80",
@@ -296,7 +296,7 @@ export function Deployment() {
               <select
                 value={fwModelFilter}
                 onChange={(e) => setFwModelFilter(e.target.value)}
-                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[10px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[12px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
               >
                 <option value="All">All Models</option>
                 {AVAILABLE_MODELS.map((m) => (
@@ -317,7 +317,7 @@ export function Deployment() {
                   ? "No firmware packages found"
                   : "No firmware found matching the selected filters"}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground/70">
+              <p className="mt-1 text-sm text-muted-foreground/70">
                 {firmware.length === 0
                   ? "Upload your first firmware package to get started."
                   : "Try adjusting your filters."}
@@ -325,7 +325,7 @@ export function Deployment() {
               {firmware.length === 0 && canManage && (
                 <button
                   onClick={() => setUploadModalOpen(true)}
-                  className="mt-4 flex items-center gap-1 rounded-sm bg-[#FF7900] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90"
+                  className="mt-4 flex items-center gap-1 rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90"
                 >
                   <Upload className="h-3 w-3" />
                   Upload Firmware
@@ -382,7 +382,7 @@ export function Deployment() {
                       </span>
                       <span
                         className={cn(
-                          "rounded-sm px-1.5 py-0.5 text-[10px] font-medium",
+                          "rounded-sm px-1.5 py-0.5 text-[12px] font-medium",
                           statusBadge,
                         )}
                       >
@@ -391,7 +391,7 @@ export function Deployment() {
                     </div>
 
                     {/* Name */}
-                    <p className="text-xs text-muted-foreground">{fw.name}</p>
+                    <p className="text-sm text-muted-foreground">{fw.name}</p>
 
                     {/* Approval Stage Indicator — Story 11.3 */}
                     <ApprovalStageIndicator
@@ -405,7 +405,7 @@ export function Deployment() {
                     />
 
                     {/* Metadata — Story 11.7 */}
-                    <div className="space-y-1 text-[10px] text-muted-foreground">
+                    <div className="space-y-1 text-[12px] text-muted-foreground">
                       <div className="flex items-center justify-between">
                         <span>
                           Model: <span className="text-foreground">{fw.models.join(", ")}</span>
@@ -439,7 +439,7 @@ export function Deployment() {
                         {canAdvanceToTesting && (
                           <button
                             onClick={() => advanceStage(fw.id)}
-                            className="flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[10px] font-medium text-white hover:bg-blue-700 transition-colors duration-150"
+                            className="flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[12px] font-medium text-white hover:bg-blue-700 transition-colors duration-150"
                           >
                             <Shield className="h-2.5 w-2.5" />
                             Advance to Testing
@@ -448,20 +448,20 @@ export function Deployment() {
                         {canApprove && (
                           <button
                             onClick={() => advanceStage(fw.id)}
-                            className="flex items-center gap-1 rounded-sm bg-emerald-600 px-2 py-1 text-[10px] font-medium text-white hover:bg-emerald-700 transition-colors duration-150"
+                            className="flex items-center gap-1 rounded-sm bg-emerald-600 px-2 py-1 text-[12px] font-medium text-white hover:bg-emerald-700 transition-colors duration-150"
                           >
                             <ShieldCheck className="h-2.5 w-2.5" />
                             Approve
                           </button>
                         )}
                         {showSoDWarningUploaded && (
-                          <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[10px] font-medium text-amber-600">
+                          <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[12px] font-medium text-amber-600">
                             <AlertTriangle className="h-2.5 w-2.5" />
                             Requires different tester
                           </span>
                         )}
                         {showSoDWarningTesting && (
-                          <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[10px] font-medium text-amber-600">
+                          <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[12px] font-medium text-amber-600">
                             <AlertTriangle className="h-2.5 w-2.5" />
                             Requires different approver
                           </span>
@@ -469,7 +469,7 @@ export function Deployment() {
                         {canDeprecate && (
                           <button
                             onClick={() => deprecateFirmware(fw.id)}
-                            className="flex items-center gap-1 rounded-sm border border-red-200 px-2 py-1 text-[10px] font-medium text-red-600 hover:bg-red-50 transition-colors duration-150"
+                            className="flex items-center gap-1 rounded-sm border border-red-200 px-2 py-1 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors duration-150"
                           >
                             <Ban className="h-2.5 w-2.5" />
                             Deprecate
@@ -478,7 +478,7 @@ export function Deployment() {
                         {canActivate && (
                           <button
                             onClick={() => activateFirmware(fw.id)}
-                            className="flex items-center gap-1 rounded-sm border border-emerald-200 px-2 py-1 text-[10px] font-medium text-emerald-600 hover:bg-emerald-50 transition-colors duration-150"
+                            className="flex items-center gap-1 rounded-sm border border-emerald-200 px-2 py-1 text-[12px] font-medium text-emerald-600 hover:bg-emerald-50 transition-colors duration-150"
                           >
                             <RotateCcw className="h-2.5 w-2.5" />
                             Activate
@@ -525,7 +525,7 @@ export function Deployment() {
                     setVulnPage(1);
                   }}
                   className={cn(
-                    "rounded-full px-2.5 py-1 text-[10px] font-medium transition-colors duration-150",
+                    "rounded-full px-2.5 py-1 text-[12px] font-medium transition-colors duration-150",
                     vulnSeverityFilter === s
                       ? "bg-[#FF7900] text-white"
                       : s === "All"
@@ -541,37 +541,37 @@ export function Deployment() {
 
           {/* Vulnerability Table — Story 11.4 */}
           <div className="overflow-auto rounded-sm border border-border">
-            <table className="w-full text-xs">
+            <table className="w-full text-sm">
               <caption className="sr-only">Deployment vulnerability list</caption>
               <thead>
                 <tr className="border-b-2 border-border bg-muted/50">
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                   >
                     CVE ID
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                   >
                     Severity
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                   >
                     Affected Component
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                   >
                     Remediation Status
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                   >
                     Firmware Version
                   </th>
@@ -595,13 +595,13 @@ export function Deployment() {
                         key={vuln.id}
                         className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors duration-150"
                       >
-                        <td className="px-3 py-2.5 font-mono text-[11px] font-medium text-foreground">
+                        <td className="px-3 py-2.5 font-mono text-[13px] font-medium text-foreground">
                           {vuln.cveId}
                         </td>
                         <td className="px-3 py-2.5">
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                              "rounded-full px-2 py-0.5 text-[12px] font-semibold",
                               sevCfg.bg,
                               sevCfg.text,
                             )}
@@ -624,7 +624,7 @@ export function Deployment() {
                                 )
                               }
                               className={cn(
-                                "rounded px-2 py-0.5 text-[10px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -635,7 +635,7 @@ export function Deployment() {
                           ) : (
                             <span
                               className={cn(
-                                "rounded px-2 py-0.5 text-[10px] font-medium",
+                                "rounded px-2 py-0.5 text-[12px] font-medium",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -643,7 +643,7 @@ export function Deployment() {
                             </span>
                           )}
                           {vuln.resolvedDate && (
-                            <span className="ml-1.5 text-[9px] text-muted-foreground">
+                            <span className="ml-1.5 text-[12px] text-muted-foreground">
                               ({vuln.resolvedDate})
                             </span>
                           )}
@@ -661,7 +661,7 @@ export function Deployment() {
 
           {/* Pagination */}
           {filteredVulnerabilities.length > VULN_PAGE_SIZE && (
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>
                 Showing{" "}
                 {Math.min((vulnPage - 1) * VULN_PAGE_SIZE + 1, filteredVulnerabilities.length)}
@@ -673,14 +673,14 @@ export function Deployment() {
                 <button
                   onClick={() => setVulnPage((p) => Math.max(1, p - 1))}
                   disabled={vulnPage <= 1}
-                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft className="h-3.5 w-3.5" />
                 </button>
                 <button
                   onClick={() => setVulnPage((p) => Math.min(totalVulnPages, p + 1))}
                   disabled={vulnPage >= totalVulnPages}
-                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <ChevronRight className="h-3.5 w-3.5" />
                 </button>
@@ -695,7 +695,7 @@ export function Deployment() {
         <div className="space-y-4">
           {/* Report Type Selector */}
           <div className="flex items-center gap-4">
-            <label className="text-[11px] font-medium text-muted-foreground">Report Type:</label>
+            <label className="text-[13px] font-medium text-muted-foreground">Report Type:</label>
             <div className="flex items-center gap-3">
               {[
                 { id: "compliance" as const, label: "Compliance Summary" },
@@ -715,13 +715,13 @@ export function Deployment() {
                     }}
                     className="accent-[#FF7900] h-3 w-3"
                   />
-                  <span className="text-xs text-foreground">{rt.label}</span>
+                  <span className="text-sm text-foreground">{rt.label}</span>
                 </label>
               ))}
             </div>
             <button
               onClick={generateReport}
-              className="flex items-center gap-1.5 rounded-sm bg-[#FF7900] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
             >
               <FileText className="h-3 w-3" />
               Generate
@@ -733,19 +733,19 @@ export function Deployment() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => exportReport("csv")}
-                className="flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors duration-150"
+                className="flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted transition-colors duration-150"
               >
                 <Download className="h-3 w-3" />
                 Export CSV
               </button>
               <button
                 onClick={() => exportReport("json")}
-                className="flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors duration-150"
+                className="flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted transition-colors duration-150"
               >
                 <Download className="h-3 w-3" />
                 Export JSON
               </button>
-              <span className="text-[10px] text-muted-foreground ml-2">
+              <span className="text-[12px] text-muted-foreground ml-2">
                 {reportData.length} records generated
               </span>
             </div>
@@ -765,7 +765,7 @@ export function Deployment() {
                   </p>
                 </div>
               ) : (
-                <table className="w-full text-xs">
+                <table className="w-full text-sm">
                   <caption className="sr-only">Deployment report data</caption>
                   <thead className="sticky top-0">
                     <tr className="border-b-2 border-border bg-muted/50">
@@ -773,7 +773,7 @@ export function Deployment() {
                         <th
                           key={key}
                           scope="col"
-                          className="px-3 py-2.5 text-left text-[11px] font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap"
+                          className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap"
                         >
                           {key}
                         </th>
@@ -808,7 +808,7 @@ export function Deployment() {
               <p className="text-sm font-medium text-muted-foreground">
                 Select a report type and click Generate
               </p>
-              <p className="mt-1 text-xs text-muted-foreground/70">
+              <p className="mt-1 text-sm text-muted-foreground/70">
                 Reports can be exported as CSV or JSON
               </p>
             </div>
@@ -824,7 +824,7 @@ export function Deployment() {
             {/* Date Range */}
             <div className="flex items-end gap-2">
               <div>
-                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   From
                 </label>
                 <div className="relative">
@@ -836,12 +836,12 @@ export function Deployment() {
                       setAuditStartDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
                   />
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   To
                 </label>
                 <div className="relative">
@@ -853,13 +853,13 @@ export function Deployment() {
                       setAuditEndDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
                   />
                 </div>
               </div>
               <button
                 onClick={handleApplyDateRange}
-                className="rounded-sm bg-[#FF7900] px-3 py-1.5 text-xs font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
+                className="rounded-sm bg-[#FF7900] px-3 py-1.5 text-sm font-medium text-white hover:bg-[#FF7900]/90 transition-colors duration-150"
               >
                 Apply
               </button>
@@ -868,7 +868,7 @@ export function Deployment() {
             {/* User Filter */}
             <div className="flex items-end gap-2">
               <div>
-                <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   Filter by User
                 </label>
                 <div className="relative">
@@ -881,20 +881,20 @@ export function Deployment() {
                       if (e.key === "Enter") handleApplyUserFilter();
                     }}
                     placeholder="User ID or email"
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900] w-48"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900] w-48"
                   />
                 </div>
               </div>
               <button
                 onClick={handleApplyUserFilter}
-                className="rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors duration-150"
+                className="rounded-sm border border-border px-3 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors duration-150"
               >
                 <Search className="h-3 w-3" />
               </button>
               {auditUserFilter && (
                 <button
                   onClick={handleClearUserFilter}
-                  className="flex items-center gap-1 rounded-sm bg-blue-500/10 px-2 py-1.5 text-xs font-medium text-blue-600 hover:bg-blue-500/20 transition-colors duration-150"
+                  className="flex items-center gap-1 rounded-sm bg-blue-500/10 px-2 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-500/20 transition-colors duration-150"
                 >
                   {auditUserFilter}
                   <X className="h-3 w-3" />
@@ -908,23 +908,23 @@ export function Deployment() {
             <button
               onClick={exportAuditCsv}
               disabled={sortedAudit.length === 0}
-              className="flex items-center gap-1 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1 rounded-sm border border-border px-2.5 py-1.5 text-sm font-medium text-muted-foreground hover:bg-muted transition-colors duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Download className="h-3 w-3" />
               Export CSV
             </button>
           </div>
 
-          {auditDateError && <p className="text-xs text-red-500">{auditDateError}</p>}
+          {auditDateError && <p className="text-sm text-red-500">{auditDateError}</p>}
 
           {auditError && (
             <div className="flex flex-col items-center justify-center rounded-sm border border-red-200 bg-red-50 py-8">
               <AlertTriangle className="mb-2 h-6 w-6 text-red-500" />
               <p className="text-sm font-medium text-red-600">Failed to load audit logs</p>
-              <p className="mt-1 text-xs text-red-500">{auditError}</p>
+              <p className="mt-1 text-sm text-red-500">{auditError}</p>
               <button
                 onClick={handleRetryAudit}
-                className="mt-3 flex items-center gap-1 rounded-sm border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 transition-colors duration-150"
+                className="mt-3 flex items-center gap-1 rounded-sm border border-red-200 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-100 transition-colors duration-150"
               >
                 <RefreshCw className="h-3 w-3" />
                 Retry
@@ -943,7 +943,7 @@ export function Deployment() {
                   Loading audit log...
                 </span>
               )}
-              <table className="w-full text-xs">
+              <table className="w-full text-sm">
                 <caption className="sr-only">Deployment audit log</caption>
                 <thead className="sticky top-0 z-10">
                   <tr className="border-b border-border bg-muted/50">
@@ -1019,7 +1019,7 @@ export function Deployment() {
                         <td className="px-3 py-2">
                           <span
                             className={cn(
-                              "rounded-sm px-1.5 py-0.5 text-[10px] font-medium",
+                              "rounded-sm px-1.5 py-0.5 text-[12px] font-medium",
                               getActionBadgeClass(log.action),
                             )}
                           >
@@ -1027,7 +1027,7 @@ export function Deployment() {
                           </span>
                         </td>
                         <td className="px-3 py-2">
-                          <span className="rounded-sm bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                          <span className="rounded-sm bg-muted px-1.5 py-0.5 text-[12px] text-muted-foreground">
                             {log.resourceType}
                           </span>
                         </td>
@@ -1041,7 +1041,7 @@ export function Deployment() {
                           {log.ipAddress}
                         </td>
                         <td className="px-3 py-2">
-                          <span className="rounded-sm bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-600">
+                          <span className="rounded-sm bg-emerald-500/10 px-1.5 py-0.5 text-[12px] font-medium text-emerald-600">
                             {log.status}
                           </span>
                         </td>
@@ -1055,7 +1055,7 @@ export function Deployment() {
 
           {/* Pagination */}
           {!auditError && !auditLoading && sortedAudit.length > 0 && (
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>
                 Showing {Math.min((auditPage - 1) * AUDIT_PAGE_SIZE + 1, sortedAudit.length)}
                 {" - "}
@@ -1066,17 +1066,17 @@ export function Deployment() {
                 <button
                   onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
                   disabled={auditPage <= 1}
-                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <ChevronLeft className="h-3.5 w-3.5" />
                 </button>
-                <span className="px-2 text-[12px] font-medium text-foreground">
+                <span className="px-2 text-[14px] font-medium text-foreground">
                   {auditPage} / {totalAuditPages}
                 </span>
                 <button
                   onClick={() => setAuditPage((p) => Math.min(totalAuditPages, p + 1))}
                   disabled={auditPage >= totalAuditPages}
-                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-sm border border-border p-1 hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   <ChevronRight className="h-3.5 w-3.5" />
                 </button>

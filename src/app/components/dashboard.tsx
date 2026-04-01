@@ -185,10 +185,10 @@ function SectionError({ message, onRetry }: { message: string; onRetry: () => vo
   return (
     <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
       <RefreshCw className="h-8 w-8 text-muted-foreground/40 mb-3" />
-      <p className="text-[14px] font-medium text-foreground/80">{message}</p>
+      <p className="text-[15px] font-medium text-foreground/80">{message}</p>
       <button
         onClick={onRetry}
-        className="mt-3 rounded-lg bg-[#FF7900] px-4 py-2 text-[13px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+        className="mt-3 rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
       >
         Retry
       </button>
@@ -233,8 +233,8 @@ function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void
                 <Icon className={cn("h-[18px] w-[18px]", card.iconColor)} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[12px] text-muted-foreground truncate">{card.label}</p>
-                <p className="text-[22px] font-bold leading-tight text-foreground tabular-nums">
+                <p className="text-[14px] text-muted-foreground truncate">{card.label}</p>
+                <p className="text-[22px] font-bold leading-snug text-foreground tabular-nums">
                   {card.value}
                 </p>
               </div>
@@ -249,13 +249,13 @@ function KpiSection({ state, onRetry }: { state: FetchState; onRetry: () => void
                 )}
                 <span
                   className={cn(
-                    "text-[11px] font-medium",
+                    "text-[13px] font-medium",
                     card.trendUp ? "text-emerald-600" : "text-red-600",
                   )}
                 >
                   {card.trend}
                 </span>
-                <span className="text-[10px] text-muted-foreground/70">{card.trendLabel}</span>
+                <span className="text-[12px] text-muted-foreground/70">{card.trendLabel}</span>
               </div>
             </div>
           </div>
@@ -460,7 +460,7 @@ export function Dashboard() {
       {!navigator.onLine && (
         <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
           <WifiOff className="h-4 w-4 shrink-0 text-amber-500" />
-          <p className="text-[13px] font-medium text-amber-700">
+          <p className="text-[14px] font-medium text-amber-700">
             You are offline. Some data may be stale.
           </p>
         </div>
@@ -474,14 +474,14 @@ export function Dashboard() {
           <h2 className="text-[20px] font-medium text-foreground">
             {greeting}, {displayName}
           </h2>
-          <p className="mt-0.5 text-[13px] text-muted-foreground">
+          <p className="mt-0.5 text-[14px] text-muted-foreground">
             Here&apos;s your fleet overview for today
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[13px] text-muted-foreground/70">{dateStr}</span>
+          <span className="text-[14px] text-muted-foreground/70">{dateStr}</span>
           {dashData?.lastUpdated && (
-            <span className="text-[11px] text-muted-foreground/40">
+            <span className="text-[13px] text-muted-foreground/40">
               Updated {dashData.lastUpdated.toLocaleTimeString()}
             </span>
           )}
@@ -492,7 +492,7 @@ export function Dashboard() {
               "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border bg-card text-muted-foreground",
               "hover:bg-muted/50 hover:text-foreground/80",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
-              "disabled:cursor-not-allowed disabled:opacity-50",
+              "disabled:cursor-not-allowed disabled:opacity-60",
               dashState === "loading" && "animate-spin",
             )}
             aria-label="Refresh dashboard"
@@ -513,7 +513,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* System Status */}
         <div className="card-elevated px-5 py-4">
-          <h3 className="text-[14px] font-semibold text-foreground mb-3">System Status</h3>
+          <h3 className="text-[15px] font-semibold text-foreground mb-3">System Status</h3>
           <div className="grid grid-cols-2 gap-3">
             {SYSTEM_SERVICES.map((svc) => (
               <div
@@ -528,8 +528,8 @@ export function Dashboard() {
                   )}
                 />
                 <div className="min-w-0">
-                  <p className="truncate text-[13px] font-medium text-foreground/80">{svc.name}</p>
-                  <p className="text-[11px] text-muted-foreground/70">{svc.lastChecked}</p>
+                  <p className="truncate text-[14px] font-medium text-foreground/80">{svc.name}</p>
+                  <p className="text-[13px] text-muted-foreground/70">{svc.lastChecked}</p>
                 </div>
               </div>
             ))}
@@ -542,7 +542,7 @@ export function Dashboard() {
 
         {/* Quick Actions */}
         <div className="card-elevated px-5 py-4">
-          <h3 className="text-[14px] font-semibold text-foreground mb-3">Quick Actions</h3>
+          <h3 className="text-[15px] font-semibold text-foreground mb-3">Quick Actions</h3>
           <div className="grid grid-cols-3 gap-2.5">
             {QUICK_ACTIONS.map((action) => {
               const Icon = action.icon;
@@ -555,9 +555,9 @@ export function Dashboard() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted/50">
                     <Icon className="h-[18px] w-[18px] text-muted-foreground" />
                   </div>
-                  <span className="text-[12px] font-medium text-foreground/80">{action.label}</span>
+                  <span className="text-[14px] font-medium text-foreground/80">{action.label}</span>
                   {action.badge > 0 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white shadow-sm">
+                    <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[12px] font-bold text-white shadow-sm">
                       {action.badge}
                     </span>
                   )}
@@ -576,7 +576,7 @@ export function Dashboard() {
         <div className="col-span-3 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Fleet Status</h3>
-            <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[12px] font-medium text-[#FF7900]">
+            <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-[#FF7900]">
               1,247 devices
             </span>
           </div>
@@ -589,7 +589,7 @@ export function Dashboard() {
                 <FleetDonut segments={FLEET_SEGMENTS} size={140} />
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-[22px] font-bold tabular-nums text-foreground">1,247</span>
-                  <span className="text-[10px] text-muted-foreground/70">Total</span>
+                  <span className="text-[12px] text-muted-foreground/70">Total</span>
                 </div>
               </div>
               {/* Legend + values */}
@@ -602,10 +602,10 @@ export function Dashboard() {
                     />
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[13px] font-medium text-foreground/80">
+                        <span className="text-[14px] font-medium text-foreground/80">
                           {seg.label}
                         </span>
-                        <span className="text-[14px] font-bold tabular-nums text-foreground">
+                        <span className="text-[15px] font-bold tabular-nums text-foreground">
                           {seg.value.toLocaleString()}
                         </span>
                       </div>
@@ -623,14 +623,14 @@ export function Dashboard() {
 
             {/* Top Regions */}
             <div>
-              <p className="mb-3 text-[13px] font-semibold text-foreground">Device Distribution</p>
+              <p className="mb-3 text-[14px] font-semibold text-foreground">Device Distribution</p>
               <div className="space-y-2.5">
                 {TOP_REGIONS.map((region, i) => (
                   <div key={region.name} className="flex items-center gap-3">
-                    <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-muted-foreground/70 bg-muted">
+                    <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-muted-foreground/70 bg-muted">
                       {i + 1}
                     </span>
-                    <span className="w-[100px] truncate text-[13px] font-medium text-foreground/80">
+                    <span className="w-[100px] truncate text-[14px] font-medium text-foreground/80">
                       {region.name}
                     </span>
                     <div className="flex-1">
@@ -644,7 +644,7 @@ export function Dashboard() {
                         />
                       </div>
                     </div>
-                    <span className="w-[40px] text-right text-[13px] font-bold tabular-nums text-foreground/80">
+                    <span className="w-[40px] text-right text-[14px] font-bold tabular-nums text-foreground/80">
                       {region.count}
                     </span>
                   </div>
@@ -658,7 +658,7 @@ export function Dashboard() {
         <div className="col-span-2 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Health Score</h3>
-            <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700">
+            <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[13px] font-semibold text-emerald-700">
               Healthy
             </span>
           </div>
@@ -669,7 +669,7 @@ export function Dashboard() {
               <GaugeChart value={94.2} />
               <div className="absolute inset-x-0 bottom-2 flex flex-col items-center">
                 <span className="text-[28px] font-bold tabular-nums text-foreground">94.2%</span>
-                <span className="text-[11px] text-muted-foreground/70">Overall Fleet Health</span>
+                <span className="text-[13px] text-muted-foreground/70">Overall Fleet Health</span>
               </div>
             </div>
 
@@ -686,8 +686,8 @@ export function Dashboard() {
                     className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: tier.color }}
                   />
-                  <span className="flex-1 text-[12px] text-muted-foreground">{tier.label}</span>
-                  <span className="text-[12px] font-bold tabular-nums text-foreground">
+                  <span className="flex-1 text-[14px] text-muted-foreground">{tier.label}</span>
+                  <span className="text-[14px] font-bold tabular-nums text-foreground">
                     {tier.count}
                   </span>
                 </div>
@@ -714,7 +714,7 @@ export function Dashboard() {
                     >
                       {stat.value}
                     </p>
-                    <p className="mt-0.5 text-[10px] font-medium text-muted-foreground">
+                    <p className="mt-0.5 text-[12px] font-medium text-muted-foreground">
                       {stat.label}
                     </p>
                   </div>
@@ -733,7 +733,7 @@ export function Dashboard() {
         <div className="col-span-3 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Recent Activity</h3>
-            <button className="flex items-center gap-1 text-[13px] font-medium text-[#FF7900] hover:underline cursor-pointer">
+            <button className="flex items-center gap-1 text-[14px] font-medium text-[#FF7900] hover:underline cursor-pointer">
               View all activity <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
@@ -745,29 +745,29 @@ export function Dashboard() {
                 <tr className="border-b-2 border-border bg-muted">
                   <th
                     scope="col"
-                    className="px-5 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                    className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                   />
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                   >
                     Description
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                   >
                     Module
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                    className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                   >
                     User
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-muted-foreground"
+                    className="px-5 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                   >
                     Time
                   </th>
@@ -782,11 +782,11 @@ export function Dashboard() {
                         style={{ backgroundColor: row.dot }}
                       />
                     </td>
-                    <td className="px-3 text-[13px] text-foreground/80">{row.description}</td>
+                    <td className="px-3 text-[14px] text-foreground/80">{row.description}</td>
                     <td className="px-3">
                       <span
                         className={cn(
-                          "inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium",
+                          "inline-flex rounded-full px-2 py-0.5 text-[12px] font-medium",
                           row.moduleBg,
                         )}
                       >
@@ -795,13 +795,13 @@ export function Dashboard() {
                     </td>
                     <td className="px-3">
                       <div className="flex items-center gap-2">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[9px] font-semibold text-muted-foreground">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-[12px] font-semibold text-muted-foreground">
                           {row.user}
                         </span>
-                        <span className="text-[12px] text-muted-foreground">{row.userName}</span>
+                        <span className="text-[14px] text-muted-foreground">{row.userName}</span>
                       </div>
                     </td>
-                    <td className="px-5 text-right text-[12px] text-muted-foreground/70">
+                    <td className="px-5 text-right text-[14px] text-muted-foreground/70">
                       {row.time}
                     </td>
                   </tr>
@@ -834,8 +834,8 @@ export function Dashboard() {
                     <Icon className={cn("h-[18px] w-[18px]", item.iconColor)} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[14px] font-medium text-foreground">{item.title}</p>
-                    <p className="text-[12px] text-muted-foreground/70 truncate">{item.subtitle}</p>
+                    <p className="text-[15px] font-medium text-foreground">{item.title}</p>
+                    <p className="text-[14px] text-muted-foreground/70 truncate">{item.subtitle}</p>
                   </div>
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/40" />
                 </div>
@@ -844,7 +844,7 @@ export function Dashboard() {
           </div>
 
           <div className="border-t border-border/50 px-5 py-3">
-            <button className="flex items-center gap-1 text-[13px] font-medium text-[#FF7900] hover:underline cursor-pointer">
+            <button className="flex items-center gap-1 text-[14px] font-medium text-[#FF7900] hover:underline cursor-pointer">
               View all <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>

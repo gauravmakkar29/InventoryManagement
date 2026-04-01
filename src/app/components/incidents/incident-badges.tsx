@@ -22,7 +22,7 @@ export function SeverityBadge({ severity }: { severity: IncidentSeverity }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
         styles[severity],
       )}
     >
@@ -49,7 +49,7 @@ export function StatusBadge({ status }: { status: IncidentStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold",
+        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
         styles[status],
       )}
     >
@@ -76,7 +76,7 @@ export function CategoryBadge({ category }: { category: IncidentCategory }) {
   return (
     <span
       className={cn(
-        "inline-flex rounded-full px-2 py-0.5 text-[10px] font-medium",
+        "inline-flex rounded-full px-2 py-0.5 text-[12px] font-medium",
         styles[category],
       )}
     >

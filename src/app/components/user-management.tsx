@@ -235,7 +235,7 @@ export function UserManagement() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[20px] font-medium text-gray-900">User Management</h2>
-          <p className="mt-0.5 text-[13px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-500">
             Manage platform users, roles, and access permissions
           </p>
         </div>
@@ -243,7 +243,7 @@ export function UserManagement() {
           <button
             onClick={() => setInviteOpen(true)}
             className={cn(
-              "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[14px] font-medium text-white",
+              "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[15px] font-medium text-white",
               "hover:bg-[#e86e00]",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
             )}
@@ -264,8 +264,9 @@ export function UserManagement() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name or email..."
+            aria-label="Search users"
             className={cn(
-              "h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-400",
+              "h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-500",
               "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
             )}
           />
@@ -276,7 +277,7 @@ export function UserManagement() {
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
           className={cn(
-            "h-10 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-[14px] text-gray-700",
+            "h-10 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-[15px] text-gray-700",
             "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
           )}
         >
@@ -288,7 +289,7 @@ export function UserManagement() {
         </select>
 
         {/* Count */}
-        <span className="text-[13px] text-gray-500">
+        <span className="text-[14px] text-gray-500">
           {filteredUsers.length} of {users.length} users
         </span>
       </div>
@@ -302,44 +303,44 @@ export function UserManagement() {
               <tr className="border-b border-gray-100 bg-gray-50/60">
                 <th
                   scope="col"
-                  className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Role
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Department
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                 >
                   Last Login
                 </th>
                 {isAdmin && (
                   <th
                     scope="col"
-                    className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-500"
+                    className="px-5 py-3 text-right text-[13px] font-semibold uppercase tracking-wider text-gray-500"
                   >
                     Actions
                   </th>
@@ -351,7 +352,7 @@ export function UserManagement() {
                 <tr>
                   <td
                     colSpan={isAdmin ? 7 : 6}
-                    className="px-5 py-12 text-center text-[14px] text-gray-500"
+                    className="px-5 py-12 text-center text-[15px] text-gray-500"
                   >
                     No users match your search criteria.
                   </td>
@@ -373,7 +374,7 @@ export function UserManagement() {
                         <div className="flex items-center gap-3">
                           <div
                             className={cn(
-                              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white",
+                              "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold text-white",
                               user.status === "Disabled" ? "bg-gray-400" : "bg-[#0f172a]",
                             )}
                           >
@@ -381,7 +382,7 @@ export function UserManagement() {
                           </div>
                           <span
                             className={cn(
-                              "text-[14px] font-medium",
+                              "text-[15px] font-medium",
                               user.status === "Disabled" ? "text-gray-400" : "text-gray-900",
                             )}
                           >
@@ -391,13 +392,13 @@ export function UserManagement() {
                       </td>
 
                       {/* Email */}
-                      <td className="px-4 text-[13px] text-gray-600">{user.email}</td>
+                      <td className="px-4 text-[14px] text-gray-600">{user.email}</td>
 
                       {/* Role */}
                       <td className="px-4">
                         <span
                           className={cn(
-                            "inline-flex rounded-md px-2 py-0.5 text-[12px] font-medium",
+                            "inline-flex rounded-md px-2 py-0.5 text-[14px] font-medium",
                             user.role === "Admin" && "bg-blue-50 text-[#2563eb]",
                             user.role === "Manager" && "bg-purple-50 text-purple-700",
                             user.role === "Technician" && "bg-orange-50 text-[#FF7900]",
@@ -410,13 +411,13 @@ export function UserManagement() {
                       </td>
 
                       {/* Department */}
-                      <td className="px-4 text-[13px] text-gray-600">{user.department}</td>
+                      <td className="px-4 text-[14px] text-gray-600">{user.department}</td>
 
                       {/* Status */}
                       <td className="px-4">
                         <span
                           className={cn(
-                            "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[12px] font-medium",
+                            "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[14px] font-medium",
                             statusCfg.bg,
                             statusCfg.text,
                           )}
@@ -427,7 +428,7 @@ export function UserManagement() {
                       </td>
 
                       {/* Last Login */}
-                      <td className="px-4 text-[13px] text-gray-500 tabular-nums">
+                      <td className="px-4 text-[14px] text-gray-500 tabular-nums">
                         {formatLastLogin(user.lastLogin)}
                       </td>
 

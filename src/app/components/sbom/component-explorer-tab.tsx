@@ -66,9 +66,10 @@ export function ComponentExplorerTab({
           <input
             type="text"
             placeholder="Search components..."
+            aria-label="Search components"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder:text-gray-400 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
+            className="h-9 w-full rounded-lg border border-gray-200 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] outline-none"
           />
         </div>
         <div className="flex gap-1.5">
@@ -77,7 +78,7 @@ export function ComponentExplorerTab({
               key={f}
               onClick={() => setLicenseFilter(f)}
               className={cn(
-                "rounded-lg px-3 py-1.5 text-[12px] font-medium cursor-pointer",
+                "rounded-lg px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                 licenseFilter === f
                   ? "bg-[#FF7900] text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200",
@@ -90,7 +91,7 @@ export function ComponentExplorerTab({
       </div>
 
       {sbomFilter && (
-        <div className="mb-3 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-[12px] text-blue-700">
+        <div className="mb-3 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-[14px] text-blue-700">
           <Filter className="h-3.5 w-3.5" />
           Filtered to SBOM: {sbomFilter}
           <button
@@ -154,7 +155,7 @@ export function ComponentExplorerTab({
         {pagination.total === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
             <Package className="mb-2 h-8 w-8 text-gray-300" />
-            <p className="text-[13px] text-gray-500">No components found</p>
+            <p className="text-[14px] text-gray-500">No components found</p>
           </div>
         )}
       </div>
@@ -194,12 +195,12 @@ function ComponentRow({
             <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
           )}
         </td>
-        <td className="px-4 py-3 text-[13px] font-medium text-gray-900">{comp.name}</td>
-        <td className="px-4 py-3 text-[13px] text-gray-600 font-mono">{comp.version}</td>
+        <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
+        <td className="px-4 py-3 text-[14px] text-gray-600 font-mono">{comp.version}</td>
         <td className="px-4 py-3">
           <span
             className={cn(
-              "rounded-md px-2 py-0.5 text-[11px] font-medium",
+              "rounded-md px-2 py-0.5 text-[13px] font-medium",
               complianceCfg.bg,
               complianceCfg.color,
             )}
@@ -207,12 +208,12 @@ function ComponentRow({
             {comp.license}
           </span>
         </td>
-        <td className="px-4 py-3 text-[13px] text-gray-600">{comp.supplier}</td>
+        <td className="px-4 py-3 text-[14px] text-gray-600">{comp.supplier}</td>
         <td className="px-4 py-3">
           {comp.vulnerabilityCount > 0 ? (
             <span
               className={cn(
-                "rounded-md px-2 py-0.5 text-[11px] font-medium",
+                "rounded-md px-2 py-0.5 text-[13px] font-medium",
                 comp.highestSeverity ? SEVERITY_CONFIG[comp.highestSeverity].bg : "bg-gray-100",
                 comp.highestSeverity
                   ? SEVERITY_CONFIG[comp.highestSeverity].color
@@ -222,16 +223,16 @@ function ComponentRow({
               {comp.vulnerabilityCount}
             </span>
           ) : (
-            <span className="text-[12px] text-gray-500">0</span>
+            <span className="text-[14px] text-gray-500">0</span>
           )}
         </td>
-        <td className="px-4 py-3 text-[12px] text-gray-500">{comp.scope}</td>
+        <td className="px-4 py-3 text-[14px] text-gray-500">{comp.scope}</td>
       </tr>
       {isExpanded && (
         <tr className="border-b border-gray-100">
           <td colSpan={7} className="bg-gray-50 px-6 py-4">
             <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4 text-[12px]">
+              <div className="grid grid-cols-3 gap-4 text-[14px]">
                 <div>
                   <span className="font-semibold text-gray-500">Package URL</span>
                   <p className="mt-0.5 font-mono text-gray-700 break-all">{comp.purl}</p>
@@ -249,7 +250,7 @@ function ComponentRow({
               </div>
               {compVulns.length > 0 && (
                 <div>
-                  <h4 className="mb-2 text-[12px] font-semibold text-gray-600">
+                  <h4 className="mb-2 text-[14px] font-semibold text-gray-600">
                     Known Vulnerabilities
                   </h4>
                   <div className="space-y-1.5">
@@ -260,7 +261,7 @@ function ComponentRow({
                       >
                         <span
                           className={cn(
-                            "rounded px-1.5 py-0.5 text-[10px] font-semibold",
+                            "rounded px-1.5 py-0.5 text-[12px] font-semibold",
                             SEVERITY_CONFIG[v.severity].bg,
                             SEVERITY_CONFIG[v.severity].color,
                           )}
@@ -271,17 +272,17 @@ function ComponentRow({
                           href={`https://nvd.nist.gov/vuln/detail/${v.cveId}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[12px] font-medium text-blue-600 hover:underline"
+                          className="text-[14px] font-medium text-blue-600 hover:underline"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {v.cveId}
                         </a>
-                        <span className="flex-1 truncate text-[12px] text-gray-600">
+                        <span className="flex-1 truncate text-[14px] text-gray-600">
                           {v.description}
                         </span>
                         <span
                           className={cn(
-                            "rounded px-1.5 py-0.5 text-[10px] font-medium",
+                            "rounded px-1.5 py-0.5 text-[12px] font-medium",
                             REMEDIATION_CONFIG[v.remediationStatus].bg,
                             REMEDIATION_CONFIG[v.remediationStatus].color,
                           )}
@@ -294,7 +295,7 @@ function ComponentRow({
                 </div>
               )}
               {compVulns.length === 0 && (
-                <div className="flex items-center gap-2 text-[12px] text-green-600">
+                <div className="flex items-center gap-2 text-[14px] text-green-600">
                   <ShieldCheck className="h-4 w-4" />
                   No known vulnerabilities
                 </div>

@@ -157,22 +157,22 @@ export function CommandPalette() {
             }}
             onKeyDown={handleKeyDown}
             placeholder="Search pages..."
-            className="h-12 flex-1 bg-transparent px-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="h-12 flex-1 bg-transparent px-3 text-[15px] text-foreground placeholder:text-muted-foreground focus:outline-none"
             autoFocus
             aria-label="Search pages"
           />
-          <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+          <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 text-[12px] font-medium text-muted-foreground">
             ESC
           </kbd>
         </div>
 
         <div className="max-h-[320px] overflow-y-auto p-2">
           {filtered.length === 0 && (
-            <p className="py-6 text-center text-[13px] text-muted-foreground">No results found</p>
+            <p className="py-6 text-center text-[14px] text-muted-foreground">No results found</p>
           )}
           {Array.from(groups.entries()).map(([group, items]) => (
             <div key={group}>
-              <p className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="px-3 py-1.5 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
                 {group}
               </p>
               {items.map((item) => {
@@ -183,7 +183,7 @@ export function CommandPalette() {
                     key={item.path}
                     onClick={() => handleSelect(item.path)}
                     className={cn(
-                      "flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-[13px]",
+                      "flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-[14px]",
                       idx === selectedIndex
                         ? "bg-accent/10 text-foreground"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground",

@@ -34,37 +34,37 @@ export function IsolatedDevicesTab({
           <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Device
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Incident
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Isolation Date
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Policy
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Location
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-right text-[11px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-gray-600"
             >
               Action
             </th>
@@ -76,28 +76,28 @@ export function IsolatedDevicesTab({
               <td className="px-4">
                 <div className="flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-red-500" />
-                  <span className="text-[13px] font-medium text-gray-900">{dev.name}</span>
+                  <span className="text-[14px] font-medium text-gray-900">{dev.name}</span>
                 </div>
               </td>
               <td className="px-4">
-                <span className="text-[12px] text-blue-600 font-medium">{dev.incidentId}</span>
-                <p className="text-[11px] text-gray-500 truncate max-w-[200px]">
+                <span className="text-[14px] text-blue-600 font-medium">{dev.incidentId}</span>
+                <p className="text-[13px] text-gray-500 truncate max-w-[200px]">
                   {dev.incidentTitle}
                 </p>
               </td>
-              <td className="px-4 text-[12px] text-gray-600">
+              <td className="px-4 text-[14px] text-gray-600">
                 {dev.isolatedAt ? formatDateTime(dev.isolatedAt) : "N/A"}
               </td>
               <td className="px-4">
-                <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+                <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-medium text-amber-700">
                   {dev.isolationPolicy ?? "N/A"}
                 </span>
               </td>
-              <td className="px-4 text-[12px] text-gray-600">{dev.location}</td>
+              <td className="px-4 text-[14px] text-gray-600">{dev.location}</td>
               <td className="px-4 text-right">
                 <button
                   onClick={() => onRelease(dev)}
-                  className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[11px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
+                  className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[13px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
                 >
                   <Unlock className="mr-1 inline h-3 w-3" /> Release
                 </button>
@@ -108,8 +108,8 @@ export function IsolatedDevicesTab({
             <tr>
               <td colSpan={6} className="py-12 text-center">
                 <Shield className="mx-auto h-8 w-8 text-emerald-300 mb-2" />
-                <p className="text-[14px] font-medium text-emerald-700">No isolated devices</p>
-                <p className="text-[12px] text-gray-500">All devices are operating normally</p>
+                <p className="text-[15px] font-medium text-emerald-700">No isolated devices</p>
+                <p className="text-[14px] text-gray-500">All devices are operating normally</p>
               </td>
             </tr>
           )}

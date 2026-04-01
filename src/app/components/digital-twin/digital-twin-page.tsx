@@ -334,17 +334,17 @@ function HealthFactorsBreakdown({ factors }: { factors: HealthFactors }) {
         const color = getHealthColor(value);
         return (
           <div key={f.key} className="flex items-center gap-2">
-            <span className="w-[130px] truncate text-[11px] text-gray-500">{f.label}</span>
+            <span className="w-[130px] truncate text-[13px] text-gray-500">{f.label}</span>
             <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-300"
                 style={{ width: `${value}%`, backgroundColor: color }}
               />
             </div>
-            <span className="w-8 text-right text-[11px] font-semibold tabular-nums text-gray-700">
+            <span className="w-8 text-right text-[13px] font-semibold tabular-nums text-gray-700">
               {value}
             </span>
-            <span className="text-[9px] text-gray-500">({Math.round(f.weight * 100)}%)</span>
+            <span className="text-[12px] text-gray-500">({Math.round(f.weight * 100)}%)</span>
           </div>
         );
       })}
@@ -410,7 +410,7 @@ function HealthTrendChart({
               x={padding.left - 8}
               y={y + 3}
               textAnchor="end"
-              className="text-[10px] fill-gray-400"
+              className="text-[12px] fill-gray-400"
             >
               {tick}
             </text>
@@ -484,7 +484,7 @@ function HealthTrendChart({
             x={p.x}
             y={height - 5}
             textAnchor="middle"
-            className="text-[9px] fill-gray-400"
+            className="text-[12px] fill-gray-400"
           >
             {p.date.slice(5)}
           </text>
@@ -533,7 +533,7 @@ function StateReplayTimeline({
                       : "h-3 w-3 border-gray-300 bg-white group-hover:border-[#FF7900]",
                 )}
               />
-              <span className="text-[8px] text-gray-500 tabular-nums">
+              <span className="text-[11px] text-gray-500 tabular-nums">
                 {new Date(snap.timestamp).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -552,12 +552,12 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="text-[13px] font-semibold text-gray-900">
+        <h4 className="text-[14px] font-semibold text-gray-900">
           State at {new Date(snapshot.timestamp).toLocaleString()}
         </h4>
         <span
           className={cn(
-            "rounded-full px-2 py-0.5 text-[10px] font-medium",
+            "rounded-full px-2 py-0.5 text-[12px] font-medium",
             snapshot.triggeredBy === "event"
               ? "bg-orange-50 text-[#FF7900]"
               : snapshot.triggeredBy === "manual"
@@ -569,12 +569,12 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
         </span>
       </div>
       {snapshot.event && (
-        <div className="flex items-center gap-1.5 text-[11px] text-[#FF7900] font-medium">
+        <div className="flex items-center gap-1.5 text-[13px] text-[#FF7900] font-medium">
           <Zap className="h-3 w-3" />
           {snapshot.event}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-3 text-[12px]">
+      <div className="grid grid-cols-2 gap-3 text-[14px]">
         <div>
           <p className="text-gray-500">Firmware</p>
           <p className="font-medium text-gray-700">{snapshot.firmwareVersion}</p>
@@ -596,22 +596,22 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
       </div>
       <div className="grid grid-cols-3 gap-2">
         <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
-          <p className="text-[14px] font-bold tabular-nums text-gray-900">
+          <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgTemperature.toFixed(1)}
           </p>
-          <p className="text-[9px] text-gray-500">Avg Temp</p>
+          <p className="text-[12px] text-gray-500">Avg Temp</p>
         </div>
         <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
-          <p className="text-[14px] font-bold tabular-nums text-gray-900">
+          <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgCpuLoad.toFixed(1)}%
           </p>
-          <p className="text-[9px] text-gray-500">CPU Load</p>
+          <p className="text-[12px] text-gray-500">CPU Load</p>
         </div>
         <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
-          <p className="text-[14px] font-bold tabular-nums text-gray-900">
+          <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgErrorRate.toFixed(2)}%
           </p>
-          <p className="text-[9px] text-gray-500">Error Rate</p>
+          <p className="text-[12px] text-gray-500">Error Rate</p>
         </div>
       </div>
     </div>
@@ -661,17 +661,17 @@ function StateComparisonView({
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="text-[13px] font-semibold text-gray-900">State Comparison</h4>
+        <h4 className="text-[14px] font-semibold text-gray-900">State Comparison</h4>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
           <X className="h-4 w-4" />
         </button>
       </div>
-      <div className="grid grid-cols-[120px_1fr_1fr] gap-y-1.5 text-[12px]">
-        <div className="font-semibold text-gray-500 text-[10px] uppercase">Field</div>
-        <div className="font-semibold text-gray-500 text-[10px] uppercase">
+      <div className="grid grid-cols-[120px_1fr_1fr] gap-y-1.5 text-[14px]">
+        <div className="font-semibold text-gray-500 text-[12px] uppercase">Field</div>
+        <div className="font-semibold text-gray-500 text-[12px] uppercase">
           {new Date(left.timestamp).toLocaleDateString()}
         </div>
-        <div className="font-semibold text-gray-500 text-[10px] uppercase">
+        <div className="font-semibold text-gray-500 text-[12px] uppercase">
           {new Date(right.timestamp).toLocaleDateString()}
         </div>
         {fields.map((f) => {
@@ -792,7 +792,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h3 className="text-[16px] font-semibold text-gray-900">Firmware Upgrade Simulation</h3>
-            <p className="text-[12px] text-gray-500 mt-0.5">{twin.deviceName}</p>
+            <p className="text-[14px] text-gray-500 mt-0.5">{twin.deviceName}</p>
           </div>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
             <X className="h-5 w-5" />
@@ -803,7 +803,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
           <div className="p-6 space-y-5">
             {/* Current firmware */}
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-              <p className="text-[10px] font-semibold uppercase text-gray-500 mb-2">
+              <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">
                 Current Firmware
               </p>
               <div className="flex items-center gap-3">
@@ -811,23 +811,23 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   <Cpu className="h-5 w-5 text-gray-500" />
                 </div>
                 <div>
-                  <p className="text-[14px] font-semibold text-gray-900">
+                  <p className="text-[15px] font-semibold text-gray-900">
                     {twin.currentFirmwareVersion}
                   </p>
-                  <p className="text-[11px] text-gray-500">{twin.deviceModel}</p>
+                  <p className="text-[13px] text-gray-500">{twin.deviceModel}</p>
                 </div>
               </div>
             </div>
 
             {/* Target selector */}
             <div>
-              <label className="text-[12px] font-medium text-gray-700 mb-1.5 block">
+              <label className="text-[14px] font-medium text-gray-700 mb-1.5 block">
                 Target Firmware
               </label>
               <select
                 value={targetVersion}
                 onChange={(e) => setTargetVersion(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-700 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-[14px] text-gray-700 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
               >
                 <option value="">Select target version...</option>
                 {compatibleFirmwares.map((fw) => (
@@ -837,7 +837,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 ))}
               </select>
               {compatibleFirmwares.length === 0 && (
-                <p className="mt-1.5 text-[11px] text-amber-600">
+                <p className="mt-1.5 text-[13px] text-amber-600">
                   No compatible firmware versions available for this model.
                 </p>
               )}
@@ -846,7 +846,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex items-center justify-between pt-2">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="text-[12px] font-medium text-[#FF7900] hover:underline cursor-pointer"
+                className="text-[14px] font-medium text-[#FF7900] hover:underline cursor-pointer"
               >
                 {showHistory ? "Hide" : "View"} Simulation History ({savedSimulations.length})
               </button>
@@ -854,7 +854,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 onClick={runSimulation}
                 disabled={!targetVersion || simulating}
                 className={cn(
-                  "rounded-lg px-5 py-2.5 text-[13px] font-semibold text-white cursor-pointer",
+                  "rounded-lg px-5 py-2.5 text-[14px] font-semibold text-white cursor-pointer",
                   targetVersion
                     ? "bg-[#FF7900] hover:bg-[#e66d00]"
                     : "bg-gray-300 cursor-not-allowed",
@@ -867,31 +867,31 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {/* Simulation History */}
             {showHistory && savedSimulations.length > 0 && (
               <div className="rounded-lg border border-gray-200 overflow-hidden">
-                <table className="w-full text-[12px]">
+                <table className="w-full text-[14px]">
                   <caption className="sr-only">Digital twin simulation history</caption>
                   <thead>
                     <tr className="bg-[#f1f3f5] border-b-2 border-gray-200">
                       <th
                         scope="col"
-                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                        className="px-3 py-2 text-left font-bold uppercase text-[12px] text-gray-600"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                        className="px-3 py-2 text-left font-bold uppercase text-[12px] text-gray-600"
                       >
                         Target FW
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-2 text-left font-bold uppercase text-[10px] text-gray-600"
+                        className="px-3 py-2 text-left font-bold uppercase text-[12px] text-gray-600"
                       >
                         Compat.
                       </th>
                       <th
                         scope="col"
-                        className="px-3 py-2 text-right font-bold uppercase text-[10px] text-gray-600"
+                        className="px-3 py-2 text-right font-bold uppercase text-[12px] text-gray-600"
                       >
                         Health Delta
                       </th>
@@ -909,7 +909,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                         <td className="px-3 py-2">
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 text-[10px] font-medium",
+                              "rounded-full px-2 py-0.5 text-[12px] font-medium",
                               compatBadge(sim.compatibilityStatus),
                             )}
                           >
@@ -943,13 +943,13 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setResult(null)}
-                className="text-[12px] font-medium text-gray-500 hover:text-gray-700 cursor-pointer flex items-center gap-1"
+                className="text-[14px] font-medium text-gray-500 hover:text-gray-700 cursor-pointer flex items-center gap-1"
               >
                 <SkipBack className="h-3 w-3" /> Back
               </button>
               <span
                 className={cn(
-                  "rounded-full px-3 py-1 text-[11px] font-semibold",
+                  "rounded-full px-3 py-1 text-[13px] font-semibold",
                   compatBadge(result.compatibilityStatus),
                 )}
               >
@@ -962,7 +962,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {/* Health Delta large display */}
             <div className="flex items-center justify-center gap-4 py-4">
               <div className="text-center">
-                <p className="text-[11px] text-gray-500 mb-1">Health Score Change</p>
+                <p className="text-[13px] text-gray-500 mb-1">Health Score Change</p>
                 <div className="flex items-center gap-2">
                   {result.predictedHealthScoreChange >= 0 ? (
                     <ArrowUp className="h-6 w-6 text-emerald-500" />
@@ -985,15 +985,15 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
-                <p className="text-[14px] font-bold text-gray-900 tabular-nums">
+                <p className="text-[15px] font-bold text-gray-900 tabular-nums">
                   {result.predictedDowntimeMinutes}m
                 </p>
-                <p className="text-[10px] text-gray-500">Est. Downtime</p>
+                <p className="text-[12px] text-gray-500">Est. Downtime</p>
               </div>
               <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
                 <span
                   className={cn(
-                    "text-[13px] font-bold",
+                    "text-[14px] font-bold",
                     riskBadge(result.rollbackRisk).includes("emerald")
                       ? "text-emerald-700"
                       : riskBadge(result.rollbackRisk).includes("amber")
@@ -1003,24 +1003,24 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 >
                   {result.rollbackRisk}
                 </span>
-                <p className="text-[10px] text-gray-500">Rollback Risk</p>
+                <p className="text-[12px] text-gray-500">Rollback Risk</p>
               </div>
               <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
-                <p className="text-[14px] font-bold text-gray-900">
+                <p className="text-[15px] font-bold text-gray-900">
                   {result.targetFirmwareVersion}
                 </p>
-                <p className="text-[10px] text-gray-500">Target FW</p>
+                <p className="text-[12px] text-gray-500">Target FW</p>
               </div>
             </div>
 
             {/* Warnings */}
             {result.warnings.length > 0 && (
               <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 space-y-1.5">
-                <p className="text-[11px] font-semibold text-amber-800 flex items-center gap-1">
+                <p className="text-[13px] font-semibold text-amber-800 flex items-center gap-1">
                   <AlertTriangle className="h-3.5 w-3.5" /> Warnings
                 </p>
                 {result.warnings.map((w, i) => (
-                  <p key={i} className="text-[12px] text-amber-700 pl-5">
+                  <p key={i} className="text-[14px] text-amber-700 pl-5">
                     {w}
                   </p>
                 ))}
@@ -1030,19 +1030,19 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {/* Vulnerabilities */}
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-                <p className="text-[11px] font-semibold text-emerald-800 mb-2 flex items-center gap-1">
+                <p className="text-[13px] font-semibold text-emerald-800 mb-2 flex items-center gap-1">
                   <CheckCircle className="h-3.5 w-3.5" /> Resolved (
                   {result.resolvedVulnerabilities.length})
                 </p>
                 {result.resolvedVulnerabilities.map((v) => (
                   <div
                     key={v.cveId}
-                    className="flex items-center justify-between text-[11px] py-0.5"
+                    className="flex items-center justify-between text-[13px] py-0.5"
                   >
                     <span className="font-mono text-emerald-700">{v.cveId}</span>
                     <span
                       className={cn(
-                        "rounded-full px-1.5 py-0.5 text-[9px] font-semibold",
+                        "rounded-full px-1.5 py-0.5 text-[12px] font-semibold",
                         v.severity === "Critical"
                           ? "bg-red-100 text-red-700"
                           : v.severity === "High"
@@ -1055,23 +1055,23 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   </div>
                 ))}
                 {result.resolvedVulnerabilities.length === 0 && (
-                  <p className="text-[11px] text-emerald-600">None</p>
+                  <p className="text-[13px] text-emerald-600">None</p>
                 )}
               </div>
               <div className="rounded-lg border border-red-200 bg-red-50 p-3">
-                <p className="text-[11px] font-semibold text-red-800 mb-2 flex items-center gap-1">
+                <p className="text-[13px] font-semibold text-red-800 mb-2 flex items-center gap-1">
                   <AlertTriangle className="h-3.5 w-3.5" /> Introduced (
                   {result.newVulnerabilities.length})
                 </p>
                 {result.newVulnerabilities.map((v) => (
                   <div
                     key={v.cveId}
-                    className="flex items-center justify-between text-[11px] py-0.5"
+                    className="flex items-center justify-between text-[13px] py-0.5"
                   >
                     <span className="font-mono text-red-700">{v.cveId}</span>
                     <span
                       className={cn(
-                        "rounded-full px-1.5 py-0.5 text-[9px] font-semibold",
+                        "rounded-full px-1.5 py-0.5 text-[12px] font-semibold",
                         v.severity === "Critical"
                           ? "bg-red-100 text-red-700"
                           : v.severity === "High"
@@ -1084,7 +1084,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   </div>
                 ))}
                 {result.newVulnerabilities.length === 0 && (
-                  <p className="text-[11px] text-red-600">None</p>
+                  <p className="text-[13px] text-red-600">None</p>
                 )}
               </div>
             </div>
@@ -1092,7 +1092,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={saveSimulation}
-                className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
               >
                 <Save className="h-3.5 w-3.5" /> Save Simulation
               </button>
@@ -1123,7 +1123,7 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h4 className="text-[14px] font-semibold text-gray-900">Configuration Drift Analysis</h4>
+        <h4 className="text-[15px] font-semibold text-gray-900">Configuration Drift Analysis</h4>
         <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
           <X className="h-4 w-4" />
         </button>
@@ -1132,8 +1132,8 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
       {twin.configDriftDetails.length === 0 ? (
         <div className="flex flex-col items-center py-8 text-center">
           <CheckCircle className="h-8 w-8 text-emerald-400 mb-2" />
-          <p className="text-[14px] font-medium text-gray-700">Configuration In Sync</p>
-          <p className="text-[12px] text-gray-500 mt-1">
+          <p className="text-[15px] font-medium text-gray-700">Configuration In Sync</p>
+          <p className="text-[14px] text-gray-500 mt-1">
             All config keys match the golden baseline
           </p>
         </div>
@@ -1152,12 +1152,12 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <code className="text-[12px] font-mono font-semibold text-gray-800">
+                  <code className="text-[14px] font-mono font-semibold text-gray-800">
                     {item.configKey}
                   </code>
                   <span
                     className={cn(
-                      "rounded-full px-2 py-0.5 text-[9px] font-semibold",
+                      "rounded-full px-2 py-0.5 text-[12px] font-semibold",
                       severityBadge(item.severity),
                     )}
                   >
@@ -1171,21 +1171,21 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
                   )}
                 />
               </div>
-              <p className="text-[11px] text-gray-500 mt-1">
+              <p className="text-[13px] text-gray-500 mt-1">
                 Detected {new Date(item.detectedAt).toLocaleDateString()}
               </p>
 
               {selectedItem?.configKey === item.configKey && (
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <div className="rounded-lg bg-emerald-50 border border-emerald-200 p-2.5">
-                    <p className="text-[10px] font-semibold text-emerald-700 mb-1">Expected</p>
-                    <code className="text-[12px] font-mono text-emerald-800">
+                    <p className="text-[12px] font-semibold text-emerald-700 mb-1">Expected</p>
+                    <code className="text-[14px] font-mono text-emerald-800">
                       {item.expectedValue}
                     </code>
                   </div>
                   <div className="rounded-lg bg-red-50 border border-red-200 p-2.5">
-                    <p className="text-[10px] font-semibold text-red-700 mb-1">Actual</p>
-                    <code className="text-[12px] font-mono text-red-800">{item.actualValue}</code>
+                    <p className="text-[12px] font-semibold text-red-700 mb-1">Actual</p>
+                    <code className="text-[14px] font-mono text-red-800">{item.actualValue}</code>
                   </div>
                 </div>
               )}
@@ -1246,11 +1246,11 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
         <div className="flex items-center gap-3">
           <HealthScoreGauge score={avgScore} size={52} />
           <div>
-            <p className="text-[12px] text-gray-500">Fleet Avg Health</p>
-            <p className="text-[22px] font-bold leading-tight text-gray-900 tabular-nums">
+            <p className="text-[14px] text-gray-500">Fleet Avg Health</p>
+            <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
               {avgScore}
             </p>
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[9px] font-semibold text-[#FF7900]">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[12px] font-semibold text-[#FF7900]">
               Twin
             </span>
           </div>
@@ -1259,7 +1259,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
 
       {/* Distribution Bar Chart (Story 15.5 AC2) */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[10px] font-semibold uppercase text-gray-500 mb-2">
+        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">
           Health Distribution
         </p>
         <div className="flex items-end gap-3 h-[48px]">
@@ -1272,8 +1272,8 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: critical > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[10px] text-gray-500">Crit</span>
-            <span className="text-[12px] font-bold tabular-nums text-gray-700">{critical}</span>
+            <span className="text-[12px] text-gray-500">Crit</span>
+            <span className="text-[14px] font-bold tabular-nums text-gray-700">{critical}</span>
           </div>
           <div className="flex flex-col items-center gap-1 flex-1">
             <div
@@ -1284,8 +1284,8 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: warning > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[10px] text-gray-500">Warn</span>
-            <span className="text-[12px] font-bold tabular-nums text-gray-700">{warning}</span>
+            <span className="text-[12px] text-gray-500">Warn</span>
+            <span className="text-[14px] font-bold tabular-nums text-gray-700">{warning}</span>
           </div>
           <div className="flex flex-col items-center gap-1 flex-1">
             <div
@@ -1296,15 +1296,15 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: healthy > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[10px] text-gray-500">OK</span>
-            <span className="text-[12px] font-bold tabular-nums text-gray-700">{healthy}</span>
+            <span className="text-[12px] text-gray-500">OK</span>
+            <span className="text-[14px] font-bold tabular-nums text-gray-700">{healthy}</span>
           </div>
         </div>
       </div>
 
       {/* Radar Chart (Story 15.5 AC3) */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[10px] font-semibold uppercase text-gray-500 mb-1">Factor Analysis</p>
+        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-1">Factor Analysis</p>
         <svg
           width={radarSize}
           height={radarSize}
@@ -1340,7 +1340,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                   stroke="#e5e7eb"
                   strokeWidth={1}
                 />
-                <text x={lx} y={ly + 3} textAnchor="middle" className="text-[7px] fill-gray-400">
+                <text x={lx} y={ly + 3} textAnchor="middle" className="text-[10px] fill-gray-400">
                   {label}
                 </text>
               </g>
@@ -1375,21 +1375,21 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
 
       {/* Config Drift Summary */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[10px] font-semibold uppercase text-gray-500 mb-2">Config Status</p>
+        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">Config Status</p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[12px] text-gray-500">In Sync</span>
-            <span className="text-[14px] font-bold tabular-nums text-emerald-600">
+            <span className="text-[14px] text-gray-500">In Sync</span>
+            <span className="text-[15px] font-bold tabular-nums text-emerald-600">
               {twins.filter((t) => t.configDriftStatus === "InSync").length}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[12px] text-gray-500">Drifted</span>
-            <span className="text-[14px] font-bold tabular-nums text-amber-600">{drifted}</span>
+            <span className="text-[14px] text-gray-500">Drifted</span>
+            <span className="text-[15px] font-bold tabular-nums text-amber-600">{drifted}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[12px] text-gray-500">Unknown</span>
-            <span className="text-[14px] font-bold tabular-nums text-gray-500">
+            <span className="text-[14px] text-gray-500">Unknown</span>
+            <span className="text-[15px] font-bold tabular-nums text-gray-500">
               {twins.filter((t) => t.configDriftStatus === "Unknown").length}
             </span>
           </div>
@@ -1478,7 +1478,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
         </button>
         <div>
           <h2 className="text-[18px] font-semibold text-gray-900">{twin.deviceName}</h2>
-          <p className="text-[12px] text-gray-500">
+          <p className="text-[14px] text-gray-500">
             {twin.deviceModel} &middot; {twin.currentFirmwareVersion} &middot; Last synced{" "}
             {new Date(twin.lastSyncedAt).toLocaleTimeString()}
           </p>
@@ -1486,7 +1486,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
         <div className="ml-auto flex items-center gap-2">
           <span
             className={cn(
-              "rounded-full px-2.5 py-1 text-[11px] font-semibold",
+              "rounded-full px-2.5 py-1 text-[13px] font-semibold",
               twin.configDriftStatus === "InSync"
                 ? "bg-emerald-50 text-emerald-700"
                 : twin.configDriftStatus === "Drifted"
@@ -1499,7 +1499,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
           {Math.abs(twin.healthDelta) > 10 && (
             <span
               className={cn(
-                "rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums",
+                "rounded-full px-2 py-0.5 text-[12px] font-bold tabular-nums",
                 twin.healthDelta > 0 ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-700",
               )}
             >
@@ -1519,7 +1519,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-1.5 px-4 py-2.5 text-[13px] font-medium border-b-2 cursor-pointer transition-colors",
+                "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer transition-colors",
                 activeTab === tab.id
                   ? "border-[#FF7900] text-[#FF7900]"
                   : "border-transparent text-gray-500 hover:text-gray-700",
@@ -1539,16 +1539,16 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
           <div className="card-elevated p-5 flex flex-col items-center">
             <HealthScoreGauge score={twin.healthScore} size={120} />
             <p
-              className="mt-2 text-[14px] font-semibold"
+              className="mt-2 text-[15px] font-semibold"
               style={{ color: getHealthColor(twin.healthScore) }}
             >
               {getHealthLabel(twin.healthScore)}
             </p>
-            <p className="text-[11px] text-gray-500">Composite Health Score</p>
+            <p className="text-[13px] text-gray-500">Composite Health Score</p>
           </div>
           {/* Factors Breakdown */}
           <div className="card-elevated p-5">
-            <h4 className="text-[13px] font-semibold text-gray-900 mb-3">Health Factors</h4>
+            <h4 className="text-[14px] font-semibold text-gray-900 mb-3">Health Factors</h4>
             <HealthFactorsBreakdown factors={twin.healthFactors} />
           </div>
         </div>
@@ -1557,14 +1557,14 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
       {activeTab === "trend" && (
         <div className="card-elevated p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-[14px] font-semibold text-gray-900">Health Score Trend</h4>
+            <h4 className="text-[15px] font-semibold text-gray-900">Health Score Trend</h4>
             <div className="flex gap-1">
               {(["7d", "30d", "90d", "180d"] as TimeRange[]).map((r) => (
                 <button
                   key={r}
                   onClick={() => setTimeRange(r)}
                   className={cn(
-                    "rounded-lg px-2.5 py-1 text-[11px] font-medium cursor-pointer",
+                    "rounded-lg px-2.5 py-1 text-[13px] font-medium cursor-pointer",
                     timeRange === r
                       ? "bg-[#FF7900] text-white"
                       : "bg-gray-100 text-gray-500 hover:bg-gray-200",
@@ -1579,7 +1579,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
             <HealthTrendChart data={trendData} onPointHover={handlePointHover} />
             {tooltip && (
               <div
-                className="fixed z-50 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-lg text-[11px]"
+                className="fixed z-50 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-lg text-[13px]"
                 style={{ left: tooltip.x + 10, top: tooltip.y - 50 }}
               >
                 <p className="font-semibold text-gray-900">{tooltip.point.score}</p>
@@ -1595,7 +1595,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
 
       {activeTab === "replay" && (
         <div className="card-elevated p-5 space-y-4">
-          <h4 className="text-[14px] font-semibold text-gray-900">State Replay</h4>
+          <h4 className="text-[15px] font-semibold text-gray-900">State Replay</h4>
           <StateReplayTimeline
             snapshots={snapshots}
             selectedIds={selectedSnapIds}
@@ -1638,7 +1638,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                     : "Compare selected snapshots"
                 }
                 className={cn(
-                  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-[12px] font-medium cursor-pointer",
+                  "flex items-center gap-1.5 rounded-lg px-3 py-2 text-[14px] font-medium cursor-pointer",
                   selectedSnapIds.length >= 2
                     ? "bg-[#FF7900] text-white hover:bg-[#e66d00]"
                     : "bg-gray-100 text-gray-400 cursor-not-allowed",
@@ -1662,20 +1662,20 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
       {activeTab === "simulate" && (
         <div className="card-elevated p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h4 className="text-[14px] font-semibold text-gray-900">Firmware Upgrade Simulation</h4>
+            <h4 className="text-[15px] font-semibold text-gray-900">Firmware Upgrade Simulation</h4>
             <button
               onClick={() => setShowSimDialog(true)}
-              className="flex items-center gap-1.5 rounded-lg bg-[#FF7900] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#e66d00] cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-semibold text-white hover:bg-[#e66d00] cursor-pointer"
             >
               <Zap className="h-4 w-4" /> Simulate Upgrade
             </button>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 flex flex-col items-center">
             <Cpu className="h-10 w-10 text-gray-300 mb-3" />
-            <p className="text-[14px] font-medium text-gray-600">
+            <p className="text-[15px] font-medium text-gray-600">
               Run a firmware upgrade simulation
             </p>
-            <p className="text-[12px] text-gray-500 mt-1">
+            <p className="text-[14px] text-gray-500 mt-1">
               Preview health score impact, vulnerabilities, and rollback risk before deploying
             </p>
           </div>
@@ -1719,11 +1719,11 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
         <HealthScoreGauge score={twin.healthScore} size={52} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <p className="text-[13px] font-semibold text-gray-900 truncate">{twin.deviceName}</p>
+            <p className="text-[14px] font-semibold text-gray-900 truncate">{twin.deviceName}</p>
             {Math.abs(twin.healthDelta) > 10 && (
               <span
                 className={cn(
-                  "shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-bold tabular-nums",
+                  "shrink-0 rounded-full px-1.5 py-0.5 text-[12px] font-bold tabular-nums",
                   twin.healthDelta > 0
                     ? "bg-emerald-50 text-emerald-700"
                     : "bg-red-50 text-red-700",
@@ -1734,26 +1734,26 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
               </span>
             )}
           </div>
-          <p className="text-[11px] text-gray-500 truncate">{twin.deviceModel}</p>
+          <p className="text-[13px] text-gray-500 truncate">{twin.deviceModel}</p>
           {topRiskFactor && (
             <div className="mt-1.5 flex items-center gap-1.5">
-              <span className="text-[10px] text-gray-500">Top risk:</span>
+              <span className="text-[12px] text-gray-500">Top risk:</span>
               <span
-                className="text-[10px] font-medium"
+                className="text-[12px] font-medium"
                 style={{ color: getHealthColor(topRiskFactor[1]) }}
               >
                 {riskLabel[topRiskFactor[0]]} ({topRiskFactor[1]})
               </span>
             </div>
           )}
-          <p className="mt-1 text-[10px] text-gray-300 tabular-nums">
+          <p className="mt-1 text-[12px] text-gray-300 tabular-nums">
             Synced {new Date(twin.lastSyncedAt).toLocaleTimeString()}
           </p>
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0">
           <span
             className={cn(
-              "rounded-full px-2 py-0.5 text-[9px] font-semibold",
+              "rounded-full px-2 py-0.5 text-[12px] font-semibold",
               twin.configDriftStatus === "InSync"
                 ? "bg-emerald-50 text-emerald-700"
                 : twin.configDriftStatus === "Drifted"
@@ -1808,12 +1808,12 @@ export function DigitalTwinPage() {
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-[20px] font-semibold text-gray-900">Digital Twin</h2>
-          <p className="mt-0.5 text-[13px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-500">
             Fleet-wide device health monitoring, simulation, and configuration analysis
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[12px] font-medium text-[#FF7900]">
+          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-[#FF7900]">
             {twins.length} twins
           </span>
         </div>
@@ -1830,9 +1830,10 @@ export function DigitalTwinPage() {
           <input
             type="text"
             placeholder="Search devices..."
+            aria-label="Search devices"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-[13px] text-gray-700 placeholder:text-gray-400 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none w-[220px]"
+            className="rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-[14px] text-gray-700 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none w-[220px]"
           />
         </div>
 
@@ -1850,7 +1851,7 @@ export function DigitalTwinPage() {
               key={bucket.key}
               onClick={() => setHealthFilter(bucket.key)}
               className={cn(
-                "rounded-lg px-3 py-1.5 text-[12px] font-medium cursor-pointer",
+                "rounded-lg px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                 healthFilter === bucket.key
                   ? bucket.key === "critical"
                     ? "bg-red-50 text-red-700"
@@ -1871,7 +1872,7 @@ export function DigitalTwinPage() {
         <select
           value={driftFilter}
           onChange={(e) => setDriftFilter(e.target.value as typeof driftFilter)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[12px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[14px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
         >
           <option value="all">All Drift Status</option>
           <option value="InSync">In Sync</option>
@@ -1881,11 +1882,11 @@ export function DigitalTwinPage() {
 
         {/* Sort */}
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-[11px] text-gray-500">Sort by:</span>
+          <span className="text-[13px] text-gray-500">Sort by:</span>
           <select
             value={sortField}
             onChange={(e) => setSortField(e.target.value as SortField)}
-            className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-[12px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
+            className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-[14px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
           >
             <option value="healthScore">Health Score</option>
             <option value="deviceName">Device Name</option>
@@ -1893,7 +1894,7 @@ export function DigitalTwinPage() {
           </select>
           <button
             onClick={() => setSortAsc(!sortAsc)}
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
             title={sortAsc ? "Ascending" : "Descending"}
           >
             {sortAsc ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />}
@@ -1911,8 +1912,8 @@ export function DigitalTwinPage() {
       {filteredTwins.length === 0 && (
         <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
           <Search className="h-8 w-8 text-gray-300 mb-3" />
-          <p className="text-[14px] font-medium text-gray-700">No devices match your filters</p>
-          <p className="text-[12px] text-gray-500 mt-1">
+          <p className="text-[15px] font-medium text-gray-700">No devices match your filters</p>
+          <p className="text-[14px] text-gray-500 mt-1">
             Try adjusting your search or filter criteria
           </p>
         </div>

@@ -129,7 +129,7 @@ export function NetworkTopologyGraph({
                     x={(s.x + t.x) / 2}
                     y={(s.y + t.y) / 2 - 12}
                     textAnchor="middle"
-                    className="text-[10px] fill-gray-700 font-medium"
+                    className="text-[12px] fill-gray-700 font-medium"
                   >
                     {edgeTypeLabels[edge.relationshipType]}
                   </text>
@@ -137,7 +137,7 @@ export function NetworkTopologyGraph({
                     x={(s.x + t.x) / 2}
                     y={(s.y + t.y) / 2 + 2}
                     textAnchor="middle"
-                    className="text-[9px] fill-gray-400"
+                    className="text-[12px] fill-gray-400"
                   >
                     Strength: {Math.round(edge.weight * 100)}%
                   </text>
@@ -197,7 +197,7 @@ export function NetworkTopologyGraph({
                     y={1}
                     textAnchor="middle"
                     dominantBaseline="middle"
-                    className="text-[7px] fill-white font-bold"
+                    className="text-[10px] fill-white font-bold"
                   >
                     L
                   </text>
@@ -207,7 +207,7 @@ export function NetworkTopologyGraph({
                 x={pos.x}
                 y={pos.y + r + 14}
                 textAnchor="middle"
-                className="text-[10px] fill-gray-600 font-medium"
+                className="text-[12px] fill-gray-600 font-medium"
               >
                 {node.deviceName}
               </text>
@@ -228,23 +228,23 @@ export function NetworkTopologyGraph({
                   <text
                     x={pos.x + r + 18}
                     y={pos.y - 26}
-                    className="text-[11px] fill-gray-900 font-semibold"
+                    className="text-[13px] fill-gray-900 font-semibold"
                   >
                     {node.deviceName}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y - 12} className="text-[10px] fill-gray-500">
+                  <text x={pos.x + r + 18} y={pos.y - 12} className="text-[12px] fill-gray-500">
                     Status: {node.status}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y + 2} className="text-[10px] fill-gray-500">
+                  <text x={pos.x + r + 18} y={pos.y + 2} className="text-[12px] fill-gray-500">
                     Risk: {node.riskScore}% | {node.firmwareVersion}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y + 16} className="text-[10px] fill-gray-500">
+                  <text x={pos.x + r + 18} y={pos.y + 16} className="text-[12px] fill-gray-500">
                     Location: {node.location}
                   </text>
                   <text
                     x={pos.x + r + 18}
                     y={pos.y + 30}
-                    className="text-[10px] fill-blue-500 font-medium"
+                    className="text-[12px] fill-blue-500 font-medium"
                   >
                     Click to show lateral paths
                   </text>
@@ -255,7 +255,7 @@ export function NetworkTopologyGraph({
         })}
       </svg>
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] text-gray-500">
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-[13px] text-gray-500">
         <span className="font-semibold text-gray-700">Legend:</span>
         {Object.entries(statusColors).map(([status, color]) => (
           <span key={status} className="flex items-center gap-1.5">
@@ -294,7 +294,7 @@ export function LateralMovementPanel({
       <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
         <div className="flex items-center gap-2">
           <Network className="h-4 w-4 text-red-500" />
-          <h3 className="text-[15px] font-semibold text-gray-900">Lateral Movement Risk</h3>
+          <h3 className="text-base font-semibold text-gray-900">Lateral Movement Risk</h3>
         </div>
         <button
           onClick={onClose}
@@ -304,7 +304,7 @@ export function LateralMovementPanel({
         </button>
       </div>
       <div className="flex-1 overflow-y-auto px-5 py-4">
-        <p className="mb-4 text-[12px] text-gray-500">
+        <p className="mb-4 text-[14px] text-gray-500">
           Devices ranked by lateral movement probability from the selected origin device.
         </p>
         <div className="space-y-2">
@@ -312,14 +312,14 @@ export function LateralMovementPanel({
             <div key={dev.deviceId} className="rounded-lg border border-gray-200 p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold text-gray-500 bg-gray-100">
+                  <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-gray-500 bg-gray-100">
                     {i + 1}
                   </span>
-                  <span className="text-[13px] font-medium text-gray-900">{dev.deviceName}</span>
+                  <span className="text-[14px] font-medium text-gray-900">{dev.deviceName}</span>
                 </div>
                 <span
                   className={cn(
-                    "text-[13px] font-bold tabular-nums",
+                    "text-[14px] font-bold tabular-nums",
                     dev.probability >= 70
                       ? "text-red-600"
                       : dev.probability >= 40
@@ -346,7 +346,7 @@ export function LateralMovementPanel({
                   />
                 </div>
               </div>
-              <p className="mt-1.5 text-[11px] text-gray-500">{dev.primaryRiskFactor}</p>
+              <p className="mt-1.5 text-[13px] text-gray-500">{dev.primaryRiskFactor}</p>
             </div>
           ))}
         </div>

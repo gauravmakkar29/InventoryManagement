@@ -21,18 +21,18 @@ export function PlaybookExecutor({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="text-[13px] font-semibold text-gray-900">
+        <h4 className="text-[14px] font-semibold text-gray-900">
           Playbook: {progress.playbookName}
         </h4>
         {pct === 100 && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[12px] font-semibold text-emerald-700">
             <CheckCircle2 className="h-3 w-3" /> Complete
           </span>
         )}
       </div>
       {/* Progress bar */}
       <div>
-        <div className="mb-1 flex items-center justify-between text-[11px] text-gray-500">
+        <div className="mb-1 flex items-center justify-between text-[13px] text-gray-500">
           <span>
             {progress.completedSteps} of {progress.totalSteps} steps complete
           </span>
@@ -71,24 +71,24 @@ export function PlaybookExecutor({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-bold text-gray-500">#{step.stepNumber}</span>
+                  <span className="text-[13px] font-bold text-gray-500">#{step.stepNumber}</span>
                   <p
                     className={cn(
-                      "text-[13px] font-medium",
+                      "text-[14px] font-medium",
                       step.isCompleted ? "text-gray-500 line-through" : "text-gray-900",
                     )}
                   >
                     {step.title}
                   </p>
                   {step.actionType === "automated" && (
-                    <span className="inline-flex items-center gap-0.5 rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-semibold text-blue-600">
+                    <span className="inline-flex items-center gap-0.5 rounded bg-blue-50 px-1.5 py-0.5 text-[12px] font-semibold text-blue-600">
                       <Zap className="h-2.5 w-2.5" /> AUTO
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[12px] text-gray-500">{step.description}</p>
+                <p className="mt-0.5 text-[14px] text-gray-500">{step.description}</p>
                 {step.isCompleted && step.completedByName && (
-                  <p className="mt-1 text-[11px] text-gray-500">
+                  <p className="mt-1 text-[13px] text-gray-500">
                     Completed by {step.completedByName} &middot;{" "}
                     {step.completedAt ? formatRelativeTime(step.completedAt) : ""}
                   </p>
@@ -97,7 +97,7 @@ export function PlaybookExecutor({
               {!step.isCompleted && step.actionType === "automated" && (
                 <button
                   onClick={() => onStepComplete(step.stepNumber)}
-                  className="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-blue-700 cursor-pointer"
+                  className="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-blue-700 cursor-pointer"
                 >
                   Execute
                 </button>

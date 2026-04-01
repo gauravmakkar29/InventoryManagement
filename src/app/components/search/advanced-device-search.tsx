@@ -128,7 +128,7 @@ export function AdvancedDeviceSearch({
       {isUsingFallback && (
         <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-800 dark:bg-amber-950">
           <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-          <span className="text-[12px] text-amber-700 dark:text-amber-300">
+          <span className="text-[14px] text-amber-700 dark:text-amber-300">
             Full-text search temporarily unavailable. Using basic search.
           </span>
         </div>
@@ -148,7 +148,7 @@ export function AdvancedDeviceSearch({
                 : "Search by device name, serial, location (fuzzy)..."
             }
             className={cn(
-              "h-10 w-full rounded-lg border border-border bg-card pl-10 pr-4 text-[13px] text-foreground",
+              "h-10 w-full rounded-lg border border-border bg-card pl-10 pr-4 text-[14px] text-foreground",
               "placeholder:text-muted-foreground",
               "focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20",
             )}
@@ -159,7 +159,7 @@ export function AdvancedDeviceSearch({
           type="button"
           onClick={() => setShowFilters(!showFilters)}
           className={cn(
-            "flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-[13px] font-medium cursor-pointer",
+            "flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-[14px] font-medium cursor-pointer",
             "hover:bg-muted transition-colors",
             showFilters && "bg-accent/10 border-accent text-accent",
           )}
@@ -167,13 +167,13 @@ export function AdvancedDeviceSearch({
           <SlidersHorizontal className="h-4 w-4" />
           Filters
           {activeFilters.length > 0 && (
-            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent text-[12px] font-bold text-white">
               {activeFilters.length}
             </span>
           )}
         </button>
 
-        <span className="text-[12px] text-muted-foreground shrink-0">
+        <span className="text-[14px] text-muted-foreground shrink-0">
           {totalResults} of {totalDevices} devices
         </span>
       </div>
@@ -184,7 +184,7 @@ export function AdvancedDeviceSearch({
           {activeFilters.map((f) => (
             <span
               key={f.key}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-medium text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[13px] font-medium text-foreground"
             >
               {f.label}: {f.value}
               <button
@@ -200,7 +200,7 @@ export function AdvancedDeviceSearch({
           <button
             type="button"
             onClick={clearAllFilters}
-            className="text-[11px] text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="text-[13px] text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             Clear all
           </button>
@@ -212,7 +212,7 @@ export function AdvancedDeviceSearch({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 rounded-lg border border-border bg-card p-4">
           {/* Status filter */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
               Status
             </label>
             <select
@@ -223,7 +223,7 @@ export function AdvancedDeviceSearch({
                   status: e.target.value || undefined,
                 })
               }
-              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[12px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
+              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[14px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
             >
               <option value="">All Statuses</option>
               {statusOptions.map((s) => (
@@ -236,7 +236,7 @@ export function AdvancedDeviceSearch({
 
           {/* Location filter */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
               Location
             </label>
             <select
@@ -247,7 +247,7 @@ export function AdvancedDeviceSearch({
                   location: e.target.value || undefined,
                 })
               }
-              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[12px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
+              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[14px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
             >
               <option value="">All Locations</option>
               {locationOptions.map((l) => (
@@ -260,7 +260,7 @@ export function AdvancedDeviceSearch({
 
           {/* Model filter */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
               Model
             </label>
             <select
@@ -271,7 +271,7 @@ export function AdvancedDeviceSearch({
                   model: e.target.value || undefined,
                 })
               }
-              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[12px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
+              className="h-9 w-full rounded-md border border-border bg-card px-2 text-[14px] text-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20 cursor-pointer"
             >
               <option value="">All Models</option>
               {modelOptions.map((m) => (
@@ -284,7 +284,7 @@ export function AdvancedDeviceSearch({
 
           {/* Health score range */}
           <div className="space-y-1.5">
-            <label className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
               Health Score
             </label>
             <div className="flex items-center gap-1.5">
@@ -295,9 +295,9 @@ export function AdvancedDeviceSearch({
                 value={healthMin}
                 onChange={(e) => setHealthMin(e.target.value)}
                 placeholder="0"
-                className="h-9 w-full rounded-md border border-border bg-card px-2 text-[12px] text-foreground text-center focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20"
+                className="h-9 w-full rounded-md border border-border bg-card px-2 text-[14px] text-foreground text-center focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20"
               />
-              <span className="text-[11px] text-muted-foreground shrink-0">to</span>
+              <span className="text-[13px] text-muted-foreground shrink-0">to</span>
               <input
                 type="number"
                 min={0}
@@ -305,7 +305,7 @@ export function AdvancedDeviceSearch({
                 value={healthMax}
                 onChange={(e) => setHealthMax(e.target.value)}
                 placeholder="100"
-                className="h-9 w-full rounded-md border border-border bg-card px-2 text-[12px] text-foreground text-center focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20"
+                className="h-9 w-full rounded-md border border-border bg-card px-2 text-[14px] text-foreground text-center focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/20"
               />
             </div>
           </div>
