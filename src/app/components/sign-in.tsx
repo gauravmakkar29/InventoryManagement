@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Eye, EyeOff, AlertCircle, Sun, Zap, Shield, BarChart3 } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, Sun, Zap, Shield, BarChart3, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../../lib/use-auth";
 import { cn } from "../../lib/utils";
@@ -47,143 +47,73 @@ export function SignIn() {
 
   return (
     <div className="flex min-h-screen">
-      {/* Left 50%: Solar-themed branding panel */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center relative bg-[#0f172a] overflow-hidden">
-        {/* Animated gradient background */}
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            background:
-              "radial-gradient(ellipse at 30% 20%, #FF7900 0%, transparent 50%), " +
-              "radial-gradient(ellipse at 70% 80%, #2563eb 0%, transparent 50%)",
-          }}
+      {/* Left 50%: Solar energy branding panel with photo background */}
+      <div className="hidden lg:flex lg:w-1/2 flex-col items-end justify-between relative overflow-hidden">
+        {/* Background image — solar panels at golden hour */}
+        <img
+          src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=80&auto=format"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
         />
 
-        {/* Grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), " +
-              "linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
+        {/* Gradient overlay — bottom-heavy for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-[#0f172a]/30" />
 
-        {/* Solar panel illustration (SVG) */}
-        <div className="relative z-10 mb-10">
-          <svg
-            width="200"
-            height="200"
-            viewBox="0 0 200 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            {/* Sun */}
-            <circle cx="160" cy="40" r="24" fill="#FF7900" opacity="0.9" />
-            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
-              <line
-                key={angle}
-                x1={160 + Math.cos((angle * Math.PI) / 180) * 30}
-                y1={40 + Math.sin((angle * Math.PI) / 180) * 30}
-                x2={160 + Math.cos((angle * Math.PI) / 180) * 38}
-                y2={40 + Math.sin((angle * Math.PI) / 180) * 38}
-                stroke="#FF7900"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                opacity="0.7"
-              />
-            ))}
-            {/* Solar panel - angled rectangle */}
-            <g transform="translate(30, 70) rotate(-15, 70, 60)">
-              <rect
-                x="10"
-                y="20"
-                width="120"
-                height="80"
-                rx="4"
-                fill="#1e293b"
-                stroke="#334155"
-                strokeWidth="2"
-              />
-              {/* Panel grid cells */}
-              {[0, 1, 2, 3].map((row) =>
-                [0, 1, 2].map((col) => (
-                  <rect
-                    key={`${row}-${col}`}
-                    x={16 + col * 38}
-                    y={26 + row * 18}
-                    width="34"
-                    height="14"
-                    rx="1"
-                    fill="#2563eb"
-                    opacity={0.6 + row * 0.1}
-                  />
-                )),
-              )}
-              {/* Panel stand */}
-              <line x1="70" y1="100" x2="70" y2="130" stroke="#475569" strokeWidth="3" />
-              <line
-                x1="50"
-                y1="130"
-                x2="90"
-                y2="130"
-                stroke="#475569"
-                strokeWidth="3"
-                strokeLinecap="round"
-              />
-            </g>
-            {/* Energy flow dots */}
-            {[0, 1, 2].map((i) => (
-              <circle
-                key={i}
-                cx={140 - i * 15}
-                cy={75 + i * 15}
-                r="3"
-                fill="#FF7900"
-                opacity={0.9 - i * 0.25}
-              >
-                <animate
-                  attributeName="opacity"
-                  values="0.3;0.9;0.3"
-                  dur="2s"
-                  begin={`${i * 0.3}s`}
-                  repeatCount="indefinite"
-                />
-              </circle>
-            ))}
-          </svg>
+        {/* Top: Logo badge */}
+        <div className="relative z-10 w-full p-8">
+          <div className="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md px-4 py-2.5 border border-white/10">
+            <Sun className="h-5 w-5 text-[#FF7900]" />
+            <span className="text-[14px] font-bold text-white tracking-tight">
+              IMS <span className="text-[#FF7900]">Gen2</span>
+            </span>
+          </div>
         </div>
 
-        {/* Branding text */}
-        <div className="relative z-10 text-center px-12 max-w-md">
-          <h1 className="text-[32px] font-bold tracking-tight text-white">
-            IMS <span className="text-[#FF7900]">Gen2</span>
-          </h1>
-          <p className="mt-3 text-[16px] leading-relaxed text-gray-400">
-            Hardware Lifecycle Management Platform
-          </p>
-
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <div className="h-px w-12 bg-gray-700" />
-            <div className="h-1.5 w-1.5 rounded-full bg-[#FF7900]" />
-            <div className="h-px w-12 bg-gray-700" />
+        {/* Bottom: Branding content */}
+        <div className="relative z-10 w-full p-8 pb-10">
+          {/* Stats bar */}
+          <div className="mb-6 flex items-center gap-4">
+            {[
+              { value: "2,847", label: "Devices" },
+              { value: "96.4%", label: "Compliance" },
+              { value: "94.2%", label: "Fleet Health" },
+            ].map(({ value, label }) => (
+              <div
+                key={label}
+                className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-2.5"
+              >
+                <p className="text-[18px] font-bold text-white tabular-nums">{value}</p>
+                <p className="text-[11px] text-white/60">{label}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Feature highlights */}
-          <div className="mt-8 grid grid-cols-2 gap-4 text-left">
+          <h1 className="text-[28px] font-bold tracking-tight text-white leading-tight">
+            Hardware Lifecycle
+            <br />
+            Management Platform
+          </h1>
+          <p className="mt-3 text-[14px] leading-relaxed text-white/70 max-w-sm">
+            Enterprise device inventory, firmware deployment, compliance tracking & operational
+            analytics — powered by solar intelligence.
+          </p>
+
+          {/* Feature pills */}
+          <div className="mt-6 flex flex-wrap gap-2">
             {[
-              { icon: Sun, label: "Solar Fleet Monitoring" },
-              { icon: Zap, label: "Firmware Deployment" },
-              { icon: Shield, label: "NIST 800-53 Compliance" },
-              { icon: BarChart3, label: "Operational Analytics" },
+              { icon: Sun, label: "Solar Fleet" },
+              { icon: Zap, label: "Firmware OTA" },
+              { icon: Shield, label: "NIST 800-53" },
+              { icon: BarChart3, label: "Analytics" },
+              { icon: Activity, label: "Real-time" },
             ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
-                  <Icon className="h-4 w-4 text-[#FF7900]" />
-                </div>
-                <span className="text-[12px] text-gray-400">{label}</span>
+              <div
+                key={label}
+                className="flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5"
+              >
+                <Icon className="h-3.5 w-3.5 text-[#FF7900]" />
+                <span className="text-[11px] font-medium text-white/80">{label}</span>
               </div>
             ))}
           </div>
