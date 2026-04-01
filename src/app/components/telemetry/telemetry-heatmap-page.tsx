@@ -192,7 +192,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
               {riskTrend.toFixed(1)}%
             </span>
             <span className="text-[12px] text-gray-500">vs last 24h</span>
-            <ChevronRight className="ml-auto h-3.5 w-3.5 text-gray-300" />
+            <ChevronRight className="ml-auto h-3.5 w-3.5 text-gray-500" />
           </div>
         </button>
 
@@ -266,7 +266,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
 
           {recentResults.length === 0 ? (
             <div className="py-6 text-center">
-              <Target className="mx-auto h-8 w-8 text-gray-300 mb-2" />
+              <Target className="mx-auto h-8 w-8 text-gray-500 mb-2" />
               <p className="text-[14px] text-gray-500">No recent impact analyses</p>
               <button className="mt-2 text-[14px] font-medium text-[#FF7900] hover:underline cursor-pointer">
                 Run Simulation

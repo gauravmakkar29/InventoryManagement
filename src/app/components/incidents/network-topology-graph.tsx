@@ -263,7 +263,7 @@ export function NetworkTopologyGraph({
             {status}
           </span>
         ))}
-        <span className="mx-1 text-gray-300">|</span>
+        <span className="mx-1 text-gray-500">|</span>
         {Object.entries(edgeTypeLabels).map(([type, label]) => (
           <span key={type} className="flex items-center gap-1.5">
             <span className="h-0.5 w-4" style={{ backgroundColor: edgeTypeColors[type] }} />

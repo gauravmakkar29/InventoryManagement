@@ -383,7 +383,7 @@ export function UserManagement() {
                           <span
                             className={cn(
                               "text-[15px] font-medium",
-                              user.status === "Disabled" ? "text-gray-400" : "text-gray-900",
+                              user.status === "Disabled" ? "text-gray-500" : "text-gray-900",
                             )}
                           >
                             {user.name}

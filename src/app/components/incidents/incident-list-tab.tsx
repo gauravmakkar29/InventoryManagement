@@ -181,14 +181,14 @@ export function IncidentListTab({
                   {formatRelativeTime(inc.createdAt)}
                 </td>
                 <td className="px-2">
-                  <ChevronRight className="h-4 w-4 text-gray-300" />
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 </td>
               </tr>
             ))}
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={8} className="py-12 text-center">
-                  <AlertTriangle className="mx-auto h-8 w-8 text-gray-300 mb-2" />
+                  <AlertTriangle className="mx-auto h-8 w-8 text-gray-500 mb-2" />
                   <p className="text-[15px] font-medium text-gray-600">No incidents found</p>
                   <p className="text-[14px] text-gray-500">
                     Adjust your filters or create a new incident

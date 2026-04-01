@@ -76,9 +76,9 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
   const qrPlaceholder = totpUri ? (
     <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
       <div className="text-center">
-        <ShieldCheck className="mx-auto h-10 w-10 text-gray-300" />
+        <ShieldCheck className="mx-auto h-10 w-10 text-gray-500" />
         <p className="mt-2 text-[13px] text-gray-500">QR Code</p>
-        <p className="text-[12px] text-gray-300">Scan with authenticator</p>
+        <p className="text-[12px] text-gray-500">Scan with authenticator</p>
       </div>
     </div>
   ) : null;

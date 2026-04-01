@@ -1166,7 +1166,7 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
                 </div>
                 <ChevronRight
                   className={cn(
-                    "h-4 w-4 text-gray-300 transition-transform",
+                    "h-4 w-4 text-gray-500 transition-transform",
                     selectedItem?.configKey === item.configKey && "rotate-90",
                   )}
                 />
@@ -1641,7 +1641,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                   "flex items-center gap-1.5 rounded-lg px-3 py-2 text-[14px] font-medium cursor-pointer",
                   selectedSnapIds.length >= 2
                     ? "bg-[#FF7900] text-white hover:bg-[#e66d00]"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed",
+                    : "bg-gray-100 text-gray-500 cursor-not-allowed",
                 )}
               >
                 <GitCompare className="h-3.5 w-3.5" /> Compare
@@ -1671,7 +1671,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
             </button>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 flex flex-col items-center">
-            <Cpu className="h-10 w-10 text-gray-300 mb-3" />
+            <Cpu className="h-10 w-10 text-gray-500 mb-3" />
             <p className="text-[15px] font-medium text-gray-600">
               Run a firmware upgrade simulation
             </p>
@@ -1746,7 +1746,7 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
               </span>
             </div>
           )}
-          <p className="mt-1 text-[12px] text-gray-300 tabular-nums">
+          <p className="mt-1 text-[12px] text-gray-500 tabular-nums">
             Synced {new Date(twin.lastSyncedAt).toLocaleTimeString()}
           </p>
         </div>
@@ -1763,7 +1763,7 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
           >
             {twin.configDriftStatus === "InSync" ? "In Sync" : twin.configDriftStatus}
           </span>
-          <ChevronRight className="h-4 w-4 text-gray-300" />
+          <ChevronRight className="h-4 w-4 text-gray-500" />
         </div>
       </div>
     </div>
@@ -1911,7 +1911,7 @@ export function DigitalTwinPage() {
 
       {filteredTwins.length === 0 && (
         <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
-          <Search className="h-8 w-8 text-gray-300 mb-3" />
+          <Search className="h-8 w-8 text-gray-500 mb-3" />
           <p className="text-[15px] font-medium text-gray-700">No devices match your filters</p>
           <p className="text-[14px] text-gray-500 mt-1">
             Try adjusting your search or filter criteria

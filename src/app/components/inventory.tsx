@@ -105,7 +105,7 @@ function SortHeader({
             <ChevronDown className="h-3 w-3 text-[#FF7900]" />
           )
         ) : (
-          <ArrowUpDown className="h-3 w-3 text-gray-300" />
+          <ArrowUpDown className="h-3 w-3 text-gray-500" />
         )}
       </div>
     </th>

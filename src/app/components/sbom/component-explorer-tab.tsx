@@ -154,7 +154,7 @@ export function ComponentExplorerTab({
 
         {pagination.total === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
-            <Package className="mb-2 h-8 w-8 text-gray-300" />
+            <Package className="mb-2 h-8 w-8 text-gray-500" />
             <p className="text-[14px] text-gray-500">No components found</p>
           </div>
         )}

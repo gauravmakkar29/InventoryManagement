@@ -288,7 +288,7 @@ function SimulationHistory({
   if (history.length === 0) {
     return (
       <div className="py-12 text-center">
-        <History className="mx-auto h-8 w-8 text-gray-300 mb-2" />
+        <History className="mx-auto h-8 w-8 text-gray-500 mb-2" />
         <p className="text-[14px] text-gray-500">No simulation history</p>
       </div>
     );
@@ -581,7 +581,7 @@ export function RiskSimulationDialog({
               <SimulationResultsPanel result={result} />
             ) : (
               <div className="py-12 text-center">
-                <AlertTriangle className="mx-auto h-8 w-8 text-gray-300 mb-2" />
+                <AlertTriangle className="mx-auto h-8 w-8 text-gray-500 mb-2" />
                 <p className="text-[14px] text-gray-500">Configure parameters and click Simulate</p>
               </div>
             )

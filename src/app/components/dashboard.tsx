@@ -184,7 +184,7 @@ function KpiSkeleton() {
 function SectionError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
     <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
-      <RefreshCw className="h-8 w-8 text-muted-foreground/40 mb-3" />
+      <RefreshCw className="h-8 w-8 text-muted-foreground/70 mb-3" />
       <p className="text-[15px] font-medium text-foreground/80">{message}</p>
       <button
         onClick={onRetry}
@@ -481,7 +481,7 @@ export function Dashboard() {
         <div className="flex items-center gap-3">
           <span className="text-[14px] text-muted-foreground/70">{dateStr}</span>
           {dashData?.lastUpdated && (
-            <span className="text-[13px] text-muted-foreground/40">
+            <span className="text-[13px] text-muted-foreground/70">
               Updated {dashData.lastUpdated.toLocaleTimeString()}
             </span>
           )}
@@ -543,7 +543,7 @@ export function Dashboard() {
         {/* Quick Actions */}
         <div className="card-elevated px-5 py-4">
           <h3 className="text-[15px] font-semibold text-foreground mb-3">Quick Actions</h3>
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {QUICK_ACTIONS.map((action) => {
               const Icon = action.icon;
               return (
@@ -837,7 +837,7 @@ export function Dashboard() {
                     <p className="text-[15px] font-medium text-foreground">{item.title}</p>
                     <p className="text-[14px] text-muted-foreground/70 truncate">{item.subtitle}</p>
                   </div>
-                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/40" />
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
                 </div>
               );
             })}
