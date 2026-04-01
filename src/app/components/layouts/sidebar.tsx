@@ -193,19 +193,19 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0",
                         isActive
-                          ? "bg-accent/10 font-semibold text-accent"
+                          ? "bg-[#FFF7ED] font-semibold text-[#7c2d12] dark:bg-[#431407] dark:text-[#fed7aa]"
                           : "text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
                       {isActive && (
-                        <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-accent" />
+                        <div className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-[#9a3412] dark:bg-[#fb923c]" />
                       )}
                       <Icon
                         aria-hidden="true"
                         className={cn(
                           "h-[18px] w-[18px] shrink-0",
                           isActive
-                            ? "text-accent"
+                            ? "text-[#9a3412] dark:text-[#fed7aa]"
                             : "text-muted-foreground/60 group-hover:text-foreground",
                         )}
                       />
