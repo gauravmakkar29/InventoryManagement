@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Eye, EyeOff, Check, X, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, Sun, Zap, Shield, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../../lib/use-auth";
 import { cn } from "../../lib/utils";
@@ -10,45 +10,17 @@ import { MfaChallenge } from "./mfa-challenge";
 interface SignInForm {
   email: string;
   password: string;
-  remember: boolean;
 }
-
-interface PasswordRule {
-  label: string;
-  test: (pw: string) => boolean;
-}
-
-const PASSWORD_RULES: PasswordRule[] = [
-  { label: "At least 12 characters", test: (pw) => pw.length >= 12 },
-  { label: "One uppercase letter (A-Z)", test: (pw) => /[A-Z]/.test(pw) },
-  { label: "One lowercase letter (a-z)", test: (pw) => /[a-z]/.test(pw) },
-  { label: "One digit (0-9)", test: (pw) => /\d/.test(pw) },
-  {
-    label: "One symbol (!@#$%^&*)",
-    test: (pw) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(pw),
-  },
-];
 
 export function SignIn() {
   const { signIn, isAuthenticated, signInError, mfaRequired } = useAuth();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [showPolicyHints, setShowPolicyHints] = useState(false);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<SignInForm>();
-
-  const watchedPassword = watch("password", "");
-
-  const policyResults = useMemo(
-    () => PASSWORD_RULES.map((rule) => ({ ...rule, passed: rule.test(watchedPassword) })),
-    [watchedPassword],
-  );
-
-  const allPoliciesMet = policyResults.every((r) => r.passed);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -59,57 +31,166 @@ export function SignIn() {
   const onSubmit = async (data: SignInForm) => {
     try {
       await signIn(data.email, data.password);
-      // If MFA is required, signIn won't throw but mfaRequired will be set
-      // Navigation happens after MFA verification
       if (!mfaRequired) {
         navigate("/", { replace: true });
       }
     } catch (err) {
-      // Check if it's a network error vs auth error
       if (err instanceof TypeError && err.message.includes("fetch")) {
         toast.error("Unable to connect. Check your network and try again.");
       }
-      // Auth errors are shown inline via signInError state
     }
   };
 
-  // Show MFA challenge screen
   if (mfaRequired) {
     return <MfaChallenge onSuccess={() => navigate("/", { replace: true })} />;
   }
 
   return (
     <div className="flex min-h-screen">
-      {/* Left 50%: Branding — white with geometric pattern */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center relative bg-white overflow-hidden">
+      {/* Left 50%: Solar-themed branding panel */}
+      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-center relative bg-[#0f172a] overflow-hidden">
+        {/* Animated gradient background */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: "radial-gradient(circle at 1px 1px, #e5e7eb 0.8px, transparent 0)",
-            backgroundSize: "28px 28px",
-            opacity: 0.5,
+            background:
+              "radial-gradient(ellipse at 30% 20%, #FF7900 0%, transparent 50%), " +
+              "radial-gradient(ellipse at 70% 80%, #2563eb 0%, transparent 50%)",
           }}
         />
+
+        {/* Grid pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), " +
+              "linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+
+        {/* Solar panel illustration (SVG) */}
+        <div className="relative z-10 mb-10">
+          <svg
+            width="200"
+            height="200"
+            viewBox="0 0 200 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            {/* Sun */}
+            <circle cx="160" cy="40" r="24" fill="#FF7900" opacity="0.9" />
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+              <line
+                key={angle}
+                x1={160 + Math.cos((angle * Math.PI) / 180) * 30}
+                y1={40 + Math.sin((angle * Math.PI) / 180) * 30}
+                x2={160 + Math.cos((angle * Math.PI) / 180) * 38}
+                y2={40 + Math.sin((angle * Math.PI) / 180) * 38}
+                stroke="#FF7900"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.7"
+              />
+            ))}
+            {/* Solar panel - angled rectangle */}
+            <g transform="translate(30, 70) rotate(-15, 70, 60)">
+              <rect
+                x="10"
+                y="20"
+                width="120"
+                height="80"
+                rx="4"
+                fill="#1e293b"
+                stroke="#334155"
+                strokeWidth="2"
+              />
+              {/* Panel grid cells */}
+              {[0, 1, 2, 3].map((row) =>
+                [0, 1, 2].map((col) => (
+                  <rect
+                    key={`${row}-${col}`}
+                    x={16 + col * 38}
+                    y={26 + row * 18}
+                    width="34"
+                    height="14"
+                    rx="1"
+                    fill="#2563eb"
+                    opacity={0.6 + row * 0.1}
+                  />
+                )),
+              )}
+              {/* Panel stand */}
+              <line x1="70" y1="100" x2="70" y2="130" stroke="#475569" strokeWidth="3" />
+              <line
+                x1="50"
+                y1="130"
+                x2="90"
+                y2="130"
+                stroke="#475569"
+                strokeWidth="3"
+                strokeLinecap="round"
+              />
+            </g>
+            {/* Energy flow dots */}
+            {[0, 1, 2].map((i) => (
+              <circle
+                key={i}
+                cx={140 - i * 15}
+                cy={75 + i * 15}
+                r="3"
+                fill="#FF7900"
+                opacity={0.9 - i * 0.25}
+              >
+                <animate
+                  attributeName="opacity"
+                  values="0.3;0.9;0.3"
+                  dur="2s"
+                  begin={`${i * 0.3}s`}
+                  repeatCount="indefinite"
+                />
+              </circle>
+            ))}
+          </svg>
+        </div>
+
+        {/* Branding text */}
         <div className="relative z-10 text-center px-12 max-w-md">
-          <h1 className="text-[32px] font-bold tracking-tight text-gray-900">
+          <h1 className="text-[32px] font-bold tracking-tight text-white">
             IMS <span className="text-[#FF7900]">Gen2</span>
           </h1>
-          <p className="mt-3 text-[16px] leading-relaxed text-gray-500">
+          <p className="mt-3 text-[16px] leading-relaxed text-gray-400">
             Hardware Lifecycle Management Platform
           </p>
+
           <div className="mt-8 flex items-center justify-center gap-2">
-            <div className="h-px w-12 bg-gray-200" />
+            <div className="h-px w-12 bg-gray-700" />
             <div className="h-1.5 w-1.5 rounded-full bg-[#FF7900]" />
-            <div className="h-px w-12 bg-gray-200" />
+            <div className="h-px w-12 bg-gray-700" />
           </div>
-          <p className="mt-8 text-[13px] text-gray-500 max-w-xs mx-auto leading-relaxed">
-            Enterprise device inventory, firmware deployment, compliance tracking & operational
-            analytics.
-          </p>
+
+          {/* Feature highlights */}
+          <div className="mt-8 grid grid-cols-2 gap-4 text-left">
+            {[
+              { icon: Sun, label: "Solar Fleet Monitoring" },
+              { icon: Zap, label: "Firmware Deployment" },
+              { icon: Shield, label: "NIST 800-53 Compliance" },
+              { icon: BarChart3, label: "Operational Analytics" },
+            ].map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5">
+                  <Icon className="h-4 w-4 text-[#FF7900]" />
+                </div>
+                <span className="text-[12px] text-gray-400">{label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Right 50%: Form — light gray bg */}
+      {/* Right 50%: Sign-in form */}
       <div className="flex flex-1 flex-col items-center justify-center bg-[#f9fafb] px-6 lg:w-1/2">
         <div className="w-full max-w-[400px]">
           {/* Mobile-only logo */}
@@ -194,7 +275,6 @@ export function SignIn() {
                     {...register("password", {
                       required: "Password is required",
                     })}
-                    onFocus={() => setShowPolicyHints(true)}
                   />
                   <button
                     type="button"
@@ -211,40 +291,10 @@ export function SignIn() {
                     {errors.password.message}
                   </p>
                 )}
-
-                {/* Password policy hints */}
-                {showPolicyHints && watchedPassword.length > 0 && (
-                  <ul className="mt-2 space-y-1" aria-label="Password requirements">
-                    {policyResults.map((rule) => (
-                      <li
-                        key={rule.label}
-                        className={cn(
-                          "flex items-center gap-1.5 text-[11px]",
-                          rule.passed ? "text-emerald-600" : "text-gray-500",
-                        )}
-                      >
-                        {rule.passed ? (
-                          <Check className="h-3 w-3 shrink-0" aria-hidden="true" />
-                        ) : (
-                          <X className="h-3 w-3 shrink-0" aria-hidden="true" />
-                        )}
-                        {rule.label}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </div>
 
-              {/* Remember me + Forgot password */}
-              <div className="flex items-center justify-between">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-[#FF7900] accent-[#FF7900]"
-                    {...register("remember")}
-                  />
-                  <span className="text-[13px] text-gray-600">Remember me</span>
-                </label>
+              {/* Forgot password */}
+              <div className="flex items-center justify-end">
                 <button
                   type="button"
                   className="text-[13px] font-medium text-[#FF7900] hover:text-[#e66d00] cursor-pointer"
@@ -257,7 +307,7 @@ export function SignIn() {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={isSubmitting || (watchedPassword.length > 0 && !allPoliciesMet)}
+                disabled={isSubmitting}
                 className={cn(
                   "flex h-11 w-full cursor-pointer items-center justify-center rounded-lg bg-[#FF7900] text-[14px] font-semibold text-white",
                   "shadow-sm",
