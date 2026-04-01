@@ -114,7 +114,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
             <button
               onClick={onClose}
               className={cn(
-                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
+                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
                 "hover:bg-gray-100 hover:text-gray-600",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
               )}
@@ -129,7 +129,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
             {/* User info (read-only) */}
             <div className="rounded-lg bg-gray-50 px-4 py-3">
               <p className="text-[15px] font-medium text-gray-900">{user.name}</p>
-              <p className="mt-0.5 text-[14px] text-gray-500">{user.email}</p>
+              <p className="mt-0.5 text-[14px] text-gray-600">{user.email}</p>
             </div>
 
             {/* Role */}

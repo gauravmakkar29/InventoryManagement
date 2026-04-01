@@ -112,7 +112,7 @@ const INITIAL_USERS: ManagedUser[] = [
 const STATUS_CONFIG: Record<UserStatus, { dot: string; bg: string; text: string }> = {
   Active: { dot: "bg-emerald-500", bg: "bg-emerald-50", text: "text-emerald-700" },
   Invited: { dot: "bg-amber-500", bg: "bg-amber-50", text: "text-amber-700" },
-  Disabled: { dot: "bg-gray-400", bg: "bg-gray-100", text: "text-gray-500" },
+  Disabled: { dot: "bg-gray-400", bg: "bg-gray-100", text: "text-gray-600" },
 };
 
 function formatLastLogin(dateStr: string | null): string {
@@ -235,7 +235,7 @@ export function UserManagement() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-[20px] font-medium text-gray-900">User Management</h2>
-          <p className="mt-0.5 text-[14px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-600">
             Manage platform users, roles, and access permissions
           </p>
         </div>
@@ -258,7 +258,7 @@ export function UserManagement() {
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-[360px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             value={searchQuery}
@@ -266,7 +266,7 @@ export function UserManagement() {
             placeholder="Search by name or email..."
             aria-label="Search users"
             className={cn(
-              "h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-500",
+              "h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-600",
               "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
             )}
           />
@@ -289,7 +289,7 @@ export function UserManagement() {
         </select>
 
         {/* Count */}
-        <span className="text-[14px] text-gray-500">
+        <span className="text-[14px] text-gray-600">
           {filteredUsers.length} of {users.length} users
         </span>
       </div>
@@ -303,44 +303,44 @@ export function UserManagement() {
               <tr className="border-b border-gray-100 bg-gray-50/60">
                 <th
                   scope="col"
-                  className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Role
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Department
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                 >
                   Last Login
                 </th>
                 {isAdmin && (
                   <th
                     scope="col"
-                    className="px-5 py-3 text-right text-[13px] font-semibold uppercase tracking-wider text-gray-500"
+                    className="px-5 py-3 text-right text-[13px] font-semibold uppercase tracking-wider text-gray-600"
                   >
                     Actions
                   </th>
@@ -352,7 +352,7 @@ export function UserManagement() {
                 <tr>
                   <td
                     colSpan={isAdmin ? 7 : 6}
-                    className="px-5 py-12 text-center text-[15px] text-gray-500"
+                    className="px-5 py-12 text-center text-[15px] text-gray-600"
                   >
                     No users match your search criteria.
                   </td>
@@ -383,7 +383,7 @@ export function UserManagement() {
                           <span
                             className={cn(
                               "text-[15px] font-medium",
-                              user.status === "Disabled" ? "text-gray-500" : "text-gray-900",
+                              user.status === "Disabled" ? "text-gray-600" : "text-gray-900",
                             )}
                           >
                             {user.name}
@@ -428,7 +428,7 @@ export function UserManagement() {
                       </td>
 
                       {/* Last Login */}
-                      <td className="px-4 text-[14px] text-gray-500 tabular-nums">
+                      <td className="px-4 text-[14px] text-gray-600 tabular-nums">
                         {formatLastLogin(user.lastLogin)}
                       </td>
 
@@ -439,7 +439,7 @@ export function UserManagement() {
                             <button
                               onClick={() => handleEdit(user)}
                               className={cn(
-                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
+                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
                                 "hover:bg-gray-100 hover:text-gray-600",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
@@ -454,7 +454,7 @@ export function UserManagement() {
                                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg",
                                 user.status === "Disabled"
                                   ? "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600"
-                                  : "text-gray-500 hover:bg-red-50 hover:text-red-500",
+                                  : "text-gray-600 hover:bg-red-50 hover:text-red-500",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
                               aria-label={

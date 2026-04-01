@@ -102,7 +102,7 @@ export function QuarantineZonesTab({
                 <td className="px-4">
                   <div>
                     <p className="text-[14px] font-medium text-gray-900">{zone.name}</p>
-                    <p className="text-[13px] text-gray-500">{zone.id}</p>
+                    <p className="text-[13px] text-gray-600">{zone.id}</p>
                   </div>
                 </td>
                 <td className="px-4">
@@ -111,7 +111,7 @@ export function QuarantineZonesTab({
                       "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
                       zone.status === "Active"
                         ? "bg-red-50 text-red-700 border-red-200"
-                        : "bg-gray-50 text-gray-500 border-gray-200",
+                        : "bg-gray-50 text-gray-600 border-gray-200",
                     )}
                   >
                     <span
@@ -133,7 +133,7 @@ export function QuarantineZonesTab({
                   </span>
                 </td>
                 <td className="px-4 text-[14px] text-gray-600">{zone.radiusKm} km</td>
-                <td className="px-4 text-[14px] text-gray-500">
+                <td className="px-4 text-[14px] text-gray-600">
                   {formatRelativeTime(zone.createdAt)}
                 </td>
                 <td className="px-4 text-right">
@@ -145,7 +145,7 @@ export function QuarantineZonesTab({
                       Lift Quarantine
                     </button>
                   ) : (
-                    <span className="text-[13px] text-gray-500">
+                    <span className="text-[13px] text-gray-600">
                       Lifted {zone.liftedAt ? formatRelativeTime(zone.liftedAt) : ""}
                     </span>
                   )}

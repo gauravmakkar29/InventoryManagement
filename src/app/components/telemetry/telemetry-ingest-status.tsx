@@ -106,7 +106,7 @@ export function TelemetryIngestStatus() {
           </span>
           <button
             onClick={fetchStatus}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-600 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
             aria-label="Refresh pipeline status"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -121,7 +121,7 @@ export function TelemetryIngestStatus() {
           <p className="text-[16px] font-bold tabular-nums text-gray-900">
             {status.recordsIngestedLastHour.toLocaleString()}
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-500">Records / hr</p>
+          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Records / hr</p>
         </div>
 
         {/* Average latency */}
@@ -130,7 +130,7 @@ export function TelemetryIngestStatus() {
           <p className="text-[16px] font-bold tabular-nums text-gray-900">
             {status.avgLatencyMs}ms
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-500">Avg Latency</p>
+          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Avg Latency</p>
         </div>
 
         {/* Errors */}
@@ -143,7 +143,7 @@ export function TelemetryIngestStatus() {
           <AlertCircle
             className={cn(
               "mx-auto h-4 w-4 mb-1.5",
-              status.errorCount > 0 ? "text-red-500" : "text-gray-500",
+              status.errorCount > 0 ? "text-red-500" : "text-gray-600",
             )}
           />
           <p
@@ -154,12 +154,12 @@ export function TelemetryIngestStatus() {
           >
             {status.errorCount}
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-500">Errors / hr</p>
+          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Errors / hr</p>
         </div>
       </div>
 
       {/* Last ingestion timestamp */}
-      <div className="mt-3 flex items-center gap-1.5 text-[13px] text-gray-500">
+      <div className="mt-3 flex items-center gap-1.5 text-[13px] text-gray-600">
         <Clock className="h-3 w-3" />
         <span>Last ingestion: {formatRelativeTime(status.lastSuccessfulIngestion)}</span>
       </div>

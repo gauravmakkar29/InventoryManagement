@@ -255,7 +255,7 @@ export function NetworkTopologyGraph({
         })}
       </svg>
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-[13px] text-gray-500">
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-[13px] text-gray-600">
         <span className="font-semibold text-gray-700">Legend:</span>
         {Object.entries(statusColors).map(([status, color]) => (
           <span key={status} className="flex items-center gap-1.5">
@@ -263,7 +263,7 @@ export function NetworkTopologyGraph({
             {status}
           </span>
         ))}
-        <span className="mx-1 text-gray-500">|</span>
+        <span className="mx-1 text-gray-600">|</span>
         {Object.entries(edgeTypeLabels).map(([type, label]) => (
           <span key={type} className="flex items-center gap-1.5">
             <span className="h-0.5 w-4" style={{ backgroundColor: edgeTypeColors[type] }} />
@@ -298,13 +298,13 @@ export function LateralMovementPanel({
         </div>
         <button
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto px-5 py-4">
-        <p className="mb-4 text-[14px] text-gray-500">
+        <p className="mb-4 text-[14px] text-gray-600">
           Devices ranked by lateral movement probability from the selected origin device.
         </p>
         <div className="space-y-2">
@@ -312,7 +312,7 @@ export function LateralMovementPanel({
             <div key={dev.deviceId} className="rounded-lg border border-gray-200 p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-gray-500 bg-gray-100">
+                  <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-gray-600 bg-gray-100">
                     {i + 1}
                   </span>
                   <span className="text-[14px] font-medium text-gray-900">{dev.deviceName}</span>
@@ -346,7 +346,7 @@ export function LateralMovementPanel({
                   />
                 </div>
               </div>
-              <p className="mt-1.5 text-[13px] text-gray-500">{dev.primaryRiskFactor}</p>
+              <p className="mt-1.5 text-[13px] text-gray-600">{dev.primaryRiskFactor}</p>
             </div>
           ))}
         </div>

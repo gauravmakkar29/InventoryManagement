@@ -311,13 +311,13 @@ export function Deployment() {
 
           {filteredFirmware.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-gray-50 py-16">
-              <Package className="mb-3 h-10 w-10 text-muted-foreground/70" />
+              <Package className="mb-3 h-10 w-10 text-muted-foreground" />
               <p className="text-sm font-medium text-muted-foreground">
                 {firmware.length === 0
                   ? "No firmware packages found"
                   : "No firmware found matching the selected filters"}
               </p>
-              <p className="mt-1 text-sm text-muted-foreground/70">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {firmware.length === 0
                   ? "Upload your first firmware package to get started."
                   : "Try adjusting your filters."}
@@ -356,7 +356,7 @@ export function Deployment() {
                     case "Active":
                       return "bg-emerald-500/10 text-emerald-600";
                     case "Deprecated":
-                      return "bg-gray-200 text-gray-500";
+                      return "bg-gray-200 text-gray-600";
                     case "Pending":
                       return "bg-amber-500/10 text-amber-600";
                   }
@@ -804,11 +804,11 @@ export function Deployment() {
 
           {!reportGenerated && (
             <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-muted/20 py-16">
-              <FileText className="mb-3 h-10 w-10 text-muted-foreground/70" />
+              <FileText className="mb-3 h-10 w-10 text-muted-foreground" />
               <p className="text-sm font-medium text-muted-foreground">
                 Select a report type and click Generate
               </p>
-              <p className="mt-1 text-sm text-muted-foreground/70">
+              <p className="mt-1 text-sm text-muted-foreground">
                 Reports can be exported as CSV or JSON
               </p>
             </div>

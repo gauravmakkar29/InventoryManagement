@@ -207,7 +207,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                           "h-[18px] w-[18px] shrink-0",
                           isActive
                             ? "text-accent"
-                            : "text-muted-foreground/60 group-hover:text-foreground",
+                            : "text-muted-foreground group-hover:text-foreground",
                         )}
                       />
                       {!collapsed && <span className="truncate">{item.label}</span>}

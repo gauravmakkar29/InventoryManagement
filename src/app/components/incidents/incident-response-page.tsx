@@ -90,7 +90,7 @@ export function IncidentResponsePage() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-[20px] font-semibold text-gray-900">Incident Response</h1>
-          <p className="mt-0.5 text-[14px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-600">
             Manage security incidents, device isolation, quarantine zones, and response playbooks
           </p>
         </div>

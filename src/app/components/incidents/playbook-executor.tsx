@@ -32,7 +32,7 @@ export function PlaybookExecutor({
       </div>
       {/* Progress bar */}
       <div>
-        <div className="mb-1 flex items-center justify-between text-[13px] text-gray-500">
+        <div className="mb-1 flex items-center justify-between text-[13px] text-gray-600">
           <span>
             {progress.completedSteps} of {progress.totalSteps} steps complete
           </span>
@@ -71,11 +71,11 @@ export function PlaybookExecutor({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] font-bold text-gray-500">#{step.stepNumber}</span>
+                  <span className="text-[13px] font-bold text-gray-600">#{step.stepNumber}</span>
                   <p
                     className={cn(
                       "text-[14px] font-medium",
-                      step.isCompleted ? "text-gray-500 line-through" : "text-gray-900",
+                      step.isCompleted ? "text-gray-600 line-through" : "text-gray-900",
                     )}
                   >
                     {step.title}
@@ -86,9 +86,9 @@ export function PlaybookExecutor({
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[14px] text-gray-500">{step.description}</p>
+                <p className="mt-0.5 text-[14px] text-gray-600">{step.description}</p>
                 {step.isCompleted && step.completedByName && (
-                  <p className="mt-1 text-[13px] text-gray-500">
+                  <p className="mt-1 text-[13px] text-gray-600">
                     Completed by {step.completedByName} &middot;{" "}
                     {step.completedAt ? formatRelativeTime(step.completedAt) : ""}
                   </p>

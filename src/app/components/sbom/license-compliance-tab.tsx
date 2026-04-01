@@ -90,15 +90,15 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
             <div className="flex items-center gap-6 border-l border-gray-200 pl-6">
               <div className="text-center">
                 <div className="text-[20px] font-bold text-green-600">{stats.approved}</div>
-                <div className="text-[13px] text-gray-500">Approved</div>
+                <div className="text-[13px] text-gray-600">Approved</div>
               </div>
               <div className="text-center">
                 <div className="text-[20px] font-bold text-red-600">{stats.restricted}</div>
-                <div className="text-[13px] text-gray-500">Restricted</div>
+                <div className="text-[13px] text-gray-600">Restricted</div>
               </div>
               <div className="text-center">
-                <div className="text-[20px] font-bold text-gray-500">{stats.unknown}</div>
-                <div className="text-[13px] text-gray-500">Unknown</div>
+                <div className="text-[20px] font-bold text-gray-600">{stats.unknown}</div>
+                <div className="text-[13px] text-gray-600">Unknown</div>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-500">
+            <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-600">
               No license data available
             </div>
           )}

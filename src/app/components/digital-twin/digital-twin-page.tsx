@@ -334,7 +334,7 @@ function HealthFactorsBreakdown({ factors }: { factors: HealthFactors }) {
         const color = getHealthColor(value);
         return (
           <div key={f.key} className="flex items-center gap-2">
-            <span className="w-[130px] truncate text-[13px] text-gray-500">{f.label}</span>
+            <span className="w-[130px] truncate text-[13px] text-gray-600">{f.label}</span>
             <div className="flex-1 h-2 rounded-full bg-gray-100 overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-300"
@@ -344,7 +344,7 @@ function HealthFactorsBreakdown({ factors }: { factors: HealthFactors }) {
             <span className="w-8 text-right text-[13px] font-semibold tabular-nums text-gray-700">
               {value}
             </span>
-            <span className="text-[12px] text-gray-500">({Math.round(f.weight * 100)}%)</span>
+            <span className="text-[12px] text-gray-600">({Math.round(f.weight * 100)}%)</span>
           </div>
         );
       })}
@@ -533,7 +533,7 @@ function StateReplayTimeline({
                       : "h-3 w-3 border-gray-300 bg-white group-hover:border-[#FF7900]",
                 )}
               />
-              <span className="text-[11px] text-gray-500 tabular-nums">
+              <span className="text-[11px] text-gray-600 tabular-nums">
                 {new Date(snap.timestamp).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -576,22 +576,22 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
       )}
       <div className="grid grid-cols-2 gap-3 text-[14px]">
         <div>
-          <p className="text-gray-500">Firmware</p>
+          <p className="text-gray-600">Firmware</p>
           <p className="font-medium text-gray-700">{snapshot.firmwareVersion}</p>
         </div>
         <div>
-          <p className="text-gray-500">Health Score</p>
+          <p className="text-gray-600">Health Score</p>
           <p className="font-medium" style={{ color: getHealthColor(snapshot.healthScore) }}>
             {snapshot.healthScore}
           </p>
         </div>
         <div>
-          <p className="text-gray-500">Status</p>
+          <p className="text-gray-600">Status</p>
           <p className="font-medium text-gray-700 capitalize">{snapshot.status}</p>
         </div>
         <div>
-          <p className="text-gray-500">Config Hash</p>
-          <p className="font-mono text-gray-500 truncate">{snapshot.configHash.slice(0, 16)}</p>
+          <p className="text-gray-600">Config Hash</p>
+          <p className="font-mono text-gray-600 truncate">{snapshot.configHash.slice(0, 16)}</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2">
@@ -599,19 +599,19 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgTemperature.toFixed(1)}
           </p>
-          <p className="text-[12px] text-gray-500">Avg Temp</p>
+          <p className="text-[12px] text-gray-600">Avg Temp</p>
         </div>
         <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgCpuLoad.toFixed(1)}%
           </p>
-          <p className="text-[12px] text-gray-500">CPU Load</p>
+          <p className="text-[12px] text-gray-600">CPU Load</p>
         </div>
         <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgErrorRate.toFixed(2)}%
           </p>
-          <p className="text-[12px] text-gray-500">Error Rate</p>
+          <p className="text-[12px] text-gray-600">Error Rate</p>
         </div>
       </div>
     </div>
@@ -662,16 +662,16 @@ function StateComparisonView({
     <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="text-[14px] font-semibold text-gray-900">State Comparison</h4>
-        <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
+        <button onClick={onClose} className="text-gray-600 hover:text-gray-600 cursor-pointer">
           <X className="h-4 w-4" />
         </button>
       </div>
       <div className="grid grid-cols-[120px_1fr_1fr] gap-y-1.5 text-[14px]">
-        <div className="font-semibold text-gray-500 text-[12px] uppercase">Field</div>
-        <div className="font-semibold text-gray-500 text-[12px] uppercase">
+        <div className="font-semibold text-gray-600 text-[12px] uppercase">Field</div>
+        <div className="font-semibold text-gray-600 text-[12px] uppercase">
           {new Date(left.timestamp).toLocaleDateString()}
         </div>
-        <div className="font-semibold text-gray-500 text-[12px] uppercase">
+        <div className="font-semibold text-gray-600 text-[12px] uppercase">
           {new Date(right.timestamp).toLocaleDateString()}
         </div>
         {fields.map((f) => {
@@ -683,7 +683,7 @@ function StateComparisonView({
           const improved = !isNaN(numL) && !isNaN(numR) && numR > numL;
           return (
             <div key={f.label} className="contents">
-              <span className="text-gray-500 font-medium">{f.label}</span>
+              <span className="text-gray-600 font-medium">{f.label}</span>
               <span className={cn("font-mono", changed ? "bg-red-50 px-1 rounded" : "")}>{l}</span>
               <span
                 className={cn(
@@ -792,9 +792,9 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
           <div>
             <h3 className="text-[16px] font-semibold text-gray-900">Firmware Upgrade Simulation</h3>
-            <p className="text-[14px] text-gray-500 mt-0.5">{twin.deviceName}</p>
+            <p className="text-[14px] text-gray-600 mt-0.5">{twin.deviceName}</p>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
+          <button onClick={onClose} className="text-gray-600 hover:text-gray-600 cursor-pointer">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -803,18 +803,18 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
           <div className="p-6 space-y-5">
             {/* Current firmware */}
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-              <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">
+              <p className="text-[12px] font-semibold uppercase text-gray-600 mb-2">
                 Current Firmware
               </p>
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white border border-gray-200">
-                  <Cpu className="h-5 w-5 text-gray-500" />
+                  <Cpu className="h-5 w-5 text-gray-600" />
                 </div>
                 <div>
                   <p className="text-[15px] font-semibold text-gray-900">
                     {twin.currentFirmwareVersion}
                   </p>
-                  <p className="text-[13px] text-gray-500">{twin.deviceModel}</p>
+                  <p className="text-[13px] text-gray-600">{twin.deviceModel}</p>
                 </div>
               </div>
             </div>
@@ -900,7 +900,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   <tbody>
                     {savedSimulations.map((sim) => (
                       <tr key={sim.id} className="border-b border-gray-100">
-                        <td className="px-3 py-2 text-gray-500">
+                        <td className="px-3 py-2 text-gray-600">
                           {new Date(sim.simulatedAt).toLocaleDateString()}
                         </td>
                         <td className="px-3 py-2 font-medium text-gray-700">
@@ -943,7 +943,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setResult(null)}
-                className="text-[14px] font-medium text-gray-500 hover:text-gray-700 cursor-pointer flex items-center gap-1"
+                className="text-[14px] font-medium text-gray-600 hover:text-gray-700 cursor-pointer flex items-center gap-1"
               >
                 <SkipBack className="h-3 w-3" /> Back
               </button>
@@ -962,7 +962,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             {/* Health Delta large display */}
             <div className="flex items-center justify-center gap-4 py-4">
               <div className="text-center">
-                <p className="text-[13px] text-gray-500 mb-1">Health Score Change</p>
+                <p className="text-[13px] text-gray-600 mb-1">Health Score Change</p>
                 <div className="flex items-center gap-2">
                   {result.predictedHealthScoreChange >= 0 ? (
                     <ArrowUp className="h-6 w-6 text-emerald-500" />
@@ -988,7 +988,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 <p className="text-[15px] font-bold text-gray-900 tabular-nums">
                   {result.predictedDowntimeMinutes}m
                 </p>
-                <p className="text-[12px] text-gray-500">Est. Downtime</p>
+                <p className="text-[12px] text-gray-600">Est. Downtime</p>
               </div>
               <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
                 <span
@@ -1003,13 +1003,13 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 >
                   {result.rollbackRisk}
                 </span>
-                <p className="text-[12px] text-gray-500">Rollback Risk</p>
+                <p className="text-[12px] text-gray-600">Rollback Risk</p>
               </div>
               <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
                 <p className="text-[15px] font-bold text-gray-900">
                   {result.targetFirmwareVersion}
                 </p>
-                <p className="text-[12px] text-gray-500">Target FW</p>
+                <p className="text-[12px] text-gray-600">Target FW</p>
               </div>
             </div>
 
@@ -1124,7 +1124,7 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h4 className="text-[15px] font-semibold text-gray-900">Configuration Drift Analysis</h4>
-        <button onClick={onClose} className="text-gray-500 hover:text-gray-600 cursor-pointer">
+        <button onClick={onClose} className="text-gray-600 hover:text-gray-600 cursor-pointer">
           <X className="h-4 w-4" />
         </button>
       </div>
@@ -1133,7 +1133,7 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
         <div className="flex flex-col items-center py-8 text-center">
           <CheckCircle className="h-8 w-8 text-emerald-400 mb-2" />
           <p className="text-[15px] font-medium text-gray-700">Configuration In Sync</p>
-          <p className="text-[14px] text-gray-500 mt-1">
+          <p className="text-[14px] text-gray-600 mt-1">
             All config keys match the golden baseline
           </p>
         </div>
@@ -1166,12 +1166,12 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
                 </div>
                 <ChevronRight
                   className={cn(
-                    "h-4 w-4 text-gray-500 transition-transform",
+                    "h-4 w-4 text-gray-600 transition-transform",
                     selectedItem?.configKey === item.configKey && "rotate-90",
                   )}
                 />
               </div>
-              <p className="text-[13px] text-gray-500 mt-1">
+              <p className="text-[13px] text-gray-600 mt-1">
                 Detected {new Date(item.detectedAt).toLocaleDateString()}
               </p>
 
@@ -1246,7 +1246,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
         <div className="flex items-center gap-3">
           <HealthScoreGauge score={avgScore} size={52} />
           <div>
-            <p className="text-[14px] text-gray-500">Fleet Avg Health</p>
+            <p className="text-[14px] text-gray-600">Fleet Avg Health</p>
             <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
               {avgScore}
             </p>
@@ -1259,7 +1259,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
 
       {/* Distribution Bar Chart (Story 15.5 AC2) */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">
+        <p className="text-[12px] font-semibold uppercase text-gray-600 mb-2">
           Health Distribution
         </p>
         <div className="flex items-end gap-3 h-[48px]">
@@ -1272,7 +1272,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: critical > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[12px] text-gray-500">Crit</span>
+            <span className="text-[12px] text-gray-600">Crit</span>
             <span className="text-[14px] font-bold tabular-nums text-gray-700">{critical}</span>
           </div>
           <div className="flex flex-col items-center gap-1 flex-1">
@@ -1284,7 +1284,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: warning > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[12px] text-gray-500">Warn</span>
+            <span className="text-[12px] text-gray-600">Warn</span>
             <span className="text-[14px] font-bold tabular-nums text-gray-700">{warning}</span>
           </div>
           <div className="flex flex-col items-center gap-1 flex-1">
@@ -1296,7 +1296,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
                 minHeight: healthy > 0 ? 4 : 0,
               }}
             />
-            <span className="text-[12px] text-gray-500">OK</span>
+            <span className="text-[12px] text-gray-600">OK</span>
             <span className="text-[14px] font-bold tabular-nums text-gray-700">{healthy}</span>
           </div>
         </div>
@@ -1304,7 +1304,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
 
       {/* Radar Chart (Story 15.5 AC3) */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-1">Factor Analysis</p>
+        <p className="text-[12px] font-semibold uppercase text-gray-600 mb-1">Factor Analysis</p>
         <svg
           width={radarSize}
           height={radarSize}
@@ -1375,21 +1375,21 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
 
       {/* Config Drift Summary */}
       <div className="card-elevated px-4 py-3.5">
-        <p className="text-[12px] font-semibold uppercase text-gray-500 mb-2">Config Status</p>
+        <p className="text-[12px] font-semibold uppercase text-gray-600 mb-2">Config Status</p>
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[14px] text-gray-500">In Sync</span>
+            <span className="text-[14px] text-gray-600">In Sync</span>
             <span className="text-[15px] font-bold tabular-nums text-emerald-600">
               {twins.filter((t) => t.configDriftStatus === "InSync").length}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[14px] text-gray-500">Drifted</span>
+            <span className="text-[14px] text-gray-600">Drifted</span>
             <span className="text-[15px] font-bold tabular-nums text-amber-600">{drifted}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[14px] text-gray-500">Unknown</span>
-            <span className="text-[15px] font-bold tabular-nums text-gray-500">
+            <span className="text-[14px] text-gray-600">Unknown</span>
+            <span className="text-[15px] font-bold tabular-nums text-gray-600">
               {twins.filter((t) => t.configDriftStatus === "Unknown").length}
             </span>
           </div>
@@ -1472,13 +1472,13 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
         >
           <ChevronRight className="h-4 w-4 rotate-180" />
         </button>
         <div>
           <h2 className="text-[18px] font-semibold text-gray-900">{twin.deviceName}</h2>
-          <p className="text-[14px] text-gray-500">
+          <p className="text-[14px] text-gray-600">
             {twin.deviceModel} &middot; {twin.currentFirmwareVersion} &middot; Last synced{" "}
             {new Date(twin.lastSyncedAt).toLocaleTimeString()}
           </p>
@@ -1491,7 +1491,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 ? "bg-emerald-50 text-emerald-700"
                 : twin.configDriftStatus === "Drifted"
                   ? "bg-amber-50 text-amber-700"
-                  : "bg-gray-100 text-gray-500",
+                  : "bg-gray-100 text-gray-600",
             )}
           >
             {twin.configDriftStatus === "InSync" ? "In Sync" : twin.configDriftStatus}
@@ -1522,7 +1522,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer transition-colors",
                 activeTab === tab.id
                   ? "border-[#FF7900] text-[#FF7900]"
-                  : "border-transparent text-gray-500 hover:text-gray-700",
+                  : "border-transparent text-gray-600 hover:text-gray-700",
               )}
             >
               <Icon className="h-4 w-4" />
@@ -1544,7 +1544,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
             >
               {getHealthLabel(twin.healthScore)}
             </p>
-            <p className="text-[13px] text-gray-500">Composite Health Score</p>
+            <p className="text-[13px] text-gray-600">Composite Health Score</p>
           </div>
           {/* Factors Breakdown */}
           <div className="card-elevated p-5">
@@ -1567,7 +1567,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                     "rounded-lg px-2.5 py-1 text-[13px] font-medium cursor-pointer",
                     timeRange === r
                       ? "bg-[#FF7900] text-white"
-                      : "bg-gray-100 text-gray-500 hover:bg-gray-200",
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200",
                   )}
                 >
                   {r}
@@ -1583,7 +1583,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 style={{ left: tooltip.x + 10, top: tooltip.y - 50 }}
               >
                 <p className="font-semibold text-gray-900">{tooltip.point.score}</p>
-                <p className="text-gray-500">{tooltip.point.date}</p>
+                <p className="text-gray-600">{tooltip.point.date}</p>
                 {tooltip.point.event && (
                   <p className="text-[#FF7900] font-medium mt-0.5">{tooltip.point.event}</p>
                 )}
@@ -1609,7 +1609,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 const idx = snapshots.findIndex((s) => s.id === activeSnapId);
                 if (idx > 0) setActiveSnapId(snapshots[idx - 1]!.id);
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <SkipBack className="h-4 w-4" />
             </button>
@@ -1624,7 +1624,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 const idx = snapshots.findIndex((s) => s.id === activeSnapId);
                 if (idx < snapshots.length - 1) setActiveSnapId(snapshots[idx + 1]!.id);
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <SkipForward className="h-4 w-4" />
             </button>
@@ -1641,7 +1641,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                   "flex items-center gap-1.5 rounded-lg px-3 py-2 text-[14px] font-medium cursor-pointer",
                   selectedSnapIds.length >= 2
                     ? "bg-[#FF7900] text-white hover:bg-[#e66d00]"
-                    : "bg-gray-100 text-gray-500 cursor-not-allowed",
+                    : "bg-gray-100 text-gray-600 cursor-not-allowed",
                 )}
               >
                 <GitCompare className="h-3.5 w-3.5" /> Compare
@@ -1671,11 +1671,11 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
             </button>
           </div>
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 flex flex-col items-center">
-            <Cpu className="h-10 w-10 text-gray-500 mb-3" />
+            <Cpu className="h-10 w-10 text-gray-600 mb-3" />
             <p className="text-[15px] font-medium text-gray-600">
               Run a firmware upgrade simulation
             </p>
-            <p className="text-[14px] text-gray-500 mt-1">
+            <p className="text-[14px] text-gray-600 mt-1">
               Preview health score impact, vulnerabilities, and rollback risk before deploying
             </p>
           </div>
@@ -1734,10 +1734,10 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
               </span>
             )}
           </div>
-          <p className="text-[13px] text-gray-500 truncate">{twin.deviceModel}</p>
+          <p className="text-[13px] text-gray-600 truncate">{twin.deviceModel}</p>
           {topRiskFactor && (
             <div className="mt-1.5 flex items-center gap-1.5">
-              <span className="text-[12px] text-gray-500">Top risk:</span>
+              <span className="text-[12px] text-gray-600">Top risk:</span>
               <span
                 className="text-[12px] font-medium"
                 style={{ color: getHealthColor(topRiskFactor[1]) }}
@@ -1746,7 +1746,7 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
               </span>
             </div>
           )}
-          <p className="mt-1 text-[12px] text-gray-500 tabular-nums">
+          <p className="mt-1 text-[12px] text-gray-600 tabular-nums">
             Synced {new Date(twin.lastSyncedAt).toLocaleTimeString()}
           </p>
         </div>
@@ -1758,12 +1758,12 @@ function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => void })
                 ? "bg-emerald-50 text-emerald-700"
                 : twin.configDriftStatus === "Drifted"
                   ? "bg-amber-50 text-amber-700"
-                  : "bg-gray-100 text-gray-500",
+                  : "bg-gray-100 text-gray-600",
             )}
           >
             {twin.configDriftStatus === "InSync" ? "In Sync" : twin.configDriftStatus}
           </span>
-          <ChevronRight className="h-4 w-4 text-gray-500" />
+          <ChevronRight className="h-4 w-4 text-gray-600" />
         </div>
       </div>
     </div>
@@ -1808,7 +1808,7 @@ export function DigitalTwinPage() {
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-[20px] font-semibold text-gray-900">Digital Twin</h2>
-          <p className="mt-0.5 text-[14px] text-gray-500">
+          <p className="mt-0.5 text-[14px] text-gray-600">
             Fleet-wide device health monitoring, simulation, and configuration analysis
           </p>
         </div>
@@ -1826,14 +1826,14 @@ export function DigitalTwinPage() {
       <div className="flex flex-wrap items-center gap-3">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
           <input
             type="text"
             placeholder="Search devices..."
             aria-label="Search devices"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-[14px] text-gray-700 placeholder:text-gray-500 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none w-[220px]"
+            className="rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-[14px] text-gray-700 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none w-[220px]"
           />
         </div>
 
@@ -1860,7 +1860,7 @@ export function DigitalTwinPage() {
                       : bucket.key === "healthy"
                         ? "bg-emerald-50 text-emerald-700"
                         : "bg-[#FF7900] text-white"
-                  : "bg-gray-100 text-gray-500 hover:bg-gray-200",
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200",
               )}
             >
               {bucket.label}
@@ -1882,7 +1882,7 @@ export function DigitalTwinPage() {
 
         {/* Sort */}
         <div className="ml-auto flex items-center gap-2">
-          <span className="text-[13px] text-gray-500">Sort by:</span>
+          <span className="text-[13px] text-gray-600">Sort by:</span>
           <select
             value={sortField}
             onChange={(e) => setSortField(e.target.value as SortField)}
@@ -1894,7 +1894,7 @@ export function DigitalTwinPage() {
           </select>
           <button
             onClick={() => setSortAsc(!sortAsc)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             title={sortAsc ? "Ascending" : "Descending"}
           >
             {sortAsc ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />}
@@ -1911,9 +1911,9 @@ export function DigitalTwinPage() {
 
       {filteredTwins.length === 0 && (
         <div className="card-elevated flex flex-col items-center justify-center py-12 px-5">
-          <Search className="h-8 w-8 text-gray-500 mb-3" />
+          <Search className="h-8 w-8 text-gray-600 mb-3" />
           <p className="text-[15px] font-medium text-gray-700">No devices match your filters</p>
-          <p className="text-[14px] text-gray-500 mt-1">
+          <p className="text-[14px] text-gray-600 mt-1">
             Try adjusting your search or filter criteria
           </p>
         </div>

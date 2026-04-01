@@ -76,9 +76,9 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
   const qrPlaceholder = totpUri ? (
     <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
       <div className="text-center">
-        <ShieldCheck className="mx-auto h-10 w-10 text-gray-500" />
-        <p className="mt-2 text-[13px] text-gray-500">QR Code</p>
-        <p className="text-[12px] text-gray-500">Scan with authenticator</p>
+        <ShieldCheck className="mx-auto h-10 w-10 text-gray-600" />
+        <p className="mt-2 text-[13px] text-gray-600">QR Code</p>
+        <p className="text-[12px] text-gray-600">Scan with authenticator</p>
       </div>
     </div>
   ) : null;
@@ -88,7 +88,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
       <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-500 hover:text-gray-600 cursor-pointer"
+          className="absolute right-4 top-4 text-gray-600 hover:text-gray-600 cursor-pointer"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -96,7 +96,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
         <div className="mb-6 text-center">
           <h2 className="text-[20px] font-semibold text-gray-900">Set Up MFA</h2>
-          <p className="mt-1.5 text-[15px] text-gray-500">
+          <p className="mt-1.5 text-[15px] text-gray-600">
             Scan the QR code with your authenticator app
           </p>
         </div>
@@ -107,7 +107,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
         {/* Manual key */}
         {secret && (
           <div className="mb-5">
-            <p className="text-[14px] font-medium text-gray-500 mb-1.5">
+            <p className="text-[14px] font-medium text-gray-600 mb-1.5">
               Can't scan? Enter this key manually:
             </p>
             <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2.5">
@@ -116,7 +116,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
               </code>
               <button
                 onClick={handleCopy}
-                className="shrink-0 text-gray-500 hover:text-gray-600 cursor-pointer"
+                className="shrink-0 text-gray-600 hover:text-gray-600 cursor-pointer"
                 aria-label="Copy secret key"
               >
                 {copied ? (

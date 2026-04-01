@@ -142,7 +142,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
   if (!open) return null;
 
   const inputClass =
-    "h-10 w-full border border-gray-200 bg-white px-3 text-[15px] text-gray-900 placeholder:text-gray-500 rounded-lg focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]";
+    "h-10 w-full border border-gray-200 bg-white px-3 text-[15px] text-gray-900 placeholder:text-gray-600 rounded-lg focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]";
 
   const labelClass = "block text-[14px] font-medium text-gray-700 mb-1";
 
@@ -165,7 +165,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
             <button
               onClick={handleClose}
               className={cn(
-                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-500",
+                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
                 "hover:bg-gray-100 hover:text-gray-600",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
               )}
