@@ -139,6 +139,54 @@ Docs/                       # Specs, epics, architecture decisions
 
 ---
 
+## Role-Based Access Control (RBAC)
+
+The app enforces role-based permissions across all pages and actions. RBAC is managed in a single file — [`src/lib/rbac.ts`](src/lib/rbac.ts).
+
+### Roles & Permissions
+
+| Role              | Pages                                | Actions                       | Customer Filter     |
+| ----------------- | ------------------------------------ | ----------------------------- | ------------------- |
+| **Admin**         | All 12 pages + User Management       | Create, Edit, Delete, Approve | No                  |
+| **Manager**       | All except User Management           | Create, Edit, Approve         | No                  |
+| **Technician**    | Dashboard, Inventory, Service Orders | Create, Edit                  | No                  |
+| **Viewer**        | 10 pages (read-only)                 | None                          | No                  |
+| **CustomerAdmin** | Dashboard, Inventory, Service Orders | Create, Edit                  | Yes (own data only) |
+
+### How It Works
+
+```
+src/lib/rbac.ts                      ← Single source of truth (roles, pages, actions)
+src/lib/providers/mock/mock-auth-adapter.ts  ← Role assignment (from email or IdP groups)
+src/app/components/require-role.tsx   ← UI gating component
+src/app/components/layouts/sidebar.tsx ← Dynamic nav filtering by role
+```
+
+1. **Role assignment** — The auth adapter sets `groups: ["Admin"]` on the User object. In mock mode, roles are derived from email prefix. In production (Cognito/Azure AD), roles come from IdP groups.
+
+2. **Sidebar filtering** — `sidebar.tsx` calls `canAccessPage(role, page)` to show/hide nav items per role.
+
+3. **Action gating** — `<RequireRole action="approve">` wraps buttons so they only render for roles with that permission.
+
+4. **Data filtering** — `shouldFilterByCustomer(role)` returns true for CustomerAdmin, enabling per-tenant data isolation.
+
+### Customizing Roles
+
+To add a role or change permissions, edit the `PERMISSIONS` object in `src/lib/rbac.ts`:
+
+```typescript
+const PERMISSIONS: Record<Role, RolePermissions> = {
+  Admin: {
+    pages: ["dashboard", "inventory", "deployment", ...],
+    actions: ["create", "edit", "delete", "approve"],
+    filterByCustomer: false,
+  },
+  // Add your custom role here
+};
+```
+
+---
+
 ## Provider Adapters
 
 ### Existing Adapters
@@ -289,9 +337,11 @@ Write unit tests for your adapter by following the mock adapter test pattern:
 
 | Document                  | Path                                                    |
 | ------------------------- | ------------------------------------------------------- |
+| Demo Walkthrough          | `Docs/demo-walkthrough.md`                              |
 | Master Project Brief      | `Docs/IMS-Gen2-Detailed-Project-Brief-For-Terraform.md` |
 | App Modules Overview      | `Docs/app-modules-overview.md`                          |
 | Reporting/Traceability    | `Docs/reporting-traceability-strategy.md`               |
+| GitHub Projects Guide     | `Docs/github-projects-guide.md`                         |
 | E2E QA Process            | `Docs/e2e-qa-process.md`                                |
 | Architecture Decisions    | `Docs/decisions/`                                       |
 | Epic Stories + Tech Specs | `Docs/epics/epic-{1-18}/`                               |
