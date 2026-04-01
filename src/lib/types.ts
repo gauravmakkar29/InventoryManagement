@@ -319,9 +319,13 @@ export interface AuthState {
   signInError: string | null;
   mfaRequired: boolean;
   mfaEnabled: boolean;
+  /** True when session is about to expire (T-2 min). Show a warning modal. */
+  sessionExpiring: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   verifyMfa: (code: string) => Promise<void>;
   setupMfa: () => Promise<string>;
   confirmMfaSetup: (code: string) => Promise<void>;
   signOut: () => void;
+  /** Extend the current session (dismisses the expiry warning). */
+  extendSession: () => Promise<void>;
 }
