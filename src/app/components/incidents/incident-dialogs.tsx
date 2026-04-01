@@ -95,7 +95,7 @@ export function CreateIncidentDialog({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Brief incident description..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ export function CreateIncidentDialog({
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
               placeholder="Detailed description of the incident..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none resize-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -116,7 +116,7 @@ export function CreateIncidentDialog({
               <select
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value as IncidentSeverity)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
               >
                 <option value="Critical">Critical</option>
                 <option value="High">High</option>
@@ -129,7 +129,7 @@ export function CreateIncidentDialog({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as IncidentCategory)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
               >
                 <option value="Security">Security</option>
                 <option value="Hardware">Hardware</option>
@@ -151,7 +151,7 @@ export function CreateIncidentDialog({
                 onChange={(e) => setDeviceSearch(e.target.value)}
                 placeholder="Search devices to add..."
                 aria-label="Search devices to add"
-                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
               />
             </div>
           </div>
@@ -166,7 +166,7 @@ export function CreateIncidentDialog({
           <button
             onClick={handleSubmit}
             disabled={!title.trim()}
-            className="rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-accent-hover disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             Create Incident
           </button>
@@ -252,7 +252,7 @@ export function IsolationDialog({
                   className={cn(
                     "flex cursor-pointer items-start gap-3 rounded-lg border p-3",
                     policy === p.value
-                      ? "border-[#c2410c] bg-orange-50"
+                      ? "border-accent-text bg-orange-50"
                       : "border-gray-300 hover:bg-gray-50",
                   )}
                 >
@@ -345,7 +345,7 @@ export function ReleaseDialog({
               onChange={(e) => setReason(e.target.value)}
               rows={3}
               placeholder="Provide a reason for releasing this device from isolation..."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none resize-none"
             />
           </div>
         </div>

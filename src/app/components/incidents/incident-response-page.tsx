@@ -108,7 +108,7 @@ export function IncidentResponsePage() {
               className={cn(
                 "flex items-center gap-2 rounded-md px-4 py-2 text-[14px] font-medium cursor-pointer",
                 isActive
-                  ? "bg-[#FF7900] text-white shadow-sm"
+                  ? "bg-accent text-white shadow-sm"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
               )}
             >

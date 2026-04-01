@@ -83,7 +83,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
         <div className="rounded-2xl bg-white p-8 shadow-lg">
           <div className="mb-7 flex flex-col items-center text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
-              <ShieldCheck className="h-9 w-9 text-[#c2410c]" />
+              <ShieldCheck className="h-9 w-9 text-accent-text" />
             </div>
             <h2 className="text-[22px] font-semibold text-gray-900">Verification Required</h2>
             <p className="mt-1.5 text-[15px] text-gray-600">
@@ -119,7 +119,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
                 autoFocus={i === 0}
                 className={cn(
                   "h-12 w-11 rounded-lg border border-gray-300 bg-white text-center text-[18px] font-semibold text-gray-900",
-                  "focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20",
+                  "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                   "disabled:opacity-60",
                 )}
                 aria-label={`Digit ${i + 1}`}

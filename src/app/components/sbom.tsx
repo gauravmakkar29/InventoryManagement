@@ -38,8 +38,8 @@ export function SBOMPage() {
       {/* Page header */}
       <div className="mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF7900]/10">
-            <FileBox className="h-5 w-5 text-[#c2410c]" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
+            <FileBox className="h-5 w-5 text-accent-text" />
           </div>
           <div>
             <h1 className="text-[18px] font-bold text-gray-900">SBOM Management</h1>
@@ -65,7 +65,7 @@ export function SBOMPage() {
               className={cn(
                 "flex items-center gap-2 border-b-2 px-4 py-2.5 text-[14px] font-medium cursor-pointer -mb-px",
                 isActive
-                  ? "border-[#c2410c] text-[#c2410c]"
+                  ? "border-accent-text text-accent-text"
                   : "border-transparent text-gray-600 hover:text-gray-700",
               )}
             >

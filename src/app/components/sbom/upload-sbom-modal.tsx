@@ -69,7 +69,7 @@ export function UploadSBOMModal({
               aria-label="Search firmware"
               value={firmwareSearch}
               onChange={(e) => setFirmwareSearch(e.target.value)}
-              className="mb-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none"
+              className="mb-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none"
             />
             <div className="max-h-[120px] overflow-y-auto rounded-lg border border-gray-300">
               {filteredFirmware.map((fw) => (
@@ -79,7 +79,7 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex w-full items-center justify-between px-3 py-2 text-left text-[14px] cursor-pointer",
                     selectedFirmware === fw.id
-                      ? "bg-orange-50 text-[#c2410c] font-medium"
+                      ? "bg-orange-50 text-accent-text font-medium"
                       : "text-gray-700 hover:bg-gray-50",
                   )}
                 >
@@ -110,14 +110,14 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex items-center gap-2 rounded-lg border px-4 py-2.5 text-[14px] font-medium cursor-pointer",
                     format === f
-                      ? "border-[#c2410c] bg-orange-50 text-[#c2410c]"
+                      ? "border-accent-text bg-orange-50 text-accent-text"
                       : "border-gray-300 text-gray-600 hover:bg-gray-50",
                   )}
                 >
                   <div
                     className={cn(
                       "h-3.5 w-3.5 rounded-full border-2",
-                      format === f ? "border-[#c2410c] bg-[#FF7900]" : "border-gray-300",
+                      format === f ? "border-accent-text bg-accent" : "border-gray-300",
                     )}
                   >
                     {format === f && (
@@ -152,7 +152,7 @@ export function UploadSBOMModal({
               className={cn(
                 "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 cursor-pointer",
                 dragOver
-                  ? "border-[#c2410c] bg-orange-50"
+                  ? "border-accent-text bg-orange-50"
                   : fileName
                     ? "border-green-300 bg-green-50"
                     : "border-gray-300 hover:border-gray-300",
@@ -202,7 +202,7 @@ export function UploadSBOMModal({
             className={cn(
               "rounded-lg px-4 py-2 text-[14px] font-medium text-white cursor-pointer",
               selectedFirmware && fileName
-                ? "bg-[#FF7900] hover:bg-[#e66e00]"
+                ? "bg-accent hover:bg-[#e66e00]"
                 : "bg-gray-300 cursor-not-allowed",
             )}
           >

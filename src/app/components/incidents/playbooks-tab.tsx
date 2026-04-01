@@ -21,7 +21,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as IncidentCategory | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Categories</option>
           <option value="Security">Security</option>
@@ -30,7 +30,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
           <option value="Firmware">Firmware</option>
           <option value="Environmental">Environmental</option>
         </select>
-        <button className="ml-auto rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer">
+        <button className="ml-auto rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer">
           <Plus className="mr-1.5 inline h-3.5 w-3.5" /> Create Playbook
         </button>
       </div>

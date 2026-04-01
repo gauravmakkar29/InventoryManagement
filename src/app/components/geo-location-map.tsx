@@ -104,7 +104,7 @@ const FILTER_OPTIONS: FilterOption[] = [
     id: "all",
     label: "All",
     color: "bg-gray-100 text-gray-600 hover:bg-gray-200",
-    activeColor: "bg-[#FF7900] text-white",
+    activeColor: "bg-accent text-white",
     dotColor: "",
   },
   {
@@ -772,7 +772,7 @@ function MapError({ devices, onRetry }: { devices: GeoDevice[]; onRetry: () => v
         <table className="w-full">
           <caption className="sr-only">Device geo-locations</caption>
           <thead>
-            <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
+            <tr className="border-b-2 border-gray-300 bg-table-header">
               <th
                 scope="col"
                 className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"

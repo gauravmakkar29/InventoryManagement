@@ -61,7 +61,7 @@ export function PaginationControls({
             className={cn(
               "h-9 w-9 rounded-lg text-center cursor-pointer",
               page === pagination.currentPage
-                ? "bg-[#FF7900] text-white font-medium"
+                ? "bg-accent text-white font-medium"
                 : "text-gray-600 hover:bg-gray-100",
             )}
           >

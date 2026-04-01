@@ -167,7 +167,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
               className={cn(
                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
                 "hover:bg-gray-100 hover:text-gray-600",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               )}
               aria-label="Close"
             >
@@ -356,7 +356,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 className={cn(
                   "h-10 cursor-pointer rounded-lg border border-gray-300 bg-white px-5 text-[15px] font-medium text-gray-700",
                   "hover:bg-gray-50",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 )}
               >
                 Cancel
@@ -364,9 +364,9 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
               <button
                 type="submit"
                 className={cn(
-                  "h-10 cursor-pointer rounded-lg bg-[#FF7900] px-5 text-[15px] font-medium text-white",
-                  "hover:bg-[#e86e00]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
+                  "h-10 cursor-pointer rounded-lg bg-accent px-5 text-[15px] font-medium text-white",
+                  "hover:bg-accent-hover",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 )}
               >
                 Create Device

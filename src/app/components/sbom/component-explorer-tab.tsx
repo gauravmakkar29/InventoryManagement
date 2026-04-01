@@ -69,7 +69,7 @@ export function ComponentExplorerTab({
             aria-label="Search components"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none"
+            className="h-9 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none"
           />
         </div>
         <div className="flex gap-1.5">
@@ -80,7 +80,7 @@ export function ComponentExplorerTab({
               className={cn(
                 "rounded-lg px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                 licenseFilter === f
-                  ? "bg-[#FF7900] text-white"
+                  ? "bg-accent text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200",
               )}
             >

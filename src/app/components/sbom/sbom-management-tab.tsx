@@ -58,7 +58,7 @@ export function SBOMManagementTab({
             <select
               value={modelFilter}
               onChange={(e) => setModelFilter(e.target.value)}
-              className="h-9 appearance-none rounded-lg border border-gray-300 bg-white pl-9 pr-8 text-[14px] text-gray-700 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] outline-none cursor-pointer"
+              className="h-9 appearance-none rounded-lg border border-gray-300 bg-white pl-9 pr-8 text-[14px] text-gray-700 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none cursor-pointer"
             >
               <option value="all">All Firmware Models</option>
               {firmwareModels.map((m) => (
@@ -74,7 +74,7 @@ export function SBOMManagementTab({
         {canUpload && (
           <button
             onClick={() => setShowUpload(true)}
-            className="flex items-center gap-2 rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66e00] cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66e00] cursor-pointer"
           >
             <Upload className="h-4 w-4" />
             Upload SBOM
@@ -262,7 +262,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
         <div className="flex justify-end">
           <button
             onClick={onViewDetails}
-            className="flex items-center gap-1 text-[14px] font-medium text-[#c2410c] hover:text-[#e66e00] cursor-pointer"
+            className="flex items-center gap-1 text-[14px] font-medium text-accent-text hover:text-[#e66e00] cursor-pointer"
           >
             View Details
             <ChevronRight className="h-3.5 w-3.5" />

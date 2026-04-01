@@ -243,9 +243,9 @@ export function UserManagement() {
           <button
             onClick={() => setInviteOpen(true)}
             className={cn(
-              "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[15px] font-medium text-white",
-              "hover:bg-[#e86e00]",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
+              "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-accent px-4 text-[15px] font-medium text-white",
+              "hover:bg-accent-hover",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
           >
             <UserPlus className="h-4 w-4" aria-hidden="true" />
@@ -401,7 +401,7 @@ export function UserManagement() {
                             "inline-flex rounded-md px-2 py-0.5 text-[14px] font-medium",
                             user.role === "Admin" && "bg-blue-50 text-[#2563eb]",
                             user.role === "Manager" && "bg-purple-50 text-purple-700",
-                            user.role === "Technician" && "bg-orange-50 text-[#c2410c]",
+                            user.role === "Technician" && "bg-orange-50 text-accent-text",
                             user.role === "Viewer" && "bg-gray-100 text-gray-600",
                             user.role === "CustomerAdmin" && "bg-emerald-50 text-emerald-700",
                           )}

@@ -188,7 +188,7 @@ function SectionError({ message, onRetry }: { message: string; onRetry: () => vo
       <p className="text-[15px] font-medium text-foreground/80">{message}</p>
       <button
         onClick={onRetry}
-        className="mt-3 rounded-lg bg-[#FF7900] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66d00] cursor-pointer"
+        className="mt-3 rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer"
       >
         Retry
       </button>
@@ -290,7 +290,7 @@ const METRIC_CARDS = [
     spark: [8, 12, 10, 14, 15, 16, 18],
     icon: Cpu,
     iconBg: "bg-orange-50",
-    iconColor: "text-[#c2410c]",
+    iconColor: "text-accent-text",
     sparkColor: "#FF7900",
   },
   {
@@ -354,7 +354,7 @@ const RECENT_ACTIVITY = [
     dot: "#10b981",
     description: "Firmware v4.1.2 deployed to SG-INV cluster",
     module: "Deployment",
-    moduleBg: "bg-orange-50 text-[#c2410c]",
+    moduleBg: "bg-orange-50 text-accent-text",
     user: "AC",
     userName: "A. Chen",
     time: "15m ago",
@@ -408,7 +408,7 @@ const ATTENTION_ITEMS = [
   {
     icon: Rocket,
     iconBg: "bg-orange-50",
-    iconColor: "text-[#c2410c]",
+    iconColor: "text-accent-text",
     title: "3 firmware approvals",
     subtitle: "v4.2.0, v4.1.3-hotfix, v3.9.8-patch",
   },
@@ -491,7 +491,7 @@ export function Dashboard() {
             className={cn(
               "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg border border-border bg-card text-muted-foreground",
               "hover:bg-muted/50 hover:text-foreground/80",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               "disabled:cursor-not-allowed disabled:opacity-60",
               dashState === "loading" && "animate-spin",
             )}
@@ -550,7 +550,7 @@ export function Dashboard() {
                 <a
                   key={action.label}
                   href={action.path}
-                  className="relative flex flex-col items-center gap-2 rounded-xl border border-border bg-card px-3 py-3.5 text-center shadow-sm hover:border-[#c2410c]/30 hover:shadow-md transition-all"
+                  className="relative flex flex-col items-center gap-2 rounded-xl border border-border bg-card px-3 py-3.5 text-center shadow-sm hover:border-accent-text/30 hover:shadow-md transition-all"
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted/50">
                     <Icon className="h-[18px] w-[18px] text-muted-foreground" />
@@ -576,7 +576,7 @@ export function Dashboard() {
         <div className="col-span-3 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Fleet Status</h3>
-            <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-[#c2410c]">
+            <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-accent-text">
               1,247 devices
             </span>
           </div>
@@ -733,7 +733,7 @@ export function Dashboard() {
         <div className="col-span-3 card-elevated">
           <div className="flex items-center justify-between px-5 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Recent Activity</h3>
-            <button className="flex items-center gap-1 text-[14px] font-medium text-[#c2410c] hover:underline cursor-pointer">
+            <button className="flex items-center gap-1 text-[14px] font-medium text-accent-text hover:underline cursor-pointer">
               View all activity <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
@@ -844,7 +844,7 @@ export function Dashboard() {
           </div>
 
           <div className="border-t border-border/50 px-5 py-3">
-            <button className="flex items-center gap-1 text-[14px] font-medium text-[#c2410c] hover:underline cursor-pointer">
+            <button className="flex items-center gap-1 text-[14px] font-medium text-accent-text hover:underline cursor-pointer">
               View all <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
