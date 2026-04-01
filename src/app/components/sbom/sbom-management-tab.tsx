@@ -91,7 +91,7 @@ export function SBOMManagementTab({
 
       {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
-          <FileBox className="mb-3 h-10 w-10 text-gray-300" />
+          <FileBox className="mb-3 h-10 w-10 text-gray-500" />
           <p className="text-[15px] font-medium text-gray-500">No SBOMs found</p>
           <p className="text-[14px] text-gray-500">Upload an SBOM to get started</p>
         </div>

@@ -54,7 +54,7 @@ function LayoutSkeleton() {
             </div>
             <Skeleton className="h-9 w-9 rounded-lg" />
           </div>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="card-elevated p-5 space-y-3">
                 <Skeleton className="h-10 w-10 rounded-xl" />
@@ -93,7 +93,7 @@ export function ProtectedLayout() {
           <ConnectivityStatusBar connectivity={connectivity} />
           <main
             id="main-content"
-            className="page-enter flex-1 overflow-y-auto scroll-smooth p-6"
+            className="page-enter flex-1 overflow-y-auto scroll-smooth px-4 py-5 sm:px-5 md:px-6 lg:p-6"
             role="main"
             tabIndex={-1}
           >

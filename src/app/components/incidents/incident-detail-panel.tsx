@@ -235,7 +235,7 @@ export function IncidentDetailPanel({
               />
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <BookOpen className="h-10 w-10 text-gray-300 mb-3" />
+                <BookOpen className="h-10 w-10 text-gray-500 mb-3" />
                 <p className="text-[15px] font-medium text-gray-700">No playbook attached</p>
                 <p className="text-[14px] text-gray-500 mt-1">
                   Attach a playbook to track response steps

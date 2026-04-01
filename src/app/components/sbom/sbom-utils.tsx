@@ -48,7 +48,7 @@ export function PaginationControls({
           className={cn(
             "rounded-lg px-2.5 py-1 cursor-pointer",
             pagination.currentPage === 1
-              ? "text-gray-300 cursor-not-allowed"
+              ? "text-gray-500 cursor-not-allowed"
               : "text-gray-600 hover:bg-gray-100",
           )}
         >
@@ -74,7 +74,7 @@ export function PaginationControls({
           className={cn(
             "rounded-lg px-2.5 py-1 cursor-pointer",
             pagination.currentPage === pagination.totalPages
-              ? "text-gray-300 cursor-not-allowed"
+              ? "text-gray-500 cursor-not-allowed"
               : "text-gray-600 hover:bg-gray-100",
           )}
         >

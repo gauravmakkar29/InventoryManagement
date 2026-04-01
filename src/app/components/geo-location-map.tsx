@@ -744,7 +744,7 @@ function MapSkeleton() {
       <Skeleton className="h-full w-full" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-2">
-          <MapPin className="h-8 w-8 text-gray-300 animate-pulse" />
+          <MapPin className="h-8 w-8 text-gray-500 animate-pulse" />
           <span className="text-[14px] text-gray-500">Loading map...</span>
         </div>
       </div>

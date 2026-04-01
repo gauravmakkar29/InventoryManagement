@@ -118,7 +118,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex h-full flex-col bg-card border-r border-border shrink-0 transition-[width] duration-200 ease-in-out overflow-hidden",
+        "h-full flex-col bg-card border-r border-border shrink-0 transition-[width] duration-200 ease-in-out overflow-hidden",
+        "hidden md:flex",
         collapsed ? "w-[68px]" : "w-[240px]",
       )}
       aria-label="Primary navigation"

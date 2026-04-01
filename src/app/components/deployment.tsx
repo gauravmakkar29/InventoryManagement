@@ -311,7 +311,7 @@ export function Deployment() {
 
           {filteredFirmware.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-gray-50 py-16">
-              <Package className="mb-3 h-10 w-10 text-muted-foreground/50" />
+              <Package className="mb-3 h-10 w-10 text-muted-foreground/70" />
               <p className="text-sm font-medium text-muted-foreground">
                 {firmware.length === 0
                   ? "No firmware packages found"
@@ -804,7 +804,7 @@ export function Deployment() {
 
           {!reportGenerated && (
             <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-muted/20 py-16">
-              <FileText className="mb-3 h-10 w-10 text-muted-foreground/40" />
+              <FileText className="mb-3 h-10 w-10 text-muted-foreground/70" />
               <p className="text-sm font-medium text-muted-foreground">
                 Select a report type and click Generate
               </p>

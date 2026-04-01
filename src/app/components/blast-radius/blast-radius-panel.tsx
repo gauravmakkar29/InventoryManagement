@@ -345,7 +345,7 @@ export function BlastRadiusPanel({
           </div>
           {affectedDevices.length === 0 ? (
             <div className="py-8 text-center">
-              <Activity className="mx-auto h-8 w-8 text-gray-300 mb-2" />
+              <Activity className="mx-auto h-8 w-8 text-gray-500 mb-2" />
               <p className="text-[14px] text-gray-500">No devices within radius</p>
             </div>
           ) : (

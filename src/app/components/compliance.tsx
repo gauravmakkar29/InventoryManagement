@@ -488,7 +488,7 @@ function ComplianceTab({
                 <tr>
                   <td colSpan={8} className="px-3 py-12 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <Shield className="h-8 w-8 text-gray-300" />
+                      <Shield className="h-8 w-8 text-gray-500" />
                       <p className="text-sm text-gray-500">No compliance items found</p>
                       <p className="text-sm text-gray-500">
                         Try adjusting your filters or search criteria

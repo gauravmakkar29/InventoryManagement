@@ -354,7 +354,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
   if (!latestReading) {
     return (
       <div className="card-elevated p-8 text-center">
-        <Activity className="mx-auto h-10 w-10 text-gray-300 mb-3" />
+        <Activity className="mx-auto h-10 w-10 text-gray-500 mb-3" />
         <p className="text-[15px] font-medium text-gray-600">No telemetry data available</p>
         <p className="mt-1 text-[14px] text-gray-500">
           Telemetry data will appear here once the device begins reporting
@@ -460,7 +460,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                     ) : trend === "down" ? (
                       <TrendingDown className="h-2.5 w-2.5 text-emerald-400" />
                     ) : (
-                      <Minus className="h-2.5 w-2.5 text-gray-300" />
+                      <Minus className="h-2.5 w-2.5 text-gray-500" />
                     )}
                   </div>
                 </div>
