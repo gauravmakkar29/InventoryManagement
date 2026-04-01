@@ -2,22 +2,16 @@
  * IMS Gen 2 — Epic 14: Incident Response & Quarantine Management
  * Main page component implementing Stories 14.1–14.6
  */
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { cn } from "../../../lib/utils";
 import type {
   Incident,
   IncidentStatus,
   AffectedDevice,
-  QuarantineZone,
-  Playbook,
   IsolationPolicy,
 } from "../../../lib/incident-types";
-import {
-  MOCK_INCIDENTS,
-  MOCK_QUARANTINE_ZONES,
-  MOCK_PLAYBOOKS,
-  MOCK_INCIDENT_METRICS,
-} from "../../../lib/incident-mock-data";
+import { MOCK_INCIDENT_METRICS } from "../../../lib/incident-mock-data";
+import { useIncidentManagement } from "../../../lib/hooks/use-incident-management";
 import type { TabId } from "./incident-types";
 import { TABS } from "./incident-types";
 import { CreateIncidentDialog, IsolationDialog, ReleaseDialog } from "./incident-dialogs";
@@ -32,202 +26,63 @@ import { MetricsDashboardTab } from "./metrics-dashboard-tab";
 // Main Page Component
 // ---------------------------------------------------------------------------
 export function IncidentResponsePage() {
+  const {
+    incidents,
+    quarantineZones,
+    playbooks,
+    isolatedCount,
+    handleCreateIncident,
+    handleStatusChange: hookStatusChange,
+    handleIsolateConfirm: hookIsolateConfirm,
+    handleReleaseConfirm: hookReleaseConfirm,
+    handleStepComplete: hookStepComplete,
+  } = useIncidentManagement();
+
   const [activeTab, setActiveTab] = useState<TabId>("incidents");
-  const [incidents, setIncidents] = useState<Incident[]>(MOCK_INCIDENTS);
-  const [quarantineZones] = useState<QuarantineZone[]>(MOCK_QUARANTINE_ZONES);
-  const [playbooks] = useState<Playbook[]>(MOCK_PLAYBOOKS);
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [isolateDevice, setIsolateDevice] = useState<AffectedDevice | null>(null);
   const [releaseDevice, setReleaseDevice] = useState<AffectedDevice | null>(null);
 
-  const isolatedCount = useMemo(() => {
-    let count = 0;
-    incidents.forEach((inc) => {
-      inc.affectedDevices.forEach((dev) => {
-        if (dev.status === "Isolated") count++;
-      });
-    });
-    return count;
-  }, [incidents]);
-
-  const handleCreateIncident = useCallback((newIncident: Incident) => {
-    setIncidents((prev) => [newIncident, ...prev]);
-  }, []);
+  // Sync selectedIncident with incidents array after mutations
+  useEffect(() => {
+    if (selectedIncident) {
+      const updated = incidents.find((inc) => inc.id === selectedIncident.id);
+      if (updated && updated !== selectedIncident) {
+        setSelectedIncident(updated);
+      }
+    }
+  }, [incidents, selectedIncident]);
 
   const handleStatusChange = useCallback(
     (incidentId: string, newStatus: IncidentStatus, note: string) => {
-      setIncidents((prev) =>
-        prev.map((inc) => {
-          if (inc.id !== incidentId) return inc;
-          const event = {
-            timestamp: new Date().toISOString(),
-            action: "status_changed" as const,
-            performedBy: "USR-001",
-            performedByName: "Sarah Chen",
-            fromStatus: inc.status,
-            toStatus: newStatus,
-            note: note || undefined,
-          };
-          return {
-            ...inc,
-            status: newStatus,
-            updatedAt: new Date().toISOString(),
-            containedAt: newStatus === "Contained" ? new Date().toISOString() : inc.containedAt,
-            resolvedAt: newStatus === "Resolved" ? new Date().toISOString() : inc.resolvedAt,
-            timelineEvents: [...inc.timelineEvents, event],
-          };
-        }),
-      );
-      setSelectedIncident((prev) => {
-        if (!prev || prev.id !== incidentId) return prev;
-        const event = {
-          timestamp: new Date().toISOString(),
-          action: "status_changed" as const,
-          performedBy: "USR-001",
-          performedByName: "Sarah Chen",
-          fromStatus: prev.status,
-          toStatus: newStatus,
-          note: note || undefined,
-        };
-        return {
-          ...prev,
-          status: newStatus,
-          updatedAt: new Date().toISOString(),
-          timelineEvents: [...prev.timelineEvents, event],
-        };
-      });
+      hookStatusChange(incidentId, newStatus, note);
     },
-    [],
+    [hookStatusChange],
   );
 
-  const handleIsolateConfirm = useCallback((deviceId: string, policy: IsolationPolicy) => {
-    setIncidents((prev) =>
-      prev.map((inc) => ({
-        ...inc,
-        affectedDevices: inc.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Isolated" as const,
-                isolatedAt: new Date().toISOString(),
-                isolationPolicy: policy,
-              }
-            : dev,
-        ),
-      })),
-    );
-    setSelectedIncident((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        affectedDevices: prev.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Isolated" as const,
-                isolatedAt: new Date().toISOString(),
-                isolationPolicy: policy,
-              }
-            : dev,
-        ),
-        timelineEvents: [
-          ...prev.timelineEvents,
-          {
-            timestamp: new Date().toISOString(),
-            action: "device_isolated" as const,
-            performedBy: "USR-001",
-            performedByName: "Sarah Chen",
-            deviceId,
-            deviceName: prev.affectedDevices.find((d) => d.id === deviceId)?.name,
-            note: `${policy} policy applied`,
-          },
-        ],
-      };
-    });
-    setIsolateDevice(null);
-  }, []);
+  const handleIsolateConfirm = useCallback(
+    (deviceId: string, policy: IsolationPolicy) => {
+      hookIsolateConfirm(deviceId, policy);
+      setIsolateDevice(null);
+    },
+    [hookIsolateConfirm],
+  );
 
-  const handleReleaseConfirm = useCallback((deviceId: string, reason: string) => {
-    setIncidents((prev) =>
-      prev.map((inc) => ({
-        ...inc,
-        affectedDevices: inc.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Online" as const,
-                isolatedAt: undefined,
-                isolationPolicy: undefined,
-              }
-            : dev,
-        ),
-      })),
-    );
-    setSelectedIncident((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        affectedDevices: prev.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Online" as const,
-                isolatedAt: undefined,
-                isolationPolicy: undefined,
-              }
-            : dev,
-        ),
-        timelineEvents: [
-          ...prev.timelineEvents,
-          {
-            timestamp: new Date().toISOString(),
-            action: "device_released" as const,
-            performedBy: "USR-001",
-            performedByName: "Sarah Chen",
-            deviceId,
-            deviceName: prev.affectedDevices.find((d) => d.id === deviceId)?.name,
-            note: reason,
-          },
-        ],
-      };
-    });
-    setReleaseDevice(null);
-  }, []);
+  const handleReleaseConfirm = useCallback(
+    (deviceId: string, reason: string) => {
+      hookReleaseConfirm(deviceId, reason);
+      setReleaseDevice(null);
+    },
+    [hookReleaseConfirm],
+  );
 
-  const handleStepComplete = useCallback((incidentId: string, stepNumber: number) => {
-    const updateProgress = (progress: Incident["playbookProgress"]) => {
-      if (!progress) return progress;
-      const updatedSteps = progress.steps.map((s) =>
-        s.stepNumber === stepNumber
-          ? {
-              ...s,
-              isCompleted: true,
-              completedBy: "USR-001",
-              completedByName: "Sarah Chen",
-              completedAt: new Date().toISOString(),
-            }
-          : s,
-      );
-      return {
-        ...progress,
-        completedSteps: updatedSteps.filter((s) => s.isCompleted).length,
-        steps: updatedSteps,
-      };
-    };
-
-    setIncidents((prev) =>
-      prev.map((inc) =>
-        inc.id === incidentId
-          ? { ...inc, playbookProgress: updateProgress(inc.playbookProgress) }
-          : inc,
-      ),
-    );
-    setSelectedIncident((prev) => {
-      if (!prev || prev.id !== incidentId) return prev;
-      return { ...prev, playbookProgress: updateProgress(prev.playbookProgress) };
-    });
-  }, []);
+  const handleStepComplete = useCallback(
+    (incidentId: string, stepNumber: number) => {
+      hookStepComplete(incidentId, stepNumber);
+    },
+    [hookStepComplete],
+  );
 
   return (
     <div className="space-y-5">

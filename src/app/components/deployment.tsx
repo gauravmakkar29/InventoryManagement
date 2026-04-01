@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   Upload,
   ChevronRight,
@@ -33,39 +33,21 @@ import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
 import { generateCSV } from "../../lib/report-generator";
 import { Skeleton } from "../../components/skeleton";
 
-import type {
-  Tab,
-  FirmwareStage,
-  FirmwareStatus,
-  FirmwareEntry,
-  AuditEntry,
-  AuditAction,
-  VulnerabilityEntry,
-  VulnSeverity,
-  RemediationStatus,
-  ReportType,
-  SortDirection,
-  AuditSortField,
-} from "./deployment/deployment-types";
+import type { Tab, RemediationStatus, ReportType } from "./deployment/deployment-types";
 import {
-  INITIAL_FIRMWARE,
-  INITIAL_VULNERABILITIES,
-  INITIAL_AUDIT,
   AUDIT_PAGE_SIZE,
   VULN_PAGE_SIZE,
   AVAILABLE_MODELS,
   SEVERITY_CONFIG,
   REMEDIATION_STYLES,
 } from "./deployment/deployment-constants";
-import {
-  formatTimestamp,
-  getDefaultDateRange,
-  getActionBadgeClass,
-  downloadFile,
-} from "./deployment/deployment-utils";
+import { formatTimestamp, getActionBadgeClass, downloadFile } from "./deployment/deployment-utils";
 import { ApprovalStageIndicator } from "./deployment/approval-stage-indicator";
 import { UploadFirmwareModal } from "./deployment/upload-firmware-modal";
 import { CreateVulnerabilityModal } from "./deployment/create-vulnerability-modal";
+import { useAuditLog } from "../../lib/hooks/use-audit-log";
+import { useFirmwareDeployment } from "../../lib/hooks/use-firmware-deployment";
+import { useVulnerabilityTracker } from "../../lib/hooks/use-vulnerability-tracker";
 
 // =============================================================================
 // Main Deployment Component
@@ -79,66 +61,71 @@ export function Deployment() {
   const canViewAudit = role === "Admin" || role === "Manager";
   const canManageVulns = role === "Admin" || role === "Manager";
 
+  const currentUser = email ?? "admin@hlm.com";
+
+  // --- Custom hooks (issue #160) ---
+  const {
+    addAuditEntry,
+    sortedAudit,
+    paginatedAudit,
+    totalAuditPages,
+    auditStartDate,
+    setAuditStartDate,
+    auditEndDate,
+    setAuditEndDate,
+    auditDateError,
+    setAuditDateError,
+    auditUserFilter,
+    auditUserInput,
+    setAuditUserInput,
+    auditPage,
+    setAuditPage,
+    auditSortField,
+    auditSortDir,
+    auditLoading,
+    auditError,
+    handleApplyDateRange,
+    handleApplyUserFilter,
+    handleClearUserFilter,
+    handleSort,
+    handleRetryAudit,
+    exportAuditCsv,
+  } = useAuditLog(currentUser);
+
+  const {
+    firmware,
+    filteredFirmware,
+    fwStatusFilter,
+    setFwStatusFilter,
+    fwModelFilter,
+    setFwModelFilter,
+    handleUpload: hookUpload,
+    advanceStage,
+    deprecateFirmware,
+    activateFirmware,
+  } = useFirmwareDeployment(currentUser, addAuditEntry);
+
+  const {
+    vulnerabilities,
+    filteredVulnerabilities,
+    paginatedVulnerabilities,
+    totalVulnPages,
+    vulnSeverityFilter,
+    setVulnSeverityFilter,
+    vulnPage,
+    setVulnPage,
+    handleCreateVulnerability,
+    handleRemediationChange,
+  } = useVulnerabilityTracker(addAuditEntry);
+
   const [activeTab, setActiveTab] = useState<Tab>("firmware");
-  const [firmware, setFirmware] = useState<FirmwareEntry[]>(INITIAL_FIRMWARE);
-  const [vulnerabilities, setVulnerabilities] =
-    useState<VulnerabilityEntry[]>(INITIAL_VULNERABILITIES);
-  const [auditLog, setAuditLog] = useState<AuditEntry[]>(INITIAL_AUDIT);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [vulnModalOpen, setVulnModalOpen] = useState(false);
-
-  // Firmware filters — Story 11.7
-  const [fwStatusFilter, setFwStatusFilter] = useState<FirmwareStatus | "All">("All");
-  const [fwModelFilter, setFwModelFilter] = useState<string>("All");
-
-  // Vulnerability filters — Story 11.4
-  const [vulnSeverityFilter, setVulnSeverityFilter] = useState<VulnSeverity | "All">("All");
-  const [vulnPage, setVulnPage] = useState(1);
 
   // Regulatory Reports — Story 11.6
   const [selectedReportType, setSelectedReportType] = useState<ReportType>("compliance");
   const [reportGenerated, setReportGenerated] = useState(false);
   const [reportData, setReportData] = useState<Record<string, unknown>[]>([]);
-
-  // Audit state — Epic 8
-  const defaultRange = useMemo(() => getDefaultDateRange(), []);
-  const [auditStartDate, setAuditStartDate] = useState(defaultRange.start);
-  const [auditEndDate, setAuditEndDate] = useState(defaultRange.end);
-  const [auditDateError, setAuditDateError] = useState("");
-  const [auditUserFilter, setAuditUserFilter] = useState("");
-  const [auditUserInput, setAuditUserInput] = useState("");
-  const [auditPage, setAuditPage] = useState(1);
-  const [auditSortField, setAuditSortField] = useState<AuditSortField>("timestamp");
-  const [auditSortDir, setAuditSortDir] = useState<SortDirection>("desc");
-  const [auditLoading, setAuditLoading] = useState(false);
-  const [auditError, setAuditError] = useState<string | null>(null);
-
-  // ---------------------------------------------------------------------------
-  // Helpers
-  // ---------------------------------------------------------------------------
-
-  const currentUser = email ?? "admin@hlm.com";
-
-  const addAuditEntry = useCallback(
-    (action: AuditAction, resourceType: string, resourceId: string) => {
-      const entry: AuditEntry = {
-        id: `aud-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        user: currentUser,
-        action,
-        resourceType,
-        resourceId,
-        ipAddress: "10.0.12.45",
-        status: "Success",
-      };
-      setAuditLog((prev) => [entry, ...prev]);
-    },
-    [currentUser],
-  );
-
-  // ---------------------------------------------------------------------------
-  // Story 11.1 — Upload Firmware with Checksum
-  // ---------------------------------------------------------------------------
 
   const handleUpload = useCallback(
     (data: {
@@ -149,221 +136,10 @@ export function Deployment() {
       fileSize: string;
       checksum: string;
     }) => {
-      const newEntry: FirmwareEntry = {
-        id: `fw-${Date.now()}`,
-        version: data.version,
-        name: data.name,
-        stage: "Uploaded",
-        status: "Pending",
-        uploadedBy: currentUser,
-        uploadedDate: new Date().toISOString(),
-        testedBy: null,
-        testedDate: null,
-        approvedBy: null,
-        approvedDate: null,
-        date: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        devices: 0,
-        models: data.models.length > 0 ? data.models : ["INV-3200"],
-        releaseNotes: data.releaseNotes,
-        fileSize: data.fileSize,
-        checksum: data.checksum,
-      };
-      setFirmware((prev) => [newEntry, ...prev]);
-      addAuditEntry("Created", "Firmware", `FW#${newEntry.id}`);
-      toast.success(`Firmware ${data.version} uploaded successfully`);
-      setUploadModalOpen(false);
+      hookUpload(data, () => setUploadModalOpen(false));
     },
-    [currentUser, addAuditEntry],
+    [hookUpload],
   );
-
-  // ---------------------------------------------------------------------------
-  // Story 11.2 — Multi-Stage Approval with SoD
-  // ---------------------------------------------------------------------------
-
-  const advanceStage = useCallback(
-    (id: string) => {
-      const fw = firmware.find((f) => f.id === id);
-      if (!fw) return;
-
-      if (fw.stage === "Uploaded") {
-        // SoD: Uploader cannot advance to Testing
-        if (fw.uploadedBy === currentUser) {
-          toast.error("Separation of Duties: The uploader cannot advance to Testing");
-          return;
-        }
-        const confirmed = window.confirm(
-          `Are you sure you want to advance ${fw.version} to Testing?`,
-        );
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? {
-                  ...f,
-                  stage: "Testing" as FirmwareStage,
-                  testedBy: currentUser,
-                  testedDate: new Date().toISOString(),
-                }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} advanced to Testing`);
-      } else if (fw.stage === "Testing") {
-        // SoD: Tester cannot approve
-        if (fw.testedBy === currentUser) {
-          toast.error("Separation of Duties: The tester cannot approve");
-          return;
-        }
-        const confirmed = window.confirm(
-          `Are you sure you want to advance ${fw.version} to Approved?`,
-        );
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? {
-                  ...f,
-                  stage: "Approved" as FirmwareStage,
-                  status: "Active" as FirmwareStatus,
-                  approvedBy: currentUser,
-                  approvedDate: new Date().toISOString(),
-                }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} approved`);
-      }
-    },
-    [firmware, currentUser, addAuditEntry],
-  );
-
-  // ---------------------------------------------------------------------------
-  // Story 11.7 — Deprecate / Activate
-  // ---------------------------------------------------------------------------
-
-  const deprecateFirmware = useCallback(
-    (id: string) => {
-      const fw = firmware.find((f) => f.id === id);
-      if (!fw) return;
-      const confirmed = window.confirm(`Deprecate firmware ${fw.version}?`);
-      if (!confirmed) return;
-
-      setFirmware((prev) =>
-        prev.map((f) =>
-          f.id === id
-            ? {
-                ...f,
-                stage: "Deprecated" as FirmwareStage,
-                status: "Deprecated" as FirmwareStatus,
-                devices: 0,
-              }
-            : f,
-        ),
-      );
-      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-      toast.success(`${fw.version} deprecated`);
-    },
-    [firmware, addAuditEntry],
-  );
-
-  const activateFirmware = useCallback(
-    (id: string) => {
-      const fw = firmware.find((f) => f.id === id);
-      if (!fw) return;
-      const confirmed = window.confirm(
-        `Reactivate firmware ${fw.version}? It will return to Uploaded stage.`,
-      );
-      if (!confirmed) return;
-
-      setFirmware((prev) =>
-        prev.map((f) =>
-          f.id === id
-            ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
-            : f,
-        ),
-      );
-      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-      toast.success(`${fw.version} reactivated`);
-    },
-    [firmware, addAuditEntry],
-  );
-
-  // ---------------------------------------------------------------------------
-  // Story 11.5 — Vulnerability Remediation
-  // ---------------------------------------------------------------------------
-
-  const handleCreateVulnerability = useCallback(
-    (data: Omit<VulnerabilityEntry, "id" | "resolvedDate">) => {
-      const newVuln: VulnerabilityEntry = {
-        ...data,
-        id: `vuln-${Date.now()}`,
-        resolvedDate: null,
-      };
-      setVulnerabilities((prev) => [newVuln, ...prev]);
-      addAuditEntry("Created", "Vulnerability", `VULN#${newVuln.id}`);
-      toast.success("Vulnerability record created");
-    },
-    [addAuditEntry],
-  );
-
-  const handleRemediationChange = useCallback(
-    (vulnId: string, newStatus: RemediationStatus) => {
-      const resolvedDate =
-        newStatus === "Resolved" ? (new Date().toISOString().split("T")[0] ?? null) : null;
-      setVulnerabilities((prev) =>
-        prev.map((v) =>
-          v.id === vulnId ? { ...v, remediationStatus: newStatus, resolvedDate } : v,
-        ),
-      );
-      addAuditEntry("Modified", "Vulnerability", `VULN#${vulnId}`);
-      toast.success(`Vulnerability status updated to ${newStatus}`);
-    },
-    [addAuditEntry],
-  );
-
-  // ---------------------------------------------------------------------------
-  // Story 11.7 — Filtered Firmware
-  // ---------------------------------------------------------------------------
-
-  const filteredFirmware = useMemo(() => {
-    let items = firmware;
-    if (fwStatusFilter !== "All") {
-      items = items.filter((fw) => fw.status === fwStatusFilter);
-    }
-    if (fwModelFilter !== "All") {
-      items = items.filter((fw) => fw.models.includes(fwModelFilter));
-    }
-    return items;
-  }, [firmware, fwStatusFilter, fwModelFilter]);
-
-  // ---------------------------------------------------------------------------
-  // Story 11.4 — Filtered Vulnerabilities
-  // ---------------------------------------------------------------------------
-
-  const filteredVulnerabilities = useMemo(() => {
-    let items = vulnerabilities;
-    if (vulnSeverityFilter !== "All") {
-      items = items.filter((v) => v.severity === vulnSeverityFilter);
-    }
-    // Sort by severity order: Critical > High > Medium > Low
-    const severityOrder: Record<VulnSeverity, number> = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-    items = [...items].sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
-    return items;
-  }, [vulnerabilities, vulnSeverityFilter]);
-
-  const totalVulnPages = Math.max(1, Math.ceil(filteredVulnerabilities.length / VULN_PAGE_SIZE));
-  const paginatedVulnerabilities = useMemo(() => {
-    const start = (vulnPage - 1) * VULN_PAGE_SIZE;
-    return filteredVulnerabilities.slice(start, start + VULN_PAGE_SIZE);
-  }, [filteredVulnerabilities, vulnPage]);
 
   // ---------------------------------------------------------------------------
   // Story 11.6 — Report Generation
@@ -373,7 +149,6 @@ export function Deployment() {
     let data: Record<string, unknown>[] = [];
 
     if (selectedReportType === "compliance") {
-      // Compliance summary from firmware + status
       data = firmware.map((fw) => ({
         "Firmware ID": fw.id,
         Version: fw.version,
@@ -429,111 +204,6 @@ export function Deployment() {
     },
     [reportData, selectedReportType],
   );
-
-  // ---------------------------------------------------------------------------
-  // Audit — Epic 8
-  // ---------------------------------------------------------------------------
-
-  const filteredAudit = useMemo(() => {
-    let entries = auditLog;
-    if (auditStartDate && auditEndDate) {
-      const startISO = new Date(auditStartDate + "T00:00:00Z").toISOString();
-      const endISO = new Date(auditEndDate + "T23:59:59Z").toISOString();
-      entries = entries.filter((e) => e.timestamp >= startISO && e.timestamp <= endISO);
-    }
-    if (auditUserFilter.trim()) {
-      const q = auditUserFilter.toLowerCase();
-      entries = entries.filter((e) => e.user.toLowerCase().includes(q));
-    }
-    return entries;
-  }, [auditLog, auditStartDate, auditEndDate, auditUserFilter]);
-
-  const sortedAudit = useMemo(() => {
-    if (!auditSortField || !auditSortDir) return filteredAudit;
-    return [...filteredAudit].sort((a, b) => {
-      const aVal = a[auditSortField];
-      const bVal = b[auditSortField];
-      const cmp = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-      return auditSortDir === "asc" ? cmp : -cmp;
-    });
-  }, [filteredAudit, auditSortField, auditSortDir]);
-
-  const totalAuditPages = Math.max(1, Math.ceil(sortedAudit.length / AUDIT_PAGE_SIZE));
-  const paginatedAudit = useMemo(() => {
-    const start = (auditPage - 1) * AUDIT_PAGE_SIZE;
-    return sortedAudit.slice(start, start + AUDIT_PAGE_SIZE);
-  }, [sortedAudit, auditPage]);
-
-  const handleApplyDateRange = useCallback(() => {
-    if (auditStartDate && auditEndDate && auditEndDate < auditStartDate) {
-      setAuditDateError("End date must be after start date");
-      return;
-    }
-    setAuditDateError("");
-    setAuditPage(1);
-    setAuditLoading(true);
-    setAuditError(null);
-    setTimeout(() => setAuditLoading(false), 300);
-  }, [auditStartDate, auditEndDate]);
-
-  const handleApplyUserFilter = useCallback(() => {
-    setAuditUserFilter(auditUserInput);
-    setAuditPage(1);
-  }, [auditUserInput]);
-
-  const handleClearUserFilter = useCallback(() => {
-    setAuditUserInput("");
-    setAuditUserFilter("");
-    setAuditPage(1);
-  }, []);
-
-  const handleSort = useCallback(
-    (field: AuditSortField) => {
-      setAuditSortField((prev) => {
-        if (prev !== field) return field;
-        return prev;
-      });
-      setAuditSortDir((prev) => {
-        if (auditSortField !== field) return "asc";
-        if (prev === "asc") return "desc";
-        if (prev === "desc") return null;
-        return "asc";
-      });
-    },
-    [auditSortField],
-  );
-
-  const handleRetryAudit = useCallback(() => {
-    setAuditError(null);
-    setAuditLoading(true);
-    setTimeout(() => setAuditLoading(false), 300);
-  }, []);
-
-  const exportAuditCsv = useCallback(() => {
-    if (sortedAudit.length === 0) return;
-    const data = sortedAudit.map((e) => ({
-      User: e.user,
-      Action: e.action,
-      ResourceType: e.resourceType,
-      ResourceId: e.resourceId,
-      Timestamp: e.timestamp,
-      IPAddress: e.ipAddress,
-      Status: e.status,
-    }));
-    const csv = generateCSV(
-      data,
-      ["User", "Action", "ResourceType", "ResourceId", "Timestamp", "IPAddress", "Status"],
-      ["User", "Action", "ResourceType", "ResourceId", "Timestamp", "IPAddress", "Status"],
-    );
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `audit-log-${auditStartDate}-to-${auditEndDate}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Audit log exported successfully");
-  }, [sortedAudit, auditStartDate, auditEndDate]);
 
   // ---------------------------------------------------------------------------
   // Tabs

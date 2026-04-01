@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, type FormEvent } from "react";
+import { useState, useMemo, type FormEvent } from "react";
 import {
   Plus,
   ChevronLeft,
@@ -17,175 +17,18 @@ import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
-
-/* ─── Types ───────────────────────────────────────────────────────── */
+import { useServiceOrders } from "../../lib/hooks/use-service-orders";
+import type {
+  ServiceOrder,
+  Status,
+  Priority,
+  ServiceType,
+} from "../../lib/mock-data/service-order-data";
+import { TECHNICIANS, STATUS_LABELS } from "../../lib/mock-data/service-order-data";
 
 type ViewMode = "kanban" | "calendar";
-type Status = "Scheduled" | "InProgress" | "Completed";
-type Priority = "High" | "Medium" | "Low";
-type ServiceType = "Internal" | "3rd Party";
 
-interface ServiceOrder {
-  id: string;
-  title: string;
-  description: string;
-  technician: string;
-  scheduledDate: string; // ISO date string YYYY-MM-DD
-  priority: Priority;
-  serviceType: ServiceType;
-  status: Status;
-  location: string;
-  customer: string;
-}
-
-/* ─── Mock Data (12 orders) ───────────────────────────────────────── */
-
-const INITIAL_ORDERS: ServiceOrder[] = [
-  {
-    id: "SO-1001",
-    title: "Quarterly inverter inspection",
-    description: "Routine quarterly inspection of inverter rack A-14.",
-    technician: "J. Martinez",
-    scheduledDate: "2026-03-30",
-    priority: "High",
-    serviceType: "Internal",
-    status: "Scheduled",
-    location: "Denver",
-    customer: "SolarEdge Corp",
-  },
-  {
-    id: "SO-1002",
-    title: "Firmware patch deployment",
-    description: "Deploy firmware v3.8.1 to field controllers.",
-    technician: "A. Chen",
-    scheduledDate: "2026-04-01",
-    priority: "Medium",
-    serviceType: "Internal",
-    status: "Scheduled",
-    location: "Houston",
-    customer: "GridSync LLC",
-  },
-  {
-    id: "SO-1003",
-    title: "Battery module replacement",
-    description: "Replace degraded lithium-ion module in rack B-7.",
-    technician: "S. Kumar",
-    scheduledDate: "2026-04-03",
-    priority: "High",
-    serviceType: "3rd Party",
-    status: "Scheduled",
-    location: "Chicago",
-    customer: "PowerVault Inc",
-  },
-  {
-    id: "SO-1004",
-    title: "Network switch reconfiguration",
-    description: "Reconfigure VLAN settings on monitoring switches.",
-    technician: "M. Johnson",
-    scheduledDate: "2026-04-05",
-    priority: "Low",
-    serviceType: "Internal",
-    status: "Scheduled",
-    location: "Dallas",
-    customer: "SolarEdge Corp",
-  },
-  {
-    id: "SO-1005",
-    title: "Emergency transformer repair",
-    description: "Urgent repair of step-up transformer unit T-3.",
-    technician: "J. Martinez",
-    scheduledDate: "2026-03-27",
-    priority: "High",
-    serviceType: "3rd Party",
-    status: "InProgress",
-    location: "New York",
-    customer: "ConEdison Solar",
-  },
-  {
-    id: "SO-1006",
-    title: "Sensor calibration — Site B",
-    description: "Calibrate irradiance and temperature sensors.",
-    technician: "R. Davis",
-    scheduledDate: "2026-03-28",
-    priority: "Medium",
-    serviceType: "Internal",
-    status: "InProgress",
-    location: "Phoenix",
-    customer: "ArizonaSun Energy",
-  },
-  {
-    id: "SO-1007",
-    title: "HVAC controller update",
-    description: "Update HVAC controllers to latest protocol.",
-    technician: "A. Chen",
-    scheduledDate: "2026-03-25",
-    priority: "Low",
-    serviceType: "Internal",
-    status: "InProgress",
-    location: "Denver",
-    customer: "SolarEdge Corp",
-  },
-  {
-    id: "SO-1008",
-    title: "Panel cleaning — Zone 4",
-    description: "Scheduled cleaning of solar panels in Zone 4.",
-    technician: "S. Kumar",
-    scheduledDate: "2026-03-26",
-    priority: "Medium",
-    serviceType: "3rd Party",
-    status: "InProgress",
-    location: "Houston",
-    customer: "GridSync LLC",
-  },
-  {
-    id: "SO-1009",
-    title: "Annual compliance audit",
-    description: "Full compliance audit per NIST 800-53 controls.",
-    technician: "M. Johnson",
-    scheduledDate: "2026-03-20",
-    priority: "High",
-    serviceType: "Internal",
-    status: "Completed",
-    location: "Chicago",
-    customer: "PowerVault Inc",
-  },
-  {
-    id: "SO-1010",
-    title: "Grounding system test",
-    description: "Test grounding resistance at all junction boxes.",
-    technician: "R. Davis",
-    scheduledDate: "2026-03-18",
-    priority: "Low",
-    serviceType: "Internal",
-    status: "Completed",
-    location: "Dallas",
-    customer: "SolarEdge Corp",
-  },
-  {
-    id: "SO-1011",
-    title: "Inverter firmware rollback",
-    description: "Rollback inverter firmware due to field issue.",
-    technician: "J. Martinez",
-    scheduledDate: "2026-03-22",
-    priority: "Medium",
-    serviceType: "3rd Party",
-    status: "Completed",
-    location: "New York",
-    customer: "ConEdison Solar",
-  },
-  {
-    id: "SO-1012",
-    title: "Thermal imaging survey",
-    description: "Conduct IR thermal imaging survey of panel arrays.",
-    technician: "A. Chen",
-    scheduledDate: "2026-04-08",
-    priority: "Low",
-    serviceType: "Internal",
-    status: "Scheduled",
-    location: "Phoenix",
-    customer: "ArizonaSun Energy",
-  },
-];
+/* ─── Mock Data — moved to src/lib/mock-data/service-order-data.ts ─ */
 
 /* ─── Constants ───────────────────────────────────────────────────── */
 
@@ -195,17 +38,9 @@ const PRIORITY_BG: Record<Priority, string> = {
   Low: "bg-green-600 text-white",
 };
 
-const STATUS_LABELS: Record<Status, string> = {
-  Scheduled: "Scheduled",
-  InProgress: "In Progress",
-  Completed: "Completed",
-};
-
 const COLUMN_ORDER: Status[] = ["Scheduled", "InProgress", "Completed"];
 
 const DAYS_OF_WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-const TECHNICIANS = ["J. Martinez", "A. Chen", "S. Kumar", "M. Johnson", "R. Davis"];
 
 /* ─── Helpers ─────────────────────────────────────────────────────── */
 
@@ -233,31 +68,7 @@ function isSameDay(iso: string, year: number, month: number, day: number): boole
   return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
 }
 
-function generateNextId(orders: ServiceOrder[]): string {
-  const maxNum = orders.reduce((max, o) => {
-    const n = parseInt(o.id.replace("SO-", ""), 10);
-    return n > max ? n : max;
-  }, 0);
-  return `SO-${maxNum + 1}`;
-}
-
-function exportToCsv(orders: ServiceOrder[]): void {
-  const header =
-    "ID,Title,Status,Priority,Technician,Location,Scheduled Date,Service Type,Customer";
-  const rows = orders.map(
-    (o) =>
-      `"${o.id}","${o.title}","${STATUS_LABELS[o.status]}","${o.priority}","${o.technician}","${o.location}","${o.scheduledDate}","${o.serviceType}","${o.customer}"`,
-  );
-  const csv = [header, ...rows].join("\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `service-orders-${new Date().toISOString().slice(0, 10)}.csv`;
-  link.click();
-  URL.revokeObjectURL(url);
-  toast.success("CSV exported successfully");
-}
+/* generateNextId, exportToCsv — moved to use-service-orders hook */
 
 /* ─── Calendar Utilities ──────────────────────────────────────────── */
 
@@ -972,82 +783,34 @@ function FilterBar({
 
 export function AccountService() {
   const [view, setView] = useState<ViewMode>("kanban");
-  const [orders, setOrders] = useState<ServiceOrder[]>(INITIAL_ORDERS);
   const [showCreateModal, setShowCreateModal] = useState(false);
-
-  // Filters
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [priorityFilter, setPriorityFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
 
   // Auth — RBAC for create button
   const { groups } = useAuth();
   const role = getPrimaryRole(groups);
   const canCreate = canPerformAction(role, "create");
 
-  // Filtered orders
-  const filteredOrders = useMemo(() => {
-    return orders.filter((o) => {
-      if (statusFilter !== "all" && o.status !== statusFilter) return false;
-      if (priorityFilter !== "all" && o.priority !== priorityFilter) return false;
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const match =
-          o.id.toLowerCase().includes(q) ||
-          o.title.toLowerCase().includes(q) ||
-          o.technician.toLowerCase().includes(q) ||
-          o.location.toLowerCase().includes(q) ||
-          o.customer.toLowerCase().includes(q);
-        if (!match) return false;
-      }
-      return true;
-    });
-  }, [orders, statusFilter, priorityFilter, searchQuery]);
+  // Data hook
+  const {
+    orders,
+    filteredOrders,
+    ordersByStatus,
+    statusFilter,
+    setStatusFilter,
+    priorityFilter,
+    setPriorityFilter,
+    searchQuery,
+    setSearchQuery,
+    handleMove,
+    handleCreate: hookCreate,
+    handleClearFilters,
+    handleExport,
+  } = useServiceOrders();
 
-  // Move handler (optimistic)
-  const handleMove = useCallback((id: string, newStatus: Status) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o)));
-    toast.success(`Order moved to ${STATUS_LABELS[newStatus]}`);
-  }, []);
-
-  // Create handler
-  const handleCreate = useCallback(
-    (order: ServiceOrder) => {
-      const newOrder: ServiceOrder = {
-        ...order,
-        id: generateNextId(orders),
-      };
-      setOrders((prev) => [...prev, newOrder]);
-      setShowCreateModal(false);
-      toast.success(`Service order ${newOrder.id} created`);
-    },
-    [orders],
-  );
-
-  // Clear all filters
-  const handleClearFilters = () => {
-    setStatusFilter("all");
-    setPriorityFilter("all");
-    setSearchQuery("");
+  const handleCreate = (order: ServiceOrder) => {
+    hookCreate(order);
+    setShowCreateModal(false);
   };
-
-  // CSV export
-  const handleExport = () => {
-    exportToCsv(filteredOrders);
-  };
-
-  // Group by status for Kanban
-  const ordersByStatus = useMemo(() => {
-    const grouped: Record<Status, ServiceOrder[]> = {
-      Scheduled: [],
-      InProgress: [],
-      Completed: [],
-    };
-    for (const o of filteredOrders) {
-      grouped[o.status].push(o);
-    }
-    return grouped;
-  }, [filteredOrders]);
 
   return (
     <div className="space-y-4">
