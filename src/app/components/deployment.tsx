@@ -232,7 +232,7 @@ export function Deployment() {
               className={cn(
                 "flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors duration-150",
                 activeTab === tab.id
-                  ? "border-b-2 border-[#FF7900] text-[#FF7900]"
+                  ? "border-b-2 border-[#c2410c] text-[#c2410c]"
                   : "text-muted-foreground hover:text-foreground",
               )}
             >
@@ -296,7 +296,7 @@ export function Deployment() {
               <select
                 value={fwModelFilter}
                 onChange={(e) => setFwModelFilter(e.target.value)}
-                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[12px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                className="appearance-none rounded-sm border border-border bg-background py-1 pl-6 pr-7 text-[12px] font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
               >
                 <option value="All">All Models</option>
                 {AVAILABLE_MODELS.map((m) => (
@@ -624,7 +624,7 @@ export function Deployment() {
                                 )
                               }
                               className={cn(
-                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#c2410c]",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -836,7 +836,7 @@ export function Deployment() {
                       setAuditStartDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
                   />
                 </div>
               </div>
@@ -853,7 +853,7 @@ export function Deployment() {
                       setAuditEndDate(e.target.value);
                       setAuditDateError("");
                     }}
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
                   />
                 </div>
               </div>
@@ -881,7 +881,7 @@ export function Deployment() {
                       if (e.key === "Enter") handleApplyUserFilter();
                     }}
                     placeholder="User ID or email"
-                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900] w-48"
+                    className="rounded-sm border border-border bg-background py-1.5 pl-7 pr-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c] w-48"
                   />
                 </div>
               </div>

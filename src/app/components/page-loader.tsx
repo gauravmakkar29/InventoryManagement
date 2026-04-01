@@ -35,7 +35,7 @@ export function PageLoader() {
         </div>
         <div className="space-y-0">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 border-t border-gray-100 px-5 py-3">
+            <div key={i} className="flex items-center gap-4 border-t border-gray-200 px-5 py-3">
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-32" />
               <Skeleton className="h-4 w-20" />

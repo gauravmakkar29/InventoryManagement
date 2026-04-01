@@ -21,7 +21,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as IncidentCategory | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#FF7900]"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-[#c2410c]"
         >
           <option value="All">All Categories</option>
           <option value="Security">Security</option>
@@ -69,7 +69,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                 <User className="h-3 w-3" /> {pb.createdByName}
               </span>
             </div>
-            <div className="mt-3 border-t border-gray-100 pt-3">
+            <div className="mt-3 border-t border-gray-200 pt-3">
               <h5 className="text-[13px] font-semibold text-gray-600 uppercase mb-2">
                 Steps Preview
               </h5>

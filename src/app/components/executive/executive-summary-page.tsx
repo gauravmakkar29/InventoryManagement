@@ -29,7 +29,13 @@ const FLEET_KPIS = [
     color: "text-success",
     bg: "bg-emerald-50",
   },
-  { label: "Uptime (30d)", value: "99.7%", icon: Clock, color: "text-accent", bg: "bg-orange-50" },
+  {
+    label: "Uptime (30d)",
+    value: "99.7%",
+    icon: Clock,
+    color: "text-[#c2410c]",
+    bg: "bg-orange-50",
+  },
   {
     label: "Open Incidents",
     value: "3",

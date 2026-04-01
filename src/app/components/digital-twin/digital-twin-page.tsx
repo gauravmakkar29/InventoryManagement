@@ -519,7 +519,7 @@ function StateReplayTimeline({
               onClick={() => onSelect(snap.id)}
               className={cn(
                 "flex flex-col items-center gap-1 cursor-pointer group",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900]",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]",
               )}
               title={new Date(snap.timestamp).toLocaleString()}
             >
@@ -527,10 +527,10 @@ function StateReplayTimeline({
                 className={cn(
                   "rounded-full border-2 transition-all",
                   isActive
-                    ? "h-4 w-4 border-[#FF7900] bg-[#FF7900]"
+                    ? "h-4 w-4 border-[#c2410c] bg-[#FF7900]"
                     : isSelected
-                      ? "h-3.5 w-3.5 border-[#FF7900] bg-orange-100"
-                      : "h-3 w-3 border-gray-300 bg-white group-hover:border-[#FF7900]",
+                      ? "h-3.5 w-3.5 border-[#c2410c] bg-orange-100"
+                      : "h-3 w-3 border-gray-300 bg-white group-hover:border-[#c2410c]",
                 )}
               />
               <span className="text-[11px] text-gray-600 tabular-nums">
@@ -550,7 +550,7 @@ function StateReplayTimeline({
 // Story 15.2 — State Snapshot Card
 function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
+    <div className="rounded-lg border border-gray-300 bg-gray-50 p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="text-[14px] font-semibold text-gray-900">
           State at {new Date(snapshot.timestamp).toLocaleString()}
@@ -559,7 +559,7 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
           className={cn(
             "rounded-full px-2 py-0.5 text-[12px] font-medium",
             snapshot.triggeredBy === "event"
-              ? "bg-orange-50 text-[#FF7900]"
+              ? "bg-orange-50 text-[#c2410c]"
               : snapshot.triggeredBy === "manual"
                 ? "bg-blue-50 text-blue-700"
                 : "bg-gray-100 text-gray-600",
@@ -569,7 +569,7 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
         </span>
       </div>
       {snapshot.event && (
-        <div className="flex items-center gap-1.5 text-[13px] text-[#FF7900] font-medium">
+        <div className="flex items-center gap-1.5 text-[13px] text-[#c2410c] font-medium">
           <Zap className="h-3 w-3" />
           {snapshot.event}
         </div>
@@ -595,19 +595,19 @@ function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot }) {
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
+        <div className="rounded-lg bg-white border border-gray-200 px-2.5 py-2 text-center">
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgTemperature.toFixed(1)}
           </p>
           <p className="text-[12px] text-gray-600">Avg Temp</p>
         </div>
-        <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
+        <div className="rounded-lg bg-white border border-gray-200 px-2.5 py-2 text-center">
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgCpuLoad.toFixed(1)}%
           </p>
           <p className="text-[12px] text-gray-600">CPU Load</p>
         </div>
-        <div className="rounded-lg bg-white border border-gray-100 px-2.5 py-2 text-center">
+        <div className="rounded-lg bg-white border border-gray-200 px-2.5 py-2 text-center">
           <p className="text-[15px] font-bold tabular-nums text-gray-900">
             {snapshot.telemetrySummary.avgErrorRate.toFixed(2)}%
           </p>
@@ -659,7 +659,7 @@ function StateComparisonView({
   ];
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4 space-y-3">
+    <div className="rounded-lg border border-gray-300 bg-white p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h4 className="text-[14px] font-semibold text-gray-900">State Comparison</h4>
         <button onClick={onClose} className="text-gray-600 hover:text-gray-600 cursor-pointer">
@@ -786,10 +786,10 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
       onClick={onClose}
     >
       <div
-        className="w-[680px] max-h-[85vh] overflow-y-auto rounded-xl bg-white shadow-xl border border-gray-200"
+        className="w-[680px] max-h-[85vh] overflow-y-auto rounded-xl bg-white shadow-xl border border-gray-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
           <div>
             <h3 className="text-[16px] font-semibold text-gray-900">Firmware Upgrade Simulation</h3>
             <p className="text-[14px] text-gray-600 mt-0.5">{twin.deviceName}</p>
@@ -802,12 +802,12 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
         {!result ? (
           <div className="p-6 space-y-5">
             {/* Current firmware */}
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+            <div className="rounded-lg border border-gray-300 bg-gray-50 p-4">
               <p className="text-[12px] font-semibold uppercase text-gray-600 mb-2">
                 Current Firmware
               </p>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white border border-gray-200">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white border border-gray-300">
                   <Cpu className="h-5 w-5 text-gray-600" />
                 </div>
                 <div>
@@ -827,7 +827,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
               <select
                 value={targetVersion}
                 onChange={(e) => setTargetVersion(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-[14px] text-gray-700 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-[14px] text-gray-700 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none"
               >
                 <option value="">Select target version...</option>
                 {compatibleFirmwares.map((fw) => (
@@ -846,7 +846,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex items-center justify-between pt-2">
               <button
                 onClick={() => setShowHistory(!showHistory)}
-                className="text-[14px] font-medium text-[#FF7900] hover:underline cursor-pointer"
+                className="text-[14px] font-medium text-[#c2410c] hover:underline cursor-pointer"
               >
                 {showHistory ? "Hide" : "View"} Simulation History ({savedSimulations.length})
               </button>
@@ -866,11 +866,11 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
 
             {/* Simulation History */}
             {showHistory && savedSimulations.length > 0 && (
-              <div className="rounded-lg border border-gray-200 overflow-hidden">
+              <div className="rounded-lg border border-gray-300 overflow-hidden">
                 <table className="w-full text-[14px]">
                   <caption className="sr-only">Digital twin simulation history</caption>
                   <thead>
-                    <tr className="bg-[#f1f3f5] border-b-2 border-gray-200">
+                    <tr className="bg-[#f1f3f5] border-b-2 border-gray-300">
                       <th
                         scope="col"
                         className="px-3 py-2 text-left font-bold uppercase text-[12px] text-gray-600"
@@ -899,7 +899,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   </thead>
                   <tbody>
                     {savedSimulations.map((sim) => (
-                      <tr key={sim.id} className="border-b border-gray-100">
+                      <tr key={sim.id} className="border-b border-gray-200">
                         <td className="px-3 py-2 text-gray-600">
                           {new Date(sim.simulatedAt).toLocaleDateString()}
                         </td>
@@ -984,13 +984,13 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
 
             {/* Stats row */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-center">
                 <p className="text-[15px] font-bold text-gray-900 tabular-nums">
                   {result.predictedDowntimeMinutes}m
                 </p>
                 <p className="text-[12px] text-gray-600">Est. Downtime</p>
               </div>
-              <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-center">
                 <span
                   className={cn(
                     "text-[14px] font-bold",
@@ -1005,7 +1005,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                 </span>
                 <p className="text-[12px] text-gray-600">Rollback Risk</p>
               </div>
-              <div className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2.5 text-center">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-center">
                 <p className="text-[15px] font-bold text-gray-900">
                   {result.targetFirmwareVersion}
                 </p>
@@ -1092,7 +1092,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={saveSimulation}
-                className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                className="flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-4 py-2 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
               >
                 <Save className="h-3.5 w-3.5" /> Save Simulation
               </button>
@@ -1143,7 +1143,7 @@ function ConfigDriftPanel({ twin, onClose }: { twin: DigitalTwin; onClose: () =>
             <div
               key={item.configKey}
               className={cn(
-                "rounded-lg border border-gray-200 border-l-4 bg-white p-3 cursor-pointer hover:shadow-sm",
+                "rounded-lg border border-gray-300 border-l-4 bg-white p-3 cursor-pointer hover:shadow-sm",
                 severityBorder(item.severity),
               )}
               onClick={() =>
@@ -1250,7 +1250,7 @@ function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
             <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
               {avgScore}
             </p>
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[12px] font-semibold text-[#FF7900]">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[12px] font-semibold text-[#c2410c]">
               Twin
             </span>
           </div>
@@ -1472,7 +1472,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
-          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
         >
           <ChevronRight className="h-4 w-4 rotate-180" />
         </button>
@@ -1511,7 +1511,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-200">
+      <div className="flex gap-1 border-b border-gray-300">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           return (
@@ -1521,7 +1521,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
               className={cn(
                 "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer transition-colors",
                 activeTab === tab.id
-                  ? "border-[#FF7900] text-[#FF7900]"
+                  ? "border-[#c2410c] text-[#c2410c]"
                   : "border-transparent text-gray-600 hover:text-gray-700",
               )}
             >
@@ -1579,13 +1579,13 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
             <HealthTrendChart data={trendData} onPointHover={handlePointHover} />
             {tooltip && (
               <div
-                className="fixed z-50 rounded-lg border border-gray-200 bg-white px-3 py-2 shadow-lg text-[13px]"
+                className="fixed z-50 rounded-lg border border-gray-300 bg-white px-3 py-2 shadow-lg text-[13px]"
                 style={{ left: tooltip.x + 10, top: tooltip.y - 50 }}
               >
                 <p className="font-semibold text-gray-900">{tooltip.point.score}</p>
                 <p className="text-gray-600">{tooltip.point.date}</p>
                 {tooltip.point.event && (
-                  <p className="text-[#FF7900] font-medium mt-0.5">{tooltip.point.event}</p>
+                  <p className="text-[#c2410c] font-medium mt-0.5">{tooltip.point.event}</p>
                 )}
               </div>
             )}
@@ -1609,7 +1609,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 const idx = snapshots.findIndex((s) => s.id === activeSnapId);
                 if (idx > 0) setActiveSnapId(snapshots[idx - 1]!.id);
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <SkipBack className="h-4 w-4" />
             </button>
@@ -1624,7 +1624,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                 const idx = snapshots.findIndex((s) => s.id === activeSnapId);
                 if (idx < snapshots.length - 1) setActiveSnapId(snapshots[idx + 1]!.id);
               }}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             >
               <SkipForward className="h-4 w-4" />
             </button>
@@ -1670,7 +1670,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
               <Zap className="h-4 w-4" /> Simulate Upgrade
             </button>
           </div>
-          <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 flex flex-col items-center">
+          <div className="rounded-lg border border-gray-300 bg-gray-50 p-6 flex flex-col items-center">
             <Cpu className="h-10 w-10 text-gray-600 mb-3" />
             <p className="text-[15px] font-medium text-gray-600">
               Run a firmware upgrade simulation
@@ -1813,7 +1813,7 @@ export function DigitalTwinPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-[#FF7900]">
+          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-[#c2410c]">
             {twins.length} twins
           </span>
         </div>
@@ -1833,7 +1833,7 @@ export function DigitalTwinPage() {
             aria-label="Search devices"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-lg border border-gray-200 bg-white pl-9 pr-3 py-2 text-[14px] text-gray-700 placeholder:text-gray-600 focus:border-[#FF7900] focus:ring-1 focus:ring-[#FF7900] focus:outline-none w-[220px]"
+            className="rounded-lg border border-gray-300 bg-white pl-9 pr-3 py-2 text-[14px] text-gray-700 placeholder:text-gray-600 focus:border-[#c2410c] focus:ring-1 focus:ring-[#c2410c] focus:outline-none w-[220px]"
           />
         </div>
 
@@ -1872,7 +1872,7 @@ export function DigitalTwinPage() {
         <select
           value={driftFilter}
           onChange={(e) => setDriftFilter(e.target.value as typeof driftFilter)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[14px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
+          className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-[14px] text-gray-600 focus:border-[#c2410c] focus:outline-none"
         >
           <option value="all">All Drift Status</option>
           <option value="InSync">In Sync</option>
@@ -1886,7 +1886,7 @@ export function DigitalTwinPage() {
           <select
             value={sortField}
             onChange={(e) => setSortField(e.target.value as SortField)}
-            className="rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-[14px] text-gray-600 focus:border-[#FF7900] focus:outline-none"
+            className="rounded-lg border border-gray-300 bg-white px-2.5 py-1.5 text-[14px] text-gray-600 focus:border-[#c2410c] focus:outline-none"
           >
             <option value="healthScore">Health Score</option>
             <option value="deviceName">Device Name</option>
@@ -1894,7 +1894,7 @@ export function DigitalTwinPage() {
           </select>
           <button
             onClick={() => setSortAsc(!sortAsc)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer"
             title={sortAsc ? "Ascending" : "Descending"}
           >
             {sortAsc ? <ArrowUp className="h-3.5 w-3.5" /> : <ArrowDown className="h-3.5 w-3.5" />}

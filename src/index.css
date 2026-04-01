@@ -22,12 +22,13 @@
   --color-muted: #f5f6f8;
   --color-muted-foreground: #4b5563;
   --color-accent: #ff7900;
+  --color-accent-text: #c2410c;
   --color-accent-foreground: #ffffff;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #fef2f2;
-  --color-border: #e5e7eb;
-  --color-input: #e5e7eb;
-  --color-ring: #ff7900;
+  --color-border: #c0c5cd;
+  --color-input: #c0c5cd;
+  --color-ring: #c2410c;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
@@ -56,12 +57,13 @@
   --color-muted: #1a1f35;
   --color-muted-foreground: #cbd5e1;
   --color-accent: #ff7900;
+  --color-accent-text: #fb923c;
   --color-accent-foreground: #ffffff;
   --color-destructive: #7f1d1d;
   --color-destructive-foreground: #fef2f2;
-  --color-border: #1e2640;
-  --color-input: #1e2640;
-  --color-ring: #ff7900;
+  --color-border: #2d3554;
+  --color-input: #2d3554;
+  --color-ring: #fb923c;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
@@ -85,9 +87,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Focus indicators — WCAG 2.1 AA */
+/* Focus indicators — WCAG 2.2 AAA (3:1+ against background) */
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-ring);
   outline-offset: 2px;
 }
 

@@ -100,9 +100,9 @@ function SortHeader({
         {label}
         {active ? (
           sortDir === "asc" ? (
-            <ChevronUp className="h-3 w-3 text-[#FF7900]" />
+            <ChevronUp className="h-3 w-3 text-[#c2410c]" />
           ) : (
-            <ChevronDown className="h-3 w-3 text-[#FF7900]" />
+            <ChevronDown className="h-3 w-3 text-[#c2410c]" />
           )
         ) : (
           <ArrowUpDown className="h-3 w-3 text-gray-600" />
@@ -148,7 +148,7 @@ export function Inventory() {
   return (
     <div className="space-y-5">
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-200">
+      <div className="flex gap-1 border-b border-gray-300">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -156,7 +156,7 @@ export function Inventory() {
             className={cn(
               "px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
-                ? "border-b-2 border-[#FF7900] text-[#FF7900]"
+                ? "border-b-2 border-[#c2410c] text-[#c2410c]"
                 : "text-gray-600 hover:text-gray-700",
             )}
           >
@@ -188,7 +188,7 @@ export function Inventory() {
                 onClick={exportCsv}
                 disabled={filteredDevices.length === 0}
                 className={cn(
-                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-[14px] font-medium text-gray-700 shrink-0",
+                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 text-[14px] font-medium text-gray-700 shrink-0",
                   "hover:bg-gray-50",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
@@ -203,7 +203,7 @@ export function Inventory() {
                   className={cn(
                     "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[14px] font-medium text-white shrink-0",
                     "hover:bg-[#e86e00]",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
                   )}
                 >
                   <Plus className="h-4 w-4" aria-hidden="true" />
@@ -219,7 +219,7 @@ export function Inventory() {
               <table className="w-full">
                 <caption className="sr-only">Device inventory list</caption>
                 <thead>
-                  <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+                  <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
                     <SortHeader
                       label="Device Name"
                       field="name"
@@ -321,7 +321,7 @@ export function Inventory() {
                               onChange={(e) =>
                                 handleStatusChange(device.id, e.target.value as DeviceStatus)
                               }
-                              className="h-8 rounded-md border border-gray-200 bg-white px-2 text-[14px] text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]/20 cursor-pointer"
+                              className="h-8 rounded-md border border-gray-300 bg-white px-2 text-[14px] text-gray-700 focus:border-[#c2410c] focus:outline-none focus:ring-1 focus:ring-[#c2410c]/20 cursor-pointer"
                             >
                               {ALL_STATUSES.map((s) => (
                                 <option key={s} value={s}>
@@ -340,7 +340,7 @@ export function Inventory() {
 
             {/* Pagination */}
             {filteredDevices.length > 0 && (
-              <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+              <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
                 <span className="text-[14px] text-gray-600">
                   Showing {startIdx + 1}–{endIdx} of {filteredDevices.length}
                 </span>

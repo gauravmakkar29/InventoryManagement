@@ -66,7 +66,7 @@ const SEVERITY_CONFIG: Record<VulnSeverity, { bg: string; text: string; border: 
   High: { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
   Medium: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
   Low: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  Info: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-200" },
+  Info: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-300" },
 };
 
 const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
@@ -173,7 +173,7 @@ export function CompliancePage() {
           {canSubmitForReview(role) && (
             <button
               onClick={() => setSubmitModalOpen(true)}
-              className="flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#FF7900]/50 hover:text-gray-900 transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-[#c2410c]/50 hover:text-gray-900 transition-colors duration-150"
             >
               <Send className="h-3.5 w-3.5" />
               Submit for Review
@@ -190,7 +190,7 @@ export function CompliancePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200">
+      <div className="flex border-b border-gray-300">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -198,7 +198,7 @@ export function CompliancePage() {
             className={cn(
               "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
-                ? "border-b-2 border-[#FF7900] text-[#FF7900]"
+                ? "border-b-2 border-[#c2410c] text-[#c2410c]"
                 : "text-gray-600 hover:text-gray-700",
             )}
           >
@@ -405,7 +405,7 @@ function ComplianceTab({
             aria-label="Search compliance items"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-600 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
+            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-600 focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20"
           />
         </div>
         <div className="relative">
@@ -413,7 +413,7 @@ function ComplianceTab({
           <select
             value={certFilter}
             onChange={(e) => setCertFilter(e.target.value as CertificationType | "All")}
-            className="appearance-none rounded border border-gray-300 bg-white py-1.5 pl-8 pr-8 text-sm text-gray-700 focus:border-[#FF7900] focus:outline-none focus:ring-2 focus:ring-[#FF7900]/20"
+            className="appearance-none rounded border border-gray-300 bg-white py-1.5 pl-8 pr-8 text-sm text-gray-700 focus:border-[#c2410c] focus:outline-none focus:ring-2 focus:ring-[#c2410c]/20"
           >
             <option value="All">All Certifications</option>
             {CERT_TYPES.map((c) => (
@@ -432,7 +432,7 @@ function ComplianceTab({
           <table className="w-full">
             <caption className="sr-only">Compliance certifications</caption>
             <thead>
-              <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+              <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
                 <th
                   scope="col"
                   className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
@@ -551,7 +551,7 @@ function ComplianceRow({
     <>
       <tr
         className={cn(
-          "border-b border-gray-100 hover:bg-gray-50/50 cursor-pointer transition-colors duration-150",
+          "border-b border-gray-200 hover:bg-gray-50/50 cursor-pointer transition-colors duration-150",
           isExpanded && "bg-gray-50/80",
         )}
         onClick={onToggle}
@@ -634,7 +634,7 @@ function ComplianceRow({
       {isExpanded && (
         <tr>
           <td colSpan={8} className="p-0">
-            <div className="border-t border-gray-200 bg-gray-50/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
+            <div className="border-t border-gray-300 bg-gray-50/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-gray-600 uppercase tracking-wider">
                   Vulnerabilities ({item.vulnerabilities.length})
@@ -653,7 +653,7 @@ function ComplianceRow({
                           "flex items-center justify-between rounded border p-2.5",
                           vuln.severity === "Critical"
                             ? "border-red-200 bg-red-50/50"
-                            : "border-gray-200 bg-white",
+                            : "border-gray-300 bg-white",
                         )}
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -685,7 +685,7 @@ function ComplianceRow({
                               }
                               onClick={(e) => e.stopPropagation()}
                               className={cn(
-                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/30 cursor-pointer",
+                                "rounded px-2 py-0.5 text-[12px] font-medium border-0 focus:outline-none focus:ring-2 focus:ring-[#c2410c]/30 cursor-pointer",
                                 REMEDIATION_STYLES[vuln.remediationStatus],
                               )}
                             >
@@ -815,7 +815,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
               </div>
 
               {/* Remediation */}
-              <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+              <div className="flex items-center justify-between pt-1 border-t border-gray-200">
                 <span
                   className={cn(
                     "rounded-full px-2 py-0.5 text-[12px] font-medium",
@@ -912,7 +912,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
           label="Compliance Rate"
           value={`${stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%`}
           icon={BarChart3}
-          valueClass="text-[#FF7900]"
+          valueClass="text-[#c2410c]"
         />
       </div>
 
@@ -927,10 +927,10 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
             return (
               <div
                 key={type}
-                className="card-elevated rounded-lg border border-gray-200 p-4 space-y-2 hover:border-[#FF7900]/30 transition-colors duration-150"
+                className="card-elevated rounded-lg border border-gray-300 p-4 space-y-2 hover:border-[#c2410c]/30 transition-colors duration-150"
               >
                 <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-[#FF7900]" />
+                  <FileText className="h-4 w-4 text-[#c2410c]" />
                   <span className="text-[14px] font-semibold text-gray-900">{type}</span>
                 </div>
                 <p className="text-[13px] text-gray-600">{itemCount} compliance items applicable</p>
@@ -976,7 +976,7 @@ function StatCard({
   valueClass?: string;
 }) {
   return (
-    <div className="card-elevated rounded-lg border border-gray-200 p-3 space-y-1">
+    <div className="card-elevated rounded-lg border border-gray-300 p-3 space-y-1">
       <div className="flex items-center gap-1.5">
         <Icon className="h-3.5 w-3.5 text-gray-600" />
         <span className="text-[12px] font-medium text-gray-600 uppercase tracking-wider">
@@ -1025,12 +1025,12 @@ function SubmitForReviewModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#c2410c]/50 focus:border-[#c2410c]";
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-200">
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
+      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-300">
+        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
           <h2 className="text-[15px] font-semibold text-gray-900">
             Submit Compliance Item for Review
           </h2>
@@ -1120,7 +1120,7 @@ function SubmitForReviewModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
           <button
             onClick={onClose}
             className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
@@ -1203,12 +1203,12 @@ function CreateVulnerabilityModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#FF7900]/50 focus:border-[#FF7900]";
+    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#c2410c]/50 focus:border-[#c2410c]";
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-200">
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
+      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-300">
+        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
           <h2 className="text-[15px] font-semibold text-gray-900">Report Vulnerability</h2>
           <button
             onClick={onClose}
@@ -1362,7 +1362,7 @@ function CreateVulnerabilityModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
           <button
             onClick={onClose}
             className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
@@ -1406,8 +1406,8 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-200">
-        <div className="flex items-center justify-between border-b border-gray-200 px-5 py-3">
+      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-300">
+        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
           <h2 className="text-[15px] font-semibold text-gray-900">Generate Regulatory Report</h2>
           <button
             onClick={onClose}
@@ -1452,7 +1452,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
           <button
             onClick={onClose}
             className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
@@ -1499,12 +1499,12 @@ function ConfirmDialog({
 }) {
   return (
     <ModalOverlay onClose={onCancel}>
-      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-200">
+      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-300">
         <div className="p-5 space-y-3">
           <h2 className="text-[15px] font-semibold text-gray-900">{title}</h2>
           <p className="text-sm text-gray-600">{message}</p>
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-gray-200 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
           <button
             onClick={onCancel}
             className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"

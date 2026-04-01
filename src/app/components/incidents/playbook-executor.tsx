@@ -52,7 +52,7 @@ export function PlaybookExecutor({
             key={step.stepNumber}
             className={cn(
               "rounded-lg border p-3",
-              step.isCompleted ? "border-emerald-200 bg-emerald-50/50" : "border-gray-200",
+              step.isCompleted ? "border-emerald-200 bg-emerald-50/50" : "border-gray-300",
             )}
           >
             <div className="flex items-start gap-3">
@@ -62,7 +62,7 @@ export function PlaybookExecutor({
                 ) : (
                   <button
                     onClick={() => onStepComplete(step.stepNumber)}
-                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 hover:border-[#FF7900] cursor-pointer"
+                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 hover:border-[#c2410c] cursor-pointer"
                     title="Mark as complete"
                   >
                     <span className="sr-only">Complete step {step.stepNumber}</span>

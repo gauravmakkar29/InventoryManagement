@@ -146,7 +146,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               }}
               placeholder="e.g. v4.3.0"
               className={cn(
-                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]",
                 errors.version ? "border-red-500" : "border-border",
               )}
             />
@@ -171,7 +171,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               }}
               placeholder="e.g. Security Patch Bundle"
               className={cn(
-                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]",
+                "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]",
                 errors.name ? "border-red-500" : "border-border",
               )}
             />
@@ -196,7 +196,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
                   className={cn(
                     "rounded-sm border px-2 py-1 text-[12px] font-medium transition-colors duration-150",
                     models.includes(model)
-                      ? "border-[#FF7900] bg-[#FF7900]/10 text-[#FF7900]"
+                      ? "border-[#c2410c] bg-[#FF7900]/10 text-[#c2410c]"
                       : "border-border bg-background text-muted-foreground hover:border-foreground/30",
                   )}
                 >
@@ -216,7 +216,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               onChange={(e) => setReleaseNotes(e.target.value)}
               rows={2}
               placeholder="Describe the changes in this firmware version..."
-              className="w-full rounded-sm border border-border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+              className="w-full rounded-sm border border-border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
             />
           </div>
 
@@ -236,10 +236,10 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               className={cn(
                 "flex flex-col items-center gap-1.5 rounded-sm border border-dashed px-3 py-3 cursor-pointer transition-colors duration-150",
                 isDragging
-                  ? "border-[#FF7900] bg-[#FF7900]/5"
+                  ? "border-[#c2410c] bg-[#FF7900]/5"
                   : errors.file
                     ? "border-red-400 bg-red-50/30"
-                    : "border-border bg-muted/30 hover:border-[#FF7900]/50",
+                    : "border-border bg-muted/30 hover:border-[#c2410c]/50",
               )}
             >
               <input
@@ -251,7 +251,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               />
               {selectedFile ? (
                 <div className="flex items-center gap-2 text-[13px]">
-                  <Package className="h-4 w-4 text-[#FF7900]" />
+                  <Package className="h-4 w-4 text-[#c2410c]" />
                   <span className="font-medium text-foreground">{selectedFile.name}</span>
                   <span className="text-muted-foreground">
                     ({(selectedFile.size / (1024 * 1024)).toFixed(1)} MB)

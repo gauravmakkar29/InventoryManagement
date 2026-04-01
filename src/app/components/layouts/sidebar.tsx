@@ -143,7 +143,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <>
             <div className="flex flex-col">
               <span className="text-base font-bold leading-snug tracking-tight text-foreground">
-                IMS <span className="text-accent">Gen2</span>
+                IMS <span className="text-[#c2410c]">Gen2</span>
               </span>
               <span className="text-[12px] leading-snug text-muted-foreground">
                 Hardware Lifecycle Mgmt
@@ -206,7 +206,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         className={cn(
                           "h-[18px] w-[18px] shrink-0",
                           isActive
-                            ? "text-accent"
+                            ? "text-[#c2410c]"
                             : "text-muted-foreground group-hover:text-foreground",
                         )}
                       />

@@ -59,7 +59,7 @@ export function ApprovalStageIndicator({
                   isCompleted && "bg-emerald-500 text-white",
                   isCurrent && "bg-blue-600 text-white animate-pulse",
                   isFuture && "border border-gray-300 bg-white text-gray-600",
-                  isDeprecated && "border border-gray-200 bg-gray-100 text-gray-600",
+                  isDeprecated && "border border-gray-300 bg-gray-100 text-gray-600",
                 )}
               >
                 {isCompleted ? <Check className="h-2.5 w-2.5" /> : i + 1}

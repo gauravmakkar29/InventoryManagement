@@ -245,7 +245,7 @@ export function UserManagement() {
             className={cn(
               "flex h-10 cursor-pointer items-center gap-2 rounded-lg bg-[#FF7900] px-4 text-[15px] font-medium text-white",
               "hover:bg-[#e86e00]",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF7900] focus-visible:ring-offset-2",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2",
             )}
           >
             <UserPlus className="h-4 w-4" aria-hidden="true" />
@@ -266,7 +266,7 @@ export function UserManagement() {
             placeholder="Search by name or email..."
             aria-label="Search users"
             className={cn(
-              "h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-600",
+              "h-10 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-600",
               "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
             )}
           />
@@ -277,7 +277,7 @@ export function UserManagement() {
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
           className={cn(
-            "h-10 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-[15px] text-gray-700",
+            "h-10 rounded-lg border border-gray-300 bg-white px-3 pr-8 text-[15px] text-gray-700",
             "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
           )}
         >
@@ -300,7 +300,7 @@ export function UserManagement() {
           <table className="w-full">
             <caption className="sr-only">User accounts</caption>
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/60">
+              <tr className="border-b border-gray-200 bg-gray-50/60">
                 <th
                   scope="col"
                   className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
@@ -401,7 +401,7 @@ export function UserManagement() {
                             "inline-flex rounded-md px-2 py-0.5 text-[14px] font-medium",
                             user.role === "Admin" && "bg-blue-50 text-[#2563eb]",
                             user.role === "Manager" && "bg-purple-50 text-purple-700",
-                            user.role === "Technician" && "bg-orange-50 text-[#FF7900]",
+                            user.role === "Technician" && "bg-orange-50 text-[#c2410c]",
                             user.role === "Viewer" && "bg-gray-100 text-gray-600",
                             user.role === "CustomerAdmin" && "bg-emerald-50 text-emerald-700",
                           )}

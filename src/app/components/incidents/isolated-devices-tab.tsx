@@ -31,7 +31,7 @@ export function IsolatedDevicesTab({
       <table className="w-full">
         <caption className="sr-only">Isolated devices</caption>
         <thead>
-          <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+          <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
             <th
               scope="col"
               className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"

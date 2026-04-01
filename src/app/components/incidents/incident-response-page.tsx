@@ -97,7 +97,7 @@ export function IncidentResponsePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white p-1">
+      <div className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white p-1">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;

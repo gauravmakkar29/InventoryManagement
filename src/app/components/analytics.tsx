@@ -288,7 +288,7 @@ export function Analytics() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex rounded-lg border border-gray-200 bg-white p-0.5">
+          <div className="flex rounded-lg border border-gray-300 bg-white p-0.5">
             {TIME_RANGE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -491,7 +491,7 @@ export function Analytics() {
                 aria-label="Search audit log"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="h-8 w-56 rounded-lg border border-gray-200 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-[#FF7900] focus:outline-none focus:ring-1 focus:ring-[#FF7900]"
+                className="h-8 w-56 rounded-lg border border-gray-300 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-[#c2410c] focus:outline-none focus:ring-1 focus:ring-[#c2410c]"
               />
             </div>
 
@@ -501,7 +501,7 @@ export function Analytics() {
                 onClick={() => setExportOpen(!exportOpen)}
                 disabled={filteredAuditLogs.length === 0}
                 className={cn(
-                  "flex h-8 items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 text-[14px] font-medium text-gray-600 cursor-pointer",
+                  "flex h-8 items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 text-[14px] font-medium text-gray-600 cursor-pointer",
                   "hover:bg-gray-50 hover:text-gray-700",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
@@ -514,7 +514,7 @@ export function Analytics() {
               {exportOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setExportOpen(false)} />
-                  <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                  <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-gray-300 bg-white py-1 shadow-lg">
                     <button
                       onClick={() => {
                         handleExportCSV();
@@ -547,7 +547,7 @@ export function Analytics() {
           <table className="w-full">
             <caption className="sr-only">Audit log entries</caption>
             <thead>
-              <tr className="border-b-2 border-gray-200 bg-[#f1f3f5]">
+              <tr className="border-b-2 border-gray-300 bg-[#f1f3f5]">
                 <th
                   scope="col"
                   className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
@@ -624,7 +624,7 @@ export function Analytics() {
 
         {/* Pagination */}
         {filteredAuditLogs.length > pageSize && (
-          <div className="flex items-center justify-between border-t border-gray-100 px-5 py-3">
+          <div className="flex items-center justify-between border-t border-gray-200 px-5 py-3">
             <p className="text-[14px] text-gray-600">
               Showing {(currentPage - 1) * pageSize + 1}
               {"-"}
@@ -635,7 +635,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -648,7 +648,7 @@ export function Analytics() {
                     "flex h-7 min-w-9 items-center justify-center rounded-md px-2 text-[13px] font-medium cursor-pointer",
                     currentPage === i + 1
                       ? "bg-[#FF7900] text-white"
-                      : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50",
+                      : "border border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
                   )}
                 >
                   {i + 1}
@@ -657,7 +657,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Next page"
               >
                 <ChevronRight className="h-3.5 w-3.5" />

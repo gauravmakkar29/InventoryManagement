@@ -184,7 +184,7 @@ function HeatmapTooltip({
 }) {
   return (
     <div
-      className="pointer-events-none absolute z-50 rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-lg"
+      className="pointer-events-none absolute z-50 rounded-xl border border-gray-300 bg-white px-4 py-3 shadow-lg"
       style={{ left: position.x + 12, top: position.y - 20 }}
     >
       <p className="text-[14px] font-semibold text-gray-900">{cell.regionName}</p>
@@ -245,7 +245,7 @@ function HeatmapLegend() {
   ];
 
   return (
-    <div className="absolute bottom-4 left-4 z-20 rounded-xl border border-gray-200 bg-white/95 px-3 py-2.5 shadow-md backdrop-blur-sm">
+    <div className="absolute bottom-4 left-4 z-20 rounded-xl border border-gray-300 bg-white/95 px-3 py-2.5 shadow-md backdrop-blur-sm">
       <p className="mb-2 text-[12px] font-bold uppercase tracking-wider text-gray-600">
         Risk Scale
       </p>
@@ -279,7 +279,7 @@ function HeatmapControls({
     <div className="absolute top-16 right-4 z-20">
       <button
         onClick={onToggle}
-        className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-[13px] font-medium text-gray-700 shadow-md hover:bg-gray-50 cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl border border-gray-300 bg-white px-3 py-2 text-[13px] font-medium text-gray-700 shadow-md hover:bg-gray-50 cursor-pointer"
       >
         <SlidersHorizontal className="h-3.5 w-3.5" />
         Controls
@@ -287,7 +287,7 @@ function HeatmapControls({
       </button>
 
       {expanded && (
-        <div className="mt-2 rounded-xl border border-gray-200 bg-white p-4 shadow-lg w-[220px]">
+        <div className="mt-2 rounded-xl border border-gray-300 bg-white p-4 shadow-lg w-[220px]">
           <label className="block text-[13px] font-semibold text-gray-700 mb-2">
             Risk Threshold
           </label>
@@ -301,7 +301,7 @@ function HeatmapControls({
           />
           <div className="flex items-center justify-between mt-1">
             <span className="text-[12px] text-gray-600">0</span>
-            <span className="text-[14px] font-bold tabular-nums text-[#FF7900]">
+            <span className="text-[14px] font-bold tabular-nums text-[#c2410c]">
               {riskThreshold}
             </span>
             <span className="text-[12px] text-gray-600">100</span>
@@ -359,7 +359,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
   if (loading) {
     return (
       <div
-        className="relative h-[600px] rounded-xl border border-gray-200 overflow-hidden"
+        className="relative h-[600px] rounded-xl border border-gray-300 overflow-hidden"
         aria-busy="true"
       >
         <span className="sr-only" aria-live="polite">
@@ -411,18 +411,18 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
       </div>
 
       {/* Map container */}
-      <div className="relative h-[600px] rounded-xl border border-gray-200 bg-[#f8fafc] overflow-hidden">
+      <div className="relative h-[600px] rounded-xl border border-gray-300 bg-[#f8fafc] overflow-hidden">
         {/* Zoom controls */}
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1">
           <button
             onClick={handleZoomIn}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
           >
             <ZoomIn className="h-4 w-4" />
           </button>
           <button
             onClick={handleZoomOut}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
           >
             <ZoomOut className="h-4 w-4" />
           </button>
