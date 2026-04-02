@@ -1,0 +1,100 @@
+import { ChevronDown, ChevronUp, ArrowUpDown } from "lucide-react";
+import { cn } from "../../../lib/utils";
+import { DeviceStatus } from "../../../lib/types";
+import type { SortField, SortDir } from "../../../lib/hooks/use-device-inventory";
+
+// ---------------------------------------------------------------------------
+// StatusBadge
+// ---------------------------------------------------------------------------
+
+export function StatusBadge({ status }: { status: string }) {
+  const config: Record<string, { dot: string; text: string; bg: string }> = {
+    [DeviceStatus.Online]: { dot: "bg-emerald-500", text: "text-emerald-700", bg: "bg-emerald-50" },
+    [DeviceStatus.Offline]: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50" },
+    [DeviceStatus.Maintenance]: { dot: "bg-amber-500", text: "text-amber-700", bg: "bg-amber-50" },
+    [DeviceStatus.Decommissioned]: {
+      dot: "bg-gray-400",
+      text: "text-muted-foreground",
+      bg: "bg-muted",
+    },
+  };
+  const c = config[status] ?? { dot: "bg-gray-400", text: "text-muted-foreground", bg: "bg-muted" };
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[13px] font-medium",
+        c.bg,
+        c.text,
+      )}
+    >
+      <span className={cn("h-1.5 w-1.5 rounded-full", c.dot)} />
+      {status}
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// HealthBar
+// ---------------------------------------------------------------------------
+
+export function HealthBar({ value }: { value: number }) {
+  const color =
+    value >= 90
+      ? "bg-emerald-500"
+      : value >= 70
+        ? "bg-amber-500"
+        : value >= 50
+          ? "bg-orange-500"
+          : "bg-red-500";
+  return (
+    <div className="flex items-center gap-2">
+      <div className="h-1.5 w-20 rounded-full bg-muted">
+        <div
+          className={cn("h-full rounded-full transition-all", color)}
+          style={{ width: `${value}%` }}
+        />
+      </div>
+      <span className="text-[14px] font-mono tabular-nums text-muted-foreground">{value}%</span>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// SortHeader
+// ---------------------------------------------------------------------------
+
+export function SortHeader({
+  label,
+  field,
+  sortField,
+  sortDir,
+  onSort,
+}: {
+  label: string;
+  field: SortField;
+  sortField: SortField;
+  sortDir: SortDir;
+  onSort: (f: SortField) => void;
+}) {
+  const active = sortField === field;
+  return (
+    <th
+      scope="col"
+      className="px-4 py-3 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground cursor-pointer select-none hover:text-foreground bg-table-header"
+      onClick={() => onSort(field)}
+    >
+      <div className="flex items-center gap-1">
+        {label}
+        {active ? (
+          sortDir === "asc" ? (
+            <ChevronUp className="h-3 w-3 text-accent-text" />
+          ) : (
+            <ChevronDown className="h-3 w-3 text-accent-text" />
+          )
+        ) : (
+          <ArrowUpDown className="h-3 w-3 text-muted-foreground" />
+        )}
+      </div>
+    </th>
+  );
+}
