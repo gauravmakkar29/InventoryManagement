@@ -17,7 +17,14 @@ import {
   StatusFilterPills,
 } from "./geo-location/map-controls";
 import { GeofencePanel, TrailTimeline, MapSkeleton, MapError } from "./geo-location/map-panels";
-import type { GeoStatusFilter, ResolvedDevice, Geofence } from "./geo-location/geo-location-types";
+import type {
+  GeoDevice,
+  GeoStatusFilter,
+  ResolvedDevice,
+  Geofence,
+  TrailPoint,
+  DeviceCluster,
+} from "./geo-location/geo-location-types";
 import {
   GEO_URL,
   DEFAULT_GEOFENCES,
@@ -25,7 +32,6 @@ import {
   clusterDevices,
   computeGeofences,
 } from "./geo-location/geo-location-types";
-import type { TrailPoint, DeviceCluster } from "./geo-location/geo-location-types";
 
 // Re-export for external consumers
 export type { GeoDevice } from "./geo-location/geo-location-types";
@@ -33,15 +39,9 @@ export type { GeoDevice } from "./geo-location/geo-location-types";
 // ---------------------------------------------------------------------------
 // Main Component — GeoLocationMap
 // ---------------------------------------------------------------------------
-export function GeoLocationMap({
-  devices,
-}: {
-  devices: import("./geo-location/geo-location-types").GeoDevice[];
-}) {
+export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
   const [statusFilter, setStatusFilter] = useState<GeoStatusFilter>("all");
-  const [selectedDevice, setSelectedDevice] = useState<
-    import("./geo-location/geo-location-types").GeoDevice | null
-  >(null);
+  const [selectedDevice, setSelectedDevice] = useState<GeoDevice | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [mapLoaded, setMapLoaded] = useState(false);
   const [mapError, setMapError] = useState(false);
@@ -95,7 +95,7 @@ export function GeoLocationMap({
   }, [devices]);
 
   const handleMarkerClick = useCallback(
-    (device: import("./geo-location/geo-location-types").GeoDevice, event: React.MouseEvent) => {
+    (device: GeoDevice, event: React.MouseEvent) => {
       event.stopPropagation();
 
       const container = containerRef.current;
@@ -172,7 +172,7 @@ export function GeoLocationMap({
 
   // Story 10.5: Trail handler
   const handleShowTrail = useCallback(
-    (device: import("./geo-location/geo-location-types").GeoDevice) => {
+    (device: GeoDevice) => {
       // If trail is active for this device, hide it
       if (trailDevice?.id === device.id) {
         setTrailDevice(null);
