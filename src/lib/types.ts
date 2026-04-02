@@ -79,6 +79,7 @@ export interface Device {
   installedDate: string; // ISO date
   tags: string[];
   metadata: Record<string, string>;
+  _schemaVersion?: number;
 }
 
 export interface Firmware {
@@ -97,6 +98,7 @@ export interface Firmware {
   compatibleModels: string[];
   targetDeviceCount: number;
   deployedDeviceCount: number;
+  _schemaVersion?: number;
 }
 
 export interface ServiceOrder {
@@ -113,6 +115,7 @@ export interface ServiceOrder {
   createdAt: string; // ISO date
   updatedAt: string; // ISO date
   notes: string[];
+  _schemaVersion?: number;
 }
 
 export interface Compliance {
@@ -127,6 +130,7 @@ export interface Compliance {
   criticalFindings: number;
   assignedTo: string;
   documents: string[];
+  _schemaVersion?: number;
 }
 
 export interface Vulnerability {
@@ -142,6 +146,7 @@ export interface Vulnerability {
   discoveredAt: string; // ISO date
   resolvedAt?: string; // ISO date
   status: "open" | "mitigated" | "resolved" | "accepted";
+  _schemaVersion?: number;
 }
 
 export interface AuditLog {
@@ -153,6 +158,7 @@ export interface AuditLog {
   ipAddress: string;
   timestamp: string; // ISO date
   status: "Success";
+  _schemaVersion?: number;
 }
 
 export interface Customer {
