@@ -15,12 +15,18 @@ import {
   generateJSON,
 } from "../mock-data/compliance-data";
 
+const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+
 export function useComplianceManagement() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<ComplianceStatus | "All">("All");
   const [certFilter, setCertFilter] = useState<CertificationType | "All">("All");
-  const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>(MOCK_COMPLIANCE);
-  const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>(MOCK_VULNERABILITIES);
+  const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>(
+    isMock ? MOCK_COMPLIANCE : [],
+  );
+  const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>(
+    isMock ? MOCK_VULNERABILITIES : [],
+  );
 
   const filteredItems = useMemo(() => {
     let items = complianceItems;

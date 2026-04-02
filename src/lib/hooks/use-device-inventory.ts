@@ -6,6 +6,8 @@ import type { MockDevice } from "../mock-data/inventory-data";
 import { MOCK_DEVICES } from "../mock-data/inventory-data";
 import type { CreateDevicePayload } from "../types/device";
 
+const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+
 type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
 type SortDir = "asc" | "desc";
 const PAGE_SIZE = 6;
@@ -19,7 +21,7 @@ export function useDeviceInventory() {
   const [advancedFilters, setAdvancedFilters] = useState<DeviceSearchFilters>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [devices, setDevices] = useState<MockDevice[]>(MOCK_DEVICES);
+  const [devices, setDevices] = useState<MockDevice[]>(isMock ? MOCK_DEVICES : []);
   const [page, setPage] = useState(1);
 
   const handleStatusChange = useCallback(
