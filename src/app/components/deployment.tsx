@@ -695,8 +695,8 @@ export function Deployment() {
         <div className="space-y-4">
           {/* Report Type Selector */}
           <div className="flex items-center gap-4">
-            <label className="text-[13px] font-medium text-muted-foreground">Report Type:</label>
-            <div className="flex items-center gap-3">
+            <label id="deploy-report-type-label" className="text-[13px] font-medium text-muted-foreground">Report Type:</label>
+            <div role="radiogroup" aria-labelledby="deploy-report-type-label" className="flex items-center gap-3">
               {[
                 { id: "compliance" as const, label: "Compliance Summary" },
                 { id: "vulnerability" as const, label: "Vulnerability Report" },
@@ -824,12 +824,13 @@ export function Deployment() {
             {/* Date Range */}
             <div className="flex items-end gap-2">
               <div>
-                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+                <label htmlFor="deploy-audit-from" className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   From
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <input
+                    id="deploy-audit-from"
                     type="date"
                     value={auditStartDate}
                     onChange={(e) => {
@@ -841,12 +842,13 @@ export function Deployment() {
                 </div>
               </div>
               <div>
-                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+                <label htmlFor="deploy-audit-to" className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   To
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <input
+                    id="deploy-audit-to"
                     type="date"
                     value={auditEndDate}
                     onChange={(e) => {
@@ -868,12 +870,13 @@ export function Deployment() {
             {/* User Filter */}
             <div className="flex items-end gap-2">
               <div>
-                <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+                <label htmlFor="deploy-audit-user" className="mb-1 block text-[13px] font-medium text-muted-foreground">
                   Filter by User
                 </label>
                 <div className="relative">
                   <User className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <input
+                    id="deploy-audit-user"
                     type="text"
                     value={auditUserInput}
                     onChange={(e) => setAuditUserInput(e.target.value)}
