@@ -833,10 +833,11 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
 
             {/* Target selector */}
             <div>
-              <label className="text-[14px] font-medium text-foreground/80 mb-1.5 block">
+              <label htmlFor="dt-target-firmware" className="text-[14px] font-medium text-foreground/80 mb-1.5 block">
                 Target Firmware
               </label>
               <select
+                id="dt-target-firmware"
                 value={targetVersion}
                 onChange={(e) => setTargetVersion(e.target.value)}
                 className="w-full rounded-lg border border-border bg-card px-3 py-2.5 text-[14px] text-foreground/80 focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"

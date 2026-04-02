@@ -212,10 +212,14 @@ export function AdvancedDeviceSearch({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 rounded-lg border border-border bg-card p-4">
           {/* Status filter */}
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="search-status"
+              className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground"
+            >
               Status
             </label>
             <select
+              id="search-status"
               value={filters.status ?? ""}
               onChange={(e) =>
                 onFiltersChange({
@@ -236,10 +240,14 @@ export function AdvancedDeviceSearch({
 
           {/* Location filter */}
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="search-location"
+              className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground"
+            >
               Location
             </label>
             <select
+              id="search-location"
               value={filters.location ?? ""}
               onChange={(e) =>
                 onFiltersChange({
@@ -260,10 +268,14 @@ export function AdvancedDeviceSearch({
 
           {/* Model filter */}
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="search-model"
+              className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground"
+            >
               Model
             </label>
             <select
+              id="search-model"
               value={filters.model ?? ""}
               onChange={(e) =>
                 onFiltersChange({
@@ -284,11 +296,15 @@ export function AdvancedDeviceSearch({
 
           {/* Health score range */}
           <div className="space-y-1.5">
-            <label className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground">
+            <label
+              htmlFor="search-health-min"
+              className="text-[13px] font-medium uppercase tracking-wider text-muted-foreground"
+            >
               Health Score
             </label>
             <div className="flex items-center gap-1.5">
               <input
+                id="search-health-min"
                 type="number"
                 min={0}
                 max={100}

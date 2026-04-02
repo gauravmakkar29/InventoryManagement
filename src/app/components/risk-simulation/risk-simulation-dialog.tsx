@@ -450,10 +450,11 @@ export function RiskSimulationDialog({
         <div className="border-b border-border/60 px-6 py-4 space-y-4">
           {/* Device name */}
           <div>
-            <label className="block text-[13px] font-semibold text-muted-foreground mb-1">
+            <label htmlFor="risk-sim-device" className="block text-[13px] font-semibold text-muted-foreground mb-1">
               Device
             </label>
             <input
+              id="risk-sim-device"
               type="text"
               value={params.deviceName}
               onChange={(e) => setParams((p) => ({ ...p, deviceName: e.target.value }))}
@@ -463,10 +464,10 @@ export function RiskSimulationDialog({
 
           {/* Failure type */}
           <div>
-            <label className="block text-[13px] font-semibold text-muted-foreground mb-1">
+            <label id="risk-sim-failure-type-label" className="block text-[13px] font-semibold text-muted-foreground mb-1">
               Failure Type
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div role="group" aria-labelledby="risk-sim-failure-type-label" className="grid grid-cols-2 gap-2">
               {FAILURE_TYPES.map((ft) => {
                 const Icon = ft.icon;
                 return (
