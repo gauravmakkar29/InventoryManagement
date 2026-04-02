@@ -5,6 +5,9 @@ import { MockAuthProvider } from "./mock/mock-auth-provider";
 import { createAuthProvider } from "./auth-provider";
 import { createCdkAuthAdapter } from "./aws-cdk/cdk-auth-adapter";
 import { createCdkApiProvider } from "./aws-cdk/cdk-api-provider";
+import { createAmplifyAuthAdapter } from "./aws-amplify/amplify-auth-adapter";
+import { createAmplifyApiProvider } from "./aws-amplify/amplify-api-provider";
+import { createAmplifyStorageProvider } from "./aws-amplify/amplify-storage-provider";
 import { createTerraformAuthAdapter } from "./aws-terraform/terraform-auth-adapter";
 import { createTerraformApiProvider } from "./aws-terraform/terraform-api-provider";
 import { createTerraformStorageProvider } from "./aws-terraform/terraform-storage-provider";
@@ -86,7 +89,11 @@ export function createPlatformConfig(): PlatformConfig {
 
   switch (platform) {
     case "aws-amplify":
-      throw new Error(`Platform "${platform}" is not yet implemented. See Story #204.`);
+      return {
+        api: createAmplifyApiProvider(),
+        storage: createAmplifyStorageProvider(),
+        AuthProvider: createAuthProvider(createAmplifyAuthAdapter()),
+      };
     case "aws-cdk":
       return {
         api: createCdkApiProvider(),
