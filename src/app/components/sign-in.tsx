@@ -12,9 +12,9 @@ interface SignInForm {
   password: string;
 }
 
-/* ─── Sun rays + solar grid on light background ───────────────────── */
+/* ─── Sun rays + energy particles overlay on photo ────────────────── */
 
-function SolarCanvas() {
+function SolarOverlay() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -39,18 +39,18 @@ function SolarCanvas() {
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
 
-      // ─── Sun rays emanating from top-right corner ───
-      const sunX = w * 0.85;
-      const sunY = h * 0.08;
-      const rayCount = 24;
+      // ─── Sun rays from top-right ───
+      const sunX = w * 0.82;
+      const sunY = h * 0.12;
+      const rayCount = 32;
 
       for (let i = 0; i < rayCount; i++) {
         const angle = (i / rayCount) * Math.PI * 2;
-        const pulse = Math.sin(time * 0.5 + i * 0.5) * 0.3 + 0.7;
-        const length = 300 + Math.sin(time * 0.3 + i * 0.8) * 80;
+        const pulse = Math.sin(time * 0.4 + i * 0.4) * 0.4 + 0.6;
+        const length = 400 + Math.sin(time * 0.25 + i * 0.7) * 120;
 
-        ctx.strokeStyle = `rgba(255, 160, 40, ${0.04 * pulse})`;
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = `rgba(255, 200, 60, ${0.07 * pulse})`;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.moveTo(sunX, sunY);
         ctx.lineTo(
@@ -61,102 +61,48 @@ function SolarCanvas() {
       }
 
       // Sun glow
-      const glowRadius = 60 + Math.sin(time * 0.6) * 10;
-      const glow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, glowRadius);
-      glow.addColorStop(0, "rgba(255, 160, 40, 0.12)");
-      glow.addColorStop(0.5, "rgba(255, 121, 0, 0.04)");
+      const glowR = 80 + Math.sin(time * 0.5) * 15;
+      const glow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, glowR);
+      glow.addColorStop(0, "rgba(255, 200, 60, 0.2)");
+      glow.addColorStop(0.4, "rgba(255, 160, 40, 0.08)");
       glow.addColorStop(1, "transparent");
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(sunX, sunY, glowRadius, 0, Math.PI * 2);
+      ctx.arc(sunX, sunY, glowR, 0, Math.PI * 2);
       ctx.fill();
 
-      // ─── Solar panel grid (bottom half) ───
-      const gridStartY = h * 0.52;
-      const gridH = h * 0.35;
-      const cols = 16;
-      const rows = 6;
-      const cellW = (w * 0.7) / cols;
-      const cellH = gridH / rows;
-      const gridStartX = w * 0.08;
+      // ─── Rising energy particles ───
+      for (let i = 0; i < 16; i++) {
+        const baseX = w * 0.05 + (i * w * 0.06);
+        const px = baseX + Math.sin(time * 0.4 + i * 1.3) * 15;
+        const py = h - ((time * 25 + i * 70) % (h + 60)) + 30;
+        const size = 2 + Math.sin(time * 0.8 + i) * 1;
+        const fadeTop = py < h * 0.15 ? py / (h * 0.15) : 1;
+        const fadeBottom = py > h * 0.85 ? (h - py) / (h * 0.15) : 1;
+        const alpha = 0.25 * fadeTop * fadeBottom;
 
-      // Perspective tilt effect
-      for (let j = 0; j <= rows; j++) {
-        const y = gridStartY + j * cellH;
-        const perspective = 1 - j * 0.03;
-        const offsetX = j * 8;
-        ctx.strokeStyle = `rgba(255, 121, 0, ${0.08 * perspective})`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(gridStartX + offsetX, y);
-        ctx.lineTo(gridStartX + cols * cellW - offsetX, y);
-        ctx.stroke();
-      }
+        if (alpha > 0.01) {
+          ctx.fillStyle = `rgba(255, 180, 40, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(px, py, size, 0, Math.PI * 2);
+          ctx.fill();
 
-      for (let i = 0; i <= cols; i++) {
-        const x = gridStartX + i * cellW;
-        ctx.strokeStyle = "rgba(255, 121, 0, 0.06)";
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(x + rows * 8, gridStartY);
-        ctx.lineTo(x, gridStartY + gridH);
-        ctx.stroke();
-      }
-
-      // Pulsing solar cells
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const wave = Math.sin(time * 0.8 + i * 0.4 + j * 0.6);
-          if (wave > 0.3) {
-            const alpha = (wave - 0.3) * 0.06;
-            const offsetX = j * 8;
-            const x = gridStartX + i * cellW + offsetX;
-            const y = gridStartY + j * cellH;
-            ctx.fillStyle = `rgba(255, 121, 0, ${alpha})`;
-            ctx.fillRect(x + 1, y + 1, cellW - 2, cellH - 2);
-          }
+          // Tiny glow around each particle
+          ctx.fillStyle = `rgba(255, 180, 40, ${alpha * 0.3})`;
+          ctx.beginPath();
+          ctx.arc(px, py, size * 2.5, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
 
-      // ─── Floating energy particles (rising upward like solar energy) ───
-      for (let i = 0; i < 12; i++) {
-        const baseX = w * 0.1 + (i * w * 0.07);
-        const px = baseX + Math.sin(time * 0.5 + i * 1.5) * 20;
-        const py = h - ((time * 30 + i * 80) % (h + 40)) + 20;
-        const size = 1.5 + Math.sin(time + i) * 0.8;
-        const alpha = Math.max(0, 0.15 - (py < h * 0.2 ? (h * 0.2 - py) * 0.003 : 0));
-        ctx.fillStyle = `rgba(255, 150, 30, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(px, py, size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      // ─── Solar inverter silhouettes ───
-      const drawInverter = (x: number, y: number, scale: number, opacity: number) => {
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.scale(scale, scale);
-        ctx.fillStyle = `rgba(255, 121, 0, ${opacity})`;
-        // Box body
-        ctx.fillRect(-15, -20, 30, 40);
-        // Screen
-        ctx.fillStyle = `rgba(255, 180, 60, ${opacity * 0.6})`;
-        ctx.fillRect(-10, -14, 20, 12);
-        // LED dots
-        ctx.fillStyle = `rgba(100, 220, 100, ${opacity * 0.8})`;
-        ctx.beginPath();
-        ctx.arc(-5, 10, 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = `rgba(255, 180, 60, ${opacity * 0.6})`;
-        ctx.beginPath();
-        ctx.arc(5, 10, 2, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      };
-
-      drawInverter(w * 0.15, h * 0.42, 0.8, 0.06);
-      drawInverter(w * 0.38, h * 0.38, 1.0, 0.08);
-      drawInverter(w * 0.62, h * 0.44, 0.7, 0.05);
+      // ─── Subtle horizontal scan line (like energy flowing) ───
+      const scanY = ((time * 40) % h);
+      const scanGrad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
+      scanGrad.addColorStop(0, "transparent");
+      scanGrad.addColorStop(0.5, "rgba(255, 160, 40, 0.04)");
+      scanGrad.addColorStop(1, "transparent");
+      ctx.fillStyle = scanGrad;
+      ctx.fillRect(0, scanY - 30, w, 60);
 
       time += 0.012;
       animationId = requestAnimationFrame(draw);
@@ -169,7 +115,7 @@ function SolarCanvas() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[2]" aria-hidden="true" />;
 }
 
 /* ─── Live metrics ticker ─────────────────────────────────────────── */
@@ -200,10 +146,10 @@ function MetricsTicker() {
             i === activeIndex ? "opacity-100 scale-100" : "opacity-40 scale-[0.97]",
           )}
         >
-          <p className="text-[22px] font-bold text-gray-900 tabular-nums tracking-tight">{m.value}</p>
-          <p className="text-[12px] text-gray-400 uppercase tracking-wider font-medium">{m.label}</p>
+          <p className="text-[22px] font-bold text-white tabular-nums tracking-tight">{m.value}</p>
+          <p className="text-[12px] text-white/60 uppercase tracking-wider font-medium">{m.label}</p>
           {i === activeIndex && (
-            <p className="text-[11px] text-orange-500 mt-0.5 font-medium">{m.trend}</p>
+            <p className="text-[11px] text-orange-300 mt-0.5 font-medium">{m.trend}</p>
           )}
         </div>
       ))}
@@ -213,11 +159,12 @@ function MetricsTicker() {
 
 /* ─── Brand mark with pulse ───────────────────────────────────────── */
 
-function BrandMark() {
+function BrandMark({ variant = "light" }: { variant?: "light" | "dark" }) {
+  const isDark = variant === "dark";
   return (
     <div className="flex items-center gap-3">
       <div className="relative">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="4" fill="white" />
             <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="white" strokeWidth="2" strokeLinecap="round" />
@@ -227,10 +174,10 @@ function BrandMark() {
         <div className="absolute inset-0 rounded-xl bg-orange-500/20 animate-ping" style={{ animationDuration: "3s" }} />
       </div>
       <div>
-        <h1 className="text-[20px] font-bold text-gray-900 tracking-tight leading-none">
-          IMS Gen<span className="text-orange-500">2</span>
+        <h1 className={cn("text-[20px] font-bold tracking-tight leading-none", isDark ? "text-gray-900" : "text-white")}>
+          IMS Gen<span className={isDark ? "text-orange-500" : "text-orange-300"}>2</span>
         </h1>
-        <p className="text-[11px] text-gray-400 tracking-[0.15em] uppercase font-medium mt-0.5">
+        <p className={cn("text-[11px] tracking-[0.15em] uppercase font-medium mt-0.5", isDark ? "text-gray-400" : "text-white/50")}>
           Hardware Lifecycle Platform
         </p>
       </div>
@@ -276,84 +223,78 @@ export function SignIn() {
 
   return (
     <div className="flex min-h-screen bg-white">
-      {/* ─── Left panel: Light solar brand experience ─── */}
-      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between relative overflow-hidden bg-gradient-to-br from-orange-50/80 via-white to-amber-50/50">
-        {/* Warm ambient glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(255,160,40,0.1)_0%,transparent_70%)]" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(255,121,0,0.06)_0%,transparent_70%)]" />
+      {/* ─── Left panel: Solar farm photo + animated overlay ─── */}
+      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between relative overflow-hidden">
+        {/* Background photo — solar farm at golden hour */}
+        <img
+          src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1400&q=85&auto=format"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-        {/* Canvas: sun rays + solar grid + inverters + particles */}
-        <SolarCanvas />
+        {/* Light warm overlay — keeps it bright, not dark */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-orange-50/30 to-amber-900/40 z-[1]" />
+
+        {/* Bottom gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent z-[1]" />
+
+        {/* Animated sun rays + energy particles */}
+        <SolarOverlay />
 
         {/* Top: Brand + compliance */}
         <div className="relative z-10 p-10 flex items-start justify-between">
           <BrandMark />
-          <div className="flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-sm border border-orange-100 px-3.5 py-1.5 shadow-sm">
-            <Shield className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
-            <span className="text-[11px] font-medium text-gray-600 tracking-wide">
+          <div className="flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-md border border-white/20 px-3.5 py-1.5">
+            <Shield className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
+            <span className="text-[11px] font-medium text-white/90 tracking-wide">
               Enterprise Compliant
             </span>
           </div>
         </div>
 
         {/* Center: Hero */}
-        <div className="relative z-10 px-10 flex-1 flex flex-col justify-center max-w-xl">
-          <div className="space-y-6">
+        <div className="relative z-10 px-10 flex-1 flex flex-col justify-end pb-6 max-w-xl">
+          <div className="space-y-5">
             <div>
-              <p className="text-[13px] font-semibold text-orange-500 uppercase tracking-[0.2em] mb-4">
+              <p className="text-[13px] font-semibold text-orange-300 uppercase tracking-[0.2em] mb-4">
                 Enterprise Platform
               </p>
-              <h2 className="text-[42px] font-bold text-gray-900 leading-[1.1] tracking-tight">
+              <h2 className="text-[42px] font-bold text-white leading-[1.1] tracking-tight drop-shadow-sm">
                 Powering the
                 <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-amber-200">
                   Solar Revolution
                 </span>
               </h2>
-              <p className="mt-5 text-[16px] leading-relaxed text-gray-500 max-w-md">
+              <p className="mt-4 text-[15px] leading-relaxed text-white/70 max-w-md">
                 Manage inverters, track firmware deployments, enforce compliance,
                 and monitor fleet health — all from one unified command center.
               </p>
             </div>
 
-            {/* Capability cards */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
+            {/* Capability pills */}
+            <div className="flex flex-wrap gap-2">
               {[
-                { num: "01", label: "Device Inventory & Tracking", active: true },
-                { num: "02", label: "Firmware OTA Deployment" },
-                { num: "03", label: "Compliance & SBOM Audit" },
-                { num: "04", label: "Real-time Fleet Analytics" },
-              ].map((cap) => (
+                "Device Inventory",
+                "Firmware OTA",
+                "Compliance Audit",
+                "Fleet Analytics",
+              ].map((label) => (
                 <div
-                  key={cap.num}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-4 py-3 border transition-colors duration-300",
-                    cap.active
-                      ? "border-orange-200 bg-orange-50/80 shadow-sm"
-                      : "border-gray-100 bg-white/60 hover:border-orange-100",
-                  )}
+                  key={label}
+                  className="rounded-full bg-white/10 backdrop-blur-sm border border-white/15 px-3.5 py-1.5"
                 >
-                  <span className={cn(
-                    "text-[11px] font-bold tabular-nums",
-                    cap.active ? "text-orange-500" : "text-gray-300",
-                  )}>
-                    {cap.num}
-                  </span>
-                  <span className={cn(
-                    "text-[13px] font-medium",
-                    cap.active ? "text-gray-800" : "text-gray-400",
-                  )}>
-                    {cap.label}
-                  </span>
+                  <span className="text-[12px] font-medium text-white/80">{label}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Bottom: Live metrics ticker */}
-        <div className="relative z-10 p-10 pt-0">
-          <div className="border-t border-orange-100/60 pt-8">
+        {/* Bottom: Live metrics */}
+        <div className="relative z-10 p-10 pt-4">
+          <div className="border-t border-white/10 pt-6">
             <MetricsTicker />
           </div>
         </div>
@@ -364,7 +305,7 @@ export function SignIn() {
         <div className="w-full max-w-[400px]">
           {/* Mobile brand */}
           <div className="mb-10 lg:hidden">
-            <BrandMark />
+            <BrandMark variant="dark" />
           </div>
 
           {/* Form card */}
