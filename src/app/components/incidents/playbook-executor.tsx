@@ -21,7 +21,7 @@ export function PlaybookExecutor({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h4 className="text-[14px] font-semibold text-gray-900">
+        <h4 className="text-[14px] font-semibold text-foreground">
           Playbook: {progress.playbookName}
         </h4>
         {pct === 100 && (
@@ -32,13 +32,13 @@ export function PlaybookExecutor({
       </div>
       {/* Progress bar */}
       <div>
-        <div className="mb-1 flex items-center justify-between text-[13px] text-gray-600">
+        <div className="mb-1 flex items-center justify-between text-[13px] text-muted-foreground">
           <span>
             {progress.completedSteps} of {progress.totalSteps} steps complete
           </span>
           <span>{pct}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+        <div className="h-2 overflow-hidden rounded-full bg-muted">
           <div
             className="h-full rounded-full bg-accent transition-all duration-300"
             style={{ width: `${pct}%` }}
@@ -52,7 +52,7 @@ export function PlaybookExecutor({
             key={step.stepNumber}
             className={cn(
               "rounded-lg border p-3",
-              step.isCompleted ? "border-emerald-200 bg-emerald-50/50" : "border-gray-300",
+              step.isCompleted ? "border-emerald-200 bg-emerald-50/50" : "border-border",
             )}
           >
             <div className="flex items-start gap-3">
@@ -62,7 +62,7 @@ export function PlaybookExecutor({
                 ) : (
                   <button
                     onClick={() => onStepComplete(step.stepNumber)}
-                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-gray-300 hover:border-accent-text cursor-pointer"
+                    className="flex h-5 w-5 items-center justify-center rounded-full border-2 border-border hover:border-accent-text cursor-pointer"
                     title="Mark as complete"
                   >
                     <span className="sr-only">Complete step {step.stepNumber}</span>
@@ -71,11 +71,13 @@ export function PlaybookExecutor({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] font-bold text-gray-600">#{step.stepNumber}</span>
+                  <span className="text-[13px] font-bold text-muted-foreground">
+                    #{step.stepNumber}
+                  </span>
                   <p
                     className={cn(
                       "text-[14px] font-medium",
-                      step.isCompleted ? "text-gray-600 line-through" : "text-gray-900",
+                      step.isCompleted ? "text-muted-foreground line-through" : "text-foreground",
                     )}
                   >
                     {step.title}
@@ -86,9 +88,9 @@ export function PlaybookExecutor({
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 text-[14px] text-gray-600">{step.description}</p>
+                <p className="mt-0.5 text-[14px] text-muted-foreground">{step.description}</p>
                 {step.isCompleted && step.completedByName && (
-                  <p className="mt-1 text-[13px] text-gray-600">
+                  <p className="mt-1 text-[13px] text-muted-foreground">
                     Completed by {step.completedByName} &middot;{" "}
                     {step.completedAt ? formatRelativeTime(step.completedAt) : ""}
                   </p>

@@ -310,7 +310,7 @@ export function Deployment() {
           </div>
 
           {filteredFirmware.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-gray-50 py-16">
+            <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-border bg-muted py-16">
               <Package className="mb-3 h-10 w-10 text-muted-foreground" />
               <p className="text-sm font-medium text-muted-foreground">
                 {firmware.length === 0
@@ -356,7 +356,7 @@ export function Deployment() {
                     case "Active":
                       return "bg-emerald-500/10 text-emerald-600";
                     case "Deprecated":
-                      return "bg-gray-200 text-gray-600";
+                      return "bg-muted text-muted-foreground";
                     case "Pending":
                       return "bg-amber-500/10 text-amber-600";
                   }

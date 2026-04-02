@@ -31,40 +31,40 @@ export function IsolatedDevicesTab({
       <table className="w-full">
         <caption className="sr-only">Isolated devices</caption>
         <thead>
-          <tr className="border-b-2 border-gray-300 bg-table-header">
+          <tr className="border-b-2 border-border bg-table-header">
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Device
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Incident
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Isolation Date
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Policy
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Location
             </th>
             <th
               scope="col"
-              className="px-4 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-gray-600"
+              className="px-4 py-2.5 text-right text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
             >
               Action
             </th>
@@ -72,20 +72,20 @@ export function IsolatedDevicesTab({
         </thead>
         <tbody>
           {isolatedDevices.map((dev, i) => (
-            <tr key={dev.id} className={cn("h-[48px]", i % 2 === 1 && "bg-gray-50/50")}>
+            <tr key={dev.id} className={cn("h-[48px]", i % 2 === 1 && "bg-muted/50")}>
               <td className="px-4">
                 <div className="flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-red-500" />
-                  <span className="text-[14px] font-medium text-gray-900">{dev.name}</span>
+                  <span className="text-[14px] font-medium text-foreground">{dev.name}</span>
                 </div>
               </td>
               <td className="px-4">
                 <span className="text-[14px] text-blue-600 font-medium">{dev.incidentId}</span>
-                <p className="text-[13px] text-gray-600 truncate max-w-[200px]">
+                <p className="text-[13px] text-muted-foreground truncate max-w-[200px]">
                   {dev.incidentTitle}
                 </p>
               </td>
-              <td className="px-4 text-[14px] text-gray-600">
+              <td className="px-4 text-[14px] text-muted-foreground">
                 {dev.isolatedAt ? formatDateTime(dev.isolatedAt) : "N/A"}
               </td>
               <td className="px-4">
@@ -93,7 +93,7 @@ export function IsolatedDevicesTab({
                   {dev.isolationPolicy ?? "N/A"}
                 </span>
               </td>
-              <td className="px-4 text-[14px] text-gray-600">{dev.location}</td>
+              <td className="px-4 text-[14px] text-muted-foreground">{dev.location}</td>
               <td className="px-4 text-right">
                 <button
                   onClick={() => onRelease(dev)}
@@ -109,7 +109,9 @@ export function IsolatedDevicesTab({
               <td colSpan={6} className="py-12 text-center">
                 <Shield className="mx-auto h-8 w-8 text-emerald-300 mb-2" />
                 <p className="text-[15px] font-medium text-emerald-700">No isolated devices</p>
-                <p className="text-[14px] text-gray-600">All devices are operating normally</p>
+                <p className="text-[14px] text-muted-foreground">
+                  All devices are operating normally
+                </p>
               </td>
             </tr>
           )}

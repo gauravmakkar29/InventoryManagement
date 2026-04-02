@@ -36,7 +36,7 @@ export function PaginationControls({
   };
 }) {
   return (
-    <div className="mt-4 flex items-center justify-between text-[14px] text-gray-600">
+    <div className="mt-4 flex items-center justify-between text-[14px] text-muted-foreground">
       <span>
         Showing {(pagination.currentPage - 1) * PAGE_SIZE + 1} -{" "}
         {Math.min(pagination.currentPage * PAGE_SIZE, pagination.total)} of {pagination.total}
@@ -48,8 +48,8 @@ export function PaginationControls({
           className={cn(
             "rounded-lg px-2.5 py-1 cursor-pointer",
             pagination.currentPage === 1
-              ? "text-gray-600 cursor-not-allowed"
-              : "text-gray-600 hover:bg-gray-100",
+              ? "text-muted-foreground cursor-not-allowed"
+              : "text-muted-foreground hover:bg-muted",
           )}
         >
           Previous
@@ -62,7 +62,7 @@ export function PaginationControls({
               "h-9 w-9 rounded-lg text-center cursor-pointer",
               page === pagination.currentPage
                 ? "bg-accent text-white font-medium"
-                : "text-gray-600 hover:bg-gray-100",
+                : "text-muted-foreground hover:bg-muted",
             )}
           >
             {page}
@@ -74,8 +74,8 @@ export function PaginationControls({
           className={cn(
             "rounded-lg px-2.5 py-1 cursor-pointer",
             pagination.currentPage === pagination.totalPages
-              ? "text-gray-600 cursor-not-allowed"
-              : "text-gray-600 hover:bg-gray-100",
+              ? "text-muted-foreground cursor-not-allowed"
+              : "text-muted-foreground hover:bg-muted",
           )}
         >
           Next

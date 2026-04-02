@@ -91,7 +91,7 @@ export function TelemetryIngestStatus() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-accent-text" />
-          <h3 className="text-[15px] font-semibold text-gray-900">Telemetry Pipeline</h3>
+          <h3 className="text-[15px] font-semibold text-foreground">Telemetry Pipeline</h3>
         </div>
         <div className="flex items-center gap-2">
           <span
@@ -106,7 +106,7 @@ export function TelemetryIngestStatus() {
           </span>
           <button
             onClick={fetchStatus}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-gray-600 hover:text-gray-600 hover:bg-gray-50 cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground hover:text-muted-foreground hover:bg-muted cursor-pointer"
             aria-label="Refresh pipeline status"
           >
             <RefreshCw className="h-3.5 w-3.5" />
@@ -116,50 +116,50 @@ export function TelemetryIngestStatus() {
 
       <div className="grid grid-cols-3 gap-3">
         {/* Records ingested */}
-        <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
+        <div className="rounded-xl border border-border/60 bg-muted px-3 py-3 text-center">
           <Database className="mx-auto h-4 w-4 text-blue-500 mb-1.5" />
-          <p className="text-[16px] font-bold tabular-nums text-gray-900">
+          <p className="text-[16px] font-bold tabular-nums text-foreground">
             {status.recordsIngestedLastHour.toLocaleString()}
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Records / hr</p>
+          <p className="mt-0.5 text-[12px] font-medium text-muted-foreground">Records / hr</p>
         </div>
 
         {/* Average latency */}
-        <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-center">
+        <div className="rounded-xl border border-border/60 bg-muted px-3 py-3 text-center">
           <Clock className="mx-auto h-4 w-4 text-accent-text mb-1.5" />
-          <p className="text-[16px] font-bold tabular-nums text-gray-900">
+          <p className="text-[16px] font-bold tabular-nums text-foreground">
             {status.avgLatencyMs}ms
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Avg Latency</p>
+          <p className="mt-0.5 text-[12px] font-medium text-muted-foreground">Avg Latency</p>
         </div>
 
         {/* Errors */}
         <div
           className={cn(
             "rounded-xl border px-3 py-3 text-center",
-            status.errorCount > 0 ? "border-red-200 bg-red-50" : "border-gray-200 bg-gray-50",
+            status.errorCount > 0 ? "border-red-200 bg-red-50" : "border-border/60 bg-muted",
           )}
         >
           <AlertCircle
             className={cn(
               "mx-auto h-4 w-4 mb-1.5",
-              status.errorCount > 0 ? "text-red-500" : "text-gray-600",
+              status.errorCount > 0 ? "text-red-500" : "text-muted-foreground",
             )}
           />
           <p
             className={cn(
               "text-[16px] font-bold tabular-nums",
-              status.errorCount > 0 ? "text-red-600" : "text-gray-900",
+              status.errorCount > 0 ? "text-red-600" : "text-foreground",
             )}
           >
             {status.errorCount}
           </p>
-          <p className="mt-0.5 text-[12px] font-medium text-gray-600">Errors / hr</p>
+          <p className="mt-0.5 text-[12px] font-medium text-muted-foreground">Errors / hr</p>
         </div>
       </div>
 
       {/* Last ingestion timestamp */}
-      <div className="mt-3 flex items-center gap-1.5 text-[13px] text-gray-600">
+      <div className="mt-3 flex items-center gap-1.5 text-[13px] text-muted-foreground">
         <Clock className="h-3 w-3" />
         <span>Last ingestion: {formatRelativeTime(status.lastSuccessfulIngestion)}</span>
       </div>

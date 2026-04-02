@@ -28,8 +28,9 @@ resource "aws_lambda_function" "audit_processor" {
 
   environment {
     variables = {
-      TABLE_NAME  = var.dynamodb_table_name
-      ENVIRONMENT = var.environment
+      TABLE_NAME       = var.dynamodb_table_name
+      AUDIT_TABLE_NAME = var.audit_table_name
+      ENVIRONMENT      = var.environment
     }
   }
 

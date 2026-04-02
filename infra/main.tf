@@ -23,10 +23,13 @@ module "cognito" {
 }
 
 module "iam" {
-  source             = "./modules/iam"
-  environment        = var.environment
-  project_name       = var.project_name
-  dynamodb_table_arn = module.dynamodb.table_arn
+  source                      = "./modules/iam"
+  environment                 = var.environment
+  project_name                = var.project_name
+  dynamodb_table_arn          = module.dynamodb.table_arn
+  audit_table_arn             = module.dynamodb.audit_table_arn
+  opensearch_export_bucket_arn = module.opensearch.export_bucket_arn
+  opensearch_collection_arn    = module.opensearch.collection_arn
 }
 
 module "appsync" {
@@ -69,6 +72,7 @@ module "lambda_audit" {
   environment         = var.environment
   project_name        = var.project_name
   dynamodb_table_name = module.dynamodb.table_name
+  audit_table_name    = module.dynamodb.audit_table_name
   dynamodb_stream_arn = module.dynamodb.stream_arn
   lambda_role_arn     = module.iam.lambda_role_arn
   log_retention_days  = var.lambda_log_retention_days

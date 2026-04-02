@@ -148,7 +148,7 @@ function KanbanCard({
   onMove: (id: string, newStatus: Status) => void;
 }) {
   return (
-    <div className="rounded border border-border bg-white p-3 space-y-2 hover:border-accent-text/40 transition-colors duration-150">
+    <div className="rounded border border-border bg-card p-3 space-y-2 hover:border-accent-text/40 transition-colors duration-150">
       {/* Top row: ID + Priority */}
       <div className="flex items-center justify-between">
         <span className="text-[12px] font-mono text-muted-foreground">{order.id}</span>
@@ -222,7 +222,7 @@ function KanbanColumn({
   );
 
   return (
-    <div className="flex flex-col rounded border border-border bg-gray-50 min-h-[300px]">
+    <div className="flex flex-col rounded border border-border bg-muted min-h-[300px]">
       {/* Column header */}
       <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
         <h3 className="text-sm font-bold text-foreground">{STATUS_LABELS[status]}</h3>
@@ -305,20 +305,20 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
   return (
     <div className="space-y-3">
       {/* Calendar card */}
-      <div className="rounded border border-border bg-white p-4 space-y-3">
+      <div className="rounded border border-border bg-card p-4 space-y-3">
         {/* Navigation */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <button
               onClick={goToPrev}
-              className="rounded p-1.5 text-muted-foreground hover:bg-gray-100 transition-colors"
+              className="rounded p-1.5 text-muted-foreground hover:bg-muted transition-colors"
               aria-label="Previous month"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={goToNext}
-              className="rounded p-1.5 text-muted-foreground hover:bg-gray-100 transition-colors"
+              className="rounded p-1.5 text-muted-foreground hover:bg-muted transition-colors"
               aria-label="Next month"
             >
               <ChevronRight className="h-4 w-4" />
@@ -327,7 +327,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
           <h3 className="text-sm font-bold text-foreground">{monthLabel}</h3>
           <button
             onClick={goToToday}
-            className="rounded border border-border px-2.5 py-1 text-[13px] font-medium text-foreground hover:bg-gray-100 transition-colors"
+            className="rounded border border-border px-2.5 py-1 text-[13px] font-medium text-foreground hover:bg-muted transition-colors"
           >
             Today
           </button>
@@ -352,7 +352,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
             </div>
 
             {/* Day grid */}
-            <div className="grid grid-cols-7 gap-px bg-gray-200 rounded overflow-hidden">
+            <div className="grid grid-cols-7 gap-px bg-border/60 rounded overflow-hidden">
               {calendarDays.map((cell, idx) => {
                 const dayOrders = orders.filter(
                   (o) =>
@@ -375,8 +375,8 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                       }
                     }}
                     className={cn(
-                      "min-h-[70px] bg-white p-1.5 text-left transition-colors",
-                      !cell.inMonth && "bg-gray-50 opacity-40",
+                      "min-h-[70px] bg-card p-1.5 text-left transition-colors",
+                      !cell.inMonth && "bg-muted opacity-40",
                       cell.inMonth && dayOrders.length > 0 && "cursor-pointer hover:bg-orange-50",
                       isTodayCell && "ring-2 ring-inset ring-ring",
                       isSelected && "bg-orange-50",
@@ -418,7 +418,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
 
       {/* Selected day detail */}
       {selectedDay !== null && ordersForSelectedDay.length > 0 && (
-        <div className="rounded border border-border bg-white p-4 space-y-3">
+        <div className="rounded border border-border bg-card p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h4 className="text-sm font-bold text-foreground">
               Orders for{" "}
@@ -430,7 +430,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
             </h4>
             <button
               onClick={() => setSelectedDay(null)}
-              className="rounded p-1 text-muted-foreground hover:bg-gray-100"
+              className="rounded p-1 text-muted-foreground hover:bg-muted"
               aria-label="Close day detail"
             >
               <X className="h-3.5 w-3.5" />
@@ -440,7 +440,7 @@ function CalendarView({ orders }: { orders: ServiceOrder[] }) {
             {ordersForSelectedDay.map((o) => (
               <div
                 key={o.id}
-                className="flex items-center gap-3 rounded border border-border bg-gray-50 p-2.5"
+                className="flex items-center gap-3 rounded border border-border bg-muted p-2.5"
               >
                 <PriorityBadge priority={o.priority} />
                 <div className="flex-1 min-w-0">
@@ -502,18 +502,18 @@ function CreateOrderModal({
   };
 
   const inputClasses =
-    "w-full rounded border border-border bg-white px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
+    "w-full rounded border border-border bg-card px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
   const labelClasses = "block text-[13px] font-semibold text-foreground mb-1";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="w-full max-w-lg rounded-lg border border-border bg-white shadow-xl">
+      <div className="w-full max-w-lg rounded-lg border border-border bg-card shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
           <h2 className="text-sm font-bold text-foreground">Create Service Order</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-muted-foreground hover:bg-gray-100 transition-colors"
+            className="rounded p-1 text-muted-foreground hover:bg-muted transition-colors"
             aria-label="Close modal"
           >
             <X className="h-4 w-4" />
@@ -662,7 +662,7 @@ function CreateOrderModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-gray-100 transition-colors"
+              className="rounded border border-border px-3 py-1.5 text-sm font-medium text-foreground hover:bg-muted transition-colors"
             >
               Cancel
             </button>
@@ -707,7 +707,7 @@ function FilterBar({
   const hasActiveFilters = statusFilter !== "all" || priorityFilter !== "all" || searchQuery !== "";
 
   const selectClasses =
-    "rounded border border-border bg-white px-2 py-1.5 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50";
+    "rounded border border-border bg-card px-2 py-1.5 text-[13px] text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -720,7 +720,7 @@ function FilterBar({
           aria-label="Search orders"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="rounded border border-border bg-white py-1.5 pl-7 pr-2.5 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 w-48"
+          className="rounded border border-border bg-card py-1.5 pl-7 pr-2.5 text-[13px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 w-48"
         />
       </div>
 
@@ -752,7 +752,7 @@ function FilterBar({
       {hasActiveFilters && (
         <button
           onClick={onClearAll}
-          className="flex items-center gap-1 rounded border border-border px-2 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-gray-100 transition-colors"
+          className="flex items-center gap-1 rounded border border-border px-2 py-1.5 text-[13px] font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
         >
           <X className="h-3 w-3" />
           Clear all
@@ -770,7 +770,7 @@ function FilterBar({
       {/* CSV Export */}
       <button
         onClick={onExport}
-        className="flex items-center gap-1 rounded border border-border px-2.5 py-1.5 text-[13px] font-medium text-foreground hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-1 rounded border border-border px-2.5 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted transition-colors"
         title="Export filtered results as CSV"
       >
         <Download className="h-3.5 w-3.5" />
@@ -832,7 +832,7 @@ export function AccountService() {
                 "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-semibold transition-colors duration-150",
                 view === "kanban"
                   ? "bg-accent text-white"
-                  : "bg-white text-muted-foreground hover:text-foreground hover:bg-gray-50",
+                  : "bg-card text-muted-foreground hover:text-foreground hover:bg-muted",
               )}
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -844,7 +844,7 @@ export function AccountService() {
                 "flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-semibold transition-colors duration-150",
                 view === "calendar"
                   ? "bg-accent text-white"
-                  : "bg-white text-muted-foreground hover:text-foreground hover:bg-gray-50",
+                  : "bg-card text-muted-foreground hover:text-foreground hover:bg-muted",
               )}
             >
               <Calendar className="h-3.5 w-3.5" />

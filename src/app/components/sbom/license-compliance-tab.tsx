@@ -76,7 +76,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 </div>
               )}
               <div>
-                <h3 className="text-[15px] font-semibold text-gray-900">License Policy Status</h3>
+                <h3 className="text-[15px] font-semibold text-foreground">License Policy Status</h3>
                 {allCompliant ? (
                   <p className="text-[14px] text-green-600 font-medium">All Compliant</p>
                 ) : (
@@ -87,18 +87,18 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-6 border-l border-gray-300 pl-6">
+            <div className="flex items-center gap-6 border-l border-border pl-6">
               <div className="text-center">
                 <div className="text-[20px] font-bold text-green-600">{stats.approved}</div>
-                <div className="text-[13px] text-gray-600">Approved</div>
+                <div className="text-[13px] text-muted-foreground">Approved</div>
               </div>
               <div className="text-center">
                 <div className="text-[20px] font-bold text-red-600">{stats.restricted}</div>
-                <div className="text-[13px] text-gray-600">Restricted</div>
+                <div className="text-[13px] text-muted-foreground">Restricted</div>
               </div>
               <div className="text-center">
-                <div className="text-[20px] font-bold text-gray-600">{stats.unknown}</div>
-                <div className="text-[13px] text-gray-600">Unknown</div>
+                <div className="text-[20px] font-bold text-muted-foreground">{stats.unknown}</div>
+                <div className="text-[13px] text-muted-foreground">Unknown</div>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
       {/* License distribution pie chart */}
       <div className="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
         <div className="card-elevated p-5">
-          <h3 className="mb-4 text-[14px] font-semibold text-gray-900">License Distribution</h3>
+          <h3 className="mb-4 text-[14px] font-semibold text-foreground">License Distribution</h3>
           {licenseDistribution.length > 0 ? (
             <ResponsiveContainer width="100%" height={320}>
               <PieChart>
@@ -138,13 +138,13 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                   verticalAlign="bottom"
                   height={36}
                   formatter={(value: string) => (
-                    <span className="text-[13px] text-gray-600">{value}</span>
+                    <span className="text-[13px] text-muted-foreground">{value}</span>
                   )}
                 />
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-600">
+            <div className="flex h-[280px] items-center justify-center text-[14px] text-muted-foreground">
               No license data available
             </div>
           )}
@@ -152,7 +152,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
 
         {/* License Legend / Stats */}
         <div className="card-elevated p-5">
-          <h3 className="mb-4 text-[14px] font-semibold text-gray-900">License Breakdown</h3>
+          <h3 className="mb-4 text-[14px] font-semibold text-foreground">License Breakdown</h3>
           <div className="space-y-2">
             {licenseDistribution.map((item, idx) => {
               const compliance = getLicenseCompliance(item.name);
@@ -160,14 +160,14 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
               return (
                 <div
                   key={item.name}
-                  className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-gray-50"
+                  className="flex items-center justify-between rounded-lg px-3 py-2 hover:bg-muted"
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className="h-3 w-3 rounded-sm"
                       style={{ backgroundColor: PIE_COLORS[idx % PIE_COLORS.length] }}
                     />
-                    <span className="text-[14px] text-gray-700">{item.name}</span>
+                    <span className="text-[14px] text-foreground/80">{item.name}</span>
                     <span
                       className={cn(
                         "rounded px-1.5 py-0.5 text-[12px] font-medium",
@@ -178,7 +178,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                       {cfg.label}
                     </span>
                   </div>
-                  <span className="text-[14px] font-medium text-gray-900">{item.value}</span>
+                  <span className="text-[14px] font-medium text-foreground">{item.value}</span>
                 </div>
               );
             })}
@@ -190,10 +190,10 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
       {nonCompliant.length > 0 && (
         <div>
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-[15px] font-semibold text-gray-900">Non-Compliant Components</h3>
+            <h3 className="text-[15px] font-semibold text-foreground">Non-Compliant Components</h3>
             <button
               onClick={handleExport}
-              className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-[14px] font-medium text-gray-600 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-[14px] font-medium text-muted-foreground hover:bg-muted cursor-pointer"
             >
               <Download className="h-3.5 w-3.5" />
               Export CSV
@@ -225,10 +225,12 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 {nonCompliant.map((comp) => (
                   <tr
                     key={comp.id}
-                    className="border-b border-gray-200 border-l-4 border-l-red-400"
+                    className="border-b border-border/60 border-l-4 border-l-red-400"
                   >
-                    <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
-                    <td className="px-4 py-3 text-[14px] font-mono text-gray-600">
+                    <td className="px-4 py-3 text-[14px] font-medium text-foreground">
+                      {comp.name}
+                    </td>
+                    <td className="px-4 py-3 text-[14px] font-mono text-muted-foreground">
                       {comp.version}
                     </td>
                     <td className="px-4 py-3">
@@ -236,7 +238,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                         {comp.license}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-[14px] text-gray-600">{comp.sbomId}</td>
+                    <td className="px-4 py-3 text-[14px] text-muted-foreground">{comp.sbomId}</td>
                     <td className="px-4 py-3 text-[14px] text-amber-700">
                       {comp.license.startsWith("GPL") || comp.license.startsWith("AGPL")
                         ? "Replace with permissive-licensed alternative or obtain commercial license"

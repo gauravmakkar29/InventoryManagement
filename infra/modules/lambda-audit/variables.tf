@@ -9,12 +9,17 @@ variable "project_name" {
 }
 
 variable "dynamodb_table_name" {
-  description = "DynamoDB DataTable name"
+  description = "DynamoDB DataTable name (source of stream events)"
   type        = string
 }
 
 variable "dynamodb_stream_arn" {
   description = "DynamoDB Streams ARN for event source mapping"
+  type        = string
+}
+
+variable "audit_table_name" {
+  description = "Dedicated DynamoDB AuditLog table name (write target)"
   type        = string
 }
 

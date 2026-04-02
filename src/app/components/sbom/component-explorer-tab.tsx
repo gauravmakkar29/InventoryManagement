@@ -62,14 +62,14 @@ export function ComponentExplorerTab({
       {/* Search and filters */}
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search components..."
             aria-label="Search components"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-9 w-full rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-[14px] text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none"
+            className="h-9 w-full rounded-lg border border-border bg-card pl-10 pr-4 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-accent-text focus:ring-1 focus:ring-ring outline-none"
           />
         </div>
         <div className="flex gap-1.5">
@@ -81,7 +81,7 @@ export function ComponentExplorerTab({
                 "rounded-lg px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                 licenseFilter === f
                   ? "bg-accent text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+                  : "bg-muted text-muted-foreground hover:bg-muted",
               )}
             >
               {f === "all" ? "All" : f}
@@ -154,8 +154,8 @@ export function ComponentExplorerTab({
 
         {pagination.total === 0 && (
           <div className="flex flex-col items-center justify-center py-12">
-            <Package className="mb-2 h-8 w-8 text-gray-600" />
-            <p className="text-[14px] text-gray-600">No components found</p>
+            <Package className="mb-2 h-8 w-8 text-muted-foreground" />
+            <p className="text-[14px] text-muted-foreground">No components found</p>
           </div>
         )}
       </div>
@@ -184,19 +184,19 @@ function ComponentRow({
       <tr
         onClick={onToggle}
         className={cn(
-          "border-b border-gray-200 cursor-pointer hover:bg-gray-50",
-          isExpanded && "bg-gray-50",
+          "border-b border-border/60 cursor-pointer hover:bg-muted",
+          isExpanded && "bg-muted",
         )}
       >
         <td className="px-4 py-3">
           {isExpanded ? (
-            <ChevronDown className="h-3.5 w-3.5 text-gray-600" />
+            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
           ) : (
-            <ChevronRight className="h-3.5 w-3.5 text-gray-600" />
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
           )}
         </td>
-        <td className="px-4 py-3 text-[14px] font-medium text-gray-900">{comp.name}</td>
-        <td className="px-4 py-3 text-[14px] text-gray-600 font-mono">{comp.version}</td>
+        <td className="px-4 py-3 text-[14px] font-medium text-foreground">{comp.name}</td>
+        <td className="px-4 py-3 text-[14px] text-muted-foreground font-mono">{comp.version}</td>
         <td className="px-4 py-3">
           <span
             className={cn(
@@ -208,56 +208,56 @@ function ComponentRow({
             {comp.license}
           </span>
         </td>
-        <td className="px-4 py-3 text-[14px] text-gray-600">{comp.supplier}</td>
+        <td className="px-4 py-3 text-[14px] text-muted-foreground">{comp.supplier}</td>
         <td className="px-4 py-3">
           {comp.vulnerabilityCount > 0 ? (
             <span
               className={cn(
                 "rounded-md px-2 py-0.5 text-[13px] font-medium",
-                comp.highestSeverity ? SEVERITY_CONFIG[comp.highestSeverity].bg : "bg-gray-100",
+                comp.highestSeverity ? SEVERITY_CONFIG[comp.highestSeverity].bg : "bg-muted",
                 comp.highestSeverity
                   ? SEVERITY_CONFIG[comp.highestSeverity].color
-                  : "text-gray-600",
+                  : "text-muted-foreground",
               )}
             >
               {comp.vulnerabilityCount}
             </span>
           ) : (
-            <span className="text-[14px] text-gray-600">0</span>
+            <span className="text-[14px] text-muted-foreground">0</span>
           )}
         </td>
-        <td className="px-4 py-3 text-[14px] text-gray-600">{comp.scope}</td>
+        <td className="px-4 py-3 text-[14px] text-muted-foreground">{comp.scope}</td>
       </tr>
       {isExpanded && (
-        <tr className="border-b border-gray-200">
-          <td colSpan={7} className="bg-gray-50 px-6 py-4">
+        <tr className="border-b border-border/60">
+          <td colSpan={7} className="bg-muted px-6 py-4">
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-4 text-[14px]">
                 <div>
-                  <span className="font-semibold text-gray-600">Package URL</span>
-                  <p className="mt-0.5 font-mono text-gray-700 break-all">{comp.purl}</p>
+                  <span className="font-semibold text-muted-foreground">Package URL</span>
+                  <p className="mt-0.5 font-mono text-foreground/80 break-all">{comp.purl}</p>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-600">License Status</span>
+                  <span className="font-semibold text-muted-foreground">License Status</span>
                   <p className={cn("mt-0.5 font-medium", complianceCfg.color)}>
                     {complianceCfg.label}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-gray-600">SBOM</span>
-                  <p className="mt-0.5 text-gray-700">{comp.sbomId}</p>
+                  <span className="font-semibold text-muted-foreground">SBOM</span>
+                  <p className="mt-0.5 text-foreground/80">{comp.sbomId}</p>
                 </div>
               </div>
               {compVulns.length > 0 && (
                 <div>
-                  <h4 className="mb-2 text-[14px] font-semibold text-gray-600">
+                  <h4 className="mb-2 text-[14px] font-semibold text-muted-foreground">
                     Known Vulnerabilities
                   </h4>
                   <div className="space-y-1.5">
                     {compVulns.map((v) => (
                       <div
                         key={v.id}
-                        className="flex items-center gap-3 rounded-lg bg-white p-2.5 border border-gray-300"
+                        className="flex items-center gap-3 rounded-lg bg-card p-2.5 border border-border"
                       >
                         <span
                           className={cn(
@@ -277,7 +277,7 @@ function ComponentRow({
                         >
                           {v.cveId}
                         </a>
-                        <span className="flex-1 truncate text-[14px] text-gray-600">
+                        <span className="flex-1 truncate text-[14px] text-muted-foreground">
                           {v.description}
                         </span>
                         <span

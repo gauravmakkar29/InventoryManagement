@@ -71,7 +71,7 @@ export function NetworkTopologyGraph({
     <div className="relative">
       <svg
         viewBox="0 0 800 500"
-        className="w-full rounded-lg border border-gray-300 bg-gray-50"
+        className="w-full rounded-lg border border-border bg-muted"
         style={{ minHeight: 400 }}
       >
         {/* Edges */}
@@ -121,15 +121,15 @@ export function NetworkTopologyGraph({
                     width={120}
                     height={36}
                     rx={6}
-                    fill="white"
-                    stroke="#e5e7eb"
+                    fill="var(--color-card)"
+                    stroke="var(--color-border)"
                     strokeWidth={1}
                   />
                   <text
                     x={(s.x + t.x) / 2}
                     y={(s.y + t.y) / 2 - 12}
                     textAnchor="middle"
-                    className="text-[12px] fill-gray-700 font-medium"
+                    className="text-[12px] fill-foreground/80 font-medium"
                   >
                     {edgeTypeLabels[edge.relationshipType]}
                   </text>
@@ -137,7 +137,7 @@ export function NetworkTopologyGraph({
                     x={(s.x + t.x) / 2}
                     y={(s.y + t.y) / 2 + 2}
                     textAnchor="middle"
-                    className="text-[12px] fill-gray-400"
+                    className="text-[12px] fill-muted-foreground/70"
                   >
                     Strength: {Math.round(edge.weight * 100)}%
                   </text>
@@ -207,7 +207,7 @@ export function NetworkTopologyGraph({
                 x={pos.x}
                 y={pos.y + r + 14}
                 textAnchor="middle"
-                className="text-[12px] fill-gray-600 font-medium"
+                className="text-[12px] fill-muted-foreground font-medium"
               >
                 {node.deviceName}
               </text>
@@ -220,25 +220,37 @@ export function NetworkTopologyGraph({
                     width={180}
                     height={80}
                     rx={8}
-                    fill="white"
-                    stroke="#e5e7eb"
+                    fill="var(--color-card)"
+                    stroke="var(--color-border)"
                     strokeWidth={1}
                     filter="drop-shadow(0 2px 4px rgba(0,0,0,0.1))"
                   />
                   <text
                     x={pos.x + r + 18}
                     y={pos.y - 26}
-                    className="text-[13px] fill-gray-900 font-semibold"
+                    className="text-[13px] fill-foreground font-semibold"
                   >
                     {node.deviceName}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y - 12} className="text-[12px] fill-gray-500">
+                  <text
+                    x={pos.x + r + 18}
+                    y={pos.y - 12}
+                    className="text-[12px] fill-muted-foreground"
+                  >
                     Status: {node.status}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y + 2} className="text-[12px] fill-gray-500">
+                  <text
+                    x={pos.x + r + 18}
+                    y={pos.y + 2}
+                    className="text-[12px] fill-muted-foreground"
+                  >
                     Risk: {node.riskScore}% | {node.firmwareVersion}
                   </text>
-                  <text x={pos.x + r + 18} y={pos.y + 16} className="text-[12px] fill-gray-500">
+                  <text
+                    x={pos.x + r + 18}
+                    y={pos.y + 16}
+                    className="text-[12px] fill-muted-foreground"
+                  >
                     Location: {node.location}
                   </text>
                   <text
@@ -255,15 +267,15 @@ export function NetworkTopologyGraph({
         })}
       </svg>
       {/* Legend */}
-      <div className="mt-3 flex flex-wrap items-center gap-4 text-[13px] text-gray-600">
-        <span className="font-semibold text-gray-700">Legend:</span>
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-[13px] text-muted-foreground">
+        <span className="font-semibold text-foreground/80">Legend:</span>
         {Object.entries(statusColors).map(([status, color]) => (
           <span key={status} className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color }} />
             {status}
           </span>
         ))}
-        <span className="mx-1 text-gray-600">|</span>
+        <span className="mx-1 text-muted-foreground">|</span>
         {Object.entries(edgeTypeLabels).map(([type, label]) => (
           <span key={type} className="flex items-center gap-1.5">
             <span className="h-0.5 w-4" style={{ backgroundColor: edgeTypeColors[type] }} />
@@ -290,32 +302,32 @@ export function LateralMovementPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed right-0 top-0 z-40 flex h-full w-[360px] flex-col border-l border-gray-300 bg-white shadow-xl">
-      <div className="flex items-center justify-between border-b border-gray-300 px-5 py-4">
+    <div className="fixed right-0 top-0 z-40 flex h-full w-[360px] flex-col border-l border-border bg-card shadow-xl">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div className="flex items-center gap-2">
           <Network className="h-4 w-4 text-red-500" />
-          <h3 className="text-base font-semibold text-gray-900">Lateral Movement Risk</h3>
+          <h3 className="text-base font-semibold text-foreground">Lateral Movement Risk</h3>
         </div>
         <button
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto px-5 py-4">
-        <p className="mb-4 text-[14px] text-gray-600">
+        <p className="mb-4 text-[14px] text-muted-foreground">
           Devices ranked by lateral movement probability from the selected origin device.
         </p>
         <div className="space-y-2">
           {devices.map((dev, i) => (
-            <div key={dev.deviceId} className="rounded-lg border border-gray-300 p-3">
+            <div key={dev.deviceId} className="rounded-lg border border-border p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-gray-600 bg-gray-100">
+                  <span className="flex h-5 w-5 items-center justify-center rounded text-[12px] font-bold text-muted-foreground bg-muted">
                     {i + 1}
                   </span>
-                  <span className="text-[14px] font-medium text-gray-900">{dev.deviceName}</span>
+                  <span className="text-[14px] font-medium text-foreground">{dev.deviceName}</span>
                 </div>
                 <span
                   className={cn(
@@ -324,14 +336,14 @@ export function LateralMovementPanel({
                       ? "text-red-600"
                       : dev.probability >= 40
                         ? "text-amber-600"
-                        : "text-gray-600",
+                        : "text-muted-foreground",
                   )}
                 >
                   {dev.probability}%
                 </span>
               </div>
               <div className="mt-1.5">
-                <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{
@@ -346,7 +358,7 @@ export function LateralMovementPanel({
                   />
                 </div>
               </div>
-              <p className="mt-1.5 text-[13px] text-gray-600">{dev.primaryRiskFactor}</p>
+              <p className="mt-1.5 text-[13px] text-muted-foreground">{dev.primaryRiskFactor}</p>
             </div>
           ))}
         </div>

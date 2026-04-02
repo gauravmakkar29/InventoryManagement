@@ -7,8 +7,8 @@ export function AccessDenied() {
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
         <ShieldX className="h-8 w-8 text-red-500" />
       </div>
-      <h1 className="text-[20px] font-semibold text-gray-900">Access Denied</h1>
-      <p className="max-w-sm text-center text-[15px] text-gray-600">
+      <h1 className="text-[20px] font-semibold text-foreground">Access Denied</h1>
+      <p className="max-w-sm text-center text-[15px] text-muted-foreground">
         You don't have permission to view this page. Contact your administrator if you believe this
         is an error.
       </p>

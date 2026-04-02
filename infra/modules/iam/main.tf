@@ -97,9 +97,13 @@ resource "aws_iam_role_policy" "lambda_dynamodb_stream" {
         Effect = "Allow"
         Action = [
           "dynamodb:PutItem",
-          "dynamodb:UpdateItem"
+          "dynamodb:UpdateItem",
+          "dynamodb:Query"
         ]
-        Resource = var.dynamodb_table_arn
+        Resource = [
+          var.audit_table_arn,
+          "${var.audit_table_arn}/index/*"
+        ]
       }
     ]
   })
@@ -176,14 +180,15 @@ resource "aws_iam_role_policy" "osis_dynamodb" {
           "s3:ListBucket",
           "s3:PutObject"
         ]
-        Resource = "*"
-        # TODO: Scope to specific export bucket ARN
+        Resource = var.opensearch_export_bucket_arn != "" ? [
+          var.opensearch_export_bucket_arn,
+          "${var.opensearch_export_bucket_arn}/*"
+        ] : ["*"]
       },
       {
         Effect   = "Allow"
         Action   = "aoss:BatchGetCollection"
-        Resource = "*"
-        # TODO: Scope to specific OpenSearch collection ARN
+        Resource = var.opensearch_collection_arn != "" ? [var.opensearch_collection_arn] : ["*"]
       }
     ]
   })

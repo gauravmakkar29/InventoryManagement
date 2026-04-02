@@ -128,7 +128,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
       {/* Panel */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col bg-white shadow-xl transition-transform duration-200",
+          "fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col bg-card shadow-xl transition-transform duration-200",
           open ? "translate-x-0" : "translate-x-full",
         )}
         role="dialog"
@@ -137,9 +137,9 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
         aria-hidden={!open}
       >
         {/* Header */}
-        <div className="flex h-14 items-center justify-between border-b border-gray-200 px-5">
+        <div className="flex h-14 items-center justify-between border-b border-border/60 px-5">
           <div className="flex items-center gap-2">
-            <h2 className="text-[16px] font-semibold text-gray-900">Notifications</h2>
+            <h2 className="text-[16px] font-semibold text-foreground">Notifications</h2>
             {unreadCount > 0 && (
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[12px] font-bold text-white">
                 {unreadCount > 99 ? "99+" : unreadCount}
@@ -157,7 +157,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
             )}
             <button
               onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-600 cursor-pointer"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-muted-foreground cursor-pointer"
               aria-label="Close notifications"
             >
               <X className="h-4 w-4" />
@@ -169,8 +169,8 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
         <div className="flex-1 overflow-y-auto">
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16">
-              <Bell className="h-10 w-10 text-gray-200 mb-3" />
-              <p className="text-[15px] text-gray-600">No notifications</p>
+              <Bell className="h-10 w-10 text-muted-foreground/40 mb-3" />
+              <p className="text-[15px] text-muted-foreground">No notifications</p>
             </div>
           ) : (
             <div>
@@ -183,7 +183,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                     href={notification.sourceUrl ?? "#"}
                     onClick={() => markRead(notification.id)}
                     className={cn(
-                      "flex gap-3 border-b border-gray-50 px-5 py-3.5 hover:bg-gray-50 transition-colors",
+                      "flex gap-3 border-b border-border/30 px-5 py-3.5 hover:bg-muted transition-colors",
                       !notification.read && "bg-orange-50/30",
                     )}
                   >
@@ -201,8 +201,8 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                           className={cn(
                             "text-[14px] leading-snug",
                             notification.read
-                              ? "font-medium text-gray-700"
-                              : "font-semibold text-gray-900",
+                              ? "font-medium text-foreground/80"
+                              : "font-semibold text-foreground",
                           )}
                         >
                           {notification.title}
@@ -211,10 +211,12 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
                           <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
                         )}
                       </div>
-                      <p className="mt-0.5 text-[14px] leading-snug text-gray-600 line-clamp-2">
+                      <p className="mt-0.5 text-[14px] leading-snug text-muted-foreground line-clamp-2">
                         {notification.message}
                       </p>
-                      <p className="mt-1 text-[13px] text-gray-600">{notification.timestamp}</p>
+                      <p className="mt-1 text-[13px] text-muted-foreground">
+                        {notification.timestamp}
+                      </p>
                     </div>
                   </a>
                 );

@@ -74,29 +74,29 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
   // QR code rendered as a placeholder since we can't generate actual QR in mock
   const qrPlaceholder = totpUri ? (
-    <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50">
+    <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted">
       <div className="text-center">
-        <ShieldCheck className="mx-auto h-10 w-10 text-gray-600" />
-        <p className="mt-2 text-[13px] text-gray-600">QR Code</p>
-        <p className="text-[12px] text-gray-600">Scan with authenticator</p>
+        <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" />
+        <p className="mt-2 text-[13px] text-muted-foreground">QR Code</p>
+        <p className="text-[12px] text-muted-foreground">Scan with authenticator</p>
       </div>
     </div>
   ) : null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="relative w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
+      <div className="relative w-full max-w-md rounded-2xl bg-card p-8 shadow-xl">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 text-gray-600 hover:text-gray-600 cursor-pointer"
+          className="absolute right-4 top-4 text-muted-foreground hover:text-muted-foreground cursor-pointer"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
         </button>
 
         <div className="mb-6 text-center">
-          <h2 className="text-[20px] font-semibold text-gray-900">Set Up MFA</h2>
-          <p className="mt-1.5 text-[15px] text-gray-600">
+          <h2 className="text-[20px] font-semibold text-foreground">Set Up MFA</h2>
+          <p className="mt-1.5 text-[15px] text-muted-foreground">
             Scan the QR code with your authenticator app
           </p>
         </div>
@@ -107,16 +107,16 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
         {/* Manual key */}
         {secret && (
           <div className="mb-5">
-            <p className="text-[14px] font-medium text-gray-600 mb-1.5">
+            <p className="text-[14px] font-medium text-muted-foreground mb-1.5">
               Can't scan? Enter this key manually:
             </p>
-            <div className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2.5">
-              <code className="flex-1 text-[15px] font-mono font-medium text-gray-700 tracking-widest">
+            <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
+              <code className="flex-1 text-[15px] font-mono font-medium text-foreground/80 tracking-widest">
                 {secret}
               </code>
               <button
                 onClick={handleCopy}
-                className="shrink-0 text-gray-600 hover:text-gray-600 cursor-pointer"
+                className="shrink-0 text-muted-foreground hover:text-muted-foreground cursor-pointer"
                 aria-label="Copy secret key"
               >
                 {copied ? (
@@ -131,7 +131,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
         {/* Verification code input */}
         <div className="mb-4">
-          <p className="text-[14px] font-medium text-gray-700 mb-2">
+          <p className="text-[14px] font-medium text-foreground/80 mb-2">
             Enter the 6-digit verification code:
           </p>
           <div className="flex justify-center gap-2">
@@ -149,7 +149,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 onKeyDown={(e) => handleKeyDown(i, e)}
                 disabled={isVerifying}
                 className={cn(
-                  "h-11 w-10 rounded-lg border border-gray-300 bg-white text-center text-[16px] font-semibold text-gray-900",
+                  "h-11 w-10 rounded-lg border border-border bg-card text-center text-[16px] font-semibold text-foreground",
                   "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                   "disabled:opacity-60",
                 )}

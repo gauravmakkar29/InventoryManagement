@@ -112,7 +112,7 @@ const INITIAL_USERS: ManagedUser[] = [
 const STATUS_CONFIG: Record<UserStatus, { dot: string; bg: string; text: string }> = {
   Active: { dot: "bg-emerald-500", bg: "bg-emerald-50", text: "text-emerald-700" },
   Invited: { dot: "bg-amber-500", bg: "bg-amber-50", text: "text-amber-700" },
-  Disabled: { dot: "bg-gray-400", bg: "bg-gray-100", text: "text-gray-600" },
+  Disabled: { dot: "bg-gray-400", bg: "bg-muted", text: "text-muted-foreground" },
 };
 
 function formatLastLogin(dateStr: string | null): string {
@@ -234,8 +234,8 @@ export function UserManagement() {
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-[20px] font-medium text-gray-900">User Management</h2>
-          <p className="mt-0.5 text-[14px] text-gray-600">
+          <h2 className="text-[20px] font-medium text-foreground">User Management</h2>
+          <p className="mt-0.5 text-[14px] text-muted-foreground">
             Manage platform users, roles, and access permissions
           </p>
         </div>
@@ -258,7 +258,7 @@ export function UserManagement() {
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-[360px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             value={searchQuery}
@@ -266,7 +266,7 @@ export function UserManagement() {
             placeholder="Search by name or email..."
             aria-label="Search users"
             className={cn(
-              "h-10 w-full rounded-lg border border-gray-300 bg-white pl-9 pr-3 text-[15px] text-gray-900 placeholder:text-gray-600",
+              "h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-[15px] text-foreground placeholder:text-muted-foreground",
               "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
             )}
           />
@@ -277,7 +277,7 @@ export function UserManagement() {
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
           className={cn(
-            "h-10 rounded-lg border border-gray-300 bg-white px-3 pr-8 text-[15px] text-gray-700",
+            "h-10 rounded-lg border border-border bg-card px-3 pr-8 text-[15px] text-foreground/80",
             "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
           )}
         >
@@ -289,7 +289,7 @@ export function UserManagement() {
         </select>
 
         {/* Count */}
-        <span className="text-[14px] text-gray-600">
+        <span className="text-[14px] text-muted-foreground">
           {filteredUsers.length} of {users.length} users
         </span>
       </div>
@@ -300,47 +300,47 @@ export function UserManagement() {
           <table className="w-full">
             <caption className="sr-only">User accounts</caption>
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50/60">
+              <tr className="border-b border-border/60 bg-muted/60">
                 <th
                   scope="col"
-                  className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-5 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Email
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Role
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Department
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                  className="px-4 py-3 text-left text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                 >
                   Last Login
                 </th>
                 {isAdmin && (
                   <th
                     scope="col"
-                    className="px-5 py-3 text-right text-[13px] font-semibold uppercase tracking-wider text-gray-600"
+                    className="px-5 py-3 text-right text-[13px] font-semibold uppercase tracking-wider text-muted-foreground"
                   >
                     Actions
                   </th>
@@ -352,7 +352,7 @@ export function UserManagement() {
                 <tr>
                   <td
                     colSpan={isAdmin ? 7 : 6}
-                    className="px-5 py-12 text-center text-[15px] text-gray-600"
+                    className="px-5 py-12 text-center text-[15px] text-muted-foreground"
                   >
                     No users match your search criteria.
                   </td>
@@ -364,8 +364,8 @@ export function UserManagement() {
                     <tr
                       key={user.id}
                       className={cn(
-                        "h-[52px] border-b border-gray-50",
-                        i % 2 === 1 && "bg-gray-50/30",
+                        "h-[52px] border-b border-border/30",
+                        i % 2 === 1 && "bg-muted/30",
                         "hover:bg-blue-50/30",
                       )}
                     >
@@ -383,7 +383,9 @@ export function UserManagement() {
                           <span
                             className={cn(
                               "text-[15px] font-medium",
-                              user.status === "Disabled" ? "text-gray-600" : "text-gray-900",
+                              user.status === "Disabled"
+                                ? "text-muted-foreground"
+                                : "text-foreground",
                             )}
                           >
                             {user.name}
@@ -392,7 +394,7 @@ export function UserManagement() {
                       </td>
 
                       {/* Email */}
-                      <td className="px-4 text-[14px] text-gray-600">{user.email}</td>
+                      <td className="px-4 text-[14px] text-muted-foreground">{user.email}</td>
 
                       {/* Role */}
                       <td className="px-4">
@@ -402,7 +404,7 @@ export function UserManagement() {
                             user.role === "Admin" && "bg-blue-50 text-[#2563eb]",
                             user.role === "Manager" && "bg-purple-50 text-purple-700",
                             user.role === "Technician" && "bg-orange-50 text-accent-text",
-                            user.role === "Viewer" && "bg-gray-100 text-gray-600",
+                            user.role === "Viewer" && "bg-muted text-muted-foreground",
                             user.role === "CustomerAdmin" && "bg-emerald-50 text-emerald-700",
                           )}
                         >
@@ -411,7 +413,7 @@ export function UserManagement() {
                       </td>
 
                       {/* Department */}
-                      <td className="px-4 text-[14px] text-gray-600">{user.department}</td>
+                      <td className="px-4 text-[14px] text-muted-foreground">{user.department}</td>
 
                       {/* Status */}
                       <td className="px-4">
@@ -428,7 +430,7 @@ export function UserManagement() {
                       </td>
 
                       {/* Last Login */}
-                      <td className="px-4 text-[14px] text-gray-600 tabular-nums">
+                      <td className="px-4 text-[14px] text-muted-foreground tabular-nums">
                         {formatLastLogin(user.lastLogin)}
                       </td>
 
@@ -439,8 +441,8 @@ export function UserManagement() {
                             <button
                               onClick={() => handleEdit(user)}
                               className={cn(
-                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-gray-600",
-                                "hover:bg-gray-100 hover:text-gray-600",
+                                "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground",
+                                "hover:bg-muted hover:text-muted-foreground",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
                               aria-label={`Edit ${user.name}`}
@@ -454,7 +456,7 @@ export function UserManagement() {
                                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg",
                                 user.status === "Disabled"
                                   ? "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600"
-                                  : "text-gray-600 hover:bg-red-50 hover:text-red-500",
+                                  : "text-muted-foreground hover:bg-red-50 hover:text-red-500",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
                               )}
                               aria-label={

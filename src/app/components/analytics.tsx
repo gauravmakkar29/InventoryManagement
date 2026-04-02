@@ -54,7 +54,7 @@ function RingChart({
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke="#f1f3f5"
+        stroke="var(--color-border)"
         strokeWidth={strokeWidth}
       />
       {/* Segments */}
@@ -86,7 +86,7 @@ function RingChart({
         x={size / 2}
         y={size / 2 - 6}
         textAnchor="middle"
-        className="fill-gray-900 text-[22px] font-bold"
+        className="fill-foreground text-[22px] font-bold"
       >
         {total.toLocaleString()}
       </text>
@@ -94,7 +94,7 @@ function RingChart({
         x={size / 2}
         y={size / 2 + 14}
         textAnchor="middle"
-        className="fill-gray-400 text-[13px]"
+        className="fill-muted-foreground/70 text-[13px]"
       >
         Total
       </text>
@@ -133,7 +133,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x2={chartWidth + 20}
               y1={y}
               y2={y}
-              stroke="#e5e7eb"
+              stroke="var(--color-border)"
               strokeWidth={1}
               strokeDasharray={pct === 0 ? "0" : "4 4"}
             />
@@ -141,7 +141,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={chartWidth + 18}
               y={y + 4}
               textAnchor="end"
-              className="fill-gray-400 text-[12px]"
+              className="fill-muted-foreground/70 text-[12px]"
             >
               {Math.round(maxCount * pct)}
             </text>
@@ -168,7 +168,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={x + barWidth / 2}
               y={y - 6}
               textAnchor="middle"
-              className="fill-gray-600 text-[12px] font-semibold"
+              className="fill-muted-foreground text-[12px] font-semibold"
             >
               {d.count}
             </text>
@@ -176,7 +176,7 @@ function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: 
               x={x + barWidth / 2}
               y={height - 6}
               textAnchor="middle"
-              className="fill-gray-500 text-[12px]"
+              className="fill-muted-foreground text-[12px]"
             >
               {d.month}
             </text>
@@ -213,7 +213,11 @@ function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
         const barW = (d.count / maxCount) * barMaxWidth;
         return (
           <g key={d.severity}>
-            <text x={0} y={y + barHeight / 2 + 4} className="fill-gray-600 text-[13px] font-medium">
+            <text
+              x={0}
+              y={y + barHeight / 2 + 4}
+              className="fill-muted-foreground text-[13px] font-medium"
+            >
               {d.severity}
             </text>
             <rect
@@ -228,7 +232,7 @@ function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
             <text
               x={labelWidth + barW + 8}
               y={y + barHeight / 2 + 4}
-              className="fill-gray-700 text-[13px] font-bold"
+              className="fill-foreground/80 text-[13px] font-bold"
             >
               {d.count}
             </text>
@@ -282,13 +286,13 @@ export function Analytics() {
       {/* ================================================================ */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[20px] font-semibold text-gray-900">Analytics</h1>
-          <p className="mt-0.5 text-[14px] text-gray-600">
+          <h1 className="text-[20px] font-semibold text-foreground">Analytics</h1>
+          <p className="mt-0.5 text-[14px] text-muted-foreground">
             Platform health and operational insights — {rangeLabel}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex rounded-lg border border-gray-300 bg-white p-0.5">
+          <div className="flex rounded-lg border border-border bg-card p-0.5">
             {TIME_RANGE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -297,7 +301,7 @@ export function Analytics() {
                   "rounded-md px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                   range === opt.value
                     ? "bg-accent text-white shadow-sm"
-                    : "text-gray-600 hover:text-gray-700 hover:bg-gray-50",
+                    : "text-muted-foreground hover:text-foreground/80 hover:bg-muted",
                 )}
               >
                 {opt.label}
@@ -325,8 +329,8 @@ export function Analytics() {
                   <Icon className={cn("h-[18px] w-[18px]", kpi.iconColor)} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[14px] text-gray-600 truncate">{kpi.label}</p>
-                  <p className="text-[22px] font-bold leading-snug text-gray-900 tabular-nums">
+                  <p className="text-[14px] text-muted-foreground truncate">{kpi.label}</p>
+                  <p className="text-[22px] font-bold leading-snug text-foreground tabular-nums">
                     {kpi.value}
                   </p>
                 </div>
@@ -345,7 +349,7 @@ export function Analytics() {
                 >
                   {kpi.trend}
                 </span>
-                <span className="text-[12px] text-gray-600">{kpi.trendLabel}</span>
+                <span className="text-[12px] text-muted-foreground">{kpi.trendLabel}</span>
               </div>
             </div>
           );
@@ -359,7 +363,9 @@ export function Analytics() {
         {/* Device Status Distribution */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[15px] font-semibold text-gray-900">Device Status Distribution</h3>
+            <h3 className="text-[15px] font-semibold text-foreground">
+              Device Status Distribution
+            </h3>
           </div>
           <div className="flex items-center gap-6 px-5 pb-5">
             <div className="shrink-0">
@@ -377,12 +383,14 @@ export function Analytics() {
                     />
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[14px] font-medium text-gray-700">{seg.label}</span>
-                        <span className="text-[14px] font-bold tabular-nums text-gray-900">
+                        <span className="text-[14px] font-medium text-foreground/80">
+                          {seg.label}
+                        </span>
+                        <span className="text-[14px] font-bold tabular-nums text-foreground">
                           {seg.value.toLocaleString()}
                         </span>
                       </div>
-                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -392,7 +400,9 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[13px] text-gray-600 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-muted-foreground w-10 text-right">
+                      {pct}%
+                    </span>
                   </div>
                 );
               })}
@@ -403,7 +413,7 @@ export function Analytics() {
         {/* Compliance Status */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[15px] font-semibold text-gray-900">Compliance Status</h3>
+            <h3 className="text-[15px] font-semibold text-foreground">Compliance Status</h3>
           </div>
           <div className="flex items-center gap-6 px-5 pb-5">
             <div className="shrink-0">
@@ -421,12 +431,14 @@ export function Analytics() {
                     />
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-[14px] font-medium text-gray-700">{seg.label}</span>
-                        <span className="text-[14px] font-bold tabular-nums text-gray-900">
+                        <span className="text-[14px] font-medium text-foreground/80">
+                          {seg.label}
+                        </span>
+                        <span className="text-[14px] font-bold tabular-nums text-foreground">
                           {seg.value.toLocaleString()}
                         </span>
                       </div>
-                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                         <div
                           className="h-full rounded-full"
                           style={{
@@ -436,7 +448,9 @@ export function Analytics() {
                         />
                       </div>
                     </div>
-                    <span className="text-[13px] text-gray-600 w-10 text-right">{pct}%</span>
+                    <span className="text-[13px] text-muted-foreground w-10 text-right">
+                      {pct}%
+                    </span>
                   </div>
                 );
               })}
@@ -452,8 +466,10 @@ export function Analytics() {
         {/* Deployment Trend — Monthly Bar Chart */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[15px] font-semibold text-gray-900">Deployment Trend</h3>
-            <p className="text-[13px] text-gray-600 mt-0.5">Monthly deployments (last 6 months)</p>
+            <h3 className="text-[15px] font-semibold text-foreground">Deployment Trend</h3>
+            <p className="text-[13px] text-muted-foreground mt-0.5">
+              Monthly deployments (last 6 months)
+            </p>
           </div>
           <div className="px-5 pb-5">
             <BarChart data={MONTHLY_DEPLOYMENTS} height={200} />
@@ -463,8 +479,10 @@ export function Analytics() {
         {/* Vulnerability Breakdown — Horizontal Bar Chart */}
         <div className="card-elevated">
           <div className="px-5 py-4">
-            <h3 className="text-[15px] font-semibold text-gray-900">Vulnerability Breakdown</h3>
-            <p className="text-[13px] text-gray-600 mt-0.5">Open vulnerabilities by severity</p>
+            <h3 className="text-[15px] font-semibold text-foreground">Vulnerability Breakdown</h3>
+            <p className="text-[13px] text-muted-foreground mt-0.5">
+              Open vulnerabilities by severity
+            </p>
           </div>
           <div className="px-5 pb-5">
             <HorizontalBarChart data={VULN_SEVERITY} />
@@ -478,20 +496,22 @@ export function Analytics() {
       <div className="card-elevated">
         <div className="flex items-center justify-between px-5 py-4">
           <div>
-            <h3 className="text-[15px] font-semibold text-gray-900">Audit Log</h3>
-            <p className="text-[13px] text-gray-600 mt-0.5">System activity — {rangeLabel}</p>
+            <h3 className="text-[15px] font-semibold text-foreground">Audit Log</h3>
+            <p className="text-[13px] text-muted-foreground mt-0.5">
+              System activity — {rangeLabel}
+            </p>
           </div>
           <div className="flex items-center gap-3">
             {/* Search Filter */}
             <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
+              <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search audit log..."
                 aria-label="Search audit log"
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="h-8 w-56 rounded-lg border border-gray-300 bg-white pl-8 pr-3 text-[14px] text-gray-700 placeholder-gray-500 focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-ring"
+                className="h-8 w-56 rounded-lg border border-border bg-card pl-8 pr-3 text-[14px] text-foreground/80 placeholder-muted-foreground focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-ring"
               />
             </div>
 
@@ -501,8 +521,8 @@ export function Analytics() {
                 onClick={() => setExportOpen(!exportOpen)}
                 disabled={filteredAuditLogs.length === 0}
                 className={cn(
-                  "flex h-8 items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 text-[14px] font-medium text-gray-600 cursor-pointer",
-                  "hover:bg-gray-50 hover:text-gray-700",
+                  "flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[14px] font-medium text-muted-foreground cursor-pointer",
+                  "hover:bg-muted hover:text-foreground/80",
                   "disabled:cursor-not-allowed disabled:opacity-60",
                 )}
                 title={filteredAuditLogs.length === 0 ? "No data to export" : "Export data"}
@@ -514,15 +534,15 @@ export function Analytics() {
               {exportOpen && (
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setExportOpen(false)} />
-                  <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-gray-300 bg-white py-1 shadow-lg">
+                  <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-border bg-card py-1 shadow-lg">
                     <button
                       onClick={() => {
                         handleExportCSV();
                         setExportOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-foreground/80 hover:bg-muted cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-600" />
+                      <Download className="h-3.5 w-3.5 text-muted-foreground" />
                       Export as CSV
                     </button>
                     <button
@@ -530,9 +550,9 @@ export function Analytics() {
                         handleExportJSON();
                         setExportOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-foreground/80 hover:bg-muted cursor-pointer"
                     >
-                      <Download className="h-3.5 w-3.5 text-gray-600" />
+                      <Download className="h-3.5 w-3.5 text-muted-foreground" />
                       Export as JSON
                     </button>
                   </div>
@@ -547,34 +567,34 @@ export function Analytics() {
           <table className="w-full">
             <caption className="sr-only">Audit log entries</caption>
             <thead>
-              <tr className="border-b-2 border-gray-300 bg-table-header">
+              <tr className="border-b-2 border-border bg-table-header">
                 <th
                   scope="col"
-                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Timestamp
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   User
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Action
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Entity
                 </th>
                 <th
                   scope="col"
-                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-gray-600"
+                  className="px-5 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider text-muted-foreground"
                 >
                   Details
                 </th>
@@ -583,14 +603,17 @@ export function Analytics() {
             <tbody>
               {paginatedLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-5 py-8 text-center text-[14px] text-gray-600">
+                  <td
+                    colSpan={5}
+                    className="px-5 py-8 text-center text-[14px] text-muted-foreground"
+                  >
                     No audit entries found
                   </td>
                 </tr>
               ) : (
                 paginatedLogs.map((entry, i) => (
-                  <tr key={entry.id} className={cn("h-[44px]", i % 2 === 1 && "bg-gray-50/50")}>
-                    <td className="px-5 text-[14px] font-mono text-gray-600 whitespace-nowrap">
+                  <tr key={entry.id} className={cn("h-[44px]", i % 2 === 1 && "bg-muted/50")}>
+                    <td className="px-5 text-[14px] font-mono text-muted-foreground whitespace-nowrap">
                       {new Date(entry.timestamp).toLocaleString("en-US", {
                         month: "short",
                         day: "numeric",
@@ -600,7 +623,7 @@ export function Analytics() {
                         hour12: true,
                       })}
                     </td>
-                    <td className="px-3 text-[14px] text-gray-600">{entry.user}</td>
+                    <td className="px-3 text-[14px] text-muted-foreground">{entry.user}</td>
                     <td className="px-3">
                       <span
                         className={cn(
@@ -611,8 +634,10 @@ export function Analytics() {
                         {entry.action}
                       </span>
                     </td>
-                    <td className="px-3 text-[14px] font-medium text-gray-700">{entry.entity}</td>
-                    <td className="px-5 text-[14px] text-gray-600 max-w-[300px] truncate">
+                    <td className="px-3 text-[14px] font-medium text-foreground/80">
+                      {entry.entity}
+                    </td>
+                    <td className="px-5 text-[14px] text-muted-foreground max-w-[300px] truncate">
                       {entry.details}
                     </td>
                   </tr>
@@ -624,8 +649,8 @@ export function Analytics() {
 
         {/* Pagination */}
         {filteredAuditLogs.length > pageSize && (
-          <div className="flex items-center justify-between border-t border-gray-200 px-5 py-3">
-            <p className="text-[14px] text-gray-600">
+          <div className="flex items-center justify-between border-t border-border/60 px-5 py-3">
+            <p className="text-[14px] text-muted-foreground">
               Showing {(currentPage - 1) * pageSize + 1}
               {"-"}
               {Math.min(currentPage * pageSize, filteredAuditLogs.length)} of{" "}
@@ -635,7 +660,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -648,7 +673,7 @@ export function Analytics() {
                     "flex h-7 min-w-9 items-center justify-center rounded-md px-2 text-[13px] font-medium cursor-pointer",
                     currentPage === i + 1
                       ? "bg-accent text-white"
-                      : "border border-gray-300 bg-white text-gray-600 hover:bg-gray-50",
+                      : "border border-border bg-card text-muted-foreground hover:bg-muted",
                   )}
                 >
                   {i + 1}
@@ -657,7 +682,7 @@ export function Analytics() {
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                 aria-label="Next page"
               >
                 <ChevronRight className="h-3.5 w-3.5" />

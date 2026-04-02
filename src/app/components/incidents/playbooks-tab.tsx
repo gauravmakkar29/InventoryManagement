@@ -21,7 +21,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value as IncidentCategory | "All")}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-[14px] text-gray-700 focus:outline-none focus:border-accent-text"
+          className="rounded-lg border border-border px-3 py-2 text-[14px] text-foreground/80 focus:outline-none focus:border-accent-text"
         >
           <option value="All">All Categories</option>
           <option value="Security">Security</option>
@@ -50,15 +50,15 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                     ? "bg-emerald-50 text-emerald-700"
                     : pb.status === "Draft"
                       ? "bg-amber-50 text-amber-700"
-                      : "bg-gray-50 text-gray-600",
+                      : "bg-muted text-muted-foreground",
                 )}
               >
                 {pb.status}
               </span>
             </div>
-            <h4 className="text-[15px] font-semibold text-gray-900">{pb.name}</h4>
-            <p className="mt-1 text-[14px] text-gray-600 line-clamp-2">{pb.description}</p>
-            <div className="mt-3 flex items-center gap-4 text-[13px] text-gray-600">
+            <h4 className="text-[15px] font-semibold text-foreground">{pb.name}</h4>
+            <p className="mt-1 text-[14px] text-muted-foreground line-clamp-2">{pb.description}</p>
+            <div className="mt-3 flex items-center gap-4 text-[13px] text-muted-foreground">
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="h-3 w-3" /> {pb.stepCount} steps
               </span>
@@ -69,17 +69,17 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                 <User className="h-3 w-3" /> {pb.createdByName}
               </span>
             </div>
-            <div className="mt-3 border-t border-gray-200 pt-3">
-              <h5 className="text-[13px] font-semibold text-gray-600 uppercase mb-2">
+            <div className="mt-3 border-t border-border/60 pt-3">
+              <h5 className="text-[13px] font-semibold text-muted-foreground uppercase mb-2">
                 Steps Preview
               </h5>
               <div className="space-y-1">
                 {pb.steps.slice(0, 3).map((step) => (
                   <div
                     key={step.stepNumber}
-                    className="flex items-center gap-2 text-[14px] text-gray-600"
+                    className="flex items-center gap-2 text-[14px] text-muted-foreground"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100 text-[12px] font-bold text-gray-600">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-muted text-[12px] font-bold text-muted-foreground">
                       {step.stepNumber}
                     </span>
                     <span className="truncate">{step.title}</span>
@@ -91,7 +91,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                   </div>
                 ))}
                 {pb.steps.length > 3 && (
-                  <p className="text-[13px] text-gray-600 pl-6">
+                  <p className="text-[13px] text-muted-foreground pl-6">
                     +{pb.steps.length - 3} more steps
                   </p>
                 )}

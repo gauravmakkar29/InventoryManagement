@@ -89,15 +89,15 @@ export function IncidentResponsePage() {
       {/* Page Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-[20px] font-semibold text-gray-900">Incident Response</h1>
-          <p className="mt-0.5 text-[14px] text-gray-600">
+          <h1 className="text-[20px] font-semibold text-foreground">Incident Response</h1>
+          <p className="mt-0.5 text-[14px] text-muted-foreground">
             Manage security incidents, device isolation, quarantine zones, and response playbooks
           </p>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white p-1">
+      <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -109,7 +109,7 @@ export function IncidentResponsePage() {
                 "flex items-center gap-2 rounded-md px-4 py-2 text-[14px] font-medium cursor-pointer",
                 isActive
                   ? "bg-accent text-white shadow-sm"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
               <Icon className="h-4 w-4" />

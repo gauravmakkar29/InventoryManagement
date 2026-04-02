@@ -128,9 +128,9 @@ function BlastRadiusSummary({
   radiusKm: number;
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+    <div className="rounded-xl border border-border/60 bg-muted p-4">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[14px] font-semibold text-gray-700">Impact Summary</span>
+        <span className="text-[14px] font-semibold text-foreground/80">Impact Summary</span>
         <span
           className={cn(
             "rounded-full px-2.5 py-0.5 text-[13px] font-bold",
@@ -142,16 +142,16 @@ function BlastRadiusSummary({
       </div>
       <div className="grid grid-cols-3 gap-3">
         <div className="text-center">
-          <p className="text-[18px] font-bold tabular-nums text-gray-900">{affectedCount}</p>
-          <p className="text-[12px] text-gray-600">Affected</p>
+          <p className="text-[18px] font-bold tabular-nums text-foreground">{affectedCount}</p>
+          <p className="text-[12px] text-muted-foreground">Affected</p>
         </div>
         <div className="text-center">
-          <p className="text-[18px] font-bold tabular-nums text-gray-900">{estimatedDowntime}m</p>
-          <p className="text-[12px] text-gray-600">Est. Downtime</p>
+          <p className="text-[18px] font-bold tabular-nums text-foreground">{estimatedDowntime}m</p>
+          <p className="text-[12px] text-muted-foreground">Est. Downtime</p>
         </div>
         <div className="text-center">
-          <p className="text-[18px] font-bold tabular-nums text-gray-900">{radiusKm}km</p>
-          <p className="text-[12px] text-gray-600">Radius</p>
+          <p className="text-[18px] font-bold tabular-nums text-foreground">{radiusKm}km</p>
+          <p className="text-[12px] text-muted-foreground">Radius</p>
         </div>
       </div>
     </div>
@@ -168,13 +168,16 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
         <div
           key={device.id}
           className={cn(
-            "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-gray-50 cursor-pointer",
+            "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-muted cursor-pointer",
             device.riskScore <= 30 && "bg-red-50/50",
           )}
         >
           <div className="relative">
             <MapPin
-              className={cn("h-4 w-4", device.riskScore <= 30 ? "text-red-500" : "text-gray-600")}
+              className={cn(
+                "h-4 w-4",
+                device.riskScore <= 30 ? "text-red-500" : "text-muted-foreground",
+              )}
             />
             <span
               className={cn(
@@ -184,8 +187,10 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[14px] font-medium text-gray-900 truncate">{device.name}</p>
-            <p className="text-[13px] text-gray-600">{device.distanceKm.toFixed(1)} km away</p>
+            <p className="text-[14px] font-medium text-foreground truncate">{device.name}</p>
+            <p className="text-[13px] text-muted-foreground">
+              {device.distanceKm.toFixed(1)} km away
+            </p>
           </div>
           <div className="text-right shrink-0">
             <p
@@ -202,7 +207,7 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
             >
               {device.riskScore}
             </p>
-            <p className="text-[12px] text-gray-600">{device.estimatedDowntimeMinutes}m</p>
+            <p className="text-[12px] text-muted-foreground">{device.estimatedDowntimeMinutes}m</p>
           </div>
         </div>
       ))}
@@ -277,28 +282,28 @@ export function BlastRadiusPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col border-l border-gray-300 bg-white shadow-xl">
+    <div className="fixed right-0 top-0 z-50 flex h-full w-[360px] flex-col border-l border-border bg-card shadow-xl">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
+      <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
         <div className="flex items-center gap-2">
           <Target className="h-4 w-4 text-accent-text" />
-          <h3 className="text-[15px] font-semibold text-gray-900">Blast Radius</h3>
+          <h3 className="text-[15px] font-semibold text-foreground">Blast Radius</h3>
         </div>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:text-muted-foreground hover:bg-muted cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
       {/* Origin device */}
-      <div className="px-5 py-3 border-b border-gray-200 bg-gray-50">
-        <p className="text-[13px] font-medium text-gray-600 uppercase tracking-wider">
+      <div className="px-5 py-3 border-b border-border/60 bg-muted">
+        <p className="text-[13px] font-medium text-muted-foreground uppercase tracking-wider">
           Origin Device
         </p>
-        <p className="mt-1 text-[15px] font-semibold text-gray-900">{originDeviceName}</p>
-        <p className="text-[13px] text-gray-600">
+        <p className="mt-1 text-[15px] font-semibold text-foreground">{originDeviceName}</p>
+        <p className="text-[13px] text-muted-foreground">
           {originLat.toFixed(4)}, {originLng.toFixed(4)}
         </p>
       </div>
@@ -315,7 +320,7 @@ export function BlastRadiusPanel({
 
         {/* Radius slider */}
         <div>
-          <label className="flex items-center justify-between text-[13px] font-semibold text-gray-700 mb-2">
+          <label className="flex items-center justify-between text-[13px] font-semibold text-foreground/80 mb-2">
             <span className="flex items-center gap-1">
               <SlidersHorizontal className="h-3 w-3" />
               Radius
@@ -332,7 +337,7 @@ export function BlastRadiusPanel({
             onChange={(e) => setRadiusKm(Number(e.target.value))}
             className="w-full accent-[#FF7900]"
           />
-          <div className="flex justify-between text-[12px] text-gray-600 mt-0.5">
+          <div className="flex justify-between text-[12px] text-muted-foreground mt-0.5">
             <span>1 km</span>
             <span>100 km</span>
           </div>
@@ -341,14 +346,14 @@ export function BlastRadiusPanel({
         {/* Affected devices list */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[14px] font-semibold text-gray-700">
+            <span className="text-[14px] font-semibold text-foreground/80">
               Affected Devices ({affectedDevices.length})
             </span>
           </div>
           {affectedDevices.length === 0 ? (
             <div className="py-8 text-center">
-              <Activity className="mx-auto h-8 w-8 text-gray-600 mb-2" />
-              <p className="text-[14px] text-gray-600">No devices within radius</p>
+              <Activity className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+              <p className="text-[14px] text-muted-foreground">No devices within radius</p>
             </div>
           ) : (
             <BlastRadiusDeviceList devices={affectedDevices} />
@@ -357,7 +362,7 @@ export function BlastRadiusPanel({
       </div>
 
       {/* Footer actions */}
-      <div className="border-t border-gray-200 px-5 py-3 flex gap-2">
+      <div className="border-t border-border/60 px-5 py-3 flex gap-2">
         <button
           onClick={onRunSimulation}
           className="flex-1 flex items-center justify-center gap-1.5 rounded-lg bg-accent px-4 py-2.5 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer"
@@ -367,7 +372,7 @@ export function BlastRadiusPanel({
         </button>
         <button
           onClick={onClose}
-          className="rounded-lg border border-gray-300 px-4 py-2.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+          className="rounded-lg border border-border px-4 py-2.5 text-[14px] font-medium text-foreground/80 hover:bg-muted cursor-pointer"
         >
           Clear Radius
         </button>
