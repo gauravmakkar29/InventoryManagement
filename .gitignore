@@ -33,6 +33,9 @@ Thumbs.db
 # MCP tokens
 *.token
 
+# Storybook
+storybook-static/
+
 # Playwright MCP (temp files from selector discovery)
 .playwright-mcp/
 login-*.png
