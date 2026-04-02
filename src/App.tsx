@@ -9,7 +9,7 @@ import { PageLoader } from "./app/components/page-loader";
 // ---------------------------------------------------------------------------
 const SignIn = lazy(() => import("./app/components/sign-in").then((m) => ({ default: m.SignIn })));
 const Dashboard = lazy(() =>
-  import("./app/components/dashboard").then((m) => ({ default: m.Dashboard })),
+  import("./app/components/dashboard/dashboard").then((m) => ({ default: m.Dashboard })),
 );
 const Inventory = lazy(() =>
   import("./app/components/inventory").then((m) => ({ default: m.Inventory })),
