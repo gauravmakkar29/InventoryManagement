@@ -20,7 +20,7 @@ Enterprise device inventory tracking, firmware deployment with multi-stage appro
 - `npm run test:e2e` — Run full E2E regression (Maven/TestNG)
 - `npm run test:e2e:smoke` — Run smoke E2E suite
 - `npm run lint` — ESLint check
-- `cd infra && terraform init -backend=false && terraform validate` — Validate Terraform
+- `cd infra/reference/aws-terraform && terraform init -backend=false && terraform validate` — Validate Terraform
 
 ## Project Structure
 
@@ -34,9 +34,11 @@ e2e/ims-e2e/            # E2E test framework (Java/Maven)
 ├── ims-core-ui/        # Browser actions (Click, Enter, Verify)
 ├── ims-core-api/       # API testing (REST/GraphQL)
 └── ims-tests/          # IMS page objects, impls, macros, tests
-infra/                  # Terraform (13 AWS modules)
-├── modules/            # dynamodb, cognito, appsync, s3, cloudfront, lambda, iam, waf, dns, opensearch, monitoring, alerting
-└── environments/       # dev.tfvars, staging.tfvars, prod.tfvars
+infra/                  # Infrastructure reference implementations
+├── reference/
+│   ├── aws-terraform/  # Terraform (13 AWS modules) + environments
+│   └── aws-cdk/        # CDK reference skeleton (TypeScript)
+└── migrations/         # Schema versioning (future)
 Docs/epics/             # 18 epics with functional stories + tech specs
 .github/                # CI workflows + issue templates (story, bug)
 ```

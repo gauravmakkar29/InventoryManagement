@@ -128,3 +128,14 @@ module "alerting" {
   lambda_function_name = module.lambda_audit.function_name
   appsync_api_id       = module.appsync.api_id
 }
+
+# --- CloudTrail + Compliance ---
+# @see Story #168 — CloudTrail logging + NIST 800-53 control mapping
+
+module "cloudtrail" {
+  source             = "./modules/cloudtrail"
+  environment        = var.environment
+  project_name       = var.project_name
+  log_retention_days = 90
+  s3_bucket_arns     = [module.s3_firmware.bucket_arn]
+}

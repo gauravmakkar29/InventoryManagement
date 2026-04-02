@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infra
+        working-directory: infra/reference/aws-terraform
     steps:
       - uses: actions/checkout@v4
 
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: infra
+        working-directory: infra/reference/aws-terraform
     steps:
       - uses: actions/checkout@v4
 
