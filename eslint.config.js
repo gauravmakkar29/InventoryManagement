@@ -47,7 +47,7 @@ export default tseslint.config(
       "jsx-a11y/tabindex-no-positive": "error",
       // Code quality
       "@typescript-eslint/no-explicit-any": "error",
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": ["error", { allow: ["warn", "error"] }],
     },
   }
 );
