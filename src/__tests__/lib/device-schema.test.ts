@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createDeviceSchema } from "../../lib/schemas/device.schema";
+import { createDeviceSchema } from "@/lib/schemas/device.schema";
 
 describe("createDeviceSchema", () => {
   const validDevice = {

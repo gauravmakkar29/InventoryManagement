@@ -8,7 +8,7 @@ import {
   AlertTriangle,
   ChevronRight,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { DeviceTelemetryChart } from "./device-telemetry-chart";
 import { TelemetryIngestStatus } from "./telemetry-ingest-status";
 import { HeatmapPage } from "../heatmap/heatmap-page";

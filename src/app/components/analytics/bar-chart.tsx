@@ -1,4 +1,4 @@
-import type { MonthlyDeployment } from "../../../lib/mock-data/analytics-data";
+import type { MonthlyDeployment } from "@/lib/mock-data/analytics-data";
 
 export function BarChart({ data, height = 180 }: { data: MonthlyDeployment[]; height?: number }) {
   const maxCount = Math.max(...data.map((d) => d.count), 1);

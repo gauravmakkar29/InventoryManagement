@@ -6,8 +6,8 @@ import {
   generateJsonContent,
   resolveAccessor,
   triggerDownload,
-} from "../../lib/use-export";
-import type { ExportColumn } from "../../lib/use-export";
+} from "@/lib/use-export";
+import type { ExportColumn } from "@/lib/use-export";
 
 // ---------------------------------------------------------------------------
 // Test data

@@ -7,8 +7,8 @@
  * @see Story #232 — Application versioning strategy
  */
 
-import { cn } from "../../lib/utils";
-import { getVersionDisplay, getVersionFull } from "../../lib/app-version";
+import { cn } from "@/lib/utils";
+import { getVersionDisplay, getVersionFull } from "@/lib/app-version";
 
 interface AppVersionBadgeProps {
   /** Show abbreviated form (just "v") when true — used in collapsed sidebar. */

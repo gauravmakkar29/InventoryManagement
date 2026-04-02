@@ -1,13 +1,13 @@
 /**
  * IMS Gen 2 — Epic 14: Badge components for incidents
  */
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type {
   IncidentSeverity,
   IncidentStatus,
   IncidentCategory,
-} from "../../../lib/incident-types";
-import { SEVERITY_COLORS, STATUS_COLORS } from "../../../lib/incident-types";
+} from "@/lib/incident-types";
+import { SEVERITY_COLORS, STATUS_COLORS } from "@/lib/incident-types";
 
 // ---------------------------------------------------------------------------
 // Severity Badge

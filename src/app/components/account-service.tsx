@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Plus, Calendar, LayoutGrid } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
-import { useServiceOrders } from "../../lib/hooks/use-service-orders";
-import type { ServiceOrder } from "../../lib/mock-data/service-order-data";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { useServiceOrders } from "@/lib/hooks/use-service-orders";
+import type { ServiceOrder } from "@/lib/mock-data/service-order-data";
 import { KanbanColumn, COLUMN_ORDER } from "./service-orders/service-order-kanban";
 import { CalendarView } from "./service-orders/service-order-calendar";
 import { CreateOrderModal } from "./service-orders/create-order-modal";

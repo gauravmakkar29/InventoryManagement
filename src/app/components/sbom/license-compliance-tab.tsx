@@ -2,8 +2,8 @@ import { useMemo, useCallback } from "react";
 import { Download, ShieldCheck, ShieldAlert } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
-import { generateCSV } from "../../../lib/report-generator";
+import { cn } from "@/lib/utils";
+import { generateCSV } from "@/lib/report-generator";
 import type { SBOMComponent } from "./sbom-types";
 import { getLicenseCompliance, LICENSE_COMPLIANCE_CONFIG, PIE_COLORS } from "./sbom-constants";
 

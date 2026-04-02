@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { GlobalSearchResult, SearchEntityType } from "../../../lib/opensearch-types";
+import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
 
 // =============================================================================
 // Story 18.2 — Global Search Hook (useGlobalSearch)

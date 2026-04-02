@@ -1,8 +1,8 @@
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { AnalyticsAuditEntry } from "../../../lib/mock-data/analytics-data";
+import { cn } from "@/lib/utils";
+import type { AnalyticsAuditEntry } from "@/lib/mock-data/analytics-data";
 import { ExportDropdown } from "../export-dropdown";
-import type { ExportColumn } from "../../../lib/use-export";
+import type { ExportColumn } from "@/lib/use-export";
 
 const AUDIT_EXPORT_COLUMNS: ExportColumn<AnalyticsAuditEntry>[] = [
   {

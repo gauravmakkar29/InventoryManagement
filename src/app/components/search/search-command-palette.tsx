@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { Search, Loader2, X } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { GlobalSearchResult, SearchEntityType } from "../../../lib/opensearch-types";
+import { cn } from "@/lib/utils";
+import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
 import type { UseGlobalSearchReturn } from "./use-global-search";
 import { SearchResultGroup } from "./search-result-group";
 import { SearchEmptyState } from "./search-empty-state";

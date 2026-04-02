@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useServiceOrders } from "../../../lib/hooks/use-service-orders";
+import { useServiceOrders } from "@/lib/hooks/use-service-orders";
 
 // Mock sonner toast
 vi.mock("sonner", () => ({

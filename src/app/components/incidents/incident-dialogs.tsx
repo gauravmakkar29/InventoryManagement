@@ -4,15 +4,15 @@
  */
 import { useState, useCallback } from "react";
 import { AlertTriangle, Search, Lock, Unlock, X } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatDateTime } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
+import { formatDateTime } from "@/lib/utils";
 import type {
   Incident,
   IncidentSeverity,
   IncidentCategory,
   AffectedDevice,
   IsolationPolicy,
-} from "../../../lib/incident-types";
+} from "@/lib/incident-types";
 
 // ---------------------------------------------------------------------------
 // Create Incident Dialog (Story 14.1 AC1-AC2)

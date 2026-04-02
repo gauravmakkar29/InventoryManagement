@@ -12,9 +12,9 @@ import {
   Circle,
   ArrowRight,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatRelativeTime } from "../../../lib/utils";
-import type { Incident } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/lib/utils";
+import type { Incident } from "@/lib/incident-types";
 
 export function IncidentTimeline({ events }: { events: Incident["timelineEvents"] }) {
   const getEventIcon = (action: string) => {

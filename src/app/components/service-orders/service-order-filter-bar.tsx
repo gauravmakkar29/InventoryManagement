@@ -1,8 +1,8 @@
 import { Search, X } from "lucide-react";
-import type { ServiceOrder } from "../../../lib/mock-data/service-order-data";
+import type { ServiceOrder } from "@/lib/mock-data/service-order-data";
 import { ExportDropdown } from "../export-dropdown";
-import type { ExportColumn } from "../../../lib/use-export";
-import { STATUS_LABELS } from "../../../lib/mock-data/service-order-data";
+import type { ExportColumn } from "@/lib/use-export";
+import { STATUS_LABELS } from "@/lib/mock-data/service-order-data";
 
 /* ─── Export Column Config ────────────────────────────────────────── */
 

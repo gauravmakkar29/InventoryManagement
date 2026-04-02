@@ -15,7 +15,7 @@
  * @see Story #204 — AWS Amplify Gen2 adapter (full activation)
  */
 
-import type { User } from "../../types";
+import type { User } from "@/lib/types";
 import type { IAuthAdapter, AuthSession, SignInResult } from "../auth-adapter";
 
 // =============================================================================

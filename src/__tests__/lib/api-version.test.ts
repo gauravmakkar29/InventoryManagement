@@ -3,7 +3,7 @@ import {
   createApiVersionManager,
   createVersionInterceptor,
   createVersionCheckInterceptor,
-} from "../../lib/api-version";
+} from "@/lib/api-version";
 
 describe("ApiVersionManager", () => {
   describe("header mode", () => {

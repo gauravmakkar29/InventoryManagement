@@ -3,9 +3,9 @@
  */
 import { useState, useMemo, useCallback } from "react";
 import { Network, X } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { LateralMovementDevice } from "../../../lib/incident-types";
-import { MOCK_TOPOLOGY } from "../../../lib/incident-mock-data";
+import { cn } from "@/lib/utils";
+import type { LateralMovementDevice } from "@/lib/incident-types";
+import { MOCK_TOPOLOGY } from "@/lib/incident-mock-data";
 
 // ---------------------------------------------------------------------------
 // Network Topology Graph (Story 14.3) — SVG force-directed

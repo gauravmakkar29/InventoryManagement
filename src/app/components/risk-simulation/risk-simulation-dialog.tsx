@@ -13,10 +13,10 @@ import {
   Eye,
   Activity,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { FailureType, RiskLevel, SimulationType, DeviceStatus } from "../../../lib/types";
-import type { BlastRadiusResult, BlastRadiusDevice } from "../../../lib/types";
-import { formatDateTime } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
+import { FailureType, RiskLevel, SimulationType, DeviceStatus } from "@/lib/types";
+import type { BlastRadiusResult, BlastRadiusDevice } from "@/lib/types";
+import { formatDateTime } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types

@@ -3,8 +3,8 @@
  */
 import { useState, useMemo } from "react";
 import { Plus, Clock, User, CheckCircle2, Zap } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { IncidentCategory, Playbook } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import type { IncidentCategory, Playbook } from "@/lib/incident-types";
 import { SeverityBadge, CategoryBadge } from "./incident-badges";
 
 export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {

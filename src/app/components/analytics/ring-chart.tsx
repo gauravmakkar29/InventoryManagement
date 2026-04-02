@@ -1,4 +1,4 @@
-import type { RingSegment } from "../../../lib/mock-data/analytics-data";
+import type { RingSegment } from "@/lib/mock-data/analytics-data";
 
 export function RingChart({
   segments,

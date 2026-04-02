@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Server, HeartPulse, Clock, AlertTriangle, Download, Printer } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 
 /**
  * Story 16.4: Executive Summary Page

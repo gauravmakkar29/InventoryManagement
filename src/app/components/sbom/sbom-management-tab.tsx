@@ -8,9 +8,9 @@ import {
   Loader2,
   AlertTriangle,
 } from "lucide-react";
-import { cn, formatDate } from "../../../lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { SBOM, SBOMFormat } from "./sbom-types";
-import type { Role } from "../../../lib/rbac";
+import type { Role } from "@/lib/rbac";
 import { UploadSBOMModal } from "./upload-sbom-modal";
 
 // =============================================================================

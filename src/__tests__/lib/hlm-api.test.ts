@@ -37,9 +37,9 @@ import {
   getDeviceGeoClusters,
   getOsisPipelineHealth,
   triggerReindex,
-} from "../../lib/hlm-api";
-import { APP_BUILD_INFO } from "../../lib/app-version";
-import { FailureType } from "../../lib/types";
+} from "@/lib/hlm-api";
+import { APP_BUILD_INFO } from "@/lib/app-version";
+import { FailureType } from "@/lib/types";
 
 // =============================================================================
 // getDefaultHeaders

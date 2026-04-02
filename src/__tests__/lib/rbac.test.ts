@@ -7,7 +7,7 @@ import {
   getPermissions,
   type Role,
   type Action,
-} from "../../lib/rbac";
+} from "@/lib/rbac";
 
 // =============================================================================
 // getPrimaryRole

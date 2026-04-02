@@ -3,14 +3,14 @@
  */
 import { useState, useMemo } from "react";
 import { AlertTriangle, Plus, Search, ChevronRight } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatRelativeTime } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/lib/utils";
 import type {
   Incident,
   IncidentSeverity,
   IncidentStatus,
   IncidentCategory,
-} from "../../../lib/incident-types";
+} from "@/lib/incident-types";
 import { SeverityBadge, StatusBadge, CategoryBadge } from "./incident-badges";
 
 export function IncidentListTab({

@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import i18n, { SUPPORTED_LOCALES } from "../../lib/i18n";
+import i18n, { SUPPORTED_LOCALES } from "@/lib/i18n";
 
 describe("i18n configuration", () => {
   afterEach(async () => {

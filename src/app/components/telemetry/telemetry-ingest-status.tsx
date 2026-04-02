@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Activity, RefreshCw, Clock, Database, AlertCircle } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatRelativeTime } from "../../../lib/utils";
-import { Skeleton } from "../../../components/skeleton";
+import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/lib/utils";
+import { Skeleton } from "@/components/skeleton";
 
 // ---------------------------------------------------------------------------
 // Types

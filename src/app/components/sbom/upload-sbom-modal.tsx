@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { Upload, X, Check, FileText } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type { SBOMFormat } from "./sbom-types";
 import { MOCK_FIRMWARE } from "./sbom-constants";
 

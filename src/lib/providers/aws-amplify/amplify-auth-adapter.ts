@@ -18,7 +18,7 @@
  */
 
 import type { IAuthAdapter, AuthSession, SignInResult } from "../auth-adapter";
-import type { User } from "../../types";
+import type { User } from "@/lib/types";
 
 // =============================================================================
 // Config

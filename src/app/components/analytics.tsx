@@ -1,6 +1,6 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useAnalyticsData } from "../../lib/hooks/use-analytics-data";
+import { cn } from "@/lib/utils";
+import { useAnalyticsData } from "@/lib/hooks/use-analytics-data";
 import {
   TIME_RANGE_OPTIONS,
   KPI_DATA,
@@ -8,7 +8,7 @@ import {
   COMPLIANCE_SEGMENTS,
   MONTHLY_DEPLOYMENTS,
   VULN_SEVERITY,
-} from "../../lib/mock-data/analytics-data";
+} from "@/lib/mock-data/analytics-data";
 import { RingChart } from "./analytics/ring-chart";
 import { BarChart } from "./analytics/bar-chart";
 import { HorizontalBarChart } from "./analytics/horizontal-bar-chart";

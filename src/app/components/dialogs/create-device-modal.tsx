@@ -2,8 +2,8 @@ import FocusTrap from "focus-trap-react";
 import { useState, useCallback, useEffect } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
-import { DeviceStatus } from "../../../lib/types";
+import { cn } from "@/lib/utils";
+import { DeviceStatus } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Types

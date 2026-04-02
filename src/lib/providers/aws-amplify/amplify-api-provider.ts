@@ -27,7 +27,7 @@ import type {
   GeoDeviceResult,
   GeoCluster,
   PipelineHealthStatus,
-} from "../../opensearch-types";
+} from "@/lib/opensearch-types";
 import type {
   Device,
   Firmware,
@@ -45,9 +45,9 @@ import type {
   BlastRadiusResult,
   TelemetryPipelineStatus,
   FailureType,
-} from "../../types";
-import { createApiClient, type IApiClient } from "../../api-client";
-import { createAppVersionInterceptor } from "../../app-version";
+} from "@/lib/types";
+import { createApiClient, type IApiClient } from "@/lib/api-client";
+import { createAppVersionInterceptor } from "@/lib/app-version";
 
 // =============================================================================
 // Config

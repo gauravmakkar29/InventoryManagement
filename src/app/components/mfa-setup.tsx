@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShieldCheck, Copy, Check, AlertCircle, X } from "lucide-react";
-import { useAuth } from "../../lib/use-auth";
-import { cn } from "../../lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { cn } from "@/lib/utils";
 
 interface MfaSetupProps {
   onClose: () => void;

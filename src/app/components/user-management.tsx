@@ -1,10 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
 import { Search, UserPlus, Pencil, Ban, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole } from "../../lib/rbac";
-import type { Role } from "../../lib/rbac";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole } from "@/lib/rbac";
+import type { Role } from "@/lib/rbac";
 import { InviteUserModal } from "./dialogs/invite-user-modal";
 import type { InviteUserPayload } from "./dialogs/invite-user-modal";
 import { EditUserModal } from "./dialogs/edit-user-modal";

@@ -1,13 +1,13 @@
 import { useState, type FormEvent } from "react";
 import { X } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type {
   ServiceOrder,
   Priority,
   ServiceType,
-} from "../../../lib/mock-data/service-order-data";
-import { TECHNICIANS } from "../../../lib/mock-data/service-order-data";
+} from "@/lib/mock-data/service-order-data";
+import { TECHNICIANS } from "@/lib/mock-data/service-order-data";
 
 /* ─── Create Order Modal ──────────────────────────────────────────── */
 

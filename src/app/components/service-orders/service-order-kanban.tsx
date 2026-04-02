@@ -1,12 +1,12 @@
 import { Clock, MapPin, ArrowRight, CheckCircle } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type {
   ServiceOrder,
   Status,
   Priority,
   ServiceType,
-} from "../../../lib/mock-data/service-order-data";
-import { STATUS_LABELS } from "../../../lib/mock-data/service-order-data";
+} from "@/lib/mock-data/service-order-data";
+import { STATUS_LABELS } from "@/lib/mock-data/service-order-data";
 
 /* ─── Constants ───────────────────────────────────────────────────── */
 

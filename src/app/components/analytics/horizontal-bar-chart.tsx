@@ -1,4 +1,4 @@
-import type { VulnSeverity } from "../../../lib/mock-data/analytics-data";
+import type { VulnSeverity } from "@/lib/mock-data/analytics-data";
 
 export function HorizontalBarChart({ data }: { data: VulnSeverity[] }) {
   const maxCount = Math.max(...data.map((d) => d.count), 1);

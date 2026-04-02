@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { createMockAuthAdapter } from "../../lib/providers/mock/mock-auth-adapter";
-import type { IAuthAdapter } from "../../lib/providers/auth-adapter";
+import { createMockAuthAdapter } from "@/lib/providers/mock/mock-auth-adapter";
+import type { IAuthAdapter } from "@/lib/providers/auth-adapter";
 
 // Mock localStorage
 const store: Record<string, string> = {};

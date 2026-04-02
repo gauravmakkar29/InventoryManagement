@@ -1,5 +1,5 @@
 import { Server, Package, ClipboardList, Shield, AlertTriangle } from "lucide-react";
-import type { GlobalSearchResult, SearchEntityType } from "../../../lib/opensearch-types";
+import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
 import { SearchResultItem } from "./search-result-item";
 
 // =============================================================================

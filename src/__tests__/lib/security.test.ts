@@ -8,7 +8,7 @@ import {
   isSafeUrl,
   containsPotentialSecret,
   buildCspString,
-} from "../../lib/security";
+} from "@/lib/security";
 
 describe("Security Utilities", () => {
   describe("escapeHtml", () => {

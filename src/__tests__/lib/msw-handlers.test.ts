@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
-import { server } from "../../mocks/server";
+import { server } from "@/mocks/server";
 
 // Wire MSW lifecycle
 beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));

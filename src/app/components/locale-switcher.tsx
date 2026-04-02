@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LOCALES } from "../../lib/i18n";
-import { cn } from "../../lib/utils";
+import { SUPPORTED_LOCALES } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
 interface LocaleSwitcherProps {
   compact?: boolean;
