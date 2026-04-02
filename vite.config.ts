@@ -24,6 +24,9 @@ function getBuildMeta() {
 
 const buildMeta = getBuildMeta();
 
+// Also expose as VITE_APP_VERSION for standard Vite env access
+process.env.VITE_APP_VERSION = `${buildMeta.version}+${buildMeta.sha}`;
+
 export default defineConfig({
   define: {
     __APP_VERSION__: JSON.stringify(buildMeta.version),

@@ -38,8 +38,29 @@ import type {
   PipelineHealthStatus,
 } from "./opensearch-types";
 
+import { APP_BUILD_INFO } from "./app-version";
+
+/**
+ * Default headers attached to every API request, including the
+ * X-App-Version header for build traceability and stale client detection.
+ */
+export function getDefaultHeaders(): Record<string, string> {
+  return {
+    "Content-Type": "application/json",
+    "X-App-Version": APP_BUILD_INFO.full,
+  };
+}
+
 function stub<T>(name: string, fallback: T): T {
-  console.warn(`[hlm-api] ${name}() — returning mock data`);
+  // Structured log context includes app version for traceability
+  const ctx = { source: "hlm-api", method: name, version: APP_BUILD_INFO.full };
+  const logger = (globalThis as Record<string, unknown>)["structuredLog"];
+  if (typeof logger === "function") {
+    (logger as (level: string, meta: Record<string, string>) => void)(
+      "warn",
+      { ...ctx, message: `${name}() — returning mock data` },
+    );
+  }
   return fallback;
 }
 
