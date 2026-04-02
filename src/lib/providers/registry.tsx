@@ -68,12 +68,46 @@ function useProviders(): ProviderRegistryValue {
   return ctx;
 }
 
-/** Access the API provider for data operations */
+/**
+ * Access the API provider for data operations.
+ *
+ * Use this hook in components that need direct access to the platform's
+ * API adapter (e.g., for custom queries not covered by hlm-api.ts).
+ *
+ * @example
+ * ```tsx
+ * function DeviceDetail({ id }: { id: string }) {
+ *   const api = useApiProvider();
+ *   const { data } = useQuery({
+ *     queryKey: ["device", id],
+ *     queryFn: () => api.query("GetDevice", { id }),
+ *   });
+ *   return <div>{data?.name}</div>;
+ * }
+ * ```
+ */
 export function useApiProvider(): IApiProvider {
   return useProviders().api;
 }
 
-/** Access the storage provider for key-value persistence */
+/**
+ * Access the storage provider for key-value persistence.
+ *
+ * Use this hook in components that need to read/write user preferences,
+ * cached state, or other key-value data through the platform storage layer.
+ *
+ * @example
+ * ```tsx
+ * function ThemeToggle() {
+ *   const storage = useStorageProvider();
+ *   const toggle = async () => {
+ *     const current = await storage.getItem("theme");
+ *     await storage.setItem("theme", current === "dark" ? "light" : "dark");
+ *   };
+ *   return <button onClick={toggle}>Toggle theme</button>;
+ * }
+ * ```
+ */
 export function useStorageProvider(): IStorageProvider {
   return useProviders().storage;
 }
