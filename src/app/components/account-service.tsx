@@ -4,7 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Download,
   X,
   Calendar,
   LayoutGrid,
@@ -25,6 +24,20 @@ import type {
   ServiceType,
 } from "../../lib/mock-data/service-order-data";
 import { TECHNICIANS, STATUS_LABELS } from "../../lib/mock-data/service-order-data";
+import { ExportDropdown } from "./export-dropdown";
+import type { ExportColumn } from "../../lib/use-export";
+
+const SERVICE_ORDER_EXPORT_COLUMNS: ExportColumn<ServiceOrder>[] = [
+  { header: "ID", accessor: "id" },
+  { header: "Title", accessor: "title" },
+  { header: "Status", accessor: (o) => STATUS_LABELS[o.status] },
+  { header: "Priority", accessor: "priority" },
+  { header: "Technician", accessor: "technician" },
+  { header: "Location", accessor: "location" },
+  { header: "Scheduled Date", accessor: "scheduledDate" },
+  { header: "Service Type", accessor: "serviceType" },
+  { header: "Customer", accessor: "customer" },
+];
 
 type ViewMode = "kanban" | "calendar";
 
@@ -689,7 +702,7 @@ function FilterBar({
   onPriorityChange,
   onSearchChange,
   onClearAll,
-  onExport,
+  filteredOrders,
   filteredCount,
   totalCount,
 }: {
@@ -700,7 +713,7 @@ function FilterBar({
   onPriorityChange: (v: string) => void;
   onSearchChange: (v: string) => void;
   onClearAll: () => void;
-  onExport: () => void;
+  filteredOrders: ServiceOrder[];
   filteredCount: number;
   totalCount: number;
 }) {
@@ -767,15 +780,13 @@ function FilterBar({
         {filteredCount} of {totalCount} orders
       </span>
 
-      {/* CSV Export */}
-      <button
-        onClick={onExport}
-        className="flex items-center gap-1 rounded border border-border px-2.5 py-1.5 text-[13px] font-medium text-foreground hover:bg-muted transition-colors"
-        title="Export filtered results as CSV"
-      >
-        <Download className="h-3.5 w-3.5" />
-        Export CSV
-      </button>
+      {/* Standardized Export (Story 19.20) */}
+      <ExportDropdown
+        data={filteredOrders}
+        columns={SERVICE_ORDER_EXPORT_COLUMNS}
+        filename="service-orders"
+        title="Service Orders"
+      />
     </div>
   );
 }
@@ -805,7 +816,6 @@ export function AccountService() {
     handleMove,
     handleCreate: hookCreate,
     handleClearFilters,
-    handleExport,
   } = useServiceOrders();
 
   const handleCreate = (order: ServiceOrder) => {
@@ -874,7 +884,7 @@ export function AccountService() {
         onPriorityChange={setPriorityFilter}
         onSearchChange={setSearchQuery}
         onClearAll={handleClearFilters}
-        onExport={handleExport}
+        filteredOrders={filteredOrders}
         filteredCount={filteredOrders.length}
         totalCount={orders.length}
       />
