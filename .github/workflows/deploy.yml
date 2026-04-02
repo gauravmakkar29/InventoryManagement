@@ -43,7 +43,7 @@ jobs:
     environment: ${{ needs.determine-env.outputs.environment }}
     defaults:
       run:
-        working-directory: infra
+        working-directory: infra/reference/aws-terraform
     steps:
       - uses: actions/checkout@v4
 

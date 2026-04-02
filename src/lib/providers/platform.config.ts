@@ -2,6 +2,9 @@ import type { PlatformConfig, PlatformId } from "./types";
 import { createMockApiProvider } from "./mock/mock-api-provider";
 import { createMockStorageProvider } from "./mock/mock-storage-provider";
 import { MockAuthProvider } from "./mock/mock-auth-provider";
+import { createAuthProvider } from "./auth-provider";
+import { createCdkAuthAdapter } from "./aws-cdk/cdk-auth-adapter";
+import { createCdkApiProvider } from "./aws-cdk/cdk-api-provider";
 
 const VALID_PLATFORMS: PlatformId[] = ["mock", "aws-amplify", "aws-cdk", "aws-terraform", "azure"];
 
@@ -82,7 +85,11 @@ export function createPlatformConfig(): PlatformConfig {
     case "aws-amplify":
       throw new Error(`Platform "${platform}" is not yet implemented. See Story #204.`);
     case "aws-cdk":
-      throw new Error(`Platform "${platform}" is not yet implemented. See Story #205.`);
+      return {
+        api: createCdkApiProvider(),
+        storage: createMockStorageProvider(), // TODO: S3 storage adapter
+        AuthProvider: createAuthProvider(createCdkAuthAdapter()),
+      };
     case "aws-terraform":
       throw new Error(`Platform "${platform}" is not yet implemented. See Story #207.`);
     case "azure":
