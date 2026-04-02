@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Eye, EyeOff, AlertCircle, Fingerprint, ChevronRight } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, Shield, Fingerprint, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/use-auth";
 import { cn } from "@/lib/utils";
@@ -12,9 +12,9 @@ interface SignInForm {
   password: string;
 }
 
-/* ─── Animated solar cell pattern (light theme) ───────────────────── */
+/* ─── Animated solar grid background ──────────────────────────────── */
 
-function SolarPattern() {
+function SolarGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -39,15 +39,16 @@ function SolarPattern() {
       const h = canvas.offsetHeight;
       ctx.clearRect(0, 0, w, h);
 
-      const cols = 20;
-      const rows = 14;
+      const cols = 24;
+      const rows = 16;
       const cellW = w / cols;
       const cellH = h / rows;
 
-      // Subtle grid
+      // Grid lines
       for (let i = 0; i <= cols; i++) {
         const x = i * cellW;
-        ctx.strokeStyle = "rgba(255, 121, 0, 0.06)";
+        const pulse = Math.sin(time * 0.8 + i * 0.3) * 0.3 + 0.7;
+        ctx.strokeStyle = `rgba(255, 121, 0, ${0.06 * pulse})`;
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -56,7 +57,8 @@ function SolarPattern() {
       }
       for (let j = 0; j <= rows; j++) {
         const y = j * cellH;
-        ctx.strokeStyle = "rgba(255, 121, 0, 0.06)";
+        const pulse = Math.sin(time * 0.6 + j * 0.4) * 0.3 + 0.7;
+        ctx.strokeStyle = `rgba(255, 121, 0, ${0.06 * pulse})`;
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -64,30 +66,35 @@ function SolarPattern() {
         ctx.stroke();
       }
 
-      // Pulsing cells — like solar panels charging
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const wave = Math.sin(time * 0.8 + i * 0.6 + j * 0.8);
-          if (wave > 0.5) {
-            const alpha = (wave - 0.5) * 0.08;
-            ctx.fillStyle = `rgba(255, 121, 0, ${alpha})`;
-            ctx.fillRect(i * cellW + 1, j * cellH + 1, cellW - 2, cellH - 2);
+      // Glowing intersection nodes
+      for (let i = 0; i <= cols; i++) {
+        for (let j = 0; j <= rows; j++) {
+          const wave = Math.sin(time + i * 0.5 + j * 0.7);
+          if (wave > 0.6) {
+            const x = i * cellW;
+            const y = j * cellH;
+            const alpha = (wave - 0.6) * 1.2;
+            const radius = 1.5 + alpha * 1.5;
+            ctx.fillStyle = `rgba(255, 121, 0, ${alpha * 0.5})`;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
           }
         }
       }
 
-      // Floating energy dots
-      for (let i = 0; i < 6; i++) {
-        const px = ((time * 15 + i * 180) % (w + 80)) - 40;
-        const py = h * 0.35 + Math.sin(time * 0.4 + i * 1.8) * h * 0.2;
-        const size = 2 + Math.sin(time + i) * 0.8;
-        ctx.fillStyle = `rgba(255, 121, 0, ${0.12 + Math.sin(time + i) * 0.06})`;
+      // Floating energy particles
+      for (let i = 0; i < 8; i++) {
+        const px = ((time * 20 + i * 200) % (w + 100)) - 50;
+        const py = h * 0.3 + Math.sin(time * 0.5 + i * 2) * h * 0.25;
+        const size = 2 + Math.sin(time + i) * 1;
+        ctx.fillStyle = `rgba(255, 121, 0, ${0.15 + Math.sin(time + i) * 0.1})`;
         ctx.beginPath();
         ctx.arc(px, py, size, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      time += 0.01;
+      time += 0.012;
       animationId = requestAnimationFrame(draw);
     };
 
@@ -101,24 +108,66 @@ function SolarPattern() {
   return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" aria-hidden="true" />;
 }
 
-/* ─── Brand mark ──────────────────────────────────────────────────── */
+/* ─── Live metrics ticker ─────────────────────────────────────────── */
+
+function MetricsTicker() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const metrics = [
+    { value: "2,847", label: "Active Devices", trend: "+12 today" },
+    { value: "99.7%", label: "System Uptime", trend: "Last 30 days" },
+    { value: "96.4%", label: "Fleet Compliance", trend: "Across standards" },
+    { value: "1.2 GW", label: "Power Managed", trend: "Real-time" },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % metrics.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [metrics.length]);
+
+  return (
+    <div className="flex items-center gap-6">
+      {metrics.map((m, i) => (
+        <div
+          key={m.label}
+          className={cn(
+            "transition-all duration-500 ease-out",
+            i === activeIndex ? "opacity-100 scale-100" : "opacity-40 scale-[0.97]",
+          )}
+        >
+          <p className="text-[22px] font-bold text-white tabular-nums tracking-tight">{m.value}</p>
+          <p className="text-[12px] text-white/50 uppercase tracking-wider font-medium">{m.label}</p>
+          {i === activeIndex && (
+            <p className="text-[11px] text-orange-400/80 mt-0.5 font-medium">{m.trend}</p>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Brand mark with pulse ───────────────────────────────────────── */
 
 function BrandMark({ variant = "light" }: { variant?: "light" | "dark" }) {
   const isDark = variant === "dark";
   return (
     <div className="flex items-center gap-3">
-      <div className="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center shadow-sm">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="4" fill="white" />
-          <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="white" strokeWidth="2" strokeLinecap="round" />
-          <path d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-        </svg>
+      <div className="relative">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" fill="white" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            <path d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+          </svg>
+        </div>
+        <div className="absolute inset-0 rounded-xl bg-orange-500/20 animate-ping" style={{ animationDuration: "3s" }} />
       </div>
       <div>
-        <h1 className={cn("text-[18px] font-bold tracking-tight leading-none", isDark ? "text-gray-900" : "text-white")}>
+        <h1 className={cn("text-[20px] font-bold tracking-tight leading-none", isDark ? "text-gray-900" : "text-white")}>
           IMS Gen<span className="text-orange-500">2</span>
         </h1>
-        <p className={cn("text-[10px] tracking-[0.15em] uppercase font-medium mt-0.5", isDark ? "text-gray-400" : "text-white/50")}>
+        <p className={cn("text-[11px] tracking-[0.15em] uppercase font-medium mt-0.5", isDark ? "text-gray-400" : "text-white/40")}>
           Hardware Lifecycle Platform
         </p>
       </div>
@@ -164,71 +213,91 @@ export function SignIn() {
 
   return (
     <div className="flex min-h-screen">
-      {/* ─── Left panel: Brand showcase ─── */}
-      <div className="hidden lg:flex lg:w-[52%] flex-col justify-between relative overflow-hidden bg-[#0f172a]">
-        {/* Warm glow overlays */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_30%_40%,rgba(255,121,0,0.1),transparent_70%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_80%_80%,rgba(255,121,0,0.05),transparent_60%)]" />
+      {/* ─── Left panel: Dark immersive brand experience (v1 animations) ─── */}
+      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between relative overflow-hidden bg-[#060b18]">
+        {/* Radial glows */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_20%_40%,rgba(255,121,0,0.08),transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_80%_80%,rgba(255,121,0,0.04),transparent_60%)]" />
 
-        <SolarPattern />
+        {/* Animated solar grid */}
+        <SolarGrid />
 
-        {/* Top: Brand */}
-        <div className="relative z-10 p-8">
-          <BrandMark variant="light" />
-        </div>
-
-        {/* Center: Hero */}
-        <div className="relative z-10 px-8 flex-1 flex flex-col justify-center max-w-lg">
-          <p className="text-[12px] font-semibold text-orange-400 uppercase tracking-[0.2em] mb-4">
-            Enterprise Platform
-          </p>
-          <h2 className="text-[38px] font-bold text-white leading-[1.1] tracking-tight">
-            Command your
-            <br />
-            solar fleet
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-slate-400 max-w-sm">
-            Unified device management, firmware deployment, compliance tracking,
-            and operational analytics for energy infrastructure.
-          </p>
-
-          {/* Capabilities */}
-          <div className="mt-8 space-y-2.5">
-            {[
-              "Device inventory & lifecycle tracking",
-              "Firmware OTA with multi-stage approval",
-              "Compliance audit & vulnerability management",
-              "Real-time fleet health analytics",
-            ].map((item, i) => (
-              <div key={item} className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-6 h-6 rounded-md bg-orange-500/10 text-orange-400 text-[11px] font-bold tabular-nums">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <span className="text-[14px] text-slate-300">{item}</span>
-              </div>
-            ))}
+        {/* Top: Brand + compliance badge */}
+        <div className="relative z-10 p-10 flex items-start justify-between">
+          <BrandMark />
+          <div className="flex items-center gap-2 rounded-full bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] px-3.5 py-1.5">
+            <Shield className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
+            <span className="text-[11px] font-medium text-emerald-400/90 tracking-wide">
+              Enterprise Compliant
+            </span>
           </div>
         </div>
 
-        {/* Bottom: Stats */}
-        <div className="relative z-10 p-8 pt-0">
-          <div className="border-t border-white/[0.06] pt-6 flex items-center gap-8">
-            {[
-              { value: "2,847", label: "Devices" },
-              { value: "99.7%", label: "Uptime" },
-              { value: "1.2 GW", label: "Managed" },
-            ].map(({ value, label }) => (
-              <div key={label}>
-                <p className="text-[20px] font-bold text-white tabular-nums">{value}</p>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider font-medium">{label}</p>
-              </div>
-            ))}
+        {/* Center: Hero */}
+        <div className="relative z-10 px-10 flex-1 flex flex-col justify-center max-w-xl">
+          <div className="space-y-6">
+            <div>
+              <p className="text-[13px] font-semibold text-orange-400/90 uppercase tracking-[0.2em] mb-4">
+                Enterprise Platform
+              </p>
+              <h2 className="text-[42px] font-bold text-white leading-[1.1] tracking-tight">
+                Powering the
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-300">
+                  Solar Revolution
+                </span>
+              </h2>
+              <p className="mt-5 text-[16px] leading-relaxed text-white/50 max-w-md">
+                Manage inverters, track firmware deployments, enforce compliance,
+                and monitor fleet health — all from one unified command center.
+              </p>
+            </div>
+
+            {/* Capability cards */}
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              {[
+                { num: "01", label: "Device Inventory & Tracking", active: true },
+                { num: "02", label: "Firmware OTA Deployment" },
+                { num: "03", label: "Compliance & SBOM Audit" },
+                { num: "04", label: "Real-time Fleet Analytics" },
+              ].map((cap) => (
+                <div
+                  key={cap.num}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-4 py-3 border transition-colors duration-300",
+                    cap.active
+                      ? "border-orange-500/30 bg-orange-500/[0.06]"
+                      : "border-white/[0.04] bg-white/[0.02] hover:border-white/[0.08]",
+                  )}
+                >
+                  <span className={cn(
+                    "text-[11px] font-bold tabular-nums",
+                    cap.active ? "text-orange-400" : "text-white/20",
+                  )}>
+                    {cap.num}
+                  </span>
+                  <span className={cn(
+                    "text-[13px] font-medium",
+                    cap.active ? "text-white/90" : "text-white/40",
+                  )}>
+                    {cap.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom: Live metrics ticker */}
+        <div className="relative z-10 p-10 pt-0">
+          <div className="border-t border-white/[0.06] pt-8">
+            <MetricsTicker />
           </div>
         </div>
       </div>
 
-      {/* ─── Right panel: Sign-in form (LIGHT) ─── */}
-      <div className="flex flex-1 flex-col items-center justify-center px-6 lg:w-[48%] bg-[#f7f8fa]">
+      {/* ─── Right panel: LIGHT sign-in form ─── */}
+      <div className="flex flex-1 flex-col items-center justify-center px-6 lg:w-[45%] bg-[#f7f8fa]">
         <div className="w-full max-w-[400px]">
           {/* Mobile brand */}
           <div className="mb-10 lg:hidden">
@@ -260,10 +329,7 @@ export function SignIn() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
               {/* Email */}
               <div className="space-y-1.5">
-                <label
-                  htmlFor="signin-email"
-                  className="block text-[13px] font-medium text-gray-700"
-                >
+                <label htmlFor="signin-email" className="block text-[13px] font-medium text-gray-700">
                   Email address
                 </label>
                 <div className={cn(
@@ -302,10 +368,7 @@ export function SignIn() {
               {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="signin-password"
-                    className="block text-[13px] font-medium text-gray-700"
-                  >
+                  <label htmlFor="signin-password" className="block text-[13px] font-medium text-gray-700">
                     Password
                   </label>
                   <button
@@ -372,11 +435,11 @@ export function SignIn() {
                 {isSubmitting ? (
                   <div className="flex items-center gap-2">
                     <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                    <span>Signing in...</span>
+                    <span>Authenticating...</span>
                   </div>
                 ) : (
                   <span className="flex items-center gap-1.5">
-                    Sign in
+                    Sign in to Console
                     <ChevronRight className="h-4 w-4 opacity-60 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
                   </span>
                 )}
