@@ -1,8 +1,8 @@
 # IMS Gen 2 — NIST 800-53 Rev 5 Control Mapping
 
 > **Date:** April 2026
-> **Purpose:** Maps IMS Gen 2 infrastructure and application controls to NIST 800-53 security requirements.
-> **Scope:** AWS deployment (Terraform reference implementation)
+> **Purpose:** Maps IMS Gen 2 security controls to NIST 800-53 requirements, split by enforcement layer.
+> **Scope:** Cloud-agnostic template with AWS reference implementation
 
 ---
 
@@ -20,93 +20,128 @@
 
 ---
 
-## AC — Access Control
+## Section A: Template-Enforced Controls (Portable)
 
-| Control | Name                        | Implementation                                                                                                                                                       | Status      |
-| ------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| AC-2    | Account Management          | Cognito User Pool with user groups (Admin, Manager, Technician, Viewer, CustomerAdmin). Group assignment via admin API. Inactive users disabled via `isActive` flag. | Implemented |
-| AC-3    | Access Enforcement          | RBAC enforced at route level (`rbac.ts`) and API level (AppSync resolvers check `cognito:groups` claim). Page-level access via `canAccessPage()`.                    | Implemented |
-| AC-6    | Least Privilege             | Five-role hierarchy with granular page/action permissions. No role has unnecessary access. API resolvers enforce per-operation authorization.                        | Implemented |
-| AC-7    | Unsuccessful Logon Attempts | Cognito lockout after configurable failed attempts. MFA required for admin roles.                                                                                    | Implemented |
-| AC-8    | System Use Notification     | Sign-in page displays terms of use. Configurable banner text.                                                                                                        | Planned     |
-| AC-11   | Session Lock                | Session timeout with warning dialog (`session-timeout-warning.tsx`). Auto-logout after configurable inactivity period.                                               | Implemented |
-| AC-12   | Session Termination         | Explicit sign-out clears tokens. Refresh token expiry forces re-authentication. Session data cleared from localStorage.                                              | Implemented |
-| AC-17   | Remote Access               | HTTPS-only access enforced via CloudFront + WAF. TLS 1.2 minimum on all endpoints.                                                                                   | Implemented |
+These controls are enforced by the IMS Gen 2 application code and ship with every deployment regardless of cloud provider or infrastructure choice.
 
-## AU — Audit & Accountability
+### AC — Access Control (Application Layer)
 
-| Control | Name                                  | Implementation                                                                                                                        | Status      |
-| ------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| AU-2    | Event Logging                         | DynamoDB Streams → Lambda audit processor captures all CREATE, MODIFY, DELETE events. Dedicated AuditLog table (#167).                | Implemented |
-| AU-3    | Content of Audit Records              | Audit entries include: timestamp, action, resourceType, resourceId, userId, clientIP, before/after values.                            | Implemented |
-| AU-4    | Audit Log Storage Capacity            | Dedicated AuditLog DynamoDB table with PAY_PER_REQUEST billing (auto-scales). CloudTrail logs to S3 with lifecycle policies.          | Implemented |
-| AU-5    | Response to Audit Processing Failures | Lambda audit processor has DLQ for failed events. CloudWatch alarms on processing errors.                                             | Implemented |
-| AU-6    | Audit Record Review                   | Analytics page with audit log table (Story 7.5). Filter by user, resource, date range. Export capability.                             | Implemented |
-| AU-8    | Time Stamps                           | All audit records use ISO 8601 UTC timestamps. DynamoDB TTL for automatic rotation.                                                   | Implemented |
-| AU-12   | Audit Record Generation               | CloudTrail captures all AWS API calls (management + S3 data events). Application-level audit via DynamoDB Streams. Combined coverage. | Implemented |
+| Control | Name               | Implementation                                                                                                                                                   | Status      |
+| ------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| AC-3    | Access Enforcement | RBAC enforced at route level (`src/lib/rbac.ts`) and API level (AppSync resolvers check role claims). Page-level access via `canAccessPage()`.                   | Implemented |
+| AC-5    | Separation of Duties | Firmware approval workflow enforces SoD: uploader, tester, and approver must be different users. Enforced in approval state machine and API resolvers.          | Implemented |
+| AC-6    | Least Privilege    | Five-role hierarchy (Admin, Manager, Technician, Viewer, CustomerAdmin) with granular page/action permissions. No role has unnecessary access. API resolvers enforce per-operation authorization. | Implemented |
+| AC-11   | Session Lock       | Session timeout with warning dialog (`src/app/components/session-timeout-warning.tsx`). Auto-logout after configurable inactivity period.                        | Implemented |
+| AC-12   | Session Termination | Explicit sign-out clears tokens. Refresh token expiry forces re-authentication. Session data cleared from localStorage.                                         | Implemented |
 
-## CM — Configuration Management
+### AU — Audit & Accountability (Application Layer)
 
-| Control | Name                         | Implementation                                                                                       | Status      |
-| ------- | ---------------------------- | ---------------------------------------------------------------------------------------------------- | ----------- |
-| CM-2    | Baseline Configuration       | Infrastructure defined as code (Terraform/CDK). All config in version control. No manual changes.    | Implemented |
-| CM-3    | Configuration Change Control | GitHub PRs required for all changes. CI validates build + tests + Terraform plan before merge.       | Implemented |
-| CM-6    | Configuration Settings       | Environment-specific settings via `.tfvars` files (dev, staging, prod). No hardcoded secrets (#166). | Implemented |
-| CM-8    | System Component Inventory   | Device inventory is the core application function. SBOM tracking for software components.            | Implemented |
+| Control | Name                | Implementation                                                                                            | Status      |
+| ------- | ------------------- | --------------------------------------------------------------------------------------------------------- | ----------- |
+| AU-6    | Audit Record Review | Analytics page with audit log table (Story 7.5). Filter by user, resource, date range. Export capability. | Implemented |
 
-## IA — Identification & Authentication
+### CM — Configuration Management (Application Layer)
 
-| Control | Name                                            | Implementation                                                                                                 | Status      |
-| ------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------- |
-| IA-2    | Identification & Authentication                 | Cognito User Pool with email/password + MFA. JWT tokens with `sub`, `email`, `cognito:groups` claims.          | Implemented |
-| IA-2(1) | MFA to Privileged Accounts                      | TOTP-based MFA via Cognito. Required for Admin and Manager roles.                                              | Implemented |
-| IA-4    | Identifier Management                           | Cognito-managed UUIDs (`sub` claim). Email uniqueness enforced.                                                | Implemented |
-| IA-5    | Authenticator Management                        | Cognito password policies (min length, complexity). Refresh tokens rotated. Secrets in Secrets Manager (#166). | Implemented |
-| IA-8    | Identification & Authentication (Non-Org Users) | Azure AD B2C / Cognito federated identity for external customer users (CustomerAdmin role).                    | Planned     |
+| Control | Name                       | Implementation                                                                                     | Status      |
+| ------- | -------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| CM-3    | Configuration Change Control | GitHub PR workflow required for all changes. CI validates build + tests before merge.             | Implemented |
+| CM-8    | System Component Inventory | Device inventory is the core application function. SBOM tracking for software components.          | Implemented |
 
-## IR — Incident Response
+### SI — System & Information Integrity (Application Layer)
 
-| Control | Name                | Implementation                                                                                          | Status      |
-| ------- | ------------------- | ------------------------------------------------------------------------------------------------------- | ----------- |
-| IR-4    | Incident Handling   | Incident Response page with isolation, playbooks, and timeline (Epic 14). Device quarantine management. | Implemented |
-| IR-5    | Incident Monitoring | CloudWatch alarms, Application Insights, structured logging. Real-time alerts via SNS.                  | Implemented |
-| IR-6    | Incident Reporting  | Audit trail correlation. Export capabilities for compliance reporting.                                  | Implemented |
-
-## SC — System & Communications Protection
-
-| Control | Name                              | Implementation                                                                                                               | Status      |
-| ------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| SC-7    | Boundary Protection               | WAF on CloudFront/AppSync. Rate limiting. IP-based rules configurable.                                                       | Implemented |
-| SC-8    | Transmission Confidentiality      | TLS 1.2+ enforced on all endpoints (CloudFront, AppSync, S3). HTTPS-only.                                                    | Implemented |
-| SC-12   | Cryptographic Key Management      | KMS keys for DynamoDB, S3, CloudTrail encryption. Key rotation enabled.                                                      | Implemented |
-| SC-13   | Cryptographic Protection          | AES-256 encryption at rest (DynamoDB, S3). TLS in transit. JWT token signing via Cognito RSA keys.                           | Implemented |
-| SC-28   | Protection of Information at Rest | Server-side encryption on all data stores: DynamoDB (KMS), S3 (KMS), OpenSearch (encryption at rest), CloudTrail logs (KMS). | Implemented |
-| SC-39   | Process Isolation                 | Serverless architecture (Lambda, AppSync) provides inherent process isolation. No shared servers.                            | Implemented |
-
-## SI — System & Information Integrity
-
-| Control | Name                         | Implementation                                                                                                    | Status      |
-| ------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
-| SI-2    | Flaw Remediation             | Vulnerability tracking panel (Epic 11). CVE monitoring via SBOM analysis. Firmware approval workflow for patches. | Implemented |
-| SI-3    | Malicious Code Protection    | Input sanitization (`security.ts`). CSP headers via CloudFront. XSS protection. No user-uploaded code execution.  | Implemented |
-| SI-4    | System Monitoring            | CloudWatch metrics, CloudTrail API logging, Application Insights APM. Anomaly detection via smart alerts.         | Implemented |
-| SI-10   | Information Input Validation | Zod schemas for all form inputs. Server-side validation in AppSync resolvers. SQL/NoSQL injection prevention.     | Implemented |
+| Control | Name                         | Implementation                                                                                                                 | Status      |
+| ------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| SI-3    | Malicious Code Protection    | Input sanitization (`src/lib/security.ts`). CSP headers configuration. XSS protection via `sanitizeObject()`, `escapeHtml()`. No user-uploaded code execution. | Implemented |
+| SI-10   | Information Input Validation | Zod schemas for all form inputs. Server-side validation in API resolvers. SQL/NoSQL injection prevention via `src/lib/security.ts` sanitization utilities.     | Implemented |
 
 ---
 
-## Infrastructure Controls Summary
+## Section B: Implementor-Required Controls (Infrastructure)
 
-| AWS Service        | Controls Addressed             | Module                                   |
-| ------------------ | ------------------------------ | ---------------------------------------- |
+These controls depend on infrastructure choices. The requirements below specify WHAT must be satisfied. See Section C for a reference implementation showing HOW.
+
+### AC — Access Control (Infrastructure)
+
+| Control | Name                        | Requirement                                                                                                                                                                                                    | Status      |
+| ------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| AC-2    | Account Management          | Your **auth provider** MUST: support user groups (Admin, Manager, Technician, Viewer, CustomerAdmin), allow group assignment via admin API, and support disabling inactive users via an `isActive` flag or equivalent. | Implemented |
+| AC-7    | Unsuccessful Logon Attempts | Your **auth provider** MUST: lock accounts after 5 consecutive failed login attempts. Lockout duration must be configurable.                                                                                   | Implemented |
+| AC-8    | System Use Notification     | Your **frontend hosting** MUST: support configurable login banner text for terms of use display.                                                                                                               | Planned     |
+| AC-17   | Remote Access               | Your **CDN/load balancer** MUST: enforce HTTPS-only access with TLS 1.2 minimum on all endpoints. HTTP requests must redirect to HTTPS.                                                                       | Implemented |
+
+### AU — Audit & Accountability (Infrastructure)
+
+| Control | Name                                  | Requirement                                                                                                                                                                                                    | Status      |
+| ------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| AU-2    | Event Logging                         | Your **data layer** MUST: capture all CREATE, MODIFY, DELETE events via change streams or triggers and route them to a dedicated audit processor. Events must be written to a dedicated audit log store.        | Implemented |
+| AU-3    | Content of Audit Records              | Your **audit processor** MUST: record these fields for every event: timestamp (ISO 8601 UTC), action, resourceType, resourceId, userId, clientIP, before/after values.                                         | Implemented |
+| AU-4    | Audit Log Storage Capacity            | Your **audit log store** MUST: auto-scale storage capacity. Minimum 90-day retention. Infrastructure API audit logs must be stored separately with lifecycle policies.                                          | Implemented |
+| AU-5    | Response to Audit Processing Failures | Your **audit processor** MUST: have a dead-letter queue (DLQ) for failed events. Your **monitoring** MUST: alert on audit processing errors.                                                                   | Implemented |
+| AU-8    | Time Stamps                           | Your **audit processor** MUST: use ISO 8601 UTC timestamps on all records. Automatic record rotation/expiry (TTL) should be configured.                                                                       | Implemented |
+| AU-12   | Audit Record Generation               | Your **infrastructure** MUST: capture all cloud API calls (management plane events + data access events). Combined with application-level audit for full coverage.                                              | Implemented |
+
+### IA — Identification & Authentication (Infrastructure)
+
+| Control | Name                                            | Requirement                                                                                                                                                                       | Status      |
+| ------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| IA-2    | Identification & Authentication                 | Your **auth provider** MUST: support email/password authentication + MFA. JWT tokens must include `sub`, `email`, and group/role claims (see integration contract Section 2).      | Implemented |
+| IA-2(1) | MFA to Privileged Accounts                      | Your **auth provider** MUST: enforce TOTP-based MFA for Admin and Manager roles.                                                                                                  | Implemented |
+| IA-4    | Identifier Management                           | Your **auth provider** MUST: assign unique identifiers (UUIDs) to all users. Email uniqueness must be enforced.                                                                   | Implemented |
+| IA-5    | Authenticator Management                        | Your **auth provider** MUST: enforce minimum 12-character passwords (per NIST 800-63B). Refresh tokens must be rotated. Secrets must be stored in a secrets manager, not in code.  | Implemented |
+| IA-8    | Identification & Authentication (Non-Org Users) | Your **auth provider** MUST: support federated identity for external customer users (CustomerAdmin role) via OIDC or SAML.                                                        | Planned     |
+
+### IR — Incident Response (Infrastructure)
+
+| Control | Name                | Requirement                                                                                                                                              | Status      |
+| ------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| IR-4    | Incident Handling   | Your **infrastructure** MUST: support device quarantine/isolation capabilities. Incident response workflows are handled by the application (Epic 14).     | Implemented |
+| IR-5    | Incident Monitoring | Your **monitoring** MUST: provide metric collection, anomaly detection, structured logging, and real-time alerting on security events (auth failures, audit processing failures). | Implemented |
+| IR-6    | Incident Reporting  | Your **infrastructure** MUST: support audit trail correlation and export capabilities for compliance reporting.                                           | Implemented |
+
+### SC — System & Communications Protection (Infrastructure)
+
+| Control | Name                              | Requirement                                                                                                                                                | Status      |
+| ------- | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| SC-7    | Boundary Protection               | Your **CDN/API gateway** MUST: provide a web application firewall (WAF) with rate limiting and configurable IP-based rules.                                | Implemented |
+| SC-8    | Transmission Confidentiality      | Your **infrastructure** MUST: enforce TLS 1.2+ on all endpoints (CDN, API, storage). HTTPS-only with no plaintext fallback.                                | Implemented |
+| SC-12   | Cryptographic Key Management      | Your **key management service** MUST: provide managed encryption keys for all data stores and audit logs. Key rotation must be enabled.                     | Implemented |
+| SC-13   | Cryptographic Protection          | Your **infrastructure** MUST: use AES-256 encryption at rest for all data stores. TLS in transit. JWT token signing via auth provider RSA/EC keys.          | Implemented |
+| SC-28   | Protection of Information at Rest | Your **data stores** MUST: enable server-side encryption on all storage (database, object storage, search indexes, audit logs) using managed encryption keys. | Implemented |
+| SC-39   | Process Isolation                 | Your **compute layer** MUST: provide process isolation between request handlers. Serverless functions, containers, or equivalent isolation is required.     | Implemented |
+
+### SI — System & Information Integrity (Infrastructure)
+
+| Control | Name             | Requirement                                                                                                                              | Status      |
+| ------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| SI-2    | Flaw Remediation | Your **infrastructure** MUST: support vulnerability tracking and CVE monitoring. The application provides the UI (Epic 11) and firmware approval workflow. | Implemented |
+| SI-4    | System Monitoring | Your **infrastructure** MUST: provide metrics collection, API audit logging, and application performance monitoring. Anomaly detection for smart alerts. | Implemented |
+
+### CM — Configuration Management (Infrastructure)
+
+| Control | Name                   | Requirement                                                                                                                                    | Status      |
+| ------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| CM-2    | Baseline Configuration | Your **infrastructure** MUST: be defined as code (IaC). All configuration in version control. No manual changes to production.                 | Implemented |
+| CM-6    | Configuration Settings | Your **IaC** MUST: support environment-specific settings (dev, staging, prod) via parameterized configuration. No hardcoded secrets in config files. | Implemented |
+
+---
+
+## Section C: Reference Implementations
+
+The following shows how the AWS Terraform reference implementation (`infra/reference/aws-terraform/`) satisfies the implementor-required controls from Section B. Other cloud providers (Azure, GCP) or IaC tools (CDK, Bicep, Pulumi) can satisfy the same requirements differently.
+
+| AWS Service        | Controls Addressed              | Terraform Module                         |
+| ------------------ | ------------------------------- | ---------------------------------------- |
 | **Cognito**        | AC-2, AC-7, IA-2, IA-4, IA-5   | `modules/cognito`                        |
-| **AppSync + WAF**  | AC-3, SC-7, SC-8               | `modules/appsync`, `modules/waf`         |
-| **DynamoDB**       | AU-2, AU-3, AU-4, SC-12, SC-28 | `modules/dynamodb`                       |
-| **Lambda (Audit)** | AU-2, AU-5                     | `modules/lambda-audit`                   |
-| **CloudTrail**     | AU-12, SI-4                    | `modules/cloudtrail`                     |
-| **S3**             | AU-4, SC-12, SC-28             | `modules/s3-firmware`                    |
-| **CloudFront**     | AC-17, SC-7, SC-8, SI-3        | `modules/cloudfront`                     |
-| **KMS**            | SC-12, SC-13                   | All modules (shared keys)                |
-| **CloudWatch**     | AU-5, IR-5, SI-4               | `modules/monitoring`, `modules/alerting` |
+| **AppSync + WAF**  | AC-3, SC-7, SC-8                | `modules/appsync`, `modules/waf`         |
+| **DynamoDB**       | AU-2, AU-3, AU-4, SC-12, SC-28  | `modules/dynamodb`                       |
+| **Lambda (Audit)** | AU-2, AU-5                      | `modules/lambda-audit`                   |
+| **CloudTrail**     | AU-12, SI-4                     | `modules/cloudtrail`                     |
+| **S3**             | AU-4, SC-12, SC-28              | `modules/s3-firmware`                    |
+| **CloudFront**     | AC-17, SC-7, SC-8, SI-3         | `modules/cloudfront`                     |
+| **KMS**            | SC-12, SC-13                    | All modules (shared keys)                |
+| **CloudWatch**     | AU-5, IR-5, SI-4                | `modules/monitoring`, `modules/alerting` |
+
+> **Note:** The CDK reference skeleton (`infra/reference/aws-cdk/`) satisfies the same controls using AWS CDK constructs. See `infra/reference/aws-cdk/README.md` for mapping details.
 
 ---
 
@@ -115,6 +150,6 @@
 | Control | Name                            | Gap                         | Plan                                                   |
 | ------- | ------------------------------- | --------------------------- | ------------------------------------------------------ |
 | AC-8    | System Use Notification         | No login banner             | Add configurable banner to sign-in page                |
-| IA-8    | Non-Org Authentication          | B2C federation not deployed | Deploy Cognito federated identity for customer tenants |
-| SC-7(3) | Access Points                   | No VPC isolation            | Add VPC module for production (Story #168 planned)     |
-| AU-9    | Protection of Audit Information | Audit logs not WORM         | Enable S3 Object Lock on audit export bucket           |
+| IA-8    | Non-Org Authentication          | B2C federation not deployed | Deploy federated identity for customer tenants         |
+| SC-7(3) | Access Points                   | No VPC isolation            | Add VPC/network isolation for production (Story #168)  |
+| AU-9    | Protection of Audit Information | Audit logs not WORM         | Enable immutable storage (S3 Object Lock or equivalent) on audit export bucket |
