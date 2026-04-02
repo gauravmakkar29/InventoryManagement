@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import type { ServiceOrder, Status } from "../mock-data/service-order-data";
 import { INITIAL_ORDERS, STATUS_LABELS } from "../mock-data/service-order-data";
 
+const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+
 function generateNextId(orders: ServiceOrder[]): string {
   const maxNum = orders.reduce((max, o) => {
     const n = parseInt(o.id.replace("SO-", ""), 10);
@@ -30,7 +32,7 @@ function exportToCsv(orders: ServiceOrder[]): void {
 }
 
 export function useServiceOrders() {
-  const [orders, setOrders] = useState<ServiceOrder[]>(INITIAL_ORDERS);
+  const [orders, setOrders] = useState<ServiceOrder[]>(isMock ? INITIAL_ORDERS : []);
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");

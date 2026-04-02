@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import type { TimeRange, KpiCard, AnalyticsAuditEntry } from "../mock-data/analytics-data";
 import { TIME_RANGE_OPTIONS, KPI_DATA, AUDIT_LOG_DATA } from "../mock-data/analytics-data";
 
+const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+
 // ---------------------------------------------------------------------------
 // Export Helpers
 // ---------------------------------------------------------------------------
@@ -64,9 +66,10 @@ export function useAnalyticsData() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredAuditLogs = useMemo(() => {
-    if (!searchQuery.trim()) return AUDIT_LOG_DATA;
+    const auditData = isMock ? AUDIT_LOG_DATA : [];
+    if (!searchQuery.trim()) return auditData;
     const q = searchQuery.toLowerCase();
-    return AUDIT_LOG_DATA.filter(
+    return auditData.filter(
       (entry) =>
         entry.user.toLowerCase().includes(q) ||
         entry.action.toLowerCase().includes(q) ||
@@ -99,7 +102,7 @@ export function useAnalyticsData() {
   };
 
   const handleExportJSON = () => {
-    generateJSON(filteredAuditLogs, KPI_DATA, range);
+    generateJSON(filteredAuditLogs, isMock ? KPI_DATA : [], range);
   };
 
   return {
