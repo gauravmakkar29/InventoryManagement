@@ -83,7 +83,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
         <div className="rounded-2xl bg-card p-8 shadow-lg">
           <div className="mb-7 flex flex-col items-center text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
-              <ShieldCheck className="h-9 w-9 text-accent-text" />
+              <ShieldCheck className="h-9 w-9 text-accent-text" aria-hidden="true" />
             </div>
             <h2 className="text-[22px] font-semibold text-foreground">Verification Required</h2>
             <p className="mt-1.5 text-[15px] text-muted-foreground">
@@ -96,7 +96,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
               className="mb-5 flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-4 py-3"
               role="alert"
             >
-              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
               <p className="text-[14px] leading-snug text-red-700">{signInError}</p>
             </div>
           )}

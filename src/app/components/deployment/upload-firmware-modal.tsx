@@ -134,10 +134,14 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
         <div className="space-y-3">
           {/* Version */}
           <div>
-            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+            <label
+              htmlFor="fw-version"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
+            >
               Version <span className="text-red-500">*</span>
             </label>
             <input
+              id="fw-version"
               type="text"
               value={version}
               onChange={(e) => {
@@ -159,10 +163,14 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Name */}
           <div>
-            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+            <label
+              htmlFor="fw-name"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
+            >
               Name <span className="text-red-500">*</span>
             </label>
             <input
+              id="fw-name"
               type="text"
               value={name}
               onChange={(e) => {
@@ -184,10 +192,13 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Device Model */}
           <div>
-            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+            <label
+              id="fw-models-label"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
+            >
               Compatible Models
             </label>
-            <div className="flex flex-wrap gap-1.5">
+            <div role="group" aria-labelledby="fw-models-label" className="flex flex-wrap gap-1.5">
               {AVAILABLE_MODELS.map((model) => (
                 <button
                   key={model}
@@ -208,10 +219,14 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* Release Notes */}
           <div>
-            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+            <label
+              htmlFor="fw-release-notes"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
+            >
               Release Notes
             </label>
             <textarea
+              id="fw-release-notes"
               value={releaseNotes}
               onChange={(e) => setReleaseNotes(e.target.value)}
               rows={2}
@@ -222,10 +237,22 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
 
           {/* File Upload — Story 11.1 AC1/AC2 */}
           <div>
-            <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+            <label
+              id="fw-file-label"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
+            >
               Firmware File <span className="text-red-500">*</span>
             </label>
             <div
+              role="button"
+              aria-labelledby="fw-file-label"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  (e.currentTarget as HTMLElement).click();
+                }
+              }}
               onDragOver={(e) => {
                 e.preventDefault();
                 setIsDragging(true);
@@ -276,7 +303,10 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
           {/* Checksum Display — Story 11.1 AC2 */}
           {(computing || checksum) && (
             <div>
-              <label className="mb-1 block text-[13px] font-medium text-muted-foreground">
+              <label
+                htmlFor="fw-checksum"
+                className="mb-1 block text-[13px] font-medium text-muted-foreground"
+              >
                 SHA-256 Checksum
               </label>
               {computing ? (
@@ -286,6 +316,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
                 </div>
               ) : (
                 <input
+                  id="fw-checksum"
                   type="text"
                   readOnly
                   value={checksum}

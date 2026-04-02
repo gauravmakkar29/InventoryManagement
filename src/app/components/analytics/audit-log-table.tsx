@@ -57,7 +57,10 @@ export function AuditLogTable({
         <div className="flex items-center gap-3">
           {/* Search Filter */}
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+            <Search
+              className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
             <input
               type="text"
               placeholder="Search audit log..."
@@ -176,7 +179,7 @@ export function AuditLogTable({
               className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               aria-label="Previous page"
             >
-              <ChevronLeft className="h-3.5 w-3.5" />
+              <ChevronLeft className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
@@ -198,7 +201,7 @@ export function AuditLogTable({
               className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card text-muted-foreground hover:bg-muted disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
               aria-label="Next page"
             >
-              <ChevronRight className="h-3.5 w-3.5" />
+              <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </div>
         </div>

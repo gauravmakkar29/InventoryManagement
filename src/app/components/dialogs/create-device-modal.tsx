@@ -171,7 +171,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
               )}
               aria-label="Close"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
 
@@ -188,10 +188,12 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. INV-3200A"
+                aria-describedby={errors.name ? "device-name-error" : undefined}
+                aria-invalid={!!errors.name || undefined}
                 className={cn(inputClass, errors.name && "border-red-400")}
               />
               {errors.name && (
-                <p className="mt-1 text-[14px] text-red-500" role="alert">
+                <p id="device-name-error" className="mt-1 text-[14px] text-red-500" role="alert">
                   {errors.name}
                 </p>
               )}
@@ -209,10 +211,16 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   value={serial}
                   onChange={(e) => setSerial(e.target.value)}
                   placeholder="e.g. SN-4821"
+                  aria-describedby={errors.serial ? "device-serial-error" : undefined}
+                  aria-invalid={!!errors.serial || undefined}
                   className={cn(inputClass, errors.serial && "border-red-400")}
                 />
                 {errors.serial && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="device-serial-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.serial}
                   </p>
                 )}
@@ -225,6 +233,8 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   id="device-model"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
+                  aria-describedby={errors.model ? "device-model-error" : undefined}
+                  aria-invalid={!!errors.model || undefined}
                   className={cn(inputClass, errors.model && "border-red-400")}
                 >
                   <option value="">Select model</option>
@@ -235,7 +245,7 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   ))}
                 </select>
                 {errors.model && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p id="device-model-error" className="mt-1 text-[14px] text-red-500" role="alert">
                     {errors.model}
                   </p>
                 )}
@@ -254,10 +264,16 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   value={firmware}
                   onChange={(e) => setFirmware(e.target.value)}
                   placeholder="e.g. v4.0.0"
+                  aria-describedby={errors.firmware ? "device-firmware-error" : undefined}
+                  aria-invalid={!!errors.firmware || undefined}
                   className={cn(inputClass, errors.firmware && "border-red-400")}
                 />
                 {errors.firmware && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="device-firmware-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.firmware}
                   </p>
                 )}
@@ -270,6 +286,8 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   id="device-status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value as DeviceStatus)}
+                  aria-describedby={errors.status ? "device-status-error" : undefined}
+                  aria-invalid={!!errors.status || undefined}
                   className={cn(inputClass, errors.status && "border-red-400")}
                 >
                   {DEVICE_STATUSES.map((s) => (
@@ -279,7 +297,11 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   ))}
                 </select>
                 {errors.status && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="device-status-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.status}
                   </p>
                 )}
@@ -297,10 +319,16 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Denver, CO"
+                aria-describedby={errors.location ? "device-location-error" : undefined}
+                aria-invalid={!!errors.location || undefined}
                 className={cn(inputClass, errors.location && "border-red-400")}
               />
               {errors.location && (
-                <p className="mt-1 text-[14px] text-red-500" role="alert">
+                <p
+                  id="device-location-error"
+                  className="mt-1 text-[14px] text-red-500"
+                  role="alert"
+                >
                   {errors.location}
                 </p>
               )}
@@ -319,10 +347,12 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   value={lat}
                   onChange={(e) => setLat(e.target.value)}
                   placeholder="e.g. 39.74"
+                  aria-describedby={errors.lat ? "device-lat-error" : undefined}
+                  aria-invalid={!!errors.lat || undefined}
                   className={cn(inputClass, errors.lat && "border-red-400")}
                 />
                 {errors.lat && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p id="device-lat-error" className="mt-1 text-[14px] text-red-500" role="alert">
                     {errors.lat}
                   </p>
                 )}
@@ -338,10 +368,12 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                   value={lng}
                   onChange={(e) => setLng(e.target.value)}
                   placeholder="e.g. -104.99"
+                  aria-describedby={errors.lng ? "device-lng-error" : undefined}
+                  aria-invalid={!!errors.lng || undefined}
                   className={cn(inputClass, errors.lng && "border-red-400")}
                 />
                 {errors.lng && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p id="device-lng-error" className="mt-1 text-[14px] text-red-500" role="alert">
                     {errors.lng}
                   </p>
                 )}

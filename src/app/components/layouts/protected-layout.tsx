@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../../../lib/use-auth";
 import { useUIStore } from "../../../stores/ui-store";
@@ -10,6 +11,8 @@ import { SessionTimeoutWarning } from "../session-timeout-warning";
 import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
 import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
 import { Skeleton } from "../../../components/skeleton";
+import { useRealtimeNotifications } from "@/lib/hooks/use-realtime-notifications";
+import { createMockRealtimeAdapter } from "@/lib/providers/realtime/mock-realtime-adapter";
 
 function LayoutSkeleton() {
   return (
@@ -75,6 +78,19 @@ export function ProtectedLayout() {
   const connectivity = useConnectivityMonitor();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+
+  // Real-time notifications — mock adapter for local dev, replaced by WebSocket/SSE in production
+  const realtimeProvider = useMemo(() => {
+    const endpoint = import.meta.env.VITE_REALTIME_ENDPOINT as string | undefined;
+    // Use mock adapter when no real endpoint is configured
+    if (!endpoint) {
+      return createMockRealtimeAdapter({ intervalMs: 30_000 });
+    }
+    // Future: return createWebSocketAdapter({ url: endpoint }) or createSSEAdapter({ url: endpoint })
+    return createMockRealtimeAdapter({ intervalMs: 30_000 });
+  }, []);
+
+  useRealtimeNotifications(realtimeProvider);
 
   if (isLoading) {
     return <LayoutSkeleton />;

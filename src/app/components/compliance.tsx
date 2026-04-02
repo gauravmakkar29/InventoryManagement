@@ -1052,10 +1052,11 @@ function SubmitForReviewModal({
 
         <div className="space-y-4 p-5">
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-firmware" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Firmware Version <span className="text-red-500">*</span>
             </label>
             <select
+              id="comp-firmware"
               value={firmware}
               onChange={(e) => {
                 setFirmware(e.target.value);
@@ -1077,10 +1078,11 @@ function SubmitForReviewModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-device-model" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Device Model <span className="text-red-500">*</span>
             </label>
             <select
+              id="comp-device-model"
               value={model}
               onChange={(e) => {
                 setModel(e.target.value);
@@ -1102,10 +1104,11 @@ function SubmitForReviewModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-certification" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Certification <span className="text-red-500">*</span>
             </label>
             <select
+              id="comp-certification"
               value={cert}
               onChange={(e) => {
                 setCert(e.target.value);
@@ -1228,10 +1231,11 @@ function CreateVulnerabilityModal({
 
         <div className="space-y-3 p-5">
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-vuln-cve" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               CVE ID <span className="text-red-500">*</span>
             </label>
             <input
+              id="comp-vuln-cve"
               type="text"
               placeholder="CVE-2026-XXXX"
               value={cveId}
@@ -1249,10 +1253,11 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-vuln-title" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Title <span className="text-red-500">*</span>
             </label>
             <input
+              id="comp-vuln-title"
               type="text"
               placeholder="Brief vulnerability title"
               value={title}
@@ -1270,10 +1275,11 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-vuln-desc" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Description
             </label>
             <textarea
+              id="comp-vuln-desc"
               placeholder="Detailed description of the vulnerability..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -1284,10 +1290,11 @@ function CreateVulnerabilityModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+              <label htmlFor="comp-vuln-severity" className="mb-1 block text-[13px] font-semibold text-foreground/80">
                 Severity <span className="text-red-500">*</span>
               </label>
               <select
+                id="comp-vuln-severity"
                 value={severity}
                 onChange={(e) => {
                   setSeverity(e.target.value as VulnSeverity);
@@ -1310,10 +1317,11 @@ function CreateVulnerabilityModal({
             </div>
 
             <div>
-              <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+              <label htmlFor="comp-vuln-cvss" className="mb-1 block text-[13px] font-semibold text-foreground/80">
                 CVSS Score <span className="text-red-500">*</span>
               </label>
               <input
+                id="comp-vuln-cvss"
                 type="number"
                 step="0.1"
                 min="0"
@@ -1335,10 +1343,11 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
+            <label htmlFor="comp-vuln-devices" className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Affected Devices <span className="text-red-500">*</span>
             </label>
             <input
+              id="comp-vuln-devices"
               type="number"
               min="0"
               placeholder="Number of affected devices"
@@ -1437,10 +1446,10 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
               </p>
 
               <div className="space-y-2">
-                <label className="block text-[13px] font-semibold text-foreground/80">
+                <label id="comp-export-format-label" className="block text-[13px] font-semibold text-foreground/80">
                   Export Format
                 </label>
-                <div className="flex gap-3">
+                <div role="radiogroup" aria-labelledby="comp-export-format-label" className="flex gap-3">
                   {(["csv", "json"] as const).map((f) => (
                     <label key={f} className="flex items-center gap-2 cursor-pointer">
                       <input

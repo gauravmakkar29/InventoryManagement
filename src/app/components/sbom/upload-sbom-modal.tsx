@@ -60,10 +60,14 @@ export function UploadSBOMModal({
         <div className="space-y-5 px-6 py-5">
           {/* Firmware selector */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <label
+              htmlFor="sbom-firmware-search"
+              className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground"
+            >
               Firmware
             </label>
             <input
+              id="sbom-firmware-search"
               type="text"
               placeholder="Search firmware..."
               aria-label="Search firmware"
@@ -99,10 +103,13 @@ export function UploadSBOMModal({
 
           {/* Format selector */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <label
+              id="sbom-format-label"
+              className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground"
+            >
               Format
             </label>
-            <div className="flex gap-3">
+            <div role="group" aria-labelledby="sbom-format-label" className="flex gap-3">
               {(["CycloneDX", "SPDX"] as SBOMFormat[]).map((f) => (
                 <button
                   key={f}
@@ -132,10 +139,22 @@ export function UploadSBOMModal({
 
           {/* File upload zone */}
           <div>
-            <label className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <label
+              id="sbom-file-label"
+              className="mb-1.5 block text-[14px] font-semibold uppercase tracking-wide text-muted-foreground"
+            >
               SBOM File (.json)
             </label>
             <div
+              role="button"
+              aria-labelledby="sbom-file-label"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  (e.currentTarget as HTMLElement).click();
+                }
+              }}
               onDragOver={(e) => {
                 e.preventDefault();
                 setDragOver(true);

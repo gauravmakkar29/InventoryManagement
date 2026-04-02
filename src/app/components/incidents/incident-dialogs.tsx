@@ -89,8 +89,14 @@ export function CreateIncidentDialog({
         </div>
         <div className="space-y-4 px-6 py-5">
           <div>
-            <label className="mb-1 block text-[14px] font-semibold text-foreground/80">Title</label>
+            <label
+              htmlFor="incident-title"
+              className="mb-1 block text-[14px] font-semibold text-foreground/80"
+            >
+              Title
+            </label>
             <input
+              id="incident-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -99,10 +105,14 @@ export function CreateIncidentDialog({
             />
           </div>
           <div>
-            <label className="mb-1 block text-[14px] font-semibold text-foreground/80">
+            <label
+              htmlFor="incident-description"
+              className="mb-1 block text-[14px] font-semibold text-foreground/80"
+            >
               Description
             </label>
             <textarea
+              id="incident-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
@@ -112,10 +122,14 @@ export function CreateIncidentDialog({
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1 block text-[14px] font-semibold text-foreground/80">
+              <label
+                htmlFor="incident-severity"
+                className="mb-1 block text-[14px] font-semibold text-foreground/80"
+              >
                 Severity
               </label>
               <select
+                id="incident-severity"
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value as IncidentSeverity)}
                 className="w-full rounded-lg border border-border px-3 py-2 text-[14px] text-foreground focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
@@ -127,10 +141,14 @@ export function CreateIncidentDialog({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[14px] font-semibold text-foreground/80">
+              <label
+                htmlFor="incident-category"
+                className="mb-1 block text-[14px] font-semibold text-foreground/80"
+              >
                 Category
               </label>
               <select
+                id="incident-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value as IncidentCategory)}
                 className="w-full rounded-lg border border-border px-3 py-2 text-[14px] text-foreground focus:border-accent-text focus:ring-1 focus:ring-ring focus:outline-none"
@@ -144,12 +162,16 @@ export function CreateIncidentDialog({
             </div>
           </div>
           <div>
-            <label className="mb-1 block text-[14px] font-semibold text-foreground/80">
+            <label
+              htmlFor="incident-device-search"
+              className="mb-1 block text-[14px] font-semibold text-foreground/80"
+            >
               Affected Devices
             </label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
               <input
+                id="incident-device-search"
                 type="text"
                 value={deviceSearch}
                 onChange={(e) => setDeviceSearch(e.target.value)}
@@ -246,10 +268,17 @@ export function IsolationDialog({
             </p>
           </div>
           <div>
-            <label className="mb-2 block text-[14px] font-semibold text-foreground/80">
+            <label
+              id="incident-isolation-policy-label"
+              className="mb-2 block text-[14px] font-semibold text-foreground/80"
+            >
               Isolation Policy
             </label>
-            <div className="space-y-2">
+            <div
+              role="radiogroup"
+              aria-labelledby="incident-isolation-policy-label"
+              className="space-y-2"
+            >
               {policies.map((p) => (
                 <label
                   key={p.value}
@@ -341,10 +370,14 @@ export function ReleaseDialog({
             </p>
           </div>
           <div>
-            <label className="mb-1 block text-[14px] font-semibold text-foreground/80">
+            <label
+              htmlFor="incident-release-reason"
+              className="mb-1 block text-[14px] font-semibold text-foreground/80"
+            >
               Reason for Release
             </label>
             <textarea
+              id="incident-release-reason"
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               rows={3}
