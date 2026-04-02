@@ -288,10 +288,14 @@ function HeatmapControls({
 
       {expanded && (
         <div className="mt-2 rounded-xl border border-border bg-card p-4 shadow-lg w-[220px]">
-          <label className="block text-[13px] font-semibold text-foreground/80 mb-2">
+          <label
+            htmlFor="heatmap-risk-threshold"
+            className="block text-[13px] font-semibold text-foreground/80 mb-2"
+          >
             Risk Threshold
           </label>
           <input
+            id="heatmap-risk-threshold"
             type="range"
             min={0}
             max={100}

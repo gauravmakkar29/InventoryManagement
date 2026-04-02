@@ -29,22 +29,24 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      // Accessibility rules (WCAG 2.1 AA enforcement)
-      "jsx-a11y/alt-text": "error",
-      "jsx-a11y/anchor-is-valid": "warn",
-      "jsx-a11y/aria-props": "error",
-      "jsx-a11y/aria-role": "error",
-      "jsx-a11y/aria-unsupported-elements": "error",
+      // Accessibility: jsx-a11y recommended ruleset (WCAG 2.1 AA enforcement)
+      ...jsxA11y.configs.recommended.rules,
+      // Pragmatic overrides — warn instead of error for rules that need
+      // incremental adoption across existing components
       "jsx-a11y/click-events-have-key-events": "warn",
-      "jsx-a11y/heading-has-content": "error",
-      "jsx-a11y/html-has-lang": "error",
-      "jsx-a11y/img-redundant-alt": "warn",
-      "jsx-a11y/label-has-associated-control": "warn",
+      "jsx-a11y/no-static-element-interactions": "warn",
+      "jsx-a11y/no-noninteractive-element-interactions": "warn",
       "jsx-a11y/no-autofocus": "warn",
-      "jsx-a11y/no-redundant-roles": "warn",
-      "jsx-a11y/role-has-required-aria-props": "error",
-      "jsx-a11y/role-supports-aria-props": "error",
-      "jsx-a11y/tabindex-no-positive": "error",
+      "jsx-a11y/anchor-is-valid": "warn",
+      "jsx-a11y/label-has-associated-control": [
+        "warn",
+        {
+          labelComponents: ["Label"],
+          controlComponents: ["Input", "Select", "Textarea"],
+          assert: "either",
+          depth: 3,
+        },
+      ],
       // Code quality
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": ["error", { allow: ["warn", "error"] }],

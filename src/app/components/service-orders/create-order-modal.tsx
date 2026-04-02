@@ -74,10 +74,11 @@ export function CreateOrderModal({
         <form onSubmit={handleSubmit} className="space-y-3.5 p-5">
           {/* Title */}
           <div>
-            <label className={labelClasses}>
+            <label htmlFor="so-title" className={labelClasses}>
               Title <span className="text-red-500">*</span>
             </label>
             <input
+              id="so-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -89,8 +90,11 @@ export function CreateOrderModal({
 
           {/* Description */}
           <div>
-            <label className={labelClasses}>Description</label>
+            <label htmlFor="so-description" className={labelClasses}>
+              Description
+            </label>
             <textarea
+              id="so-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Optional details..."
@@ -103,10 +107,11 @@ export function CreateOrderModal({
           <div className="grid grid-cols-2 gap-3">
             {/* Technician */}
             <div>
-              <label className={labelClasses}>
+              <label htmlFor="so-technician" className={labelClasses}>
                 Technician <span className="text-red-500">*</span>
               </label>
               <select
+                id="so-technician"
                 value={technician}
                 onChange={(e) => setTechnician(e.target.value)}
                 className={inputClasses}
@@ -122,10 +127,11 @@ export function CreateOrderModal({
 
             {/* Priority */}
             <div>
-              <label className={labelClasses}>
+              <label htmlFor="so-priority" className={labelClasses}>
                 Priority <span className="text-red-500">*</span>
               </label>
               <select
+                id="so-priority"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Priority)}
                 className={inputClasses}
@@ -140,10 +146,14 @@ export function CreateOrderModal({
 
           {/* Service Type (radio) */}
           <div>
-            <label className={labelClasses}>
+            <label id="so-service-type-label" className={labelClasses}>
               Service Type <span className="text-red-500">*</span>
             </label>
-            <div className="flex gap-4 mt-1">
+            <div
+              role="radiogroup"
+              aria-labelledby="so-service-type-label"
+              className="flex gap-4 mt-1"
+            >
               {(["Internal", "3rd Party"] as const).map((t) => (
                 <label key={t} className="flex items-center gap-1.5 cursor-pointer">
                   <input
@@ -164,10 +174,11 @@ export function CreateOrderModal({
           <div className="grid grid-cols-2 gap-3">
             {/* Location */}
             <div>
-              <label className={labelClasses}>
+              <label htmlFor="so-location" className={labelClasses}>
                 Location <span className="text-red-500">*</span>
               </label>
               <input
+                id="so-location"
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -179,10 +190,11 @@ export function CreateOrderModal({
 
             {/* Scheduled Date */}
             <div>
-              <label className={labelClasses}>
+              <label htmlFor="so-scheduled-date" className={labelClasses}>
                 Scheduled Date <span className="text-red-500">*</span>
               </label>
               <input
+                id="so-scheduled-date"
                 type="date"
                 value={scheduledDate}
                 onChange={(e) => setScheduledDate(e.target.value)}
@@ -194,10 +206,11 @@ export function CreateOrderModal({
 
           {/* Customer */}
           <div>
-            <label className={labelClasses}>
+            <label htmlFor="so-customer" className={labelClasses}>
               Customer <span className="text-red-500">*</span>
             </label>
             <input
+              id="so-customer"
               type="text"
               value={customer}
               onChange={(e) => setCustomer(e.target.value)}
