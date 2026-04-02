@@ -76,7 +76,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
   const qrPlaceholder = totpUri ? (
     <div className="flex h-[180px] w-[180px] items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted">
       <div className="text-center">
-        <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" />
+        <ShieldCheck className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
         <p className="mt-2 text-[13px] text-muted-foreground">QR Code</p>
         <p className="text-[12px] text-muted-foreground">Scan with authenticator</p>
       </div>
@@ -91,7 +91,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
           className="absolute right-4 top-4 text-muted-foreground hover:text-muted-foreground cursor-pointer"
           aria-label="Close"
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5" aria-hidden="true" />
         </button>
 
         <div className="mb-6 text-center">
@@ -120,9 +120,9 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 aria-label="Copy secret key"
               >
                 {copied ? (
-                  <Check className="h-4 w-4 text-emerald-500" />
+                  <Check className="h-4 w-4 text-emerald-500" aria-hidden="true" />
                 ) : (
-                  <Copy className="h-4 w-4" />
+                  <Copy className="h-4 w-4" aria-hidden="true" />
                 )}
               </button>
             </div>
@@ -164,7 +164,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
             className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2"
             role="alert"
           >
-            <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+            <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" aria-hidden="true" />
             <p className="text-[14px] text-red-700">{error}</p>
           </div>
         )}

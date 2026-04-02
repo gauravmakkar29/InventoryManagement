@@ -258,7 +258,10 @@ export function UserManagement() {
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-[360px]">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
           <input
             type="text"
             value={searchQuery}
@@ -448,7 +451,7 @@ export function UserManagement() {
                               aria-label={`Edit ${user.name}`}
                               title="Edit user"
                             >
-                              <Pencil className="h-3.5 w-3.5" />
+                              <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
                             </button>
                             <button
                               onClick={() => handleToggleStatus(user)}
@@ -467,9 +470,9 @@ export function UserManagement() {
                               title={user.status === "Disabled" ? "Enable user" : "Disable user"}
                             >
                               {user.status === "Disabled" ? (
-                                <CheckCircle className="h-3.5 w-3.5" />
+                                <CheckCircle className="h-3.5 w-3.5" aria-hidden="true" />
                               ) : (
-                                <Ban className="h-3.5 w-3.5" />
+                                <Ban className="h-3.5 w-3.5" aria-hidden="true" />
                               )}
                             </button>
                           </div>
