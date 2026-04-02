@@ -20,7 +20,6 @@ Enterprise device inventory tracking, firmware deployment with multi-stage appro
 - `npm run test:e2e` — Run full E2E regression (Maven/TestNG)
 - `npm run test:e2e:smoke` — Run smoke E2E suite
 - `npm run lint` — ESLint check
-- `cd infra/reference/aws-terraform && terraform init -backend=false && terraform validate` — Validate Terraform
 
 ## Project Structure
 
@@ -105,6 +104,41 @@ Docs/epics/             # 18 epics with functional stories + tech specs
 - Unit tests: Vitest, >=85% coverage on new code
 - E2E tests: IMS E2E framework (Java/TestNG/Playwright) for every story
 - Test file co-located: `src/__tests__/` mirrors `src/` structure
+
+### NIST 800-53 Compliance Rules (MANDATORY)
+
+This project is governed by NIST 800-53 Rev 5. Every code change, PR, and infrastructure decision must respect these controls.
+
+#### Template-Enforced Controls (app layer — Claude must enforce in all code)
+
+- **AC-3/AC-6 (RBAC & Least Privilege):** All new pages/features MUST have RBAC entries in `src/lib/rbac.ts`. Never bypass `canAccessPage()` or `canPerformAction()`. No role gets access it doesn't need.
+- **AC-5 (Separation of Duties):** Firmware workflows enforce uploader ≠ tester ≠ approver. Never allow same-user multi-stage approval in mutations.
+- **AC-11/AC-12 (Session Lock & Termination):** Session timeout and explicit logout must clear all tokens. Never store sensitive data in localStorage without expiry.
+- **SI-3 (Malicious Code Protection):** All user-facing output must go through `security.ts` sanitization. Never use `dangerouslySetInnerHTML` without escaping. CSP headers must be maintained.
+- **SI-10 (Input Validation):** Every form MUST have a Zod schema. Never trust user input — validate at system boundaries. No raw query params without sanitization.
+- **AU-6 (Audit Record Review):** UI changes to audit-visible resources must preserve the audit trail fields (timestamp, action, userId, resourceId, before/after).
+- **SC-8 (Transmission Confidentiality):** Never hardcode HTTP URLs — HTTPS only. Never disable TLS verification in any config.
+
+#### Implementor-Required Controls (infra layer — document, don't hardcode)
+
+When writing infrastructure or integration code, specify requirements cloud-agnostically:
+- **Auth (AC-2, IA-2):** Require min 12-char password (NIST 800-63B), MFA for Admin/Manager, account lockout after 5 failures. Don't hardcode Cognito — use `IAuthAdapter`.
+- **Encryption (SC-12, SC-28):** Require AES-256 at rest, TLS 1.2+ in transit, key rotation. Reference implementation in `infra/reference/`, not the app.
+- **Audit Logging (AU-2, AU-3, AU-12):** Require capture of: timestamp (ISO 8601 UTC), action, resourceType, resourceId, userId, clientIP, before/after values. 90-day minimum retention.
+- **Boundary Protection (SC-7):** Require WAF or equivalent rate limiting. Don't hardcode AWS WAF — specify the requirement.
+
+#### NIST Rules for PRs and Code Review
+
+- Every PR that touches auth, RBAC, session, or input handling must reference the relevant NIST control (e.g., "Enforces AC-3")
+- Never merge code that weakens an existing NIST control without explicit justification
+- Infrastructure code in `infra/reference/` is a **reference implementation** — never import or depend on it from `src/`
+- Security utilities (`security.ts`, `rbac.ts`) are **load-bearing NIST code** — changes require extra scrutiny
+
+#### NIST Reference Documents
+
+- **Control mapping:** `Docs/nist-800-53-control-mapping.md`
+- **Integration contract:** `Docs/integration-contract.md`
+- **Security model ADR:** `Docs/decisions/007-security-model.md`
 
 ### What NOT to Do
 
