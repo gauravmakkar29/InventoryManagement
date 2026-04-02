@@ -20,6 +20,10 @@ e2e/ims-e2e/ims-tests/src/test/resources/screenshots/*.jpg
 e2e/ims-e2e/**/target/
 e2e/ims-e2e/**/*.log
 
+# Testing — Visual Regression (Playwright Node.js)
+e2e/visual/test-results/
+e2e/visual/playwright-report/
+
 # IDE
 .vscode/
 .idea/

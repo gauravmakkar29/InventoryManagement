@@ -15,6 +15,8 @@
     "test:e2e:smoke": "cd e2e/ims-e2e && mvn clean test -DsuiteXmlFile=src/test/resources/suites/smoke-suite.xml",
     "test:e2e:module": "cd e2e/ims-e2e && mvn clean test -DsuiteXmlFile=src/test/resources/suites/module-suite.xml -Dmodule=",
     "test:e2e:headed": "cd e2e/ims-e2e && mvn clean test -DsuiteXmlFile=src/test/resources/suites/smoke-suite.xml -Dspring.profiles.active=web,test,local",
+    "test:visual": "npx playwright test --config e2e/visual/playwright.config.ts",
+    "test:visual:update": "npx playwright test --config e2e/visual/playwright.config.ts --update-snapshots",
     "compliance:validate": "echo 'TODO: compliance validators'",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
