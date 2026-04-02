@@ -26,6 +26,7 @@ When user says any of these commands, read the corresponding workflow file:
 | `unit-test-validate`      | `SPEC/workflows/unit-test-validate.toon`      |
 | `test-plan`               | `SPEC/workflows/test-plan.md`                 |
 | `generate-e2e`            | `SPEC/workflows/generate-e2e.md`              |
+| `run-e2e`                 | `SPEC/workflows/run-e2e.md`                   |
 
 ### Skills Available
 
@@ -37,6 +38,7 @@ Claude Code skills are pre-configured for SPEC Method workflows:
 |              | `/implement next story`                  | Implement next story in sequence               |
 | test-plan    | `test-plan story-1.1` or `test-plan #42` | Generate QA test plan for a story              |
 | generate-e2e | `generate-e2e story-1.1`                 | Generate E2E Java test code from approved plan |
+| run-e2e      | `run-e2e smoke` or `run-e2e regression`  | Run E2E locally, triage failures, file bugs    |
 
 **Note**: Skills automatically load relevant workflow files and follow SPEC Method process.
 

@@ -39,6 +39,7 @@ import {
   triggerReindex,
 } from "../../lib/hlm-api";
 import { APP_BUILD_INFO } from "../../lib/app-version";
+import { FailureType } from "../../lib/types";
 
 // =============================================================================
 // getDefaultHeaders
@@ -205,7 +206,7 @@ describe("HLM API telemetry stubs", () => {
   });
 
   it("runBlastRadiusSimulation returns null", async () => {
-    const result = await runBlastRadiusSimulation("d1", 10, "power_failure");
+    const result = await runBlastRadiusSimulation("d1", 10, FailureType.PowerLoss);
     expect(result).toBeNull();
   });
 
@@ -238,22 +239,25 @@ describe("HLM API OpenSearch stubs", () => {
   });
 
   it("getAggregation returns empty aggregation", async () => {
-    const result = await getAggregation("device_status");
-    expect(result).toEqual({ metric: "device_status", data: {} });
+    const result = await getAggregation("devicesByStatus");
+    expect(result).toEqual({ metric: "devicesByStatus", data: {} });
   });
 
   it("searchDevicesByBounds returns empty array", async () => {
     const result = await searchDevicesByBounds({
-      topLeft: { lat: 40, lon: -105 },
-      bottomRight: { lat: 39, lon: -104 },
+      topLat: 40,
+      leftLon: -105,
+      bottomLat: 39,
+      rightLon: -104,
     });
     expect(result).toEqual([]);
   });
 
   it("searchDevicesByDistance returns empty array", async () => {
     const result = await searchDevicesByDistance({
-      center: { lat: 39.74, lon: -104.99 },
-      distance: "10km",
+      lat: 39.74,
+      lon: -104.99,
+      radiusKm: 10,
     });
     expect(result).toEqual([]);
   });
