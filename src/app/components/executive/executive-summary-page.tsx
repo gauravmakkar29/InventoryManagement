@@ -259,7 +259,7 @@ export function ExecutiveSummaryPage() {
             {dateStr} | Last updated {lastRefresh.toLocaleTimeString()}
           </p>
         </div>
-        <div className="flex items-center gap-3 print:hidden">
+        <div className="flex items-center gap-3 print-hidden">
           {/* Time Range Selector (AC2) */}
           <div
             className="flex rounded-lg border border-border bg-muted/50 p-0.5"
@@ -342,7 +342,7 @@ export function ExecutiveSummaryPage() {
           <h3 className="text-base font-semibold text-foreground mb-4">Device Status</h3>
           <PieChart segments={DEVICE_STATUS} />
           {/* Accessible data table alternative (Story 16.6 AC4) */}
-          <details className="mt-3 print:hidden">
+          <details className="mt-3 print-hidden">
             <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>
@@ -398,7 +398,7 @@ export function ExecutiveSummaryPage() {
             label="Compliance status: Approved, Pending, Deprecated counts"
           />
           {/* Accessible table */}
-          <details className="mt-3 print:hidden">
+          <details className="mt-3 print-hidden">
             <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>
@@ -433,7 +433,7 @@ export function ExecutiveSummaryPage() {
             color="#FF7900"
             label="Weekly deployment counts"
           />
-          <details className="mt-3 print:hidden">
+          <details className="mt-3 print-hidden">
             <summary className="text-[13px] text-muted-foreground cursor-pointer hover:text-foreground">
               View as table
             </summary>

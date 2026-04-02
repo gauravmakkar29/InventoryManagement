@@ -226,6 +226,10 @@ body {
 
 /* Print styles for Executive Summary (Story 16.4) */
 @media print {
+  .print-hidden {
+    display: none !important;
+  }
+
   body {
     background: white !important;
     color: #111827 !important;
