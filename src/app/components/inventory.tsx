@@ -191,7 +191,10 @@ export function Inventory() {
                   {paginatedDevices.length === 0 ? (
                     <tr>
                       <td colSpan={canEdit ? 7 : 6} className="py-16 text-center">
-                        <Package className="mx-auto h-10 w-10 text-muted-foreground/40 mb-3" />
+                        <Package
+                          className="mx-auto h-10 w-10 text-muted-foreground/40 mb-3"
+                          aria-hidden="true"
+                        />
                         <p className="text-[15px] font-medium text-muted-foreground">
                           No devices found
                         </p>
@@ -274,7 +277,7 @@ export function Inventory() {
                     )}
                     aria-label="Previous page"
                   >
-                    <ChevronLeft className="h-4 w-4" />
+                    <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                   </button>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                     <button
@@ -300,7 +303,7 @@ export function Inventory() {
                     )}
                     aria-label="Next page"
                   >
-                    <ChevronRight className="h-4 w-4" />
+                    <ChevronRight className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </div>
               </div>

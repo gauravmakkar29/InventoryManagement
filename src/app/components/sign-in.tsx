@@ -164,6 +164,8 @@ export function SignIn() {
                   type="email"
                   autoComplete="email"
                   placeholder="admin@company.com"
+                  aria-describedby={errors.email ? "signin-email-error" : undefined}
+                  aria-invalid={errors.email ? true : undefined}
                   className={cn(
                     "block h-11 w-full rounded-lg border border-border bg-card px-3.5 text-[15px] text-foreground placeholder:text-muted-foreground",
                     "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
@@ -178,7 +180,7 @@ export function SignIn() {
                   })}
                 />
                 {errors.email && (
-                  <p className="text-[13px] text-red-500" role="alert">
+                  <p id="signin-email-error" className="text-[13px] text-red-500" role="alert">
                     {errors.email.message}
                   </p>
                 )}
@@ -198,6 +200,8 @@ export function SignIn() {
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
                     placeholder="Enter your password"
+                    aria-describedby={errors.password ? "signin-password-error" : undefined}
+                    aria-invalid={errors.password ? true : undefined}
                     className={cn(
                       "block h-11 w-full rounded-lg border border-border bg-card px-3.5 pr-10 text-[15px] text-foreground placeholder:text-muted-foreground",
                       "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
@@ -214,11 +218,15 @@ export function SignIn() {
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground cursor-pointer"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <Eye className="h-4 w-4" aria-hidden="true" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-[13px] text-red-500" role="alert">
+                  <p id="signin-password-error" className="text-[13px] text-red-500" role="alert">
                     {errors.password.message}
                   </p>
                 )}

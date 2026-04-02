@@ -164,7 +164,7 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
               )}
               aria-label="Close"
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
 
@@ -181,10 +181,12 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="user@company.com"
+                aria-describedby={errors.email ? "invite-email-error" : undefined}
+                aria-invalid={!!errors.email || undefined}
                 className={cn(inputClass, errors.email && "border-red-400")}
               />
               {errors.email && (
-                <p className="mt-1 text-[14px] text-red-500" role="alert">
+                <p id="invite-email-error" className="mt-1 text-[14px] text-red-500" role="alert">
                   {errors.email}
                 </p>
               )}
@@ -202,10 +204,16 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Jane"
+                  aria-describedby={errors.firstName ? "invite-first-name-error" : undefined}
+                  aria-invalid={!!errors.firstName || undefined}
                   className={cn(inputClass, errors.firstName && "border-red-400")}
                 />
                 {errors.firstName && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="invite-first-name-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.firstName}
                   </p>
                 )}
@@ -220,10 +228,16 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Martinez"
+                  aria-describedby={errors.lastName ? "invite-last-name-error" : undefined}
+                  aria-invalid={!!errors.lastName || undefined}
                   className={cn(inputClass, errors.lastName && "border-red-400")}
                 />
                 {errors.lastName && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="invite-last-name-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.lastName}
                   </p>
                 )}
@@ -258,6 +272,8 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 id="invite-department"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
+                aria-describedby={errors.department ? "invite-department-error" : undefined}
+                aria-invalid={!!errors.department || undefined}
                 className={cn(inputClass, errors.department && "border-red-400")}
               >
                 <option value="">Select department</option>
@@ -268,7 +284,11 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                 ))}
               </select>
               {errors.department && (
-                <p className="mt-1 text-[14px] text-red-500" role="alert">
+                <p
+                  id="invite-department-error"
+                  className="mt-1 text-[14px] text-red-500"
+                  role="alert"
+                >
                   {errors.department}
                 </p>
               )}
@@ -286,10 +306,16 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                   value={customer}
                   onChange={(e) => setCustomer(e.target.value)}
                   placeholder="e.g. Sungrow Power"
+                  aria-describedby={errors.customer ? "invite-customer-error" : undefined}
+                  aria-invalid={!!errors.customer || undefined}
                   className={cn(inputClass, errors.customer && "border-red-400")}
                 />
                 {errors.customer && (
-                  <p className="mt-1 text-[14px] text-red-500" role="alert">
+                  <p
+                    id="invite-customer-error"
+                    className="mt-1 text-[14px] text-red-500"
+                    role="alert"
+                  >
                     {errors.customer}
                   </p>
                 )}

@@ -26,7 +26,11 @@ createRoot(document.getElementById("root")!).render(
               position="bottom-right"
               toastOptions={{
                 className: "font-sans text-sm",
+                closeButtonAriaLabel: "Dismiss notification",
               }}
+              richColors
+              closeButton
+              containerAriaLabel="Notifications"
             />
           </ProviderRegistry>
         </ThemeProvider>
