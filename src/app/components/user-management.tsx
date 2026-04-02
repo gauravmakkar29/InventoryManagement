@@ -375,7 +375,7 @@ export function UserManagement() {
                           <div
                             className={cn(
                               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold text-white",
-                              user.status === "Disabled" ? "bg-gray-400" : "bg-[#0f172a]",
+                              user.status === "Disabled" ? "bg-muted-foreground" : "bg-[#0f172a]",
                             )}
                           >
                             {getUserInitials(user.name)}

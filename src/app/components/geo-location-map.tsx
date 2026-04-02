@@ -230,14 +230,14 @@ function StatusBadge({ status }: { status: string }) {
     },
     [DeviceStatus.Decommissioned]: {
       dot: "bg-gray-400",
-      text: "text-gray-600",
-      bg: "bg-gray-100",
+      text: "text-muted-foreground",
+      bg: "bg-muted",
     },
   };
   const c = config[status] ?? {
     dot: "bg-gray-400",
-    text: "text-gray-600",
-    bg: "bg-gray-100",
+    text: "text-muted-foreground",
+    bg: "bg-muted",
   };
   return (
     <span

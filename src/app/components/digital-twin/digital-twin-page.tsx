@@ -510,7 +510,7 @@ function StateReplayTimeline({
   return (
     <div className="relative px-4 py-3">
       {/* Timeline bar */}
-      <div className="absolute top-1/2 left-8 right-8 h-0.5 bg-gray-200 -translate-y-1/2" />
+      <div className="absolute top-1/2 left-8 right-8 h-0.5 bg-border -translate-y-1/2" />
       <div className="flex justify-between relative z-10">
         {snapshots.map((snap) => {
           const isActive = activeId === snap.id;
@@ -869,7 +869,7 @@ function FirmwareSimulationDialog({ twin, onClose }: { twin: DigitalTwin; onClos
                   "rounded-lg px-5 py-2.5 text-[14px] font-semibold text-white cursor-pointer",
                   targetVersion
                     ? "bg-accent hover:bg-accent-hover"
-                    : "bg-gray-300 cursor-not-allowed",
+                    : "bg-muted cursor-not-allowed",
                 )}
               >
                 {simulating ? "Simulating..." : "Run Simulation"}
@@ -1593,7 +1593,7 @@ function TwinDetailView({ twin, onBack }: { twin: DigitalTwin; onBack: () => voi
                     "rounded-lg px-2.5 py-1 text-[13px] font-medium cursor-pointer",
                     timeRange === r
                       ? "bg-accent text-white"
-                      : "bg-muted text-muted-foreground hover:bg-gray-200",
+                      : "bg-muted text-muted-foreground hover:bg-muted/70",
                   )}
                 >
                   {r}
@@ -1888,7 +1888,7 @@ export function DigitalTwinPage() {
                       : bucket.key === "healthy"
                         ? "bg-emerald-50 text-emerald-700"
                         : "bg-accent text-white"
-                  : "bg-muted text-muted-foreground hover:bg-gray-200",
+                  : "bg-muted text-muted-foreground hover:bg-muted/70",
               )}
             >
               {bucket.label}

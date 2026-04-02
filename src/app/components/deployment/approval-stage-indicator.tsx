@@ -67,7 +67,7 @@ export function ApprovalStageIndicator({
               {/* Tooltip on completed/current stages */}
               {tooltipText && (
                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block z-20">
-                  <div className="whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-[12px] text-white shadow-lg">
+                  <div className="whitespace-nowrap rounded bg-foreground px-2 py-1 text-[12px] text-background shadow-lg">
                     {tooltipText}
                   </div>
                 </div>

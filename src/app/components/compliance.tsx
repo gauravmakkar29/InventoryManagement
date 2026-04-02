@@ -1473,7 +1473,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
             className={cn(
               "flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-semibold text-white transition-colors",
               items.length === 0
-                ? "bg-gray-300 cursor-not-allowed"
+                ? "bg-muted cursor-not-allowed"
                 : "bg-accent hover:bg-accent-hover",
             )}
           >

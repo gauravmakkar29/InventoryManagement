@@ -14,7 +14,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     <input
       ref={ref}
       className={cn(
-        "h-10 w-full rounded-lg border border-border bg-white px-3 text-[15px] text-foreground",
+        "h-10 w-full rounded-lg border border-border bg-card px-3 text-[15px] text-foreground",
         "placeholder:text-muted-foreground",
         "focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-accent-text",
         "disabled:cursor-not-allowed disabled:opacity-60",
