@@ -7,6 +7,7 @@ import { ProviderRegistry } from "./lib/providers/registry";
 import { createPlatformConfig } from "./lib/providers/platform.config";
 import { ErrorBoundary } from "./components/error-boundary";
 import App from "./App";
+import "./lib/i18n";
 import "./index.css";
 
 const platform = createPlatformConfig();

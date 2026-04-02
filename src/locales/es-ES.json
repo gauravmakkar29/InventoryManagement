@@ -1,0 +1,110 @@
+{
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "export": "Exportar",
+    "import": "Importar",
+    "confirm": "Confirmar",
+    "close": "Cerrar",
+    "back": "Atr\u00e1s",
+    "next": "Siguiente",
+    "submit": "Enviar",
+    "reset": "Restablecer",
+    "loading": "Cargando...",
+    "noResults": "No se encontraron resultados",
+    "actions": "Acciones",
+    "status": "Estado",
+    "name": "Nombre",
+    "description": "Descripci\u00f3n",
+    "date": "Fecha",
+    "type": "Tipo",
+    "yes": "S\u00ed",
+    "no": "No"
+  },
+  "nav": {
+    "main": "Principal",
+    "operations": "Operaciones",
+    "admin": "Administraci\u00f3n",
+    "dashboard": "Panel",
+    "inventory": "Inventario",
+    "deployment": "Despliegue",
+    "compliance": "Cumplimiento",
+    "sbom": "SBOM",
+    "serviceOrders": "\u00d3rdenes de Servicio",
+    "analytics": "An\u00e1lisis",
+    "telemetry": "Telemetr\u00eda",
+    "incidents": "Incidentes",
+    "digitalTwin": "Gemelo Digital",
+    "executiveSummary": "Resumen Ejecutivo",
+    "userManagement": "Gesti\u00f3n de Usuarios"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesi\u00f3n",
+    "signOut": "Cerrar Sesi\u00f3n",
+    "email": "Correo electr\u00f3nico",
+    "password": "Contrase\u00f1a",
+    "forgotPassword": "\u00bfOlvid\u00f3 su contrase\u00f1a?",
+    "rememberMe": "Recordarme",
+    "sessionExpired": "Su sesi\u00f3n ha expirado. Por favor, inicie sesi\u00f3n de nuevo.",
+    "accessDenied": "Acceso Denegado",
+    "accessDeniedMessage": "No tiene permiso para ver esta p\u00e1gina."
+  },
+  "devices": {
+    "title": "Inventario de Hardware",
+    "addDevice": "Agregar Dispositivo",
+    "editDevice": "Editar Dispositivo",
+    "deviceDetails": "Detalles del Dispositivo",
+    "serialNumber": "N\u00famero de Serie",
+    "model": "Modelo",
+    "manufacturer": "Fabricante",
+    "location": "Ubicaci\u00f3n",
+    "firmware": "Firmware",
+    "lastSeen": "\u00daltima Conexi\u00f3n",
+    "status": {
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "maintenance": "Mantenimiento",
+      "decommissioned": "Descomisionado"
+    }
+  },
+  "deployment": {
+    "title": "Despliegue de Firmware",
+    "newDeployment": "Nuevo Despliegue",
+    "schedule": "Programar",
+    "approve": "Aprobar",
+    "reject": "Rechazar",
+    "rollback": "Revertir",
+    "status": {
+      "pending": "Pendiente",
+      "approved": "Aprobado",
+      "inProgress": "En Progreso",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "rolledBack": "Revertido"
+    }
+  },
+  "compliance": {
+    "title": "Cumplimiento",
+    "vulnerabilities": "Vulnerabilidades",
+    "policies": "Pol\u00edticas",
+    "score": "Puntuaci\u00f3n de Cumplimiento",
+    "severity": {
+      "critical": "Cr\u00edtico",
+      "high": "Alto",
+      "medium": "Medio",
+      "low": "Bajo"
+    }
+  },
+  "app": {
+    "title": "IMS Gen2",
+    "subtitle": "Gesti\u00f3n del Ciclo de Vida de Hardware",
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Contraer barra lateral"
+  }
+}

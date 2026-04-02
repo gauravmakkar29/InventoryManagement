@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { NavLink, useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   Package,
@@ -21,9 +22,10 @@ import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
 import { getPrimaryRole, canAccessPage } from "../../../lib/rbac";
 import { AppVersionBadge } from "../app-version-badge";
+import { LocaleSwitcher } from "../locale-switcher";
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   path: string;
   page: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -31,36 +33,41 @@ interface NavItem {
 }
 
 interface NavGroup {
-  label: string;
+  labelKey: string;
   items: NavItem[];
 }
 
 const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Main",
+    labelKey: "nav.main",
     items: [
-      { label: "Dashboard", path: "/", page: "dashboard", icon: LayoutDashboard, end: true },
-      { label: "Inventory", path: "/inventory", page: "inventory", icon: Package },
+      { labelKey: "nav.dashboard", path: "/", page: "dashboard", icon: LayoutDashboard, end: true },
+      { labelKey: "nav.inventory", path: "/inventory", page: "inventory", icon: Package },
     ],
   },
   {
-    label: "Operations",
+    labelKey: "nav.operations",
     items: [
-      { label: "Deployment", path: "/deployment", page: "deployment", icon: Rocket },
-      { label: "Compliance", path: "/compliance", page: "compliance", icon: Shield },
-      { label: "SBOM", path: "/sbom", page: "sbom", icon: FileBox },
+      { labelKey: "nav.deployment", path: "/deployment", page: "deployment", icon: Rocket },
+      { labelKey: "nav.compliance", path: "/compliance", page: "compliance", icon: Shield },
+      { labelKey: "nav.sbom", path: "/sbom", page: "sbom", icon: FileBox },
       {
-        label: "Service Orders",
+        labelKey: "nav.serviceOrders",
         path: "/account-service",
         page: "account-service",
         icon: ClipboardList,
       },
-      { label: "Analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
-      { label: "Telemetry", path: "/telemetry", page: "telemetry", icon: Thermometer },
-      { label: "Incidents", path: "/incidents", page: "incidents", icon: ShieldAlert },
-      { label: "Digital Twin", path: "/digital-twin", page: "digital-twin", icon: Fingerprint },
+      { labelKey: "nav.analytics", path: "/analytics", page: "analytics", icon: BarChart3 },
+      { labelKey: "nav.telemetry", path: "/telemetry", page: "telemetry", icon: Thermometer },
+      { labelKey: "nav.incidents", path: "/incidents", page: "incidents", icon: ShieldAlert },
       {
-        label: "Executive Summary",
+        labelKey: "nav.digitalTwin",
+        path: "/digital-twin",
+        page: "digital-twin",
+        icon: Fingerprint,
+      },
+      {
+        labelKey: "nav.executiveSummary",
         path: "/executive-summary",
         page: "executive-summary",
         icon: FileText,
@@ -68,9 +75,14 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Admin",
+    labelKey: "nav.admin",
     items: [
-      { label: "User Management", path: "/user-management", page: "user-management", icon: Users },
+      {
+        labelKey: "nav.userManagement",
+        path: "/user-management",
+        page: "user-management",
+        icon: Users,
+      },
     ],
   },
 ];
@@ -99,6 +111,7 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const location = useLocation();
+  const { t } = useTranslation();
   const { user, email, groups, signOut } = useAuth();
   const role = getPrimaryRole(groups);
 
@@ -136,7 +149,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <button
             onClick={onToggle}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
-            aria-label="Expand sidebar"
+            aria-label={t("app.expandSidebar")}
           >
             <PanelLeftOpen className="h-[18px] w-[18px]" />
           </button>
@@ -147,13 +160,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 IMS <span className="text-accent-text">Gen2</span>
               </span>
               <span className="text-[12px] leading-snug text-muted-foreground">
-                Hardware Lifecycle Mgmt
+                {t("app.subtitle")}
               </span>
             </div>
             <button
               onClick={onToggle}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
-              aria-label="Collapse sidebar"
+              aria-label={t("app.collapseSidebar")}
             >
               <PanelLeftClose className="h-[18px] w-[18px]" />
             </button>
@@ -167,11 +180,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         aria-label="Main navigation"
       >
         {filteredGroups.map((group, groupIdx) => (
-          <div key={group.label} className={cn(groupIdx > 0 && "mt-4")}>
+          <div key={group.labelKey} className={cn(groupIdx > 0 && "mt-4")}>
             {groupIdx > 0 && <div className="mx-2 mb-3 border-t border-border/50" />}
             {!collapsed && (
               <div className="mb-1.5 px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-                {group.label}
+                {t(group.labelKey)}
               </div>
             )}
 
@@ -187,8 +200,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                     <NavLink
                       to={item.path}
                       end={item.end}
-                      title={collapsed ? item.label : undefined}
-                      aria-label={item.label}
+                      title={collapsed ? t(item.labelKey) : undefined}
+                      aria-label={t(item.labelKey)}
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
                         "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[14px] font-medium",
@@ -211,7 +224,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                             : "text-muted-foreground group-hover:text-foreground",
                         )}
                       />
-                      {!collapsed && <span className="truncate">{item.label}</span>}
+                      {!collapsed && <span className="truncate">{t(item.labelKey)}</span>}
                     </NavLink>
                   </li>
                 );
@@ -233,8 +246,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </div>
             <button
               onClick={handleSignOut}
-              title="Sign Out"
-              aria-label="Sign Out"
+              title={t("auth.signOut")}
+              aria-label={t("auth.signOut")}
               className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
@@ -263,19 +276,19 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               )}
             >
               <LogOut className="h-3.5 w-3.5" aria-hidden="true" />
-              Sign Out
+              {t("auth.signOut")}
             </button>
           </>
         )}
       </div>
 
+      {/* Locale switcher */}
+      <div className={cn("border-t border-border/40 px-3 py-2", collapsed ? "px-2" : "")}>
+        <LocaleSwitcher compact={collapsed} />
+      </div>
+
       {/* App version */}
-      <div
-        className={cn(
-          "border-t border-border/40 px-3 py-2",
-          collapsed ? "text-center" : "",
-        )}
-      >
+      <div className={cn("border-t border-border/40 px-3 py-2", collapsed ? "text-center" : "")}>
         <AppVersionBadge compact={collapsed} />
       </div>
     </aside>

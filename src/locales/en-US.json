@@ -1,0 +1,110 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "reset": "Reset",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "actions": "Actions",
+    "status": "Status",
+    "name": "Name",
+    "description": "Description",
+    "date": "Date",
+    "type": "Type",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "main": "Main",
+    "operations": "Operations",
+    "admin": "Admin",
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "deployment": "Deployment",
+    "compliance": "Compliance",
+    "sbom": "SBOM",
+    "serviceOrders": "Service Orders",
+    "analytics": "Analytics",
+    "telemetry": "Telemetry",
+    "incidents": "Incidents",
+    "digitalTwin": "Digital Twin",
+    "executiveSummary": "Executive Summary",
+    "userManagement": "User Management"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember me",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "accessDenied": "Access Denied",
+    "accessDeniedMessage": "You do not have permission to view this page."
+  },
+  "devices": {
+    "title": "Hardware Inventory",
+    "addDevice": "Add Device",
+    "editDevice": "Edit Device",
+    "deviceDetails": "Device Details",
+    "serialNumber": "Serial Number",
+    "model": "Model",
+    "manufacturer": "Manufacturer",
+    "location": "Location",
+    "firmware": "Firmware",
+    "lastSeen": "Last Seen",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "maintenance": "Maintenance",
+      "decommissioned": "Decommissioned"
+    }
+  },
+  "deployment": {
+    "title": "Firmware Deployment",
+    "newDeployment": "New Deployment",
+    "schedule": "Schedule",
+    "approve": "Approve",
+    "reject": "Reject",
+    "rollback": "Rollback",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "failed": "Failed",
+      "rolledBack": "Rolled Back"
+    }
+  },
+  "compliance": {
+    "title": "Compliance",
+    "vulnerabilities": "Vulnerabilities",
+    "policies": "Policies",
+    "score": "Compliance Score",
+    "severity": {
+      "critical": "Critical",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    }
+  },
+  "app": {
+    "title": "IMS Gen2",
+    "subtitle": "Hardware Lifecycle Mgmt",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar"
+  }
+}
