@@ -1,0 +1,650 @@
+# =============================================================================
+# IMS Gen 2 — GraphQL Schema (Single Source of Truth)
+#
+# This schema mirrors the IApiProvider interface in src/lib/providers/types.ts.
+# Any changes here should be reflected in the provider types and vice versa.
+# Run `npm run codegen` to regenerate TypeScript types after editing.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Enums
+# -----------------------------------------------------------------------------
+
+enum DeviceStatus {
+  online
+  offline
+  maintenance
+  decommissioned
+}
+
+enum FirmwareStatus {
+  uploaded
+  testing
+  approved
+  deprecated
+  rejected
+}
+
+enum ApprovalStage {
+  uploaded
+  testing
+  approved
+  rejected
+}
+
+enum ServiceOrderStatus {
+  scheduled
+  in_progress
+  completed
+  cancelled
+}
+
+enum ComplianceStatus {
+  approved
+  pending
+  deprecated
+  non_compliant
+}
+
+enum VulnerabilitySeverity {
+  critical
+  high
+  medium
+  low
+  info
+}
+
+enum AuditAction {
+  Created
+  Modified
+  Deleted
+}
+
+enum NotificationType {
+  info
+  warning
+  error
+  success
+}
+
+enum RiskLevel {
+  Critical
+  High
+  Medium
+  Low
+}
+
+enum SimulationType {
+  actual
+  simulated
+}
+
+enum FailureType {
+  PowerLoss
+  NetworkFailure
+  Overheating
+  FirmwareCrash
+}
+
+enum VulnerabilityStatus {
+  open
+  mitigated
+  resolved
+  accepted
+}
+
+enum ServiceOrderPriority {
+  low
+  medium
+  high
+  critical
+}
+
+enum TelemetryHealth {
+  healthy
+  degraded
+  failed
+}
+
+enum PipelineState {
+  Running
+  Stopped
+  Error
+}
+
+enum AggregationMetric {
+  devicesByStatus
+  deviceCount
+  activeDeployments
+  pendingApprovals
+  avgHealthScore
+  complianceByStatus
+  deploymentTrend
+  topVulnerabilities
+  healthScoreDistribution
+}
+
+enum SearchEntityType {
+  Device
+  Firmware
+  ServiceOrder
+  Compliance
+  Vulnerability
+}
+
+# -----------------------------------------------------------------------------
+# Core Entity Types
+# -----------------------------------------------------------------------------
+
+type Coordinates {
+  lat: Float!
+  lng: Float!
+}
+
+type GeoLocation {
+  lat: Float!
+  lon: Float!
+}
+
+type Device {
+  id: ID!
+  name: String!
+  serialNumber: String!
+  model: String!
+  manufacturer: String!
+  status: DeviceStatus!
+  firmwareVersion: String!
+  location: String!
+  coordinates: Coordinates
+  customerId: String!
+  healthScore: Int!
+  lastSeen: String!
+  installedDate: String!
+  tags: [String!]!
+  metadata: [KeyValuePair!]!
+}
+
+type KeyValuePair {
+  key: String!
+  value: String!
+}
+
+type Firmware {
+  id: ID!
+  version: String!
+  name: String!
+  status: FirmwareStatus!
+  approvalStage: ApprovalStage!
+  releaseNotes: String!
+  fileSize: Int!
+  checksum: String!
+  uploadedBy: String!
+  uploadedAt: String!
+  approvedBy: String
+  approvedAt: String
+  compatibleModels: [String!]!
+  targetDeviceCount: Int!
+  deployedDeviceCount: Int!
+}
+
+type ServiceOrder {
+  id: ID!
+  title: String!
+  description: String!
+  status: ServiceOrderStatus!
+  priority: ServiceOrderPriority!
+  assignedTo: String!
+  customerId: String!
+  deviceId: String
+  scheduledDate: String!
+  completedDate: String
+  createdAt: String!
+  updatedAt: String!
+  notes: [String!]!
+}
+
+type Compliance {
+  id: ID!
+  name: String!
+  description: String!
+  status: ComplianceStatus!
+  certificationType: String!
+  lastAuditDate: String!
+  nextAuditDate: String!
+  findings: Int!
+  criticalFindings: Int!
+  assignedTo: String!
+  documents: [String!]!
+}
+
+type Vulnerability {
+  id: ID!
+  cveId: String!
+  title: String!
+  description: String!
+  severity: VulnerabilitySeverity!
+  cvssScore: Float!
+  affectedDevices: Int!
+  patchAvailable: Boolean!
+  patchFirmwareId: String
+  discoveredAt: String!
+  resolvedAt: String
+  status: VulnerabilityStatus!
+}
+
+type AuditLog {
+  id: ID!
+  action: AuditAction!
+  resourceType: String!
+  resourceId: String!
+  userId: String!
+  ipAddress: String!
+  timestamp: String!
+  status: String!
+}
+
+type Customer {
+  id: ID!
+  name: String!
+  code: String!
+  contactEmail: String!
+  contactPhone: String!
+  address: String!
+  deviceCount: Int!
+  activeServiceOrders: Int!
+  complianceScore: Int!
+  createdAt: String!
+}
+
+type Notification {
+  id: ID!
+  type: NotificationType!
+  title: String!
+  message: String!
+  read: Boolean!
+  actionUrl: String
+  createdAt: String!
+}
+
+# -----------------------------------------------------------------------------
+# Telemetry & Environmental Monitoring (Epic 13)
+# -----------------------------------------------------------------------------
+
+type TelemetryReading {
+  deviceId: String!
+  temperature: Float!
+  cpuLoad: Float!
+  memoryUsage: Float!
+  networkLatency: Float!
+  errorRate: Float!
+  powerOutput: Float!
+  ambientTemperature: Float!
+  humidity: Float!
+  riskScore: Float!
+  lat: Float!
+  lng: Float!
+  timestamp: String!
+}
+
+type HeatmapCell {
+  geohash: String!
+  centerLat: Float!
+  centerLng: Float!
+  deviceCount: Int!
+  avgRiskScore: Float!
+  maxRiskScore: Float!
+  criticalCount: Int!
+  regionName: String!
+}
+
+type HeatmapAggregation {
+  cells: [HeatmapCell!]!
+  totalDevices: Int!
+}
+
+type BlastRadiusDevice {
+  id: ID!
+  name: String!
+  distanceKm: Float!
+  status: DeviceStatus!
+  riskScore: Float!
+  estimatedDowntimeMinutes: Int!
+}
+
+type BlastRadiusResult {
+  id: ID!
+  originDeviceId: String!
+  originDeviceName: String!
+  radiusKm: Float!
+  affectedDevices: [BlastRadiusDevice!]!
+  affectedDeviceCount: Int!
+  estimatedDowntimeMinutes: Int!
+  riskLevel: RiskLevel!
+  simulationType: SimulationType!
+  failureType: FailureType
+  severity: Float
+  createdBy: String!
+  createdAt: String!
+}
+
+type TelemetryPipelineStatus {
+  recordsIngestedLastHour: Int!
+  health: TelemetryHealth!
+  lastSuccessfulIngestion: String!
+}
+
+# -----------------------------------------------------------------------------
+# OpenSearch Types (Epic 18)
+# -----------------------------------------------------------------------------
+
+type GlobalSearchResult {
+  id: ID!
+  entityType: SearchEntityType!
+  title: String!
+  subtitle: String!
+  _score: Float!
+  _highlights: [HighlightEntry!]!
+}
+
+type HighlightEntry {
+  field: String!
+  fragments: [String!]!
+}
+
+type GlobalSearchResponse {
+  total: Int!
+  results: [GlobalSearchResult!]!
+}
+
+type GeoDeviceResult {
+  id: ID!
+  deviceName: String!
+  serialNumber: String!
+  status: String!
+  healthScore: Int!
+  geoLocation: GeoLocation!
+  location: String!
+  distanceKm: Float
+}
+
+type GeoCluster {
+  geohash: String!
+  docCount: Int!
+  center: GeoLocation!
+  statusBreakdown: [StatusBreakdownEntry!]!
+  avgHealth: Float!
+}
+
+type StatusBreakdownEntry {
+  status: String!
+  count: Int!
+}
+
+type AggregationResponse {
+  metric: AggregationMetric!
+  data: String!
+}
+
+type AggregationBucket {
+  key: String!
+  docCount: Int!
+}
+
+type AggregationResult {
+  name: String!
+  buckets: [AggregationBucket!]!
+}
+
+type PipelineHealthStatus {
+  state: PipelineState!
+  recordsSyncedLastHour: Int!
+  currentLagSeconds: Int!
+  lastUpdated: String!
+}
+
+# -----------------------------------------------------------------------------
+# Paginated / Search Response Wrappers
+# -----------------------------------------------------------------------------
+
+type DevicePage {
+  items: [Device!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type FirmwarePage {
+  items: [Firmware!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type ServiceOrderPage {
+  items: [ServiceOrder!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type CompliancePage {
+  items: [Compliance!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type VulnerabilityPage {
+  items: [Vulnerability!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type AuditLogPage {
+  items: [AuditLog!]!
+  total: Int!
+  page: Int!
+  pageSize: Int!
+  hasMore: Boolean!
+}
+
+type DeviceSearchResult {
+  hits: [Device!]!
+  total: Int!
+  took: Int!
+  maxScore: Float!
+}
+
+type VulnerabilitySearchResult {
+  hits: [Vulnerability!]!
+  total: Int!
+  took: Int!
+  maxScore: Float!
+}
+
+# -----------------------------------------------------------------------------
+# Dashboard
+# -----------------------------------------------------------------------------
+
+type DashboardMetrics {
+  totalDevices: Int!
+  onlineDevices: Int!
+  activeDeployments: Int!
+  pendingApprovals: Int!
+  healthScore: Int!
+}
+
+# -----------------------------------------------------------------------------
+# Input Types
+# -----------------------------------------------------------------------------
+
+input DeviceFiltersInput {
+  status: String
+  location: String
+  model: String
+  manufacturer: String
+}
+
+input ServiceOrderInput {
+  title: String
+  description: String
+  status: ServiceOrderStatus
+  priority: ServiceOrderPriority
+  assignedTo: String
+  customerId: String
+  deviceId: String
+  scheduledDate: String
+  notes: [String!]
+}
+
+input FirmwareInput {
+  version: String
+  name: String
+  releaseNotes: String
+  fileSize: Int
+  checksum: String
+  compatibleModels: [String!]
+  targetDeviceCount: Int
+}
+
+input TelemetryInput {
+  temperature: Float
+  cpuLoad: Float
+  memoryUsage: Float
+  networkLatency: Float
+  errorRate: Float
+  powerOutput: Float
+  ambientTemperature: Float
+  humidity: Float
+  riskScore: Float
+  lat: Float
+  lng: Float
+  timestamp: String
+}
+
+input HeatmapBoundsInput {
+  northLat: Float!
+  southLat: Float!
+  eastLng: Float!
+  westLng: Float!
+}
+
+input GeoBoundingBoxInput {
+  topLat: Float!
+  leftLon: Float!
+  bottomLat: Float!
+  rightLon: Float!
+}
+
+input GeoDistanceInput {
+  lat: Float!
+  lon: Float!
+  radiusKm: Float!
+  status: String
+}
+
+input TimeRangeInput {
+  start: String!
+  end: String!
+}
+
+input DeviceSearchFiltersInput {
+  status: String
+  location: String
+  model: String
+  healthScoreMin: Int
+  healthScoreMax: Int
+}
+
+# -----------------------------------------------------------------------------
+# Queries — mirrors IApiProvider queries
+# -----------------------------------------------------------------------------
+
+type Query {
+  # --- Device ---
+  listDevices(page: Int, pageSize: Int, filters: DeviceFiltersInput): DevicePage!
+  getDevice(id: ID!): Device
+  searchDevices(query: String!): DeviceSearchResult!
+
+  # --- Firmware ---
+  listFirmware(page: Int, pageSize: Int): FirmwarePage!
+  getFirmware(id: ID!): Firmware
+
+  # --- Service Orders ---
+  listServiceOrders(page: Int, pageSize: Int, status: String): ServiceOrderPage!
+
+  # --- Compliance ---
+  listCompliance(status: String, certType: String): CompliancePage!
+
+  # --- Vulnerabilities ---
+  listVulnerabilities(severity: String): VulnerabilityPage!
+
+  # --- Audit Logs ---
+  listAuditLogs(startDate: String!, endDate: String!, limit: Int, nextToken: String): AuditLogPage!
+  getAuditLogsByUser(userId: String!): [AuditLog!]!
+
+  # --- Customers ---
+  getCustomer(id: ID!): Customer
+
+  # --- Notifications ---
+  listNotifications: [Notification!]!
+
+  # --- Analytics ---
+  getDeviceAggregations: [AggregationResult!]!
+  getDashboardMetrics: DashboardMetrics!
+
+  # --- Telemetry (Epic 13) ---
+  getDeviceTelemetry(deviceId: String!, startDate: String!, endDate: String!): [TelemetryReading!]!
+  getHeatmapAggregation(bounds: HeatmapBoundsInput, precision: Int, riskThreshold: Float): HeatmapAggregation!
+  getBlastRadius(lat: Float!, lng: Float!, radiusKm: Float!, includeOffline: Boolean): BlastRadiusResult
+  getBlastRadiusHistory(deviceId: String): [BlastRadiusResult!]!
+  getTelemetryPipelineStatus: TelemetryPipelineStatus!
+
+  # --- OpenSearch (Epic 18) ---
+  searchGlobal(query: String!, entityTypes: [String!], limit: Int): GlobalSearchResponse!
+  searchDevicesAdvanced(query: String!, filters: DeviceSearchFiltersInput): DeviceSearchResult!
+  searchVulnerabilities(query: String!, severity: String): VulnerabilitySearchResult!
+  getAggregation(metric: AggregationMetric!, timeRange: TimeRangeInput): AggregationResponse!
+  searchDevicesByBounds(bounds: GeoBoundingBoxInput!, status: String): [GeoDeviceResult!]!
+  searchDevicesByDistance(params: GeoDistanceInput!): [GeoDeviceResult!]!
+  getDeviceGeoClusters(bounds: GeoBoundingBoxInput, precision: Int): [GeoCluster!]!
+  getOsisPipelineHealth: PipelineHealthStatus!
+}
+
+# -----------------------------------------------------------------------------
+# Mutations — mirrors IApiProvider mutations
+# -----------------------------------------------------------------------------
+
+type Mutation {
+  # --- Service Orders ---
+  createServiceOrder(input: ServiceOrderInput!): ServiceOrder
+  updateServiceOrder(id: ID!, input: ServiceOrderInput!): ServiceOrder
+
+  # --- Firmware ---
+  uploadFirmware(input: FirmwareInput!): Firmware
+  approveFirmware(id: ID!, stage: String!): Firmware
+
+  # --- Compliance ---
+  submitComplianceReview(id: ID!): Compliance
+
+  # --- Notifications ---
+  acknowledgeNotification(id: ID!): Boolean!
+
+  # --- Telemetry (Epic 13) ---
+  ingestTelemetry(deviceId: String!, metrics: TelemetryInput!): TelemetryReading
+  runBlastRadiusSimulation(
+    deviceId: String!
+    radiusKm: Float!
+    failureType: FailureType!
+    severity: Float
+  ): BlastRadiusResult
+
+  # --- OpenSearch Admin ---
+  triggerReindex: Boolean!
+}

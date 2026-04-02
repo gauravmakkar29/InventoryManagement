@@ -1,0 +1,1420 @@
+openapi: "3.0.3"
+info:
+  title: IMS Gen 2 — Hardware Lifecycle Management API
+  description: |
+    REST equivalent of the IMS GraphQL API.
+    Mirrors the IApiProvider interface in src/lib/providers/types.ts.
+    Use `npm run codegen:openapi` to regenerate TypeScript types.
+  version: "1.0.0"
+  contact:
+    name: IMS Platform Team
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production
+  - url: https://api-staging.example.com/v1
+    description: Staging
+
+tags:
+  - name: Devices
+  - name: Firmware
+  - name: ServiceOrders
+  - name: Compliance
+  - name: Vulnerabilities
+  - name: AuditLogs
+  - name: Customers
+  - name: Notifications
+  - name: Analytics
+  - name: Telemetry
+  - name: Search
+
+paths:
+  # =========================================================================
+  # Devices
+  # =========================================================================
+  /devices:
+    get:
+      operationId: listDevices
+      tags: [Devices]
+      summary: List devices with optional pagination and filters
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 25 }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: location
+          in: query
+          schema: { type: string }
+        - name: model
+          in: query
+          schema: { type: string }
+        - name: manufacturer
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated list of devices
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DevicePage"
+
+  /devices/{id}:
+    get:
+      operationId: getDevice
+      tags: [Devices]
+      summary: Get a single device by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Device details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "404":
+          description: Device not found
+
+  /devices/search:
+    get:
+      operationId: searchDevices
+      tags: [Devices]
+      summary: Search devices by query string
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSearchResult"
+
+  # =========================================================================
+  # Firmware
+  # =========================================================================
+  /firmware:
+    get:
+      operationId: listFirmware
+      tags: [Firmware]
+      summary: List firmware versions
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 25 }
+      responses:
+        "200":
+          description: Paginated firmware list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FirmwarePage"
+    post:
+      operationId: uploadFirmware
+      tags: [Firmware]
+      summary: Upload a new firmware version
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FirmwareInput"
+      responses:
+        "201":
+          description: Firmware created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Firmware"
+
+  /firmware/{id}:
+    get:
+      operationId: getFirmware
+      tags: [Firmware]
+      summary: Get a single firmware by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Firmware details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Firmware"
+        "404":
+          description: Firmware not found
+
+  /firmware/{id}/approve:
+    post:
+      operationId: approveFirmware
+      tags: [Firmware]
+      summary: Approve firmware at a specific stage
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [stage]
+              properties:
+                stage:
+                  type: string
+      responses:
+        "200":
+          description: Firmware approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Firmware"
+
+  # =========================================================================
+  # Service Orders
+  # =========================================================================
+  /service-orders:
+    get:
+      operationId: listServiceOrders
+      tags: [ServiceOrders]
+      summary: List service orders
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: pageSize
+          in: query
+          schema: { type: integer, default: 25 }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated service orders
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceOrderPage"
+    post:
+      operationId: createServiceOrder
+      tags: [ServiceOrders]
+      summary: Create a new service order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceOrderInput"
+      responses:
+        "201":
+          description: Service order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceOrder"
+
+  /service-orders/{id}:
+    put:
+      operationId: updateServiceOrder
+      tags: [ServiceOrders]
+      summary: Update a service order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceOrderInput"
+      responses:
+        "200":
+          description: Service order updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceOrder"
+
+  # =========================================================================
+  # Compliance
+  # =========================================================================
+  /compliance:
+    get:
+      operationId: listCompliance
+      tags: [Compliance]
+      summary: List compliance records
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: certType
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated compliance records
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompliancePage"
+
+  /compliance/{id}/review:
+    post:
+      operationId: submitComplianceReview
+      tags: [Compliance]
+      summary: Submit a compliance review
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Compliance review submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Compliance"
+
+  # =========================================================================
+  # Vulnerabilities
+  # =========================================================================
+  /vulnerabilities:
+    get:
+      operationId: listVulnerabilities
+      tags: [Vulnerabilities]
+      summary: List vulnerabilities
+      parameters:
+        - name: severity
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated vulnerability list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VulnerabilityPage"
+
+  # =========================================================================
+  # Audit Logs
+  # =========================================================================
+  /audit-logs:
+    get:
+      operationId: listAuditLogs
+      tags: [AuditLogs]
+      summary: List audit logs within a date range
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: endDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: limit
+          in: query
+          schema: { type: integer }
+        - name: nextToken
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Paginated audit logs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuditLogPage"
+
+  /audit-logs/by-user/{userId}:
+    get:
+      operationId: getAuditLogsByUser
+      tags: [AuditLogs]
+      summary: Get audit logs for a specific user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Audit logs for user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuditLog"
+
+  # =========================================================================
+  # Customers
+  # =========================================================================
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      tags: [Customers]
+      summary: Get customer by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+        "404":
+          description: Customer not found
+
+  # =========================================================================
+  # Notifications
+  # =========================================================================
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [Notifications]
+      summary: List notifications for current user
+      responses:
+        "200":
+          description: Notification list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/acknowledge:
+    post:
+      operationId: acknowledgeNotification
+      tags: [Notifications]
+      summary: Acknowledge a notification
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Notification acknowledged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+  # =========================================================================
+  # Analytics / Dashboard
+  # =========================================================================
+  /analytics/aggregations:
+    get:
+      operationId: getDeviceAggregations
+      tags: [Analytics]
+      summary: Get device aggregation buckets
+      responses:
+        "200":
+          description: Aggregation results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AggregationResult"
+
+  /analytics/dashboard:
+    get:
+      operationId: getDashboardMetrics
+      tags: [Analytics]
+      summary: Get dashboard summary metrics
+      responses:
+        "200":
+          description: Dashboard metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardMetrics"
+
+  /analytics/aggregation:
+    get:
+      operationId: getAggregation
+      tags: [Analytics]
+      summary: Get a specific aggregation metric
+      parameters:
+        - name: metric
+          in: query
+          required: true
+          schema:
+            $ref: "#/components/schemas/AggregationMetric"
+        - name: start
+          in: query
+          schema: { type: string, format: date-time }
+        - name: end
+          in: query
+          schema: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Aggregation response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AggregationResponse"
+
+  # =========================================================================
+  # Telemetry (Epic 13)
+  # =========================================================================
+  /telemetry/{deviceId}:
+    get:
+      operationId: getDeviceTelemetry
+      tags: [Telemetry]
+      summary: Get telemetry readings for a device
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema: { type: string }
+        - name: startDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+        - name: endDate
+          in: query
+          required: true
+          schema: { type: string, format: date-time }
+      responses:
+        "200":
+          description: Telemetry readings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TelemetryReading"
+
+  /telemetry/ingest:
+    post:
+      operationId: ingestTelemetry
+      tags: [Telemetry]
+      summary: Ingest a telemetry reading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [deviceId, metrics]
+              properties:
+                deviceId:
+                  type: string
+                metrics:
+                  $ref: "#/components/schemas/TelemetryInput"
+      responses:
+        "201":
+          description: Telemetry reading ingested
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TelemetryReading"
+
+  /telemetry/pipeline-status:
+    get:
+      operationId: getTelemetryPipelineStatus
+      tags: [Telemetry]
+      summary: Get telemetry pipeline health status
+      responses:
+        "200":
+          description: Pipeline status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TelemetryPipelineStatus"
+
+  /telemetry/heatmap:
+    get:
+      operationId: getHeatmapAggregation
+      tags: [Telemetry]
+      summary: Get heatmap aggregation data
+      parameters:
+        - name: northLat
+          in: query
+          schema: { type: number }
+        - name: southLat
+          in: query
+          schema: { type: number }
+        - name: eastLng
+          in: query
+          schema: { type: number }
+        - name: westLng
+          in: query
+          schema: { type: number }
+        - name: precision
+          in: query
+          schema: { type: integer }
+        - name: riskThreshold
+          in: query
+          schema: { type: number }
+      responses:
+        "200":
+          description: Heatmap aggregation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HeatmapAggregation"
+
+  /telemetry/blast-radius:
+    get:
+      operationId: getBlastRadius
+      tags: [Telemetry]
+      summary: Calculate blast radius from a geographic point
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: lng
+          in: query
+          required: true
+          schema: { type: number }
+        - name: radiusKm
+          in: query
+          required: true
+          schema: { type: number }
+        - name: includeOffline
+          in: query
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: Blast radius result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlastRadiusResult"
+
+  /telemetry/blast-radius/history:
+    get:
+      operationId: getBlastRadiusHistory
+      tags: [Telemetry]
+      summary: Get blast radius simulation history
+      parameters:
+        - name: deviceId
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Blast radius history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlastRadiusResult"
+
+  /telemetry/blast-radius/simulate:
+    post:
+      operationId: runBlastRadiusSimulation
+      tags: [Telemetry]
+      summary: Run a blast radius simulation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [deviceId, radiusKm, failureType]
+              properties:
+                deviceId:
+                  type: string
+                radiusKm:
+                  type: number
+                failureType:
+                  $ref: "#/components/schemas/FailureType"
+                severity:
+                  type: number
+      responses:
+        "200":
+          description: Simulation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlastRadiusResult"
+
+  # =========================================================================
+  # Search — OpenSearch (Epic 18)
+  # =========================================================================
+  /search/global:
+    get:
+      operationId: searchGlobal
+      tags: [Search]
+      summary: Global search across all entity types
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+        - name: entityTypes
+          in: query
+          schema:
+            type: array
+            items: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Global search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GlobalSearchResponse"
+
+  /search/devices/advanced:
+    get:
+      operationId: searchDevicesAdvanced
+      tags: [Search]
+      summary: Advanced device search with filters
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: location
+          in: query
+          schema: { type: string }
+        - name: model
+          in: query
+          schema: { type: string }
+        - name: healthScoreMin
+          in: query
+          schema: { type: integer }
+        - name: healthScoreMax
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Advanced search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeviceSearchResult"
+
+  /search/vulnerabilities:
+    get:
+      operationId: searchVulnerabilities
+      tags: [Search]
+      summary: Search vulnerabilities
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema: { type: string }
+        - name: severity
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Vulnerability search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VulnerabilitySearchResult"
+
+  /search/devices/geo/bounds:
+    get:
+      operationId: searchDevicesByBounds
+      tags: [Search]
+      summary: Search devices within a geographic bounding box
+      parameters:
+        - name: topLat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: leftLon
+          in: query
+          required: true
+          schema: { type: number }
+        - name: bottomLat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: rightLon
+          in: query
+          required: true
+          schema: { type: number }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Geo device results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeoDeviceResult"
+
+  /search/devices/geo/distance:
+    get:
+      operationId: searchDevicesByDistance
+      tags: [Search]
+      summary: Search devices within radius of a point
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: lon
+          in: query
+          required: true
+          schema: { type: number }
+        - name: radiusKm
+          in: query
+          required: true
+          schema: { type: number }
+        - name: status
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Geo device results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeoDeviceResult"
+
+  /search/devices/geo/clusters:
+    get:
+      operationId: getDeviceGeoClusters
+      tags: [Search]
+      summary: Get device geo clusters for map visualization
+      parameters:
+        - name: topLat
+          in: query
+          schema: { type: number }
+        - name: leftLon
+          in: query
+          schema: { type: number }
+        - name: bottomLat
+          in: query
+          schema: { type: number }
+        - name: rightLon
+          in: query
+          schema: { type: number }
+        - name: precision
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Geo clusters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GeoCluster"
+
+  /search/pipeline/health:
+    get:
+      operationId: getOsisPipelineHealth
+      tags: [Search]
+      summary: Get OSIS pipeline health status
+      responses:
+        "200":
+          description: Pipeline health status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PipelineHealthStatus"
+
+  /search/reindex:
+    post:
+      operationId: triggerReindex
+      tags: [Search]
+      summary: Trigger a full re-index (Admin only)
+      responses:
+        "200":
+          description: Reindex triggered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+
+# =============================================================================
+# Components — Schemas
+# =============================================================================
+components:
+  schemas:
+    # --- Enums ---
+    DeviceStatus:
+      type: string
+      enum: [online, offline, maintenance, decommissioned]
+
+    FirmwareStatus:
+      type: string
+      enum: [uploaded, testing, approved, deprecated, rejected]
+
+    ApprovalStage:
+      type: string
+      enum: [uploaded, testing, approved, rejected]
+
+    ServiceOrderStatus:
+      type: string
+      enum: [scheduled, in_progress, completed, cancelled]
+
+    ComplianceStatus:
+      type: string
+      enum: [approved, pending, deprecated, non_compliant]
+
+    VulnerabilitySeverity:
+      type: string
+      enum: [critical, high, medium, low, info]
+
+    AuditAction:
+      type: string
+      enum: [Created, Modified, Deleted]
+
+    NotificationType:
+      type: string
+      enum: [info, warning, error, success]
+
+    RiskLevel:
+      type: string
+      enum: [Critical, High, Medium, Low]
+
+    SimulationType:
+      type: string
+      enum: [actual, simulated]
+
+    FailureType:
+      type: string
+      enum: [PowerLoss, NetworkFailure, Overheating, FirmwareCrash]
+
+    VulnerabilityStatus:
+      type: string
+      enum: [open, mitigated, resolved, accepted]
+
+    ServiceOrderPriority:
+      type: string
+      enum: [low, medium, high, critical]
+
+    TelemetryHealth:
+      type: string
+      enum: [healthy, degraded, failed]
+
+    PipelineState:
+      type: string
+      enum: [Running, Stopped, Error]
+
+    AggregationMetric:
+      type: string
+      enum:
+        - devicesByStatus
+        - deviceCount
+        - activeDeployments
+        - pendingApprovals
+        - avgHealthScore
+        - complianceByStatus
+        - deploymentTrend
+        - topVulnerabilities
+        - healthScoreDistribution
+
+    # --- Entity Schemas ---
+    Device:
+      type: object
+      required: [id, name, serialNumber, model, manufacturer, status, firmwareVersion, location, customerId, healthScore, lastSeen, installedDate, tags, metadata]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        serialNumber: { type: string }
+        model: { type: string }
+        manufacturer: { type: string }
+        status: { $ref: "#/components/schemas/DeviceStatus" }
+        firmwareVersion: { type: string }
+        location: { type: string }
+        coordinates:
+          type: object
+          properties:
+            lat: { type: number }
+            lng: { type: number }
+        customerId: { type: string }
+        healthScore: { type: integer }
+        lastSeen: { type: string, format: date-time }
+        installedDate: { type: string, format: date-time }
+        tags:
+          type: array
+          items: { type: string }
+        metadata:
+          type: object
+          additionalProperties: { type: string }
+
+    Firmware:
+      type: object
+      required: [id, version, name, status, approvalStage, releaseNotes, fileSize, checksum, uploadedBy, uploadedAt, compatibleModels, targetDeviceCount, deployedDeviceCount]
+      properties:
+        id: { type: string }
+        version: { type: string }
+        name: { type: string }
+        status: { $ref: "#/components/schemas/FirmwareStatus" }
+        approvalStage: { $ref: "#/components/schemas/ApprovalStage" }
+        releaseNotes: { type: string }
+        fileSize: { type: integer }
+        checksum: { type: string }
+        uploadedBy: { type: string }
+        uploadedAt: { type: string, format: date-time }
+        approvedBy: { type: string }
+        approvedAt: { type: string, format: date-time }
+        compatibleModels:
+          type: array
+          items: { type: string }
+        targetDeviceCount: { type: integer }
+        deployedDeviceCount: { type: integer }
+
+    ServiceOrder:
+      type: object
+      required: [id, title, description, status, priority, assignedTo, customerId, scheduledDate, createdAt, updatedAt, notes]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        status: { $ref: "#/components/schemas/ServiceOrderStatus" }
+        priority: { $ref: "#/components/schemas/ServiceOrderPriority" }
+        assignedTo: { type: string }
+        customerId: { type: string }
+        deviceId: { type: string }
+        scheduledDate: { type: string, format: date-time }
+        completedDate: { type: string, format: date-time }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        notes:
+          type: array
+          items: { type: string }
+
+    Compliance:
+      type: object
+      required: [id, name, description, status, certificationType, lastAuditDate, nextAuditDate, findings, criticalFindings, assignedTo, documents]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        status: { $ref: "#/components/schemas/ComplianceStatus" }
+        certificationType: { type: string }
+        lastAuditDate: { type: string, format: date-time }
+        nextAuditDate: { type: string, format: date-time }
+        findings: { type: integer }
+        criticalFindings: { type: integer }
+        assignedTo: { type: string }
+        documents:
+          type: array
+          items: { type: string }
+
+    Vulnerability:
+      type: object
+      required: [id, cveId, title, description, severity, cvssScore, affectedDevices, patchAvailable, discoveredAt, status]
+      properties:
+        id: { type: string }
+        cveId: { type: string }
+        title: { type: string }
+        description: { type: string }
+        severity: { $ref: "#/components/schemas/VulnerabilitySeverity" }
+        cvssScore: { type: number }
+        affectedDevices: { type: integer }
+        patchAvailable: { type: boolean }
+        patchFirmwareId: { type: string }
+        discoveredAt: { type: string, format: date-time }
+        resolvedAt: { type: string, format: date-time }
+        status: { $ref: "#/components/schemas/VulnerabilityStatus" }
+
+    AuditLog:
+      type: object
+      required: [id, action, resourceType, resourceId, userId, ipAddress, timestamp, status]
+      properties:
+        id: { type: string }
+        action: { $ref: "#/components/schemas/AuditAction" }
+        resourceType: { type: string }
+        resourceId: { type: string }
+        userId: { type: string }
+        ipAddress: { type: string }
+        timestamp: { type: string, format: date-time }
+        status: { type: string }
+
+    Customer:
+      type: object
+      required: [id, name, code, contactEmail, contactPhone, address, deviceCount, activeServiceOrders, complianceScore, createdAt]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        code: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }
+        address: { type: string }
+        deviceCount: { type: integer }
+        activeServiceOrders: { type: integer }
+        complianceScore: { type: integer }
+        createdAt: { type: string, format: date-time }
+
+    Notification:
+      type: object
+      required: [id, type, title, message, read, createdAt]
+      properties:
+        id: { type: string }
+        type: { $ref: "#/components/schemas/NotificationType" }
+        title: { type: string }
+        message: { type: string }
+        read: { type: boolean }
+        actionUrl: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    TelemetryReading:
+      type: object
+      required: [deviceId, temperature, cpuLoad, memoryUsage, networkLatency, errorRate, powerOutput, ambientTemperature, humidity, riskScore, lat, lng, timestamp]
+      properties:
+        deviceId: { type: string }
+        temperature: { type: number }
+        cpuLoad: { type: number }
+        memoryUsage: { type: number }
+        networkLatency: { type: number }
+        errorRate: { type: number }
+        powerOutput: { type: number }
+        ambientTemperature: { type: number }
+        humidity: { type: number }
+        riskScore: { type: number }
+        lat: { type: number }
+        lng: { type: number }
+        timestamp: { type: string, format: date-time }
+
+    HeatmapCell:
+      type: object
+      properties:
+        geohash: { type: string }
+        centerLat: { type: number }
+        centerLng: { type: number }
+        deviceCount: { type: integer }
+        avgRiskScore: { type: number }
+        maxRiskScore: { type: number }
+        criticalCount: { type: integer }
+        regionName: { type: string }
+
+    HeatmapAggregation:
+      type: object
+      properties:
+        cells:
+          type: array
+          items:
+            $ref: "#/components/schemas/HeatmapCell"
+        totalDevices: { type: integer }
+
+    BlastRadiusDevice:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        distanceKm: { type: number }
+        status: { $ref: "#/components/schemas/DeviceStatus" }
+        riskScore: { type: number }
+        estimatedDowntimeMinutes: { type: integer }
+
+    BlastRadiusResult:
+      type: object
+      properties:
+        id: { type: string }
+        originDeviceId: { type: string }
+        originDeviceName: { type: string }
+        radiusKm: { type: number }
+        affectedDevices:
+          type: array
+          items:
+            $ref: "#/components/schemas/BlastRadiusDevice"
+        affectedDeviceCount: { type: integer }
+        estimatedDowntimeMinutes: { type: integer }
+        riskLevel: { $ref: "#/components/schemas/RiskLevel" }
+        simulationType: { $ref: "#/components/schemas/SimulationType" }
+        failureType: { $ref: "#/components/schemas/FailureType" }
+        severity: { type: number }
+        createdBy: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    TelemetryPipelineStatus:
+      type: object
+      properties:
+        recordsIngestedLastHour: { type: integer }
+        health: { $ref: "#/components/schemas/TelemetryHealth" }
+        lastSuccessfulIngestion: { type: string, format: date-time }
+
+    GlobalSearchResult:
+      type: object
+      properties:
+        id: { type: string }
+        entityType: { type: string }
+        title: { type: string }
+        subtitle: { type: string }
+        _score: { type: number }
+        _highlights:
+          type: object
+          additionalProperties:
+            type: array
+            items: { type: string }
+
+    GlobalSearchResponse:
+      type: object
+      properties:
+        total: { type: integer }
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/GlobalSearchResult"
+
+    GeoDeviceResult:
+      type: object
+      properties:
+        id: { type: string }
+        deviceName: { type: string }
+        serialNumber: { type: string }
+        status: { type: string }
+        healthScore: { type: integer }
+        geoLocation:
+          type: object
+          properties:
+            lat: { type: number }
+            lon: { type: number }
+        location: { type: string }
+        distanceKm: { type: number }
+
+    GeoCluster:
+      type: object
+      properties:
+        geohash: { type: string }
+        docCount: { type: integer }
+        center:
+          type: object
+          properties:
+            lat: { type: number }
+            lon: { type: number }
+        statusBreakdown:
+          type: object
+          additionalProperties: { type: integer }
+        avgHealth: { type: number }
+
+    AggregationBucket:
+      type: object
+      properties:
+        key: { type: string }
+        docCount: { type: integer }
+
+    AggregationResult:
+      type: object
+      properties:
+        name: { type: string }
+        buckets:
+          type: array
+          items:
+            $ref: "#/components/schemas/AggregationBucket"
+
+    AggregationResponse:
+      type: object
+      properties:
+        metric: { $ref: "#/components/schemas/AggregationMetric" }
+        data:
+          type: object
+          additionalProperties: true
+
+    DashboardMetrics:
+      type: object
+      required: [totalDevices, onlineDevices, activeDeployments, pendingApprovals, healthScore]
+      properties:
+        totalDevices: { type: integer }
+        onlineDevices: { type: integer }
+        activeDeployments: { type: integer }
+        pendingApprovals: { type: integer }
+        healthScore: { type: integer }
+
+    PipelineHealthStatus:
+      type: object
+      properties:
+        state: { $ref: "#/components/schemas/PipelineState" }
+        recordsSyncedLastHour: { type: integer }
+        currentLagSeconds: { type: integer }
+        lastUpdated: { type: string, format: date-time }
+
+    # --- Paginated Response Wrappers ---
+    DevicePage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Device"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    FirmwarePage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Firmware"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    ServiceOrderPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ServiceOrder"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    CompliancePage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Compliance"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    VulnerabilityPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Vulnerability"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    AuditLogPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuditLog"
+        total: { type: integer }
+        page: { type: integer }
+        pageSize: { type: integer }
+        hasMore: { type: boolean }
+
+    DeviceSearchResult:
+      type: object
+      properties:
+        hits:
+          type: array
+          items:
+            $ref: "#/components/schemas/Device"
+        total: { type: integer }
+        took: { type: integer }
+        maxScore: { type: number }
+
+    VulnerabilitySearchResult:
+      type: object
+      properties:
+        hits:
+          type: array
+          items:
+            $ref: "#/components/schemas/Vulnerability"
+        total: { type: integer }
+        took: { type: integer }
+        maxScore: { type: number }
+
+    # --- Input Schemas ---
+    ServiceOrderInput:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        status: { $ref: "#/components/schemas/ServiceOrderStatus" }
+        priority: { $ref: "#/components/schemas/ServiceOrderPriority" }
+        assignedTo: { type: string }
+        customerId: { type: string }
+        deviceId: { type: string }
+        scheduledDate: { type: string }
+        notes:
+          type: array
+          items: { type: string }
+
+    FirmwareInput:
+      type: object
+      properties:
+        version: { type: string }
+        name: { type: string }
+        releaseNotes: { type: string }
+        fileSize: { type: integer }
+        checksum: { type: string }
+        compatibleModels:
+          type: array
+          items: { type: string }
+        targetDeviceCount: { type: integer }
+
+    TelemetryInput:
+      type: object
+      properties:
+        temperature: { type: number }
+        cpuLoad: { type: number }
+        memoryUsage: { type: number }
+        networkLatency: { type: number }
+        errorRate: { type: number }
+        powerOutput: { type: number }
+        ambientTemperature: { type: number }
+        humidity: { type: number }
+        riskScore: { type: number }
+        lat: { type: number }
+        lng: { type: number }
+        timestamp: { type: string }
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
