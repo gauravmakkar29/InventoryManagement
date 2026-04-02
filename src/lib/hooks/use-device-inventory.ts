@@ -4,9 +4,9 @@ import { DeviceStatus } from "../types";
 import type { DeviceSearchFilters } from "../opensearch-types";
 import type { MockDevice } from "../mock-data/inventory-data";
 import { MOCK_DEVICES } from "../mock-data/inventory-data";
+import type { CreateDevicePayload } from "../types/device";
 
 const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
-import type { CreateDevicePayload } from "../../app/components/dialogs/create-device-modal";
 
 type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
 type SortDir = "asc" | "desc";
