@@ -1,13 +1,4 @@
-import { useState } from "react";
-import {
-  TrendingUp,
-  TrendingDown,
-  Search,
-  Download,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-} from "lucide-react";
+import { Search, TrendingUp, TrendingDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useAnalyticsData } from "../../lib/hooks/use-analytics-data";
 import type {
@@ -24,6 +15,19 @@ import {
   MONTHLY_DEPLOYMENTS,
   VULN_SEVERITY,
 } from "../../lib/mock-data/analytics-data";
+import { ExportDropdown } from "./export-dropdown";
+import type { ExportColumn } from "../../lib/use-export";
+
+const AUDIT_EXPORT_COLUMNS: ExportColumn<AnalyticsAuditEntry>[] = [
+  {
+    header: "Timestamp",
+    accessor: (e) => new Date(e.timestamp).toLocaleString("en-US"),
+  },
+  { header: "User", accessor: "user" },
+  { header: "Action", accessor: "action" },
+  { header: "Entity", accessor: "entity" },
+  { header: "Details", accessor: "details" },
+];
 
 // ---------------------------------------------------------------------------
 // Ring Chart Component (SVG donut)
@@ -277,7 +281,10 @@ export function Analytics() {
     handleExportJSON,
   } = useAnalyticsData();
 
-  const [exportOpen, setExportOpen] = useState(false);
+  // Legacy export handlers kept for backward compatibility; ExportDropdown
+  // now provides the primary UI, but the hook handlers are still available.
+  void handleExportCSV;
+  void handleExportJSON;
 
   return (
     <div className="space-y-6">
@@ -515,50 +522,13 @@ export function Analytics() {
               />
             </div>
 
-            {/* Export Dropdown (Story 7.6) */}
-            <div className="relative">
-              <button
-                onClick={() => setExportOpen(!exportOpen)}
-                disabled={filteredAuditLogs.length === 0}
-                className={cn(
-                  "flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[14px] font-medium text-muted-foreground cursor-pointer",
-                  "hover:bg-muted hover:text-foreground/80",
-                  "disabled:cursor-not-allowed disabled:opacity-60",
-                )}
-                title={filteredAuditLogs.length === 0 ? "No data to export" : "Export data"}
-              >
-                <Download className="h-3.5 w-3.5" />
-                Export
-                <ChevronDown className="h-3 w-3" />
-              </button>
-              {exportOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setExportOpen(false)} />
-                  <div className="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-border bg-card py-1 shadow-lg">
-                    <button
-                      onClick={() => {
-                        handleExportCSV();
-                        setExportOpen(false);
-                      }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-foreground/80 hover:bg-muted cursor-pointer"
-                    >
-                      <Download className="h-3.5 w-3.5 text-muted-foreground" />
-                      Export as CSV
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleExportJSON();
-                        setExportOpen(false);
-                      }}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-foreground/80 hover:bg-muted cursor-pointer"
-                    >
-                      <Download className="h-3.5 w-3.5 text-muted-foreground" />
-                      Export as JSON
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
+            {/* Export Dropdown (Story 7.6 → standardized via Story 19.20) */}
+            <ExportDropdown
+              data={filteredAuditLogs}
+              columns={AUDIT_EXPORT_COLUMNS}
+              filename="audit-log"
+              title="Audit Log"
+            />
           </div>
         </div>
 

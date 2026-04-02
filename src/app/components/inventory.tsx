@@ -7,7 +7,6 @@ import {
   ArrowUpDown,
   Package,
   Plus,
-  Download,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { DeviceStatus } from "../../lib/types";
@@ -16,8 +15,11 @@ import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
 import { useDeviceInventory } from "../../lib/hooks/use-device-inventory";
 import type { SortField, SortDir } from "../../lib/hooks/use-device-inventory";
 import { ALL_STATUSES, ALL_LOCATIONS, ALL_MODELS } from "../../lib/mock-data/inventory-data";
+import type { MockDevice } from "../../lib/mock-data/inventory-data";
 import { CreateDeviceModal } from "./dialogs/create-device-modal";
 import { GeoLocationMap } from "./geo-location-map";
+import { ExportDropdown } from "./export-dropdown";
+import type { ExportColumn } from "../../lib/use-export";
 import { AdvancedDeviceSearch } from "./search/advanced-device-search";
 
 type Tab = "hardware" | "firmware" | "geo";
@@ -26,6 +28,17 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "hardware", label: "Hardware Inventory" },
   { id: "firmware", label: "Firmware Status" },
   { id: "geo", label: "Geo Location" },
+];
+
+const DEVICE_EXPORT_COLUMNS: ExportColumn<MockDevice>[] = [
+  { header: "Device Name", accessor: "name" },
+  { header: "Serial Number", accessor: "serial" },
+  { header: "Model", accessor: "model" },
+  { header: "Status", accessor: "status" },
+  { header: "Location", accessor: "location" },
+  { header: "Health Score", accessor: (d) => String(d.health) },
+  { header: "Firmware", accessor: "firmware" },
+  { header: "Last Seen", accessor: "lastSeen" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -37,7 +50,11 @@ function StatusBadge({ status }: { status: string }) {
     [DeviceStatus.Online]: { dot: "bg-emerald-500", text: "text-emerald-700", bg: "bg-emerald-50" },
     [DeviceStatus.Offline]: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50" },
     [DeviceStatus.Maintenance]: { dot: "bg-amber-500", text: "text-amber-700", bg: "bg-amber-50" },
-    [DeviceStatus.Decommissioned]: { dot: "bg-gray-400", text: "text-muted-foreground", bg: "bg-muted" },
+    [DeviceStatus.Decommissioned]: {
+      dot: "bg-gray-400",
+      text: "text-muted-foreground",
+      bg: "bg-muted",
+    },
   };
   const c = config[status] ?? { dot: "bg-gray-400", text: "text-muted-foreground", bg: "bg-muted" };
   return (
@@ -137,7 +154,6 @@ export function Inventory() {
     handleSort,
     handleStatusChange,
     handleCreateDevice,
-    exportCsv,
     page: safeCurrentPage,
     setPage,
     totalPages,
@@ -184,18 +200,13 @@ export function Inventory() {
 
             {/* Action buttons */}
             <div className="flex items-center gap-2 justify-end">
-              <button
-                onClick={exportCsv}
-                disabled={filteredDevices.length === 0}
-                className={cn(
-                  "flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-border bg-card px-3 text-[14px] font-medium text-foreground/80 shrink-0",
-                  "hover:bg-muted",
-                  "disabled:cursor-not-allowed disabled:opacity-60",
-                )}
-              >
-                <Download className="h-4 w-4" aria-hidden="true" />
-                Export CSV
-              </button>
+              <ExportDropdown
+                data={filteredDevices}
+                columns={DEVICE_EXPORT_COLUMNS}
+                filename="inventory-export"
+                title="Hardware Inventory"
+                className="h-10"
+              />
 
               {canCreate && (
                 <button

@@ -138,6 +138,38 @@ Every async operation must handle: loading → success → error.
 
 ---
 
+## Type Safety
+
+- **No `any` type** — use `unknown` and narrow with type guards
+- Enforced by `@typescript-eslint/no-explicit-any: "error"` in ESLint
+- Pre-commit hook blocks commits containing `any`
+
+---
+
+## Console Logging
+
+- **No `console.log`** in production code — use structured logging
+- `console.warn` and `console.error` are permitted
+- Enforced by `no-console: "error"` in ESLint (allows `warn`, `error`)
+
+---
+
+## Import Ordering
+
+Imports should follow this order, separated by blank lines:
+
+1. **External packages** — `react`, `react-router`, third-party libs
+2. **Internal aliases** — `@/lib/`, `@/app/components/`
+3. **Relative imports** — `./`, `../` (only within the same module)
+
+### No Barrel Exports
+
+- Do NOT create `index.ts` files that re-export from other files
+- Import directly from the source file: `import { Device } from '@/lib/types'`
+- Barrel exports create circular dependency risks and slow builds
+
+---
+
 ## Naming
 
 - Files: `kebab-case.tsx`
@@ -145,3 +177,4 @@ Every async operation must handle: loading → success → error.
 - Hooks: `use-{name}.ts` → `useName()`
 - Types: `PascalCase` in `src/lib/types.ts`
 - Shared components: `src/app/components/shared/`
+- Constants: `UPPER_SNAKE_CASE`
