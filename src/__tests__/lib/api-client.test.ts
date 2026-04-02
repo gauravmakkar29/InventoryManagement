@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { createApiClient, type IApiClient } from "../../lib/api-client";
+import { createApiClient, type IApiClient } from "@/lib/api-client";
 
 // Mock fetch
 const mockFetch = vi.fn();

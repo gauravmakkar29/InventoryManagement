@@ -5,8 +5,8 @@ import type {
   FirmwareStage,
   FirmwareStatus,
   AuditAction,
-} from "../../app/components/deployment/deployment-types";
-import { INITIAL_FIRMWARE } from "../../app/components/deployment/deployment-constants";
+} from "@/app/components/deployment/deployment-types";
+import { INITIAL_FIRMWARE } from "@/app/components/deployment/deployment-constants";
 
 export function useFirmwareDeployment(
   currentUser: string,

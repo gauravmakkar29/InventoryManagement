@@ -19,12 +19,12 @@ import {
   BarChart3,
 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole } from "../../lib/rbac";
-import type { Role } from "../../lib/rbac";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole } from "@/lib/rbac";
+import type { Role } from "@/lib/rbac";
 import { VulnerabilitySearch } from "./search/vulnerability-search";
-import { useComplianceManagement } from "../../lib/hooks/use-compliance-management";
+import { useComplianceManagement } from "@/lib/hooks/use-compliance-management";
 import type {
   ComplianceItem,
   ComplianceStatus,
@@ -32,14 +32,14 @@ import type {
   Vulnerability,
   VulnSeverity,
   RemediationStatus,
-} from "../../lib/mock-data/compliance-data";
+} from "@/lib/mock-data/compliance-data";
 import {
   CERT_TYPES,
   REPORT_TYPES,
   downloadFile,
   generateCSV,
   generateJSON,
-} from "../../lib/mock-data/compliance-data";
+} from "@/lib/mock-data/compliance-data";
 
 // =============================================================================
 // Types (moved to src/lib/mock-data/compliance-data.ts)

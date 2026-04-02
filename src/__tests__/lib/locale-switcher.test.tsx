@@ -19,7 +19,7 @@ vi.mock("react-i18next", async (importOriginal) => {
 });
 
 // Import after mocks are set up
-import { LocaleSwitcher } from "../../app/components/locale-switcher";
+import { LocaleSwitcher } from "@/app/components/locale-switcher";
 
 describe("LocaleSwitcher", () => {
   beforeEach(() => {

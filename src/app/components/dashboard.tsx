@@ -17,10 +17,10 @@ import {
   Rocket,
   Monitor,
 } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { useDashboardData } from "../../lib/use-dashboard-data";
-import type { FetchState } from "../../lib/use-dashboard-data";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { useDashboardData } from "@/lib/use-dashboard-data";
+import type { FetchState } from "@/lib/use-dashboard-data";
 import { PipelineStatusCard } from "./search/pipeline-status-card";
 
 // ---------------------------------------------------------------------------

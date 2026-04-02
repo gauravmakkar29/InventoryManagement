@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole, canAccessPage, canPerformAction } from "../../lib/rbac";
-import type { Role, Action } from "../../lib/rbac";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canAccessPage, canPerformAction } from "@/lib/rbac";
+import type { Role, Action } from "@/lib/rbac";
 
 interface RequireRoleProps {
   /** Allowed roles — if provided, checks that user has one of these roles. */

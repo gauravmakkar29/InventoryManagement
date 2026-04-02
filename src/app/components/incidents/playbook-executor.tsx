@@ -2,9 +2,9 @@
  * IMS Gen 2 — Epic 14: Playbook Executor (Story 14.5 AC3-AC6)
  */
 import { CheckCircle2, Zap } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatRelativeTime } from "../../../lib/utils";
-import type { Incident } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/lib/utils";
+import type { Incident } from "@/lib/incident-types";
 
 export function PlaybookExecutor({
   progress,

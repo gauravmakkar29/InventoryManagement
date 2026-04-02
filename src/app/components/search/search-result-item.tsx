@@ -1,6 +1,6 @@
 import { Server, Package, ClipboardList, Shield, AlertTriangle } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { GlobalSearchResult, SearchEntityType } from "../../../lib/opensearch-types";
+import { cn } from "@/lib/utils";
+import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
 
 // =============================================================================
 // Story 18.2 — SearchResultItem

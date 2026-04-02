@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Upload, X, Package, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type { UploadModalProps } from "./deployment-types";
 import { AVAILABLE_MODELS } from "./deployment-constants";
 import { computeSHA256 } from "./deployment-utils";

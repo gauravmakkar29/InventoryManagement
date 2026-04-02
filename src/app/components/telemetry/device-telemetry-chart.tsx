@@ -11,8 +11,8 @@ import {
   Minus,
   RefreshCw,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { TelemetryReading } from "../../../lib/types";
+import { cn } from "@/lib/utils";
+import type { TelemetryReading } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Types

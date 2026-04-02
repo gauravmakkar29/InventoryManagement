@@ -3,11 +3,11 @@
  */
 import { useState } from "react";
 import { Lock, Unlock, BookOpen, X } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatDateTime, formatRelativeTime } from "../../../lib/utils";
-import type { Incident, IncidentStatus, AffectedDevice } from "../../../lib/incident-types";
-import { STATUS_COLORS, VALID_TRANSITIONS } from "../../../lib/incident-types";
-import { MOCK_TOPOLOGY, MOCK_LATERAL_MOVEMENT } from "../../../lib/incident-mock-data";
+import { cn } from "@/lib/utils";
+import { formatDateTime, formatRelativeTime } from "@/lib/utils";
+import type { Incident, IncidentStatus, AffectedDevice } from "@/lib/incident-types";
+import { STATUS_COLORS, VALID_TRANSITIONS } from "@/lib/incident-types";
+import { MOCK_TOPOLOGY, MOCK_LATERAL_MOVEMENT } from "@/lib/incident-mock-data";
 import { SeverityBadge, StatusBadge, CategoryBadge } from "./incident-badges";
 import { IncidentTimeline } from "./incident-timeline";
 import { PlaybookExecutor } from "./playbook-executor";

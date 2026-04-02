@@ -9,9 +9,9 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { HeatmapCell } from "../../../lib/types";
-import { Skeleton } from "../../../components/skeleton";
+import { cn } from "@/lib/utils";
+import type { HeatmapCell } from "@/lib/types";
+import { Skeleton } from "@/components/skeleton";
 
 // ---------------------------------------------------------------------------
 // Constants

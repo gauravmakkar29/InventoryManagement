@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { Search } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import { useGlobalSearch } from "./use-global-search";
 import { SearchCommandPalette } from "./search-command-palette";
 

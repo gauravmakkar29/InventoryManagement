@@ -1,5 +1,5 @@
 import type { IApiProvider } from "../types";
-import * as hlmApi from "../../hlm-api";
+import * as hlmApi from "@/lib/hlm-api";
 
 /**
  * Mock API Provider — wraps the existing hlm-api.ts stub functions

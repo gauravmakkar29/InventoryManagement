@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Eye, EyeOff, AlertCircle, Sun, Zap, Shield, BarChart3, Activity } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "../../lib/use-auth";
-import { cn } from "../../lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { cn } from "@/lib/utils";
 import { MfaChallenge } from "./mfa-challenge";
 
 interface SignInForm {

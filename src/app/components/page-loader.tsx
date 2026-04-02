@@ -1,4 +1,4 @@
-import { Skeleton } from "../../components/skeleton";
+import { Skeleton } from "@/components/skeleton";
 
 /**
  * Page-level loading skeleton shown during lazy route transitions.

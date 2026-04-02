@@ -5,7 +5,7 @@
  * Swap this for CognitoAuthAdapter (or any other) via VITE_PLATFORM.
  */
 
-import type { User } from "../../types";
+import type { User } from "@/lib/types";
 import type { IAuthAdapter, AuthSession, SignInResult } from "../auth-adapter";
 
 // =============================================================================

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useDeviceInventory } from "../../../lib/hooks/use-device-inventory";
-import { DeviceStatus } from "../../../lib/types";
+import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
+import { DeviceStatus } from "@/lib/types";
 
 // Mock sonner toast
 vi.mock("sonner", () => ({

@@ -18,9 +18,9 @@ import {
   Fingerprint,
   FileText,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { useAuth } from "../../../lib/use-auth";
-import { getPrimaryRole, canAccessPage } from "../../../lib/rbac";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canAccessPage } from "@/lib/rbac";
 import { AppVersionBadge } from "../app-version-badge";
 import { LocaleSwitcher } from "../locale-switcher";
 

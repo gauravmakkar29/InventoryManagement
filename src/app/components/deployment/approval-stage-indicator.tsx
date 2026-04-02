@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type { ApprovalStageIndicatorProps } from "./deployment-types";
 import { APPROVAL_STAGES } from "./deployment-constants";
 import { formatShortDate } from "./deployment-utils";

@@ -1,4 +1,4 @@
-import { useAuth } from "../../lib/use-auth";
+import { useAuth } from "@/lib/use-auth";
 import { AlertTriangle } from "lucide-react";
 
 /**

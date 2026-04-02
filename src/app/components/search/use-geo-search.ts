@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import type { GeoBoundingBox, GeoDeviceResult, GeoCluster } from "../../../lib/opensearch-types";
+import type { GeoBoundingBox, GeoDeviceResult, GeoCluster } from "@/lib/opensearch-types";
 
 // =============================================================================
 // Story 18.6 — useGeoSearch Hook

@@ -3,15 +3,15 @@
  * Main page component implementing Stories 14.1–14.6
  */
 import { useState, useCallback, useEffect } from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type {
   Incident,
   IncidentStatus,
   AffectedDevice,
   IsolationPolicy,
-} from "../../../lib/incident-types";
-import { MOCK_INCIDENT_METRICS } from "../../../lib/incident-mock-data";
-import { useIncidentManagement } from "../../../lib/hooks/use-incident-management";
+} from "@/lib/incident-types";
+import { MOCK_INCIDENT_METRICS } from "@/lib/incident-mock-data";
+import { useIncidentManagement } from "@/lib/hooks/use-incident-management";
 import type { TabId } from "./incident-types";
 import { TABS } from "./incident-types";
 import { CreateIncidentDialog, IsolationDialog, ReleaseDialog } from "./incident-dialogs";

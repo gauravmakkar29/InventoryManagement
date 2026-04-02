@@ -6,9 +6,9 @@
  */
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Download, ChevronDown, Loader2 } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useExport } from "../../lib/use-export";
-import type { ExportFormat, ExportColumn } from "../../lib/use-export";
+import { cn } from "@/lib/utils";
+import { useExport } from "@/lib/use-export";
+import type { ExportFormat, ExportColumn } from "@/lib/use-export";
 
 // ---------------------------------------------------------------------------
 // Types

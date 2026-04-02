@@ -1,17 +1,17 @@
 import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
-import { generateCSV } from "../../lib/report-generator";
+import { generateCSV } from "@/lib/report-generator";
 import type {
   AuditEntry,
   AuditAction,
   AuditSortField,
   SortDirection,
-} from "../../app/components/deployment/deployment-types";
+} from "@/app/components/deployment/deployment-types";
 import {
   INITIAL_AUDIT,
   AUDIT_PAGE_SIZE,
-} from "../../app/components/deployment/deployment-constants";
-import { getDefaultDateRange } from "../../app/components/deployment/deployment-utils";
+} from "@/app/components/deployment/deployment-constants";
+import { getDefaultDateRange } from "@/app/components/deployment/deployment-utils";
 
 export function useAuditLog(currentUser: string) {
   const [auditLog, setAuditLog] = useState<AuditEntry[]>(INITIAL_AUDIT);

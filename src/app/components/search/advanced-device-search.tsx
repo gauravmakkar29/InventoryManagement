@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Search, X, SlidersHorizontal, AlertCircle } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { DeviceSearchFilters } from "../../../lib/opensearch-types";
+import { cn } from "@/lib/utils";
+import type { DeviceSearchFilters } from "@/lib/opensearch-types";
 
 // =============================================================================
 // Story 18.3 — AdvancedDeviceSearch

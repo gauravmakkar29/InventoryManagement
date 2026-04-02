@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { renderHook } from "@testing-library/react";
 import React from "react";
-import { useAuth } from "../../lib/use-auth";
-import { AuthContext } from "../../lib/auth-context-instance";
-import type { AuthState } from "../../lib/types";
+import { useAuth } from "@/lib/use-auth";
+import { AuthContext } from "@/lib/auth-context-instance";
+import type { AuthState } from "@/lib/types";
 
 function createMockAuthState(overrides?: Partial<AuthState>): AuthState {
   return {

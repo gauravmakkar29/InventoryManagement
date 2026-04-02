@@ -3,7 +3,7 @@ import {
   getCityCoordinates,
   getAllCities,
   resolveDeviceCoordinates,
-} from "../../lib/location-coords";
+} from "@/lib/location-coords";
 
 // =============================================================================
 // getCityCoordinates

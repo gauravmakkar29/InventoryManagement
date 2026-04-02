@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { ServiceOrder } from "../../../lib/mock-data/service-order-data";
-import { STATUS_LABELS } from "../../../lib/mock-data/service-order-data";
+import { cn } from "@/lib/utils";
+import type { ServiceOrder } from "@/lib/mock-data/service-order-data";
+import { STATUS_LABELS } from "@/lib/mock-data/service-order-data";
 import { PriorityBadge, ServiceTypeBadge } from "./service-order-kanban";
 
 /* ─── Constants ───────────────────────────────────────────────────── */

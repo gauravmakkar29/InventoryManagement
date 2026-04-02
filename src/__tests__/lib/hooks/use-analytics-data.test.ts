@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useAnalyticsData } from "../../../lib/hooks/use-analytics-data";
+import { useAnalyticsData } from "@/lib/hooks/use-analytics-data";
 
 // Mock sonner toast
 vi.mock("sonner", () => ({

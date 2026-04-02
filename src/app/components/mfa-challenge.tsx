@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from "react";
 import { ShieldCheck, AlertCircle } from "lucide-react";
-import { useAuth } from "../../lib/use-auth";
-import { cn } from "../../lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { cn } from "@/lib/utils";
 
 interface MfaChallengeProps {
   onSuccess: () => void;

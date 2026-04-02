@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createAuthProvider } from "../../lib/providers/auth-provider";
-import { createMockAuthAdapter } from "../../lib/providers/mock/mock-auth-adapter";
-import { useAuth } from "../../lib/use-auth";
+import { createAuthProvider } from "@/lib/providers/auth-provider";
+import { createMockAuthAdapter } from "@/lib/providers/mock/mock-auth-adapter";
+import { useAuth } from "@/lib/use-auth";
 
 // Mock localStorage
 const store: Record<string, string> = {};

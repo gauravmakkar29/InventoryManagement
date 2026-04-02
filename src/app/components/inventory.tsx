@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Package, Plus } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { DeviceStatus } from "../../lib/types";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
-import { useDeviceInventory } from "../../lib/hooks/use-device-inventory";
-import { ALL_STATUSES, ALL_LOCATIONS, ALL_MODELS } from "../../lib/mock-data/inventory-data";
-import type { MockDevice } from "../../lib/mock-data/inventory-data";
+import { cn } from "@/lib/utils";
+import { DeviceStatus } from "@/lib/types";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
+import { ALL_STATUSES, ALL_LOCATIONS, ALL_MODELS } from "@/lib/mock-data/inventory-data";
+import type { MockDevice } from "@/lib/mock-data/inventory-data";
 import { CreateDeviceModal } from "./dialogs/create-device-modal";
 import { GeoLocationMap } from "./geo-location-map";
 import { ExportDropdown } from "./export-dropdown";
-import type { ExportColumn } from "../../lib/use-export";
+import type { ExportColumn } from "@/lib/use-export";
 import { AdvancedDeviceSearch } from "./search/advanced-device-search";
 import { StatusBadge, HealthBar, SortHeader } from "./inventory/device-table-helpers";
 

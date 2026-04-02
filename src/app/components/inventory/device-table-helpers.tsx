@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronUp, ArrowUpDown } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { DeviceStatus } from "../../../lib/types";
-import type { SortField, SortDir } from "../../../lib/hooks/use-device-inventory";
+import { cn } from "@/lib/utils";
+import { DeviceStatus } from "@/lib/types";
+import type { SortField, SortDir } from "@/lib/hooks/use-device-inventory";
 
 // ---------------------------------------------------------------------------
 // StatusBadge

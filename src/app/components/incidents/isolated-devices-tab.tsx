@@ -3,9 +3,9 @@
  */
 import { useMemo } from "react";
 import { Shield, Unlock } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { formatDateTime } from "../../../lib/utils";
-import type { Incident, AffectedDevice } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import { formatDateTime } from "@/lib/utils";
+import type { Incident, AffectedDevice } from "@/lib/incident-types";
 
 export function IsolatedDevicesTab({
   incidents,

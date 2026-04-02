@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { generateCSV, generateJSON } from "../../lib/report-generator";
+import { generateCSV, generateJSON } from "@/lib/report-generator";
 
 describe("generateCSV()", () => {
   it("returns empty string for empty data array", () => {

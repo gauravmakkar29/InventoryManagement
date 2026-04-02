@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { createServiceOrderSchema } from "../../lib/schemas/service-order.schema";
-import { inviteUserSchema, editUserSchema } from "../../lib/schemas/user.schema";
+import { createServiceOrderSchema } from "@/lib/schemas/service-order.schema";
+import { inviteUserSchema, editUserSchema } from "@/lib/schemas/user.schema";
 
 // =============================================================================
 // Service Order Schema

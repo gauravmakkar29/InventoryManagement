@@ -4,7 +4,7 @@ import type {
   AggregationResponse,
   TimeRange,
   AggregationBucketEntry,
-} from "../../../lib/opensearch-types";
+} from "@/lib/opensearch-types";
 
 // =============================================================================
 // Story 18.5 — useAggregations Hook

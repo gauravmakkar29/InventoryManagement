@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import { Bell } from "lucide-react";
-import { useAuth } from "../../../lib/use-auth";
-import { cn } from "../../../lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { cn } from "@/lib/utils";
 import { NotificationPanel, useNotificationCount } from "../notification-panel";
 import { ThemeToggle } from "../theme/theme-toggle";
 import { GlobalSearchBar } from "../search/global-search-bar";

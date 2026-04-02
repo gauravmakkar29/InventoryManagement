@@ -4,7 +4,7 @@ import {
   createCsrfInterceptor,
   CSP_DIRECTIVES,
   RECOMMENDED_SECURITY_HEADERS,
-} from "../../lib/security";
+} from "@/lib/security";
 
 // =============================================================================
 // CSRF Token Management

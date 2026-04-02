@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Navigate, Outlet } from "react-router";
-import { useAuth } from "../../../lib/use-auth";
-import { useUIStore } from "../../../stores/ui-store";
+import { useAuth } from "@/lib/use-auth";
+import { useUIStore } from "@/stores/ui-store";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
 import { Breadcrumbs } from "./breadcrumbs";
@@ -10,7 +10,7 @@ import { CommandPalette } from "./command-palette";
 import { SessionTimeoutWarning } from "../session-timeout-warning";
 import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
 import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
-import { Skeleton } from "../../../components/skeleton";
+import { Skeleton } from "@/components/skeleton";
 import { useRealtimeNotifications } from "@/lib/hooks/use-realtime-notifications";
 import { createMockRealtimeAdapter } from "@/lib/providers/realtime/mock-realtime-adapter";
 

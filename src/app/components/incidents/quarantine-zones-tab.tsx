@@ -2,9 +2,9 @@
  * IMS Gen 2 — Epic 14: Quarantine Zones Tab (Story 14.4)
  */
 import { useState, useMemo } from "react";
-import { cn } from "../../../lib/utils";
-import { formatRelativeTime } from "../../../lib/utils";
-import type { QuarantineZone } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/lib/utils";
+import type { QuarantineZone } from "@/lib/incident-types";
 
 export function QuarantineZonesTab({
   zones,

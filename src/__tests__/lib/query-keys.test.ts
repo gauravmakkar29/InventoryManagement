@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { queryKeys } from "../../lib/query-keys";
+import { queryKeys } from "@/lib/query-keys";
 
 describe("queryKeys", () => {
   describe("dashboard", () => {

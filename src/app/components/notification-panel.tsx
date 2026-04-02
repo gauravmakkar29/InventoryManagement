@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { X, AlertTriangle, Info, AlertCircle, CheckCircle, Bell } from "lucide-react";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 import { useNotificationStore, type StoredNotification } from "@/stores/notification-store";
 import type { NotificationEventType } from "@/lib/providers/notification-provider";
 

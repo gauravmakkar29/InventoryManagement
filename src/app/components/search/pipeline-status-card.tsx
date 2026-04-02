@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Activity, RefreshCw, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
-import { getOsisPipelineHealth, triggerReindex } from "../../../lib/hlm-api";
-import type { PipelineHealthStatus } from "../../../lib/opensearch-types";
-import { useAuth } from "../../../lib/use-auth";
+import { cn } from "@/lib/utils";
+import { getOsisPipelineHealth, triggerReindex } from "@/lib/hlm-api";
+import type { PipelineHealthStatus } from "@/lib/opensearch-types";
+import { useAuth } from "@/lib/use-auth";
 
 // =============================================================================
 // Story 18.1 — PipelineStatusCard

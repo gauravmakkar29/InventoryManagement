@@ -1,8 +1,8 @@
 import { useState, useMemo } from "react";
 import { Target, X, MapPin, Activity, SlidersHorizontal, Play } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { RiskLevel, DeviceStatus } from "../../../lib/types";
-import type { BlastRadiusDevice } from "../../../lib/types";
+import { cn } from "@/lib/utils";
+import { RiskLevel, DeviceStatus } from "@/lib/types";
+import type { BlastRadiusDevice } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Mock Data

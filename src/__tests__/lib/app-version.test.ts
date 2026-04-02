@@ -15,7 +15,7 @@ import {
   isNewer,
   createStaleClientDetector,
   createAppVersionInterceptor,
-} from "../../lib/app-version";
+} from "@/lib/app-version";
 
 // =============================================================================
 // Build Info

@@ -6,12 +6,12 @@ import type {
   SBOM,
   RemediationStatus,
   ComponentVulnerability,
-} from "../../app/components/sbom/sbom-types";
+} from "@/app/components/sbom/sbom-types";
 import {
   MOCK_SBOMS,
   MOCK_FIRMWARE,
   MOCK_VULNERABILITIES,
-} from "../../app/components/sbom/sbom-constants";
+} from "@/app/components/sbom/sbom-constants";
 
 export function useSBOMData() {
   const [sboms, setSboms] = useState<SBOM[]>(MOCK_SBOMS);

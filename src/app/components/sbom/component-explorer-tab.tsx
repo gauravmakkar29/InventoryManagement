@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Search, Package, Filter, X, ChevronDown, ChevronRight, ShieldCheck } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 import type { SBOMComponent, ComponentVulnerability } from "./sbom-types";
 import {
   SEVERITY_CONFIG,

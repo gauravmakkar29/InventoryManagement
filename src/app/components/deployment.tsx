@@ -27,11 +27,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
-import { generateCSV } from "../../lib/report-generator";
-import { Skeleton } from "../../components/skeleton";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { generateCSV } from "@/lib/report-generator";
+import { Skeleton } from "@/components/skeleton";
 
 import type { Tab, RemediationStatus, ReportType } from "./deployment/deployment-types";
 import {
@@ -45,9 +45,9 @@ import { formatTimestamp, getActionBadgeClass, downloadFile } from "./deployment
 import { ApprovalStageIndicator } from "./deployment/approval-stage-indicator";
 import { UploadFirmwareModal } from "./deployment/upload-firmware-modal";
 import { CreateVulnerabilityModal } from "./deployment/create-vulnerability-modal";
-import { useAuditLog } from "../../lib/hooks/use-audit-log";
-import { useFirmwareDeployment } from "../../lib/hooks/use-firmware-deployment";
-import { useVulnerabilityTracker } from "../../lib/hooks/use-vulnerability-tracker";
+import { useAuditLog } from "@/lib/hooks/use-audit-log";
+import { useFirmwareDeployment } from "@/lib/hooks/use-firmware-deployment";
+import { useVulnerabilityTracker } from "@/lib/hooks/use-vulnerability-tracker";
 
 // =============================================================================
 // Main Deployment Component

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { formatDate, formatDateTime, formatRelativeTime } from "../../lib/utils";
+import { formatDate, formatDateTime, formatRelativeTime } from "@/lib/utils";
 
 // =============================================================================
 // formatDate

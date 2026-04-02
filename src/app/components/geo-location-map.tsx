@@ -16,14 +16,14 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { DeviceStatus } from "../../lib/types";
+import { cn } from "@/lib/utils";
+import { DeviceStatus } from "@/lib/types";
 import {
   resolveDeviceCoordinates,
   getCityCoordinates,
   type CityCoordinates,
-} from "../../lib/location-coords";
-import { Skeleton } from "../../components/skeleton";
+} from "@/lib/location-coords";
+import { Skeleton } from "@/components/skeleton";
 
 // ---------------------------------------------------------------------------
 // Types

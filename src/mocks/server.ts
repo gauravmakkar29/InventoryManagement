@@ -2,7 +2,7 @@
  * MSW server for Node.js (Vitest tests).
  *
  * Usage in tests:
- *   import { server } from "../../mocks/server";
+ *   import { server } from "@/mocks/server";
  *   beforeAll(() => server.listen());
  *   afterEach(() => server.resetHandlers());
  *   afterAll(() => server.close());

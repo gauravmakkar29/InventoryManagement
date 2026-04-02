@@ -14,7 +14,7 @@ import {
   Fingerprint,
   FileText,
 } from "lucide-react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/lib/utils";
 
 /**
  * Story 16.5: Command Palette (Cmd+K / Ctrl+K)

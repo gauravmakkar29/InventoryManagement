@@ -1,5 +1,5 @@
 import { forwardRef, type TextareaHTMLAttributes } from "react";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 
 interface FormTextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: boolean;

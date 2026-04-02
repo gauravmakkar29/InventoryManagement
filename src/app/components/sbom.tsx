@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FileBox } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole } from "../../lib/rbac";
-import { useSBOMData } from "../../lib/hooks/use-sbom-data";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole } from "@/lib/rbac";
+import { useSBOMData } from "@/lib/hooks/use-sbom-data";
 import type { Tab } from "./sbom/sbom-types";
 import { TABS, MOCK_COMPONENTS } from "./sbom/sbom-constants";
 import { SBOMManagementTab } from "./sbom/sbom-management-tab";

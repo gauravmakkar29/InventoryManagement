@@ -2,9 +2,9 @@
  * IMS Gen 2 — Epic 14: Metrics Dashboard Tab (Story 14.6)
  */
 import { Lock, MapPin, CheckCircle2, ShieldAlert } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import type { IncidentMetrics } from "../../../lib/incident-types";
-import { SEVERITY_COLORS } from "../../../lib/incident-types";
+import { cn } from "@/lib/utils";
+import type { IncidentMetrics } from "@/lib/incident-types";
+import { SEVERITY_COLORS } from "@/lib/incident-types";
 
 export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
   return (
