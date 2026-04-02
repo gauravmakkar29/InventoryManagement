@@ -215,3 +215,65 @@ To get the template running against your infrastructure:
 - No specific hosting — Static Web Apps, S3+CloudFront, Vercel, Netlify, or any static host
 
 The template is a React SPA. It needs a URL to authenticate and a URL to call APIs. Everything else is your choice.
+
+---
+
+## 6. Security Requirements (NIST 800-53)
+
+The IMS Gen 2 template enforces many NIST 800-53 controls at the application layer (RBAC, session management, input validation, CSP). The controls below must be satisfied by your infrastructure. See `Docs/nist-800-53-control-mapping.md` for the full mapping.
+
+### 6.1 Authentication Provider
+
+Your auth provider MUST satisfy:
+
+| Requirement                | Detail                                                                                          | NIST Control |
+| -------------------------- | ----------------------------------------------------------------------------------------------- | ------------ |
+| Password policy            | Minimum 12-character passwords per NIST 800-63B. No composition rules (length > complexity).    | IA-5         |
+| MFA for privileged roles   | TOTP-based MFA required for Admin and Manager roles.                                            | IA-2(1)      |
+| Account lockout            | Lock account after 5 consecutive failed login attempts. Configurable lockout duration.          | AC-7         |
+| Session token expiry       | Access tokens expire after 15 minutes. Refresh tokens rotate on use.                            | AC-11, AC-12 |
+| Unique identifiers         | Each user receives a UUID (`sub` claim). Email uniqueness enforced.                             | IA-4         |
+| Group/role claims in JWT   | Tokens must include role claims mapped to: Admin, Manager, Technician, Viewer, CustomerAdmin.   | AC-2         |
+
+### 6.2 Encryption
+
+Your infrastructure MUST satisfy:
+
+| Requirement              | Detail                                                                                            | NIST Control |
+| ------------------------ | ------------------------------------------------------------------------------------------------- | ------------ |
+| Encryption at rest       | AES-256 server-side encryption on all data stores (database, object storage, search, audit logs). | SC-13, SC-28 |
+| Encryption in transit    | TLS 1.2+ on all endpoints (CDN, API, storage). No plaintext fallback.                             | SC-8         |
+| Key management           | Managed encryption keys with automatic rotation enabled.                                          | SC-12        |
+
+### 6.3 Audit Logging
+
+Your audit infrastructure MUST satisfy:
+
+| Requirement           | Detail                                                                                                              | NIST Control |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------ |
+| Required fields       | Every audit record must capture: timestamp (ISO 8601 UTC), action, resourceType, resourceId, userId, clientIP, before/after values. | AU-3         |
+| Minimum retention     | 90-day minimum retention for application audit logs. Infrastructure API logs retained per compliance requirements.   | AU-4         |
+| Tamper protection     | Audit export storage must use WORM (Write Once Read Many) or equivalent immutable storage.                          | AU-9         |
+| Failure handling      | Dead-letter queue for failed audit events. Alerting on audit processing errors.                                     | AU-5         |
+| Full coverage         | Both application-level events (data changes) and infrastructure-level events (API calls) must be captured.          | AU-2, AU-12  |
+
+### 6.4 Firmware Approval API
+
+Your API implementation MUST enforce Separation of Duties for the firmware approval workflow:
+
+- The user who **uploads** a firmware package cannot be the user who **tests** it.
+- The user who **tests** a firmware package cannot be the user who **approves** it.
+- The user who **uploads** a firmware package cannot be the user who **approves** it.
+
+This is enforced at the API resolver level by comparing `userId` across approval stages. (NIST AC-5)
+
+### 6.5 Monitoring
+
+Your monitoring infrastructure MUST satisfy:
+
+| Requirement                  | Detail                                                                                     | NIST Control |
+| ---------------------------- | ------------------------------------------------------------------------------------------ | ------------ |
+| Anomaly detection            | Detect unusual patterns in authentication attempts and API usage.                           | SI-4         |
+| Auth failure alerting        | Alert on repeated authentication failures (brute force detection).                         | IR-5         |
+| Audit processing alerting    | Alert when audit event processing fails or DLQ depth exceeds threshold.                    | AU-5, IR-5   |
+| Metrics collection           | Collect and retain application and infrastructure performance metrics.                     | SI-4         |
