@@ -1,10 +1,31 @@
-import { useState, useCallback, useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { X, AlertTriangle, Info, AlertCircle, CheckCircle, Bell } from "lucide-react";
 import { cn } from "../../lib/utils";
+import { useNotificationStore, type StoredNotification } from "@/stores/notification-store";
+import type { NotificationEventType } from "@/lib/providers/notification-provider";
 
 export type NotificationSeverity = "critical" | "warning" | "info" | "success";
 
-export interface Notification {
+/**
+ * Map real-time event types to UI severity for consistent icon/color rendering.
+ */
+function eventTypeToSeverity(type: NotificationEventType): NotificationSeverity {
+  switch (type) {
+    case "alert":
+      return "critical";
+    case "firmware_approval":
+      return "warning";
+    case "device_status":
+      return "info";
+    case "system":
+      return "success";
+    default:
+      return "info";
+  }
+}
+
+/** Shape used for rendering — merges stored notifications and legacy format. */
+interface DisplayNotification {
   id: string;
   severity: NotificationSeverity;
   title: string;
@@ -12,6 +33,39 @@ export interface Notification {
   timestamp: string;
   read: boolean;
   sourceUrl?: string;
+}
+
+/**
+ * Map event type to a default source URL for navigation.
+ */
+function eventTypeToSourceUrl(type: NotificationEventType): string | undefined {
+  switch (type) {
+    case "device_status":
+      return "/inventory";
+    case "firmware_approval":
+      return "/deployment";
+    case "alert":
+      return "/compliance";
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * Format an ISO timestamp into a human-readable relative string.
+ */
+function formatRelativeTime(isoTimestamp: string): string {
+  const now = Date.now();
+  const then = new Date(isoTimestamp).getTime();
+  if (isNaN(then)) return isoTimestamp;
+  const diffMs = now - then;
+  const diffMin = Math.floor(diffMs / 60_000);
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin}m ago`;
+  const diffHr = Math.floor(diffMin / 60);
+  if (diffHr < 24) return `${diffHr}h ago`;
+  const diffDays = Math.floor(diffHr / 24);
+  return `${diffDays}d ago`;
 }
 
 const SEVERITY_CONFIG: Record<
@@ -24,7 +78,8 @@ const SEVERITY_CONFIG: Record<
   success: { icon: CheckCircle, iconColor: "text-emerald-500", bgColor: "bg-emerald-50" },
 };
 
-const MOCK_NOTIFICATIONS: Notification[] = [
+/** Default seed notifications shown when the store is empty (before real-time kicks in). */
+const SEED_NOTIFICATIONS: DisplayNotification[] = [
   {
     id: "n1",
     severity: "critical",
@@ -95,8 +150,35 @@ interface NotificationPanelProps {
   onClose: () => void;
 }
 
+/**
+ * Convert stored real-time notifications to display format, merging with seed data.
+ */
+function useDisplayNotifications(): DisplayNotification[] {
+  const storeNotifications = useNotificationStore((s) => s.notifications);
+
+  return useMemo(() => {
+    const realtime: DisplayNotification[] = storeNotifications.map((n: StoredNotification) => ({
+      id: n.id,
+      severity: eventTypeToSeverity(n.type),
+      title: n.title,
+      message: n.message,
+      timestamp: formatRelativeTime(n.timestamp),
+      read: n.read,
+      sourceUrl: eventTypeToSourceUrl(n.type),
+    }));
+
+    // If we have real-time notifications, show them first, then seed data
+    if (realtime.length > 0) {
+      return [...realtime, ...SEED_NOTIFICATIONS];
+    }
+
+    return SEED_NOTIFICATIONS;
+  }, [storeNotifications]);
+}
+
 export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const notifications = useDisplayNotifications();
+  const { markAsRead: storeMarkAsRead, markAllAsRead: storeMarkAllAsRead } = useNotificationStore();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -110,13 +192,8 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
     return () => document.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
-  const markAllRead = useCallback(() => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-  }, []);
-
-  const markRead = useCallback((id: string) => {
-    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
-  }, []);
+  const markAllRead = storeMarkAllAsRead;
+  const markRead = storeMarkAsRead;
 
   return (
     <>
@@ -229,7 +306,9 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
   );
 }
 
-/** Returns mock unread count for header badge. */
+/** Returns unread count from the notification store + seed data for header badge. */
 export function useNotificationCount(): number {
-  return MOCK_NOTIFICATIONS.filter((n) => !n.read).length;
+  const storeUnread = useNotificationStore((s) => s.unreadCount);
+  const seedUnread = SEED_NOTIFICATIONS.filter((n) => !n.read).length;
+  return storeUnread + seedUnread;
 }
