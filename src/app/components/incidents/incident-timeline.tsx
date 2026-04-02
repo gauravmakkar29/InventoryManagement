@@ -57,7 +57,7 @@ export function IncidentTimeline({ events }: { events: Incident["timelineEvents"
       case "playbook_completed":
         return "bg-emerald-100 text-emerald-600";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-muted text-muted-foreground";
     }
   };
 
@@ -97,7 +97,7 @@ export function IncidentTimeline({ events }: { events: Incident["timelineEvents"
       {sorted.map((event, i) => (
         <div key={i} className="relative flex gap-3 pb-4">
           {i < sorted.length - 1 && (
-            <div className="absolute left-[15px] top-8 h-[calc(100%-16px)] w-px bg-gray-200" />
+            <div className="absolute left-[15px] top-8 h-[calc(100%-16px)] w-px bg-border/60" />
           )}
           <div
             className={cn(
@@ -108,9 +108,9 @@ export function IncidentTimeline({ events }: { events: Incident["timelineEvents"
             {getEventIcon(event.action)}
           </div>
           <div className="min-w-0 flex-1 pt-0.5">
-            <p className="text-[14px] font-medium text-gray-900">{getEventText(event)}</p>
-            {event.note && <p className="mt-0.5 text-[14px] text-gray-600">{event.note}</p>}
-            <div className="mt-1 flex items-center gap-2 text-[13px] text-gray-600">
+            <p className="text-[14px] font-medium text-foreground">{getEventText(event)}</p>
+            {event.note && <p className="mt-0.5 text-[14px] text-muted-foreground">{event.note}</p>}
+            <div className="mt-1 flex items-center gap-2 text-[13px] text-muted-foreground">
               <span>{event.performedByName}</span>
               <span>&middot;</span>
               <span>{formatRelativeTime(event.timestamp)}</span>

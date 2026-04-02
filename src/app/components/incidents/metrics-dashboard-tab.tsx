@@ -14,8 +14,8 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
         <div className="card-elevated px-5 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[14px] text-gray-600">Open Incidents</p>
-              <p className="text-[28px] font-bold text-gray-900 tabular-nums">
+              <p className="text-[14px] text-muted-foreground">Open Incidents</p>
+              <p className="text-[28px] font-bold text-foreground tabular-nums">
                 {metrics.openIncidents}
               </p>
             </div>
@@ -43,21 +43,21 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-600">Isolated Devices</p>
-          <p className="text-[28px] font-bold text-gray-900 tabular-nums">
+          <p className="text-[14px] text-muted-foreground">Isolated Devices</p>
+          <p className="text-[28px] font-bold text-foreground tabular-nums">
             {metrics.isolatedDevices}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-600">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-muted-foreground">
             <Lock className="h-3 w-3" /> Currently under isolation
           </span>
         </div>
 
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-600">Active Quarantine Zones</p>
-          <p className="text-[28px] font-bold text-gray-900 tabular-nums">
+          <p className="text-[14px] text-muted-foreground">Active Quarantine Zones</p>
+          <p className="text-[28px] font-bold text-foreground tabular-nums">
             {metrics.activeQuarantineZones}
           </p>
-          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-gray-600">
+          <span className="mt-2 inline-flex items-center gap-1 text-[13px] text-muted-foreground">
             <MapPin className="h-3 w-3" /> Geographic zones
           </span>
         </div>
@@ -66,12 +66,12 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
       {/* MTTC / MTTR */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-600">Mean Time to Contain (MTTC)</p>
+          <p className="text-[14px] text-muted-foreground">Mean Time to Contain (MTTC)</p>
           <div className="mt-2 flex items-baseline gap-3">
-            <p className="text-[32px] font-bold text-gray-900 tabular-nums">
+            <p className="text-[32px] font-bold text-foreground tabular-nums">
               {metrics.meanTimeToContainHours}
             </p>
-            <span className="text-[15px] text-gray-600">hours</span>
+            <span className="text-[15px] text-muted-foreground">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -82,19 +82,19 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttcTrend < 0 ? `${metrics.mttcTrend}%` : `+${metrics.mttcTrend}%`}
             </span>
-            <span className="text-[13px] text-gray-600">vs last period</span>
+            <span className="text-[13px] text-muted-foreground">vs last period</span>
             {metrics.mttcTrend < 0 && (
               <span className="text-[12px] text-emerald-500">(improving)</span>
             )}
           </div>
         </div>
         <div className="card-elevated px-5 py-4">
-          <p className="text-[14px] text-gray-600">Mean Time to Resolve (MTTR)</p>
+          <p className="text-[14px] text-muted-foreground">Mean Time to Resolve (MTTR)</p>
           <div className="mt-2 flex items-baseline gap-3">
-            <p className="text-[32px] font-bold text-gray-900 tabular-nums">
+            <p className="text-[32px] font-bold text-foreground tabular-nums">
               {metrics.meanTimeToResolveHours}
             </p>
-            <span className="text-[15px] text-gray-600">hours</span>
+            <span className="text-[15px] text-muted-foreground">hours</span>
           </div>
           <div className="mt-2 flex items-center gap-1">
             <span
@@ -105,7 +105,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             >
               {metrics.mttrTrend < 0 ? `${metrics.mttrTrend}%` : `+${metrics.mttrTrend}%`}
             </span>
-            <span className="text-[13px] text-gray-600">vs last period</span>
+            <span className="text-[13px] text-muted-foreground">vs last period</span>
             {metrics.mttrTrend < 0 && (
               <span className="text-[12px] text-emerald-500">(improving)</span>
             )}
@@ -115,7 +115,7 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
 
       {/* Severity Pie Chart */}
       <div className="card-elevated px-5 py-4">
-        <h3 className="text-[15px] font-semibold text-gray-900 mb-4">Incidents by Severity</h3>
+        <h3 className="text-[15px] font-semibold text-foreground mb-4">Incidents by Severity</h3>
         <div className="flex items-center gap-8">
           {/* SVG Pie Chart */}
           <div className="shrink-0">
@@ -151,16 +151,21 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
                   );
                 });
               })()}
-              <circle cx="80" cy="80" r="30" fill="white" />
+              <circle cx="80" cy="80" r="30" fill="var(--color-card)" />
               <text
                 x="80"
                 y="76"
                 textAnchor="middle"
-                className="text-[16px] fill-gray-900 font-bold"
+                className="text-[16px] fill-foreground font-bold"
               >
                 {metrics.bySeverity.reduce((sum, s) => sum + s.count, 0)}
               </text>
-              <text x="80" y="92" textAnchor="middle" className="text-[12px] fill-gray-400">
+              <text
+                x="80"
+                y="92"
+                textAnchor="middle"
+                className="text-[12px] fill-muted-foreground/70"
+              >
                 Total
               </text>
             </svg>
@@ -173,8 +178,12 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
                   className="h-3 w-3 shrink-0 rounded-sm"
                   style={{ backgroundColor: SEVERITY_COLORS[s.severity] }}
                 />
-                <span className="flex-1 text-[14px] font-medium text-gray-700">{s.severity}</span>
-                <span className="text-[15px] font-bold tabular-nums text-gray-900">{s.count}</span>
+                <span className="flex-1 text-[14px] font-medium text-foreground/80">
+                  {s.severity}
+                </span>
+                <span className="text-[15px] font-bold tabular-nums text-foreground">
+                  {s.count}
+                </span>
               </div>
             ))}
           </div>

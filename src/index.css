@@ -231,10 +231,6 @@ body {
     color: #111827 !important;
   }
 
-  .print\\:hidden {
-    display: none !important;
-  }
-
   aside,
   header,
   nav[aria-label="Breadcrumb"] {

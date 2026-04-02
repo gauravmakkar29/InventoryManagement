@@ -40,3 +40,8 @@ output "index_name" {
   description = "OpenSearch index name used by the pipeline"
   value       = "ims-entities"
 }
+
+output "master_secret_arn" {
+  description = "Secrets Manager ARN for OpenSearch master password"
+  value       = length(aws_secretsmanager_secret.opensearch_master) > 0 ? aws_secretsmanager_secret.opensearch_master[0].arn : ""
+}

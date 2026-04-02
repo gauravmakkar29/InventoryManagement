@@ -184,19 +184,19 @@ function HeatmapTooltip({
 }) {
   return (
     <div
-      className="pointer-events-none absolute z-50 rounded-xl border border-gray-300 bg-white px-4 py-3 shadow-lg"
+      className="pointer-events-none absolute z-50 rounded-xl border border-border bg-card px-4 py-3 shadow-lg"
       style={{ left: position.x + 12, top: position.y - 20 }}
     >
-      <p className="text-[14px] font-semibold text-gray-900">{cell.regionName}</p>
+      <p className="text-[14px] font-semibold text-foreground">{cell.regionName}</p>
       <div className="mt-2 space-y-1.5">
         <div className="flex items-center justify-between gap-6">
-          <span className="text-[13px] text-gray-600">Devices</span>
-          <span className="text-[14px] font-bold tabular-nums text-gray-900">
+          <span className="text-[13px] text-muted-foreground">Devices</span>
+          <span className="text-[14px] font-bold tabular-nums text-foreground">
             {cell.deviceCount}
           </span>
         </div>
         <div className="flex items-center justify-between gap-6">
-          <span className="text-[13px] text-gray-600">Avg Risk Score</span>
+          <span className="text-[13px] text-muted-foreground">Avg Risk Score</span>
           <span
             className="text-[14px] font-bold tabular-nums"
             style={{ color: getRiskColor(cell.avgRiskScore) }}
@@ -205,11 +205,11 @@ function HeatmapTooltip({
           </span>
         </div>
         <div className="flex items-center justify-between gap-6">
-          <span className="text-[13px] text-gray-600">Critical</span>
+          <span className="text-[13px] text-muted-foreground">Critical</span>
           <span
             className={cn(
               "text-[14px] font-bold tabular-nums",
-              cell.criticalCount > 0 ? "text-red-600" : "text-gray-900",
+              cell.criticalCount > 0 ? "text-red-600" : "text-foreground",
             )}
           >
             {cell.criticalCount}
@@ -245,15 +245,15 @@ function HeatmapLegend() {
   ];
 
   return (
-    <div className="absolute bottom-4 left-4 z-20 rounded-xl border border-gray-300 bg-white/95 px-3 py-2.5 shadow-md backdrop-blur-sm">
-      <p className="mb-2 text-[12px] font-bold uppercase tracking-wider text-gray-600">
+    <div className="absolute bottom-4 left-4 z-20 rounded-xl border border-border bg-card/95 px-3 py-2.5 shadow-md backdrop-blur-sm">
+      <p className="mb-2 text-[12px] font-bold uppercase tracking-wider text-muted-foreground">
         Risk Scale
       </p>
       <div className="flex items-center gap-0.5">
         {scale.map((s) => (
           <div key={s.label} className="flex flex-col items-center">
             <div className="h-3 w-8 rounded-sm" style={{ backgroundColor: s.color }} />
-            <span className="mt-1 text-[11px] text-gray-600">{s.score}</span>
+            <span className="mt-1 text-[11px] text-muted-foreground">{s.score}</span>
           </div>
         ))}
       </div>
@@ -279,7 +279,7 @@ function HeatmapControls({
     <div className="absolute top-16 right-4 z-20">
       <button
         onClick={onToggle}
-        className="flex items-center gap-1.5 rounded-xl border border-gray-300 bg-white px-3 py-2 text-[13px] font-medium text-gray-700 shadow-md hover:bg-gray-50 cursor-pointer"
+        className="flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-[13px] font-medium text-foreground/80 shadow-md hover:bg-muted cursor-pointer"
       >
         <SlidersHorizontal className="h-3.5 w-3.5" />
         Controls
@@ -287,8 +287,8 @@ function HeatmapControls({
       </button>
 
       {expanded && (
-        <div className="mt-2 rounded-xl border border-gray-300 bg-white p-4 shadow-lg w-[220px]">
-          <label className="block text-[13px] font-semibold text-gray-700 mb-2">
+        <div className="mt-2 rounded-xl border border-border bg-card p-4 shadow-lg w-[220px]">
+          <label className="block text-[13px] font-semibold text-foreground/80 mb-2">
             Risk Threshold
           </label>
           <input
@@ -300,11 +300,11 @@ function HeatmapControls({
             className="w-full accent-[#FF7900]"
           />
           <div className="flex items-center justify-between mt-1">
-            <span className="text-[12px] text-gray-600">0</span>
+            <span className="text-[12px] text-muted-foreground">0</span>
             <span className="text-[14px] font-bold tabular-nums text-accent-text">
               {riskThreshold}
             </span>
-            <span className="text-[12px] text-gray-600">100</span>
+            <span className="text-[12px] text-muted-foreground">100</span>
           </div>
         </div>
       )}
@@ -359,7 +359,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
   if (loading) {
     return (
       <div
-        className="relative h-[600px] rounded-xl border border-gray-300 overflow-hidden"
+        className="relative h-[600px] rounded-xl border border-border overflow-hidden"
         aria-busy="true"
       >
         <span className="sr-only" aria-live="polite">
@@ -375,21 +375,21 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
       {/* Header bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-[16px] font-semibold text-gray-900">Environmental Heatmap</h3>
-          <p className="text-[14px] text-gray-600">
+          <h3 className="text-[16px] font-semibold text-foreground">Environmental Heatmap</h3>
+          <p className="text-[14px] text-muted-foreground">
             {totalDevices} devices across {filteredCells.length} regions
           </p>
         </div>
 
         {/* View mode toggle */}
-        <div className="flex items-center gap-1 rounded-lg bg-gray-100 p-0.5">
+        <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
           <button
             onClick={() => setViewMode("pins")}
             className={cn(
               "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium cursor-pointer",
               viewMode === "pins"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-700",
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
             )}
           >
             <MapPin className="h-3 w-3" />
@@ -400,8 +400,8 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
             className={cn(
               "flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-medium cursor-pointer",
               viewMode === "heatmap"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-600 hover:text-gray-700",
+                ? "bg-card text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
             )}
           >
             <Layers className="h-3 w-3" />
@@ -411,18 +411,18 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
       </div>
 
       {/* Map container */}
-      <div className="relative h-[600px] rounded-xl border border-gray-300 bg-[#f8fafc] overflow-hidden">
+      <div className="relative h-[600px] rounded-xl border border-border bg-muted overflow-hidden">
         {/* Zoom controls */}
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1">
           <button
             onClick={handleZoomIn}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-md hover:bg-muted cursor-pointer"
           >
             <ZoomIn className="h-4 w-4" />
           </button>
           <button
             onClick={handleZoomOut}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 shadow-md hover:bg-gray-50 cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground shadow-md hover:bg-muted cursor-pointer"
           >
             <ZoomOut className="h-4 w-4" />
           </button>
@@ -459,7 +459,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
                     key={(geo.rpiProperties?.NAME as string) ?? geo.id}
                     geography={geo}
                     fill="#e5e7eb"
-                    stroke="#d1d5db"
+                    stroke="var(--color-border)"
                     strokeWidth={0.5}
                     style={{ outline: "none" }}
                   />
@@ -545,7 +545,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
           {
             label: "Total Regions",
             value: filteredCells.length.toString(),
-            color: "text-gray-900",
+            color: "text-foreground",
           },
           { label: "Total Devices", value: totalDevices.toString(), color: "text-blue-600" },
           {
@@ -561,7 +561,7 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
         ].map((stat) => (
           <div key={stat.label} className="card-elevated px-4 py-3 text-center">
             <p className={cn("text-[18px] font-bold tabular-nums", stat.color)}>{stat.value}</p>
-            <p className="mt-0.5 text-[13px] text-gray-600">{stat.label}</p>
+            <p className="mt-0.5 text-[13px] text-muted-foreground">{stat.label}</p>
           </div>
         ))}
       </div>

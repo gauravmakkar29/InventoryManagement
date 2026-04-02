@@ -62,7 +62,7 @@ export function SignIn() {
 
         {/* Top: Logo badge */}
         <div className="relative z-10 w-full p-8">
-          <div className="inline-flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md px-4 py-2.5 border border-white/10">
+          <div className="inline-flex items-center gap-2 rounded-xl bg-card/10 backdrop-blur-md px-4 py-2.5 border border-white/10">
             <Sun className="h-5 w-5 text-accent-text" />
             <span className="text-[15px] font-bold text-white tracking-tight">
               IMS <span className="text-accent-text">Gen2</span>
@@ -81,7 +81,7 @@ export function SignIn() {
             ].map(({ value, label }) => (
               <div
                 key={label}
-                className="rounded-lg bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-2.5"
+                className="rounded-lg bg-card/10 backdrop-blur-sm border border-white/10 px-4 py-2.5"
               >
                 <p className="text-[18px] font-bold text-white tabular-nums">{value}</p>
                 <p className="text-[13px] text-white/60">{label}</p>
@@ -110,7 +110,7 @@ export function SignIn() {
             ].map(({ icon: Icon, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 px-3 py-1.5"
+                className="flex items-center gap-1.5 rounded-full bg-card/10 backdrop-blur-sm border border-white/10 px-3 py-1.5"
               >
                 <Icon className="h-3.5 w-3.5 text-accent-text" />
                 <span className="text-[13px] font-medium text-white/80">{label}</span>
@@ -121,20 +121,22 @@ export function SignIn() {
       </div>
 
       {/* Right 50%: Sign-in form */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-[#f9fafb] px-6 lg:w-1/2">
+      <div className="flex flex-1 flex-col items-center justify-center bg-muted px-6 lg:w-1/2">
         <div className="w-full max-w-[400px]">
           {/* Mobile-only logo */}
           <div className="mb-8 lg:hidden text-center">
-            <span className="text-[18px] font-bold text-gray-900">
+            <span className="text-[18px] font-bold text-foreground">
               IMS <span className="text-accent-text">Gen2</span>
             </span>
           </div>
 
           {/* Form card */}
-          <div className="rounded-2xl bg-white p-8 shadow-lg">
+          <div className="rounded-2xl bg-card p-8 shadow-lg">
             <div className="mb-7">
-              <h2 className="text-[24px] font-semibold text-gray-900">Sign in</h2>
-              <p className="mt-1.5 text-[15px] text-gray-600">Enter your credentials to continue</p>
+              <h2 className="text-[24px] font-semibold text-foreground">Sign in</h2>
+              <p className="mt-1.5 text-[15px] text-muted-foreground">
+                Enter your credentials to continue
+              </p>
             </div>
 
             {/* Auth error banner */}
@@ -153,7 +155,7 @@ export function SignIn() {
               <div className="space-y-1.5">
                 <label
                   htmlFor="signin-email"
-                  className="block text-[14px] font-medium text-gray-700"
+                  className="block text-[14px] font-medium text-foreground/80"
                 >
                   Email address
                 </label>
@@ -163,7 +165,7 @@ export function SignIn() {
                   autoComplete="email"
                   placeholder="admin@company.com"
                   className={cn(
-                    "block h-11 w-full rounded-lg border border-gray-300 bg-white px-3.5 text-[15px] text-gray-900 placeholder:text-gray-600",
+                    "block h-11 w-full rounded-lg border border-border bg-card px-3.5 text-[15px] text-foreground placeholder:text-muted-foreground",
                     "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                     errors.email && "border-red-400 focus:border-red-500 focus:ring-red-500/20",
                   )}
@@ -186,7 +188,7 @@ export function SignIn() {
               <div className="space-y-1.5">
                 <label
                   htmlFor="signin-password"
-                  className="block text-[14px] font-medium text-gray-700"
+                  className="block text-[14px] font-medium text-foreground/80"
                 >
                   Password
                 </label>
@@ -197,7 +199,7 @@ export function SignIn() {
                     autoComplete="current-password"
                     placeholder="Enter your password"
                     className={cn(
-                      "block h-11 w-full rounded-lg border border-gray-300 bg-white px-3.5 pr-10 text-[15px] text-gray-900 placeholder:text-gray-600",
+                      "block h-11 w-full rounded-lg border border-border bg-card px-3.5 pr-10 text-[15px] text-foreground placeholder:text-muted-foreground",
                       "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                       errors.password &&
                         "border-red-400 focus:border-red-500 focus:ring-red-500/20",
@@ -209,7 +211,7 @@ export function SignIn() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-600 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground cursor-pointer"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -249,15 +251,19 @@ export function SignIn() {
             </form>
 
             {/* Demo credentials hint */}
-            <div className="mt-5 rounded-lg bg-gray-50 px-4 py-3">
-              <p className="text-[13px] font-medium text-gray-600 mb-1.5">Demo credentials</p>
-              <p className="text-[13px] text-gray-600 leading-relaxed">
+            <div className="mt-5 rounded-lg bg-muted px-4 py-3">
+              <p className="text-[13px] font-medium text-muted-foreground mb-1.5">
+                Demo credentials
+              </p>
+              <p className="text-[13px] text-muted-foreground leading-relaxed">
                 admin@company.com / Admin@12345678
               </p>
             </div>
           </div>
 
-          <p className="mt-8 text-center text-[13px] text-gray-600">IMS Gen2 Platform v0.1.0</p>
+          <p className="mt-8 text-center text-[13px] text-muted-foreground">
+            IMS Gen2 Platform v0.1.0
+          </p>
         </div>
       </div>
     </div>

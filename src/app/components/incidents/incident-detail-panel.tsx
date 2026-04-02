@@ -38,23 +38,23 @@ export function IncidentDetailPanel({
   const validNext = VALID_TRANSITIONS[incident.status];
 
   return (
-    <div className="fixed inset-y-0 right-0 z-30 flex w-full max-w-2xl flex-col border-l border-gray-300 bg-white shadow-xl">
+    <div className="fixed inset-y-0 right-0 z-30 flex w-full max-w-2xl flex-col border-l border-border bg-card shadow-xl">
       {/* Header */}
-      <div className="shrink-0 border-b border-gray-300 px-6 py-4">
+      <div className="shrink-0 border-b border-border px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <span className="text-[14px] font-mono text-gray-600">{incident.id}</span>
+              <span className="text-[14px] font-mono text-muted-foreground">{incident.id}</span>
               <SeverityBadge severity={incident.severity} />
               <StatusBadge status={incident.status} />
             </div>
-            <h2 className="mt-1.5 text-[16px] font-semibold text-gray-900 truncate">
+            <h2 className="mt-1.5 text-[16px] font-semibold text-foreground truncate">
               {incident.title}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 cursor-pointer"
+            className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -65,16 +65,16 @@ export function IncidentDetailPanel({
             <div className="relative">
               <button
                 onClick={() => setShowStatusMenu(!showStatusMenu)}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-[14px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
+                className="rounded-lg border border-border px-3 py-1.5 text-[14px] font-medium text-foreground/80 hover:bg-muted cursor-pointer"
               >
                 Change Status
               </button>
               {showStatusMenu && (
-                <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-lg border border-gray-300 bg-white py-1 shadow-lg">
+                <div className="absolute left-0 top-full z-10 mt-1 w-48 rounded-lg border border-border bg-card py-1 shadow-lg">
                   {validNext.map((s) => (
                     <button
                       key={s}
-                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-gray-700 hover:bg-gray-50 cursor-pointer"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-[14px] text-foreground/80 hover:bg-muted cursor-pointer"
                       onClick={() => {
                         if (s === "Resolved" && !statusNote.trim()) {
                           setShowStatusMenu(false);
@@ -98,19 +98,21 @@ export function IncidentDetailPanel({
                       placeholder="Optional note..."
                       value={statusNote}
                       onChange={(e) => setStatusNote(e.target.value)}
-                      className="w-full rounded border border-gray-300 px-2 py-1 text-[13px] focus:outline-none focus:border-accent-text"
+                      className="w-full rounded border border-border px-2 py-1 text-[13px] focus:outline-none focus:border-accent-text"
                     />
                   </div>
                 </div>
               )}
             </div>
-            <span className="text-[13px] text-gray-600">Assigned to {incident.assignedToName}</span>
+            <span className="text-[13px] text-muted-foreground">
+              Assigned to {incident.assignedToName}
+            </span>
           </div>
         )}
       </div>
 
       {/* Section tabs */}
-      <div className="flex shrink-0 border-b border-gray-300 px-6">
+      <div className="flex shrink-0 border-b border-border px-6">
         {(["details", "devices", "topology", "playbook", "timeline"] as const).map((section) => (
           <button
             key={section}
@@ -119,7 +121,7 @@ export function IncidentDetailPanel({
               "px-3 py-2.5 text-[14px] font-medium border-b-2 cursor-pointer capitalize",
               activeSection === section
                 ? "border-accent-text text-accent-text"
-                : "border-transparent text-gray-600 hover:text-gray-700",
+                : "border-transparent text-muted-foreground hover:text-foreground/80",
             )}
           >
             {section}
@@ -132,33 +134,35 @@ export function IncidentDetailPanel({
         {activeSection === "details" && (
           <div className="space-y-4">
             <div>
-              <h4 className="text-[14px] font-semibold text-gray-600 uppercase mb-1">
+              <h4 className="text-[14px] font-semibold text-muted-foreground uppercase mb-1">
                 Description
               </h4>
-              <p className="text-[14px] text-gray-700 leading-relaxed">{incident.description}</p>
+              <p className="text-[14px] text-foreground/80 leading-relaxed">
+                {incident.description}
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-600">Category</p>
+              <div className="rounded-lg bg-muted p-3">
+                <p className="text-[13px] font-semibold text-muted-foreground">Category</p>
                 <div className="mt-1">
                   <CategoryBadge category={incident.category} />
                 </div>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-600">Affected Devices</p>
-                <p className="mt-1 text-[16px] font-bold text-gray-900">
+              <div className="rounded-lg bg-muted p-3">
+                <p className="text-[13px] font-semibold text-muted-foreground">Affected Devices</p>
+                <p className="mt-1 text-[16px] font-bold text-foreground">
                   {incident.affectedDeviceCount}
                 </p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-600">Reported By</p>
-                <p className="mt-1 text-[14px] font-medium text-gray-900">
+              <div className="rounded-lg bg-muted p-3">
+                <p className="text-[13px] font-semibold text-muted-foreground">Reported By</p>
+                <p className="mt-1 text-[14px] font-medium text-foreground">
                   {incident.reportedByName}
                 </p>
               </div>
-              <div className="rounded-lg bg-gray-50 p-3">
-                <p className="text-[13px] font-semibold text-gray-600">Created</p>
-                <p className="mt-1 text-[14px] font-medium text-gray-900">
+              <div className="rounded-lg bg-muted p-3">
+                <p className="text-[13px] font-semibold text-muted-foreground">Created</p>
+                <p className="mt-1 text-[14px] font-medium text-foreground">
                   {formatDateTime(incident.createdAt)}
                 </p>
               </div>
@@ -169,7 +173,7 @@ export function IncidentDetailPanel({
         {activeSection === "devices" && (
           <div className="space-y-2">
             {incident.affectedDevices.map((device) => (
-              <div key={device.id} className="rounded-lg border border-gray-300 p-3">
+              <div key={device.id} className="rounded-lg border border-border p-3">
                 {device.status === "Isolated" && (
                   <div className="mb-2 flex items-center gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-1.5">
                     <Lock className="h-3.5 w-3.5 text-red-500" />
@@ -188,8 +192,8 @@ export function IncidentDetailPanel({
                 )}
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[14px] font-medium text-gray-900">{device.name}</p>
-                    <p className="text-[13px] text-gray-600">
+                    <p className="text-[14px] font-medium text-foreground">{device.name}</p>
+                    <p className="text-[13px] text-muted-foreground">
                       {device.location} &middot; {device.firmwareVersion} &middot; Risk:{" "}
                       {device.riskScore}
                     </p>
@@ -235,9 +239,9 @@ export function IncidentDetailPanel({
               />
             ) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <BookOpen className="h-10 w-10 text-gray-600 mb-3" />
-                <p className="text-[15px] font-medium text-gray-700">No playbook attached</p>
-                <p className="text-[14px] text-gray-600 mt-1">
+                <BookOpen className="h-10 w-10 text-muted-foreground mb-3" />
+                <p className="text-[15px] font-medium text-foreground/80">No playbook attached</p>
+                <p className="text-[14px] text-muted-foreground mt-1">
                   Attach a playbook to track response steps
                 </p>
               </div>

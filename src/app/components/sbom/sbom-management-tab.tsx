@@ -54,11 +54,11 @@ export function SBOMManagementTab({
       <div className="mb-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
+            <Filter className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <select
               value={modelFilter}
               onChange={(e) => setModelFilter(e.target.value)}
-              className="h-9 appearance-none rounded-lg border border-gray-300 bg-white pl-9 pr-8 text-[14px] text-gray-700 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none cursor-pointer"
+              className="h-9 appearance-none rounded-lg border border-border bg-card pl-9 pr-8 text-[14px] text-foreground/80 focus:border-accent-text focus:ring-1 focus:ring-ring outline-none cursor-pointer"
             >
               <option value="all">All Firmware Models</option>
               {firmwareModels.map((m) => (
@@ -67,7 +67,7 @@ export function SBOMManagementTab({
                 </option>
               ))}
             </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           </div>
         </div>
 
@@ -91,9 +91,9 @@ export function SBOMManagementTab({
 
       {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
-          <FileBox className="mb-3 h-10 w-10 text-gray-600" />
-          <p className="text-[15px] font-medium text-gray-600">No SBOMs found</p>
-          <p className="text-[14px] text-gray-600">Upload an SBOM to get started</p>
+          <FileBox className="mb-3 h-10 w-10 text-muted-foreground" />
+          <p className="text-[15px] font-medium text-muted-foreground">No SBOMs found</p>
+          <p className="text-[14px] text-muted-foreground">Upload an SBOM to get started</p>
         </div>
       )}
 
@@ -110,11 +110,11 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
     <div className="card-elevated p-5">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="text-[15px] font-semibold text-gray-900">
+          <h3 className="text-[15px] font-semibold text-foreground">
             {sbom.firmwareName}{" "}
-            <span className="font-normal text-gray-600">v{sbom.firmwareVersion}</span>
+            <span className="font-normal text-muted-foreground">v{sbom.firmwareVersion}</span>
           </h3>
-          <p className="mt-0.5 text-[13px] text-gray-600">
+          <p className="mt-0.5 text-[13px] text-muted-foreground">
             Uploaded {formatDate(sbom.uploadedDate)} by {sbom.uploadedBy}
           </p>
         </div>
@@ -157,31 +157,31 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
         <>
           {/* Stats */}
           <div className="mb-3 grid grid-cols-3 gap-3">
-            <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[13px] text-gray-600">Components</div>
-              <div className="text-[16px] font-semibold text-gray-900">{sbom.componentCount}</div>
+            <div className="rounded-lg bg-muted px-3 py-2">
+              <div className="text-[13px] text-muted-foreground">Components</div>
+              <div className="text-[16px] font-semibold text-foreground">{sbom.componentCount}</div>
             </div>
-            <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[13px] text-gray-600">Vulnerabilities</div>
+            <div className="rounded-lg bg-muted px-3 py-2">
+              <div className="text-[13px] text-muted-foreground">Vulnerabilities</div>
               <div
                 className={cn(
                   "text-[16px] font-semibold",
-                  sbom.vulnerabilityCount > 0 ? "text-red-600" : "text-gray-900",
+                  sbom.vulnerabilityCount > 0 ? "text-red-600" : "text-foreground",
                 )}
               >
                 {sbom.vulnerabilityCount}
               </div>
             </div>
-            <div className="rounded-lg bg-gray-50 px-3 py-2">
-              <div className="text-[13px] text-gray-600">Licenses</div>
-              <div className="text-[16px] font-semibold text-gray-900">{sbom.licenseCount}</div>
+            <div className="rounded-lg bg-muted px-3 py-2">
+              <div className="text-[13px] text-muted-foreground">Licenses</div>
+              <div className="text-[16px] font-semibold text-foreground">{sbom.licenseCount}</div>
             </div>
           </div>
 
           {/* Severity bar */}
           {totalVulns > 0 && (
             <div className="mb-3">
-              <div className="flex h-2 overflow-hidden rounded-full bg-gray-100">
+              <div className="flex h-2 overflow-hidden rounded-full bg-muted">
                 {sbom.criticalVulnCount > 0 && (
                   <div
                     className="bg-red-500"
@@ -211,7 +211,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
                   />
                 )}
               </div>
-              <div className="mt-1 flex gap-3 text-[12px] text-gray-600">
+              <div className="mt-1 flex gap-3 text-[12px] text-muted-foreground">
                 {sbom.criticalVulnCount > 0 && (
                   <span className="flex items-center gap-1">
                     <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -243,7 +243,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
       )}
 
       {sbom.status === "Processing" && (
-        <div className="flex items-center justify-center py-6 text-[14px] text-gray-600">
+        <div className="flex items-center justify-center py-6 text-[14px] text-muted-foreground">
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Parsing SBOM file...
         </div>

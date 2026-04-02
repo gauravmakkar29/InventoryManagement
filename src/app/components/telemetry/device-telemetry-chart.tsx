@@ -217,7 +217,7 @@ function TimeSeriesChart({
 
   if (data.length === 0 || visibleMetrics.length === 0) {
     return (
-      <div className="flex h-[280px] items-center justify-center text-[14px] text-gray-600">
+      <div className="flex h-[280px] items-center justify-center text-[14px] text-muted-foreground">
         Select a metric to display the chart
       </div>
     );
@@ -235,7 +235,7 @@ function TimeSeriesChart({
             y1={y}
             x2={width - padding.right}
             y2={y}
-            stroke="#e5e7eb"
+            stroke="var(--color-border)"
             strokeWidth="1"
             strokeDasharray="4 4"
           />
@@ -249,7 +249,7 @@ function TimeSeriesChart({
           x={lbl.x}
           y={height - 8}
           textAnchor="middle"
-          className="fill-gray-400"
+          className="fill-muted-foreground"
           fontSize="10"
         >
           {lbl.label}
@@ -282,7 +282,7 @@ function TimeSeriesChart({
               x={padding.left - 8}
               y={y + 3}
               textAnchor="end"
-              className="fill-gray-400"
+              className="fill-muted-foreground"
               fontSize="10"
             >
               {val.toFixed(1)}
@@ -354,9 +354,9 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
   if (!latestReading) {
     return (
       <div className="card-elevated p-8 text-center">
-        <Activity className="mx-auto h-10 w-10 text-gray-600 mb-3" />
-        <p className="text-[15px] font-medium text-gray-600">No telemetry data available</p>
-        <p className="mt-1 text-[14px] text-gray-600">
+        <Activity className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+        <p className="text-[15px] font-medium text-muted-foreground">No telemetry data available</p>
+        <p className="mt-1 text-[14px] text-muted-foreground">
           Telemetry data will appear here once the device begins reporting
         </p>
       </div>
@@ -368,15 +368,15 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
       {/* Section header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-[16px] font-semibold text-gray-900">Device Telemetry</h3>
-          <p className="text-[14px] text-gray-600">
+          <h3 className="text-[16px] font-semibold text-foreground">Device Telemetry</h3>
+          <p className="text-[14px] text-muted-foreground">
             {deviceName ?? deviceId} - Real-time health metrics
           </p>
         </div>
         <button
           onClick={handleRefresh}
           className={cn(
-            "flex h-8 w-8 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 cursor-pointer",
+            "flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground hover:bg-muted cursor-pointer",
             isRefreshing && "animate-spin",
           )}
           aria-label="Refresh telemetry"
@@ -433,7 +433,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                 >
                   <Icon className={cn("h-3.5 w-3.5", metric.iconColor)} />
                 </div>
-                <span className="text-[13px] text-gray-600 truncate">{metric.label}</span>
+                <span className="text-[13px] text-muted-foreground truncate">{metric.label}</span>
               </div>
 
               <div className="flex items-end justify-between">
@@ -445,12 +445,12 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                         ? "text-red-600"
                         : status === "warning"
                           ? "text-amber-600"
-                          : "text-gray-900",
+                          : "text-foreground",
                     )}
                   >
                     {currentVal.toFixed(1)}
                   </span>
-                  <span className="ml-0.5 text-[13px] text-gray-600">{metric.unit}</span>
+                  <span className="ml-0.5 text-[13px] text-muted-foreground">{metric.unit}</span>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <MetricSparkline data={recentValues} color={metric.color} />
@@ -460,7 +460,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                     ) : trend === "down" ? (
                       <TrendingDown className="h-2.5 w-2.5 text-emerald-400" />
                     ) : (
-                      <Minus className="h-2.5 w-2.5 text-gray-600" />
+                      <Minus className="h-2.5 w-2.5 text-muted-foreground" />
                     )}
                   </div>
                 </div>
@@ -472,7 +472,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
 
       {/* Time range selector + Chart */}
       <div className="card-elevated">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
           <div className="flex items-center gap-1.5">
             {METRICS.filter((m) => activeMetrics.has(m.key)).map((m) => (
               <span
@@ -485,7 +485,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
               </span>
             ))}
           </div>
-          <div className="flex items-center gap-1 rounded-lg bg-gray-100 p-0.5">
+          <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
             {TIME_RANGES.map((tr) => (
               <button
                 key={tr.id}
@@ -493,8 +493,8 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                 className={cn(
                   "rounded-md px-3 py-1 text-[13px] font-medium cursor-pointer",
                   timeRange === tr.id
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-600 hover:text-gray-700",
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {tr.label}

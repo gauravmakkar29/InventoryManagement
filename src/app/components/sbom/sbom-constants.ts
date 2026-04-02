@@ -605,7 +605,7 @@ export const LICENSE_COMPLIANCE_CONFIG: Record<
 > = {
   approved: { label: "Approved", color: "text-green-700", bg: "bg-green-50" },
   restricted: { label: "Restricted", color: "text-red-700", bg: "bg-red-50" },
-  unknown: { label: "Unknown", color: "text-gray-600", bg: "bg-gray-100" },
+  unknown: { label: "Unknown", color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 // =============================================================================

@@ -42,8 +42,8 @@ export function SBOMPage() {
             <FileBox className="h-5 w-5 text-accent-text" />
           </div>
           <div>
-            <h1 className="text-[18px] font-bold text-gray-900">SBOM Management</h1>
-            <p className="text-[14px] text-gray-600">
+            <h1 className="text-[18px] font-bold text-foreground">SBOM Management</h1>
+            <p className="text-[14px] text-muted-foreground">
               Software Bill of Materials &mdash; supply chain security and license compliance
             </p>
           </div>
@@ -51,7 +51,7 @@ export function SBOMPage() {
       </div>
 
       {/* Tab navigation */}
-      <div className="mb-5 flex gap-1 border-b border-gray-300">
+      <div className="mb-5 flex gap-1 border-b border-border">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -66,7 +66,7 @@ export function SBOMPage() {
                 "flex items-center gap-2 border-b-2 px-4 py-2.5 text-[14px] font-medium cursor-pointer -mb-px",
                 isActive
                   ? "border-accent-text text-accent-text"
-                  : "border-transparent text-gray-600 hover:text-gray-700",
+                  : "border-transparent text-muted-foreground hover:text-foreground/80",
               )}
             >
               <Icon className="h-4 w-4" />

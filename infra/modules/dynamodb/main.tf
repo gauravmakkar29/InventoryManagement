@@ -122,3 +122,86 @@ resource "aws_dynamodb_table" "data_table" {
     Name = "${var.project_name}-${var.environment}-DataTable"
   }
 }
+
+# =============================================================================
+# DynamoDB — Dedicated Audit Log Table
+# Separates audit data from operational data to prevent hot partition risk
+# at scale and enable independent PITR/retention policies.
+# @see Story #167
+# =============================================================================
+
+resource "aws_dynamodb_table" "audit_table" {
+  name         = "${var.project_name}-${var.environment}-AuditLog"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "PK"
+  range_key    = "SK"
+
+  attribute {
+    name = "PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "SK"
+    type = "S"
+  }
+
+  # GSI: Query audit logs by user (e.g., PK=USER#user-id, SK=timestamp)
+  attribute {
+    name = "GSI1PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI1SK"
+    type = "S"
+  }
+
+  # GSI: Query audit logs by resource (e.g., PK=RESOURCE#device-001, SK=timestamp)
+  attribute {
+    name = "GSI2PK"
+    type = "S"
+  }
+
+  attribute {
+    name = "GSI2SK"
+    type = "S"
+  }
+
+  # GSI1 — User-based audit queries (all actions by a specific user)
+  global_secondary_index {
+    name            = "GSI1"
+    hash_key        = "GSI1PK"
+    range_key       = "GSI1SK"
+    projection_type = "ALL"
+  }
+
+  # GSI2 — Resource-based audit queries (all actions on a specific resource)
+  global_secondary_index {
+    name            = "GSI2"
+    hash_key        = "GSI2PK"
+    range_key       = "GSI2SK"
+    projection_type = "ALL"
+  }
+
+  # PITR always enabled on audit table (compliance requirement)
+  point_in_time_recovery {
+    enabled = true
+  }
+
+  # Server-side encryption with KMS (same key as DataTable)
+  server_side_encryption {
+    enabled     = true
+    kms_key_arn = aws_kms_key.dynamodb.arn
+  }
+
+  # TTL for automatic audit log rotation (e.g., 2 years)
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-AuditLog"
+  }
+}

@@ -80,13 +80,13 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f9fafb] px-6">
       <div className="w-full max-w-[400px]">
-        <div className="rounded-2xl bg-white p-8 shadow-lg">
+        <div className="rounded-2xl bg-card p-8 shadow-lg">
           <div className="mb-7 flex flex-col items-center text-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
               <ShieldCheck className="h-9 w-9 text-accent-text" />
             </div>
-            <h2 className="text-[22px] font-semibold text-gray-900">Verification Required</h2>
-            <p className="mt-1.5 text-[15px] text-gray-600">
+            <h2 className="text-[22px] font-semibold text-foreground">Verification Required</h2>
+            <p className="mt-1.5 text-[15px] text-muted-foreground">
               Enter the 6-digit code from your authenticator app
             </p>
           </div>
@@ -118,7 +118,7 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
                 disabled={isVerifying}
                 autoFocus={i === 0}
                 className={cn(
-                  "h-12 w-11 rounded-lg border border-gray-300 bg-white text-center text-[18px] font-semibold text-gray-900",
+                  "h-12 w-11 rounded-lg border border-border bg-card text-center text-[18px] font-semibold text-foreground",
                   "focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20",
                   "disabled:opacity-60",
                 )}
@@ -128,21 +128,21 @@ export function MfaChallenge({ onSuccess }: MfaChallengeProps) {
           </div>
 
           {isVerifying && (
-            <p className="mt-4 text-center text-[14px] text-gray-600">Verifying...</p>
+            <p className="mt-4 text-center text-[14px] text-muted-foreground">Verifying...</p>
           )}
 
           <div className="mt-6 text-center">
             <button
               type="button"
               onClick={signOut}
-              className="text-[14px] text-gray-600 hover:text-gray-600 cursor-pointer"
+              className="text-[14px] text-muted-foreground hover:text-muted-foreground cursor-pointer"
             >
               Cancel and sign out
             </button>
           </div>
 
-          <div className="mt-4 rounded-lg bg-gray-50 px-4 py-3">
-            <p className="text-[13px] text-gray-600 leading-relaxed">
+          <div className="mt-4 rounded-lg bg-muted px-4 py-3">
+            <p className="text-[13px] text-muted-foreground leading-relaxed">
               Open your authenticator app (Google Authenticator, Authy, etc.) and enter the current
               code. The code changes every 30 seconds.
             </p>

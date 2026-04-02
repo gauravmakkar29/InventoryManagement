@@ -44,7 +44,7 @@ export function StatusBadge({ status }: { status: IncidentStatus }) {
     Investigating: "bg-orange-50 text-orange-700 border-orange-200",
     Contained: "bg-amber-50 text-amber-700 border-amber-200",
     Resolved: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    Closed: "bg-gray-50 text-gray-600 border-gray-300",
+    Closed: "bg-muted text-muted-foreground border-border",
   };
   return (
     <span

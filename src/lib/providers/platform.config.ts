@@ -23,6 +23,49 @@ function detectPlatform(): PlatformId {
 }
 
 /**
+ * Validate required env vars for non-mock platforms.
+ * Fails fast with actionable error messages instead of failing silently at runtime.
+ *
+ * @see Docs/integration-contract.md for the full env var specification.
+ * @see Story #231 — Integration contract
+ */
+function validateEnvVars(platform: PlatformId): void {
+  if (platform === "mock") return;
+
+  const required: Array<{ key: string; description: string }> = [
+    { key: "VITE_AUTH_PROVIDER_URL", description: "Auth issuer URL (Cognito/Entra ID/Auth0)" },
+    { key: "VITE_AUTH_CLIENT_ID", description: "OAuth 2.0 SPA client ID" },
+    {
+      key: "VITE_API_ENDPOINT",
+      description: "Backend API base URL (AppSync/API Gateway/Azure Functions)",
+    },
+  ];
+
+  const missing = required.filter(({ key }) => !import.meta.env[key]);
+
+  if (missing.length > 0) {
+    const details = missing.map(({ key, description }) => `  - ${key}: ${description}`).join("\n");
+    throw new Error(
+      `Platform "${platform}" requires these env vars:\n${details}\n\n` +
+        `Set them in .env or your deployment config. See Docs/integration-contract.md.`,
+    );
+  }
+
+  // Warn about optional vars that enable additional features
+  const optional: Array<{ key: string; feature: string }> = [
+    { key: "VITE_STORAGE_ENDPOINT", feature: "File uploads (firmware, compliance docs)" },
+    { key: "VITE_SEARCH_ENDPOINT", feature: "Full-text and geo search" },
+    { key: "VITE_REALTIME_ENDPOINT", feature: "Real-time device status updates" },
+  ];
+
+  for (const { key, feature } of optional) {
+    if (!import.meta.env[key]) {
+      console.warn(`[IMS] ${key} not set — ${feature} will be unavailable.`);
+    }
+  }
+}
+
+/**
  * Create platform config with the appropriate adapters.
  * Add new cases here as cloud adapters are implemented.
  *
@@ -33,6 +76,7 @@ function detectPlatform(): PlatformId {
  */
 export function createPlatformConfig(): PlatformConfig {
   const platform = detectPlatform();
+  validateEnvVars(platform);
 
   switch (platform) {
     case "aws-amplify":

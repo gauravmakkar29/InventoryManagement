@@ -57,7 +57,7 @@ const STATUS_CONFIG: Record<ComplianceStatus, { bg: string; text: string; icon: 
   Approved: { bg: "bg-emerald-50", text: "text-emerald-700", icon: ShieldCheck },
   Pending: { bg: "bg-amber-50", text: "text-amber-700", icon: Clock },
   "In Review": { bg: "bg-blue-50", text: "text-blue-700", icon: Shield },
-  Deprecated: { bg: "bg-gray-100", text: "text-gray-600", icon: Archive },
+  Deprecated: { bg: "bg-muted", text: "text-muted-foreground", icon: Archive },
   "Non-Compliant": { bg: "bg-red-50", text: "text-red-700", icon: ShieldX },
 };
 
@@ -66,7 +66,7 @@ const SEVERITY_CONFIG: Record<VulnSeverity, { bg: string; text: string; border: 
   High: { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
   Medium: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
   Low: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-  Info: { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-300" },
+  Info: { bg: "bg-muted", text: "text-muted-foreground", border: "border-border" },
 };
 
 const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
@@ -168,12 +168,12 @@ export function CompliancePage() {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-base font-bold text-gray-900">Compliance & Vulnerability</h1>
+        <h1 className="text-base font-bold text-foreground">Compliance & Vulnerability</h1>
         <div className="flex items-center gap-2">
           {canSubmitForReview(role) && (
             <button
               onClick={() => setSubmitModalOpen(true)}
-              className="flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:border-accent-text/50 hover:text-gray-900 transition-colors duration-150"
+              className="flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:border-accent-text/50 hover:text-foreground transition-colors duration-150"
             >
               <Send className="h-3.5 w-3.5" />
               Submit for Review
@@ -190,7 +190,7 @@ export function CompliancePage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-300">
+      <div className="flex border-b border-border">
         {TABS.map((tab) => (
           <button
             key={tab.id}
@@ -199,7 +199,7 @@ export function CompliancePage() {
               "flex items-center gap-1.5 px-4 py-2.5 text-[14px] font-medium cursor-pointer transition-colors",
               activeTab === tab.id
                 ? "border-b-2 border-accent-text text-accent-text"
-                : "text-gray-600 hover:text-gray-700",
+                : "text-muted-foreground hover:text-foreground/80",
             )}
           >
             <tab.icon className="h-3.5 w-3.5" />
@@ -387,7 +387,7 @@ function ComplianceTab({
               "rounded-full px-3 py-1 text-[13px] font-medium transition-colors duration-150",
               statusFilter === s
                 ? "bg-accent text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+                : "bg-muted text-muted-foreground hover:bg-muted",
             )}
           >
             {s} ({statusCounts[s] || 0})
@@ -398,22 +398,22 @@ function ComplianceTab({
       {/* Search + cert filter */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-600" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search compliance items..."
             aria-label="Search compliance items"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-600 focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20"
+            className="w-full rounded border border-border bg-card py-1.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
+          <Filter className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <select
             value={certFilter}
             onChange={(e) => setCertFilter(e.target.value as CertificationType | "All")}
-            className="appearance-none rounded border border-gray-300 bg-white py-1.5 pl-8 pr-8 text-sm text-gray-700 focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20"
+            className="appearance-none rounded border border-border bg-card py-1.5 pl-8 pr-8 text-sm text-foreground/80 focus:border-accent-text focus:outline-none focus:ring-2 focus:ring-ring/20"
           >
             <option value="All">All Certifications</option>
             {CERT_TYPES.map((c) => (
@@ -422,7 +422,7 @@ function ComplianceTab({
               </option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-600" />
+          <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
         </div>
       </div>
 
@@ -432,52 +432,52 @@ function ComplianceTab({
           <table className="w-full">
             <caption className="sr-only">Compliance certifications</caption>
             <thead>
-              <tr className="border-b-2 border-gray-300 bg-table-header">
+              <tr className="border-b-2 border-border bg-table-header">
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Certification
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Status
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Last Audit
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Next Audit
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-right text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-right text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Findings
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-left text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-left text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Assigned To
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-2.5 text-right text-[13px] font-bold text-gray-600 uppercase tracking-wider"
+                  className="px-3 py-2.5 text-right text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
                 >
                   Actions
                 </th>
@@ -488,9 +488,9 @@ function ComplianceTab({
                 <tr>
                   <td colSpan={8} className="px-3 py-12 text-center">
                     <div className="flex flex-col items-center gap-2">
-                      <Shield className="h-8 w-8 text-gray-600" />
-                      <p className="text-sm text-gray-600">No compliance items found</p>
-                      <p className="text-sm text-gray-600">
+                      <Shield className="h-8 w-8 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">No compliance items found</p>
+                      <p className="text-sm text-muted-foreground">
                         Try adjusting your filters or search criteria
                       </p>
                     </div>
@@ -551,8 +551,8 @@ function ComplianceRow({
     <>
       <tr
         className={cn(
-          "border-b border-gray-200 hover:bg-gray-50/50 cursor-pointer transition-colors duration-150",
-          isExpanded && "bg-gray-50/80",
+          "border-b border-border/60 hover:bg-muted/50 cursor-pointer transition-colors duration-150",
+          isExpanded && "bg-muted/80",
         )}
         onClick={onToggle}
       >
@@ -560,18 +560,18 @@ function ComplianceRow({
           <div className="flex items-center gap-2">
             <ChevronRight
               className={cn(
-                "h-3.5 w-3.5 text-gray-600 transition-transform duration-200",
+                "h-3.5 w-3.5 text-muted-foreground transition-transform duration-200",
                 isExpanded && "rotate-90",
               )}
             />
             <div>
-              <div className="text-sm font-medium text-gray-900">{item.name}</div>
-              <div className="text-[12px] text-gray-600 font-mono">{item.id}</div>
+              <div className="text-sm font-medium text-foreground">{item.name}</div>
+              <div className="text-[12px] text-muted-foreground font-mono">{item.id}</div>
             </div>
           </div>
         </td>
         <td className="px-3 py-2.5">
-          <span className="rounded bg-gray-100 px-2 py-0.5 text-[12px] font-medium text-gray-600">
+          <span className="rounded bg-muted px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
             {item.certType}
           </span>
         </td>
@@ -587,19 +587,19 @@ function ComplianceRow({
             {item.status}
           </span>
         </td>
-        <td className="px-3 py-2.5 text-sm text-gray-600">{item.lastAudit}</td>
-        <td className="px-3 py-2.5 text-sm text-gray-600">{item.nextAudit}</td>
+        <td className="px-3 py-2.5 text-sm text-muted-foreground">{item.lastAudit}</td>
+        <td className="px-3 py-2.5 text-sm text-muted-foreground">{item.nextAudit}</td>
         <td className="px-3 py-2.5 text-right">
           <span
             className={cn(
               "text-sm tabular-nums font-medium",
-              item.findings > 0 ? "text-red-600" : "text-gray-600",
+              item.findings > 0 ? "text-red-600" : "text-muted-foreground",
             )}
           >
             {item.findings}
           </span>
         </td>
-        <td className="px-3 py-2.5 text-sm text-gray-600">{item.assignedTo}</td>
+        <td className="px-3 py-2.5 text-sm text-muted-foreground">{item.assignedTo}</td>
         <td className="px-3 py-2.5 text-right" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center justify-end gap-1">
             {canSubmitForReview(role) && item.status === "Pending" && (
@@ -634,14 +634,14 @@ function ComplianceRow({
       {isExpanded && (
         <tr>
           <td colSpan={8} className="p-0">
-            <div className="border-t border-gray-300 bg-gray-50/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
+            <div className="border-t border-border bg-muted/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-[13px] font-semibold text-gray-600 uppercase tracking-wider">
+                <h3 className="text-[13px] font-semibold text-muted-foreground uppercase tracking-wider">
                   Vulnerabilities ({item.vulnerabilities.length})
                 </h3>
               </div>
               {item.vulnerabilities.length === 0 ? (
-                <p className="text-sm text-gray-600 py-3">No vulnerabilities recorded</p>
+                <p className="text-sm text-muted-foreground py-3">No vulnerabilities recorded</p>
               ) : (
                 <div className="space-y-2">
                   {item.vulnerabilities.map((vuln) => {
@@ -653,11 +653,11 @@ function ComplianceRow({
                           "flex items-center justify-between rounded border p-2.5",
                           vuln.severity === "Critical"
                             ? "border-red-200 bg-red-50/50"
-                            : "border-gray-300 bg-white",
+                            : "border-border bg-card",
                         )}
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <span className="font-mono text-[13px] text-gray-900 font-medium whitespace-nowrap">
+                          <span className="font-mono text-[13px] text-foreground font-medium whitespace-nowrap">
                             {vuln.cveId}
                           </span>
                           <span
@@ -669,11 +669,13 @@ function ComplianceRow({
                           >
                             {vuln.severity}
                           </span>
-                          <span className="text-sm text-gray-600 truncate">{vuln.title}</span>
+                          <span className="text-sm text-muted-foreground truncate">
+                            {vuln.title}
+                          </span>
                         </div>
                         <div className="flex items-center gap-3 ml-3">
                           {vuln.resolvedDate && (
-                            <span className="text-[12px] text-gray-600">
+                            <span className="text-[12px] text-muted-foreground">
                               Resolved: {vuln.resolvedDate}
                             </span>
                           )}
@@ -731,7 +733,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           {vulnerabilities.length} vulnerabilities sorted by CVSS score (highest first)
         </p>
         {canCreateVulnerability(role) && (
@@ -762,7 +764,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
             >
               {/* Header */}
               <div className="flex items-start justify-between">
-                <span className="font-mono text-[14px] font-semibold text-gray-900">
+                <span className="font-mono text-[14px] font-semibold text-foreground">
                   {vuln.cveId}
                 </span>
                 <span
@@ -777,12 +779,14 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
               </div>
 
               {/* Title */}
-              <p className="text-sm text-gray-700 leading-relaxed line-clamp-2">{vuln.title}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed line-clamp-2">
+                {vuln.title}
+              </p>
 
               {/* Stats */}
               <div className="flex items-center gap-3 text-[12px]">
                 <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-900">CVSS</span>
+                  <span className="font-semibold text-foreground">CVSS</span>
                   <span
                     className={cn(
                       "font-bold tabular-nums",
@@ -790,20 +794,20 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                         ? "text-red-600"
                         : vuln.cvssScore >= 4.0
                           ? "text-amber-600"
-                          : "text-gray-600",
+                          : "text-muted-foreground",
                     )}
                   >
                     {vuln.cvssScore.toFixed(1)}
                   </span>
                 </div>
-                <div className="h-3 w-px bg-gray-200" />
+                <div className="h-3 w-px bg-muted" />
                 <div className="flex items-center gap-1">
-                  <AlertTriangle className="h-3 w-3 text-gray-600" />
-                  <span className="text-gray-600">
+                  <AlertTriangle className="h-3 w-3 text-muted-foreground" />
+                  <span className="text-muted-foreground">
                     {vuln.affectedDevices.toLocaleString()} devices
                   </span>
                 </div>
-                <div className="h-3 w-px bg-gray-200" />
+                <div className="h-3 w-px bg-muted" />
                 <span
                   className={cn(
                     "font-medium",
@@ -815,7 +819,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
               </div>
 
               {/* Remediation */}
-              <div className="flex items-center justify-between pt-1 border-t border-gray-200">
+              <div className="flex items-center justify-between pt-1 border-t border-border/60">
                 <span
                   className={cn(
                     "rounded-full px-2 py-0.5 text-[12px] font-medium",
@@ -825,7 +829,7 @@ function VulnerabilitiesTab({ vulnerabilities, role, onCreateVuln }: Vulnerabili
                   {vuln.remediationStatus}
                 </span>
                 {vuln.resolvedDate && (
-                  <span className="text-[12px] text-gray-600">{vuln.resolvedDate}</span>
+                  <span className="text-[12px] text-muted-foreground">{vuln.resolvedDate}</span>
                 )}
               </div>
             </div>
@@ -899,7 +903,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
           label="Deprecated"
           value={stats.deprecated}
           icon={Archive}
-          valueClass="text-gray-600"
+          valueClass="text-muted-foreground"
         />
         <StatCard label="Total Vulnerabilities" value={stats.totalVulns} icon={Bug} />
         <StatCard
@@ -918,7 +922,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
 
       {/* Report types */}
       <div className="space-y-2">
-        <h3 className="text-[14px] font-semibold text-gray-700">Available Report Types</h3>
+        <h3 className="text-[14px] font-semibold text-foreground/80">Available Report Types</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {REPORT_TYPES.map((type) => {
             const itemCount = allItems.filter(
@@ -927,13 +931,15 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
             return (
               <div
                 key={type}
-                className="card-elevated rounded-lg border border-gray-300 p-4 space-y-2 hover:border-accent-text/30 transition-colors duration-150"
+                className="card-elevated rounded-lg border border-border p-4 space-y-2 hover:border-accent-text/30 transition-colors duration-150"
               >
                 <div className="flex items-center gap-2">
                   <FileText className="h-4 w-4 text-accent-text" />
-                  <span className="text-[14px] font-semibold text-gray-900">{type}</span>
+                  <span className="text-[14px] font-semibold text-foreground">{type}</span>
                 </div>
-                <p className="text-[13px] text-gray-600">{itemCount} compliance items applicable</p>
+                <p className="text-[13px] text-muted-foreground">
+                  {itemCount} compliance items applicable
+                </p>
                 <button
                   onClick={() => {
                     const reportItems = allItems.filter((i) => i.certType === type);
@@ -950,7 +956,7 @@ function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
                     );
                     toast.success("Report downloaded");
                   }}
-                  className="flex items-center gap-1.5 rounded bg-gray-100 px-2.5 py-1 text-[13px] font-medium text-gray-700 hover:bg-gray-200 transition-colors w-full justify-center"
+                  className="flex items-center gap-1.5 rounded bg-muted px-2.5 py-1 text-[13px] font-medium text-foreground/80 hover:bg-muted transition-colors w-full justify-center"
                 >
                   <Download className="h-3 w-3" />
                   Export JSON
@@ -976,14 +982,16 @@ function StatCard({
   valueClass?: string;
 }) {
   return (
-    <div className="card-elevated rounded-lg border border-gray-300 p-3 space-y-1">
+    <div className="card-elevated rounded-lg border border-border p-3 space-y-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3.5 w-3.5 text-gray-600" />
-        <span className="text-[12px] font-medium text-gray-600 uppercase tracking-wider">
+        <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+        <span className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider">
           {label}
         </span>
       </div>
-      <p className={cn("text-xl font-bold tabular-nums", valueClass || "text-gray-900")}>{value}</p>
+      <p className={cn("text-xl font-bold tabular-nums", valueClass || "text-foreground")}>
+        {value}
+      </p>
     </div>
   );
 }
@@ -1025,18 +1033,18 @@ function SubmitForReviewModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
+    "w-full rounded border border-border bg-card px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-300">
-        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
-          <h2 className="text-[15px] font-semibold text-gray-900">
+      <div className="w-full max-w-md rounded-lg bg-card shadow-xl border border-border">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="text-[15px] font-semibold text-foreground">
             Submit Compliance Item for Review
           </h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-muted-foreground hover:text-muted-foreground hover:bg-muted"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1044,7 +1052,7 @@ function SubmitForReviewModal({
 
         <div className="space-y-4 p-5">
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Firmware Version <span className="text-red-500">*</span>
             </label>
             <select
@@ -1069,7 +1077,7 @@ function SubmitForReviewModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Device Model <span className="text-red-500">*</span>
             </label>
             <select
@@ -1094,7 +1102,7 @@ function SubmitForReviewModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Certification <span className="text-red-500">*</span>
             </label>
             <select
@@ -1120,10 +1128,10 @@ function SubmitForReviewModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
           >
             Cancel
           </button>
@@ -1203,16 +1211,16 @@ function CreateVulnerabilityModal({
   };
 
   const inputClass =
-    "w-full rounded border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-900 placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
+    "w-full rounded border border-border bg-card px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 focus:border-accent-text";
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-md rounded-lg bg-white shadow-xl border border-gray-300">
-        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
-          <h2 className="text-[15px] font-semibold text-gray-900">Report Vulnerability</h2>
+      <div className="w-full max-w-md rounded-lg bg-card shadow-xl border border-border">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="text-[15px] font-semibold text-foreground">Report Vulnerability</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-muted-foreground hover:text-muted-foreground hover:bg-muted"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1220,7 +1228,7 @@ function CreateVulnerabilityModal({
 
         <div className="space-y-3 p-5">
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               CVE ID <span className="text-red-500">*</span>
             </label>
             <input
@@ -1241,7 +1249,7 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -1262,7 +1270,7 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Description
             </label>
             <textarea
@@ -1276,7 +1284,7 @@ function CreateVulnerabilityModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+              <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
                 Severity <span className="text-red-500">*</span>
               </label>
               <select
@@ -1302,7 +1310,7 @@ function CreateVulnerabilityModal({
             </div>
 
             <div>
-              <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+              <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
                 CVSS Score <span className="text-red-500">*</span>
               </label>
               <input
@@ -1327,7 +1335,7 @@ function CreateVulnerabilityModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[13px] font-semibold text-gray-700">
+            <label className="mb-1 block text-[13px] font-semibold text-foreground/80">
               Affected Devices <span className="text-red-500">*</span>
             </label>
             <input
@@ -1356,16 +1364,16 @@ function CreateVulnerabilityModal({
               onChange={(e) => setPatchAvailable(e.target.checked)}
               className="accent-[#FF7900] h-3.5 w-3.5"
             />
-            <label htmlFor="patch-available" className="text-[13px] font-medium text-gray-700">
+            <label htmlFor="patch-available" className="text-[13px] font-medium text-foreground/80">
               Patch available
             </label>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
           >
             Cancel
           </button>
@@ -1406,12 +1414,12 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
 
   return (
     <ModalOverlay onClose={onClose}>
-      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-300">
-        <div className="flex items-center justify-between border-b border-gray-300 px-5 py-3">
-          <h2 className="text-[15px] font-semibold text-gray-900">Generate Regulatory Report</h2>
+      <div className="w-full max-w-sm rounded-lg bg-card shadow-xl border border-border">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
+          <h2 className="text-[15px] font-semibold text-foreground">Generate Regulatory Report</h2>
           <button
             onClick={onClose}
-            className="rounded p-1 text-gray-600 hover:text-gray-600 hover:bg-gray-100"
+            className="rounded p-1 text-muted-foreground hover:text-muted-foreground hover:bg-muted"
           >
             <X className="h-4 w-4" />
           </button>
@@ -1419,17 +1427,17 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
 
         <div className="space-y-4 p-5">
           {items.length === 0 ? (
-            <p className="text-sm text-gray-600">No data available for report generation</p>
+            <p className="text-sm text-muted-foreground">No data available for report generation</p>
           ) : (
             <>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 This report will include <span className="font-semibold">{items.length}</span>{" "}
                 compliance items and <span className="font-semibold">{totalVulns}</span>{" "}
                 vulnerabilities.
               </p>
 
               <div className="space-y-2">
-                <label className="block text-[13px] font-semibold text-gray-700">
+                <label className="block text-[13px] font-semibold text-foreground/80">
                   Export Format
                 </label>
                 <div className="flex gap-3">
@@ -1443,7 +1451,7 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
                         onChange={() => setFormat(f)}
                         className="accent-[#FF7900]"
                       />
-                      <span className="text-sm font-medium text-gray-700 uppercase">{f}</span>
+                      <span className="text-sm font-medium text-foreground/80 uppercase">{f}</span>
                     </label>
                   ))}
                 </div>
@@ -1452,10 +1460,10 @@ function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () 
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
           >
             Cancel
           </button>
@@ -1499,15 +1507,15 @@ function ConfirmDialog({
 }) {
   return (
     <ModalOverlay onClose={onCancel}>
-      <div className="w-full max-w-sm rounded-lg bg-white shadow-xl border border-gray-300">
+      <div className="w-full max-w-sm rounded-lg bg-card shadow-xl border border-border">
         <div className="p-5 space-y-3">
-          <h2 className="text-[15px] font-semibold text-gray-900">{title}</h2>
-          <p className="text-sm text-gray-600">{message}</p>
+          <h2 className="text-[15px] font-semibold text-foreground">{title}</h2>
+          <p className="text-sm text-muted-foreground">{message}</p>
         </div>
-        <div className="flex items-center justify-end gap-2 border-t border-gray-300 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-border px-5 py-3">
           <button
             onClick={onCancel}
-            className="rounded border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
           >
             Cancel
           </button>

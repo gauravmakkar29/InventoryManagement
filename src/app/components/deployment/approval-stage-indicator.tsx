@@ -47,7 +47,7 @@ export function ApprovalStageIndicator({
               <div
                 className={cn(
                   "h-0.5 w-4",
-                  isCompleted || isCurrent ? "bg-emerald-500" : "bg-gray-200",
+                  isCompleted || isCurrent ? "bg-emerald-500" : "bg-border/60",
                 )}
               />
             )}
@@ -58,8 +58,8 @@ export function ApprovalStageIndicator({
                   "flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold transition-all duration-200",
                   isCompleted && "bg-emerald-500 text-white",
                   isCurrent && "bg-blue-600 text-white animate-pulse",
-                  isFuture && "border border-gray-300 bg-white text-gray-600",
-                  isDeprecated && "border border-gray-300 bg-gray-100 text-gray-600",
+                  isFuture && "border border-border bg-card text-muted-foreground",
+                  isDeprecated && "border border-border bg-muted text-muted-foreground",
                 )}
               >
                 {isCompleted ? <Check className="h-2.5 w-2.5" /> : i + 1}
@@ -89,11 +89,11 @@ export function ApprovalStageIndicator({
                 i > 0 && "ml-1",
                 isCompleted && "text-emerald-600",
                 isCurrent && "text-blue-600",
-                !isCompleted && !isCurrent && "text-gray-600",
-                isDeprecated && "text-gray-600 line-through",
+                !isCompleted && !isCurrent && "text-muted-foreground",
+                isDeprecated && "text-muted-foreground line-through",
               )}
             >
-              {i > 0 && <span className="text-gray-600 mr-1">/</span>}
+              {i > 0 && <span className="text-muted-foreground mr-1">/</span>}
               {stage.label}
             </span>
           );

@@ -100,6 +100,39 @@ resource "aws_opensearchserverless_access_policy" "main" {
 }
 
 # =============================================================================
+# OpenSearch Master Password (managed domain only)
+# Generated at deploy time, stored in Secrets Manager, never in state file.
+# @see Story #166 — Remove hardcoded OpenSearch password
+# =============================================================================
+
+resource "random_password" "opensearch_master" {
+  count   = local.is_serverless ? 0 : 1
+  length  = 24
+  special = true
+  # OpenSearch requires at least one uppercase, lowercase, digit, and special char
+  override_special = "!@#$%^&*()_+-="
+}
+
+resource "aws_secretsmanager_secret" "opensearch_master" {
+  count       = local.is_serverless ? 0 : 1
+  name        = "${var.project_name}/${var.environment}/opensearch-master-password"
+  description = "OpenSearch managed domain master user password"
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-opensearch-master-password"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "opensearch_master" {
+  count     = local.is_serverless ? 0 : 1
+  secret_id = aws_secretsmanager_secret.opensearch_master[0].id
+  secret_string = jsonencode({
+    username = "admin"
+    password = random_password.opensearch_master[0].result
+  })
+}
+
+# =============================================================================
 # OpenSearch Managed Domain (dev/staging — cost savings)
 # =============================================================================
 
@@ -139,7 +172,7 @@ resource "aws_opensearch_domain" "managed" {
 
     master_user_options {
       master_user_name     = "admin"
-      master_user_password = "Admin123!temp"
+      master_user_password = random_password.opensearch_master[0].result
     }
   }
 
