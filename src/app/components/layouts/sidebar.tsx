@@ -20,7 +20,7 @@ import {
 import { cn } from "../../../lib/utils";
 import { useAuth } from "../../../lib/use-auth";
 import { getPrimaryRole, canAccessPage } from "../../../lib/rbac";
-import { getVersionDisplay } from "../../../lib/app-version";
+import { AppVersionBadge } from "../app-version-badge";
 
 interface NavItem {
   label: string;
@@ -272,12 +272,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* App version */}
       <div
         className={cn(
-          "border-t border-border/40 px-3 py-2 text-muted-foreground/60",
-          collapsed ? "text-center text-[10px]" : "text-[11px]",
+          "border-t border-border/40 px-3 py-2",
+          collapsed ? "text-center" : "",
         )}
-        title={`Build: ${getVersionDisplay()}`}
       >
-        {collapsed ? "v" : getVersionDisplay()}
+        <AppVersionBadge compact={collapsed} />
       </div>
     </aside>
   );

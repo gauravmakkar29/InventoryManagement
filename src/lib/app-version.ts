@@ -80,6 +80,13 @@ interface SemverParts {
   patch: number;
 }
 
+export interface ParsedVersion {
+  major: number;
+  minor: number;
+  patch: number;
+  sha: string | null;
+}
+
 export function parseSemver(ver: string): SemverParts | null {
   // Strip leading "v" and anything after "+" (build metadata)
   const clean = ver.replace(/^v/, "").split("+")[0] ?? "";
@@ -88,12 +95,46 @@ export function parseSemver(ver: string): SemverParts | null {
   return { major: Number(match[1]), minor: Number(match[2]), patch: Number(match[3]) };
 }
 
-/** Check if running version is compatible with deployed version (same major). */
-export function isCompatible(running: string, deployed: string): boolean {
-  const r = parseSemver(running);
-  const d = parseSemver(deployed);
-  if (!r || !d) return true; // Can't parse — assume compatible
-  return r.major === d.major;
+/** Returns the injected version string (e.g., "0.1.0+abc1234"). */
+export function getAppVersion(): string {
+  return APP_BUILD_INFO.full;
+}
+
+/** Parses a version string into { major, minor, patch, sha }. */
+export function parseVersion(version: string): ParsedVersion | null {
+  const clean = version.replace(/^v/, "");
+  const [semverPart, shaPart] = clean.split("+");
+  const match = (semverPart ?? "").match(/^(\d+)\.(\d+)\.(\d+)/);
+  if (!match) return null;
+  return {
+    major: Number(match[1]),
+    minor: Number(match[2]),
+    patch: Number(match[3]),
+    sha: shaPart ?? null,
+  };
+}
+
+/**
+ * Check if appVersion is compatible with apiVersion.
+ * Major must match, app minor must be >= api minor.
+ */
+export function isCompatible(appVersion: string, apiVersion: string): boolean {
+  const app = parseSemver(appVersion);
+  const api = parseSemver(apiVersion);
+  if (!app || !api) return true; // Can't parse — assume compatible
+  return app.major === api.major && app.minor >= api.minor;
+}
+
+/** Returns true if currentVersion and deployedVersion differ (stale client). */
+export function isStale(currentVersion: string, deployedVersion: string): boolean {
+  const current = parseSemver(currentVersion);
+  const deployed = parseSemver(deployedVersion);
+  if (!current || !deployed) return false;
+  return (
+    current.major !== deployed.major ||
+    current.minor !== deployed.minor ||
+    current.patch !== deployed.patch
+  );
 }
 
 /** Check if deployed version is newer than running version. */

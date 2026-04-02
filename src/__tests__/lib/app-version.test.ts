@@ -7,8 +7,11 @@ import {
   APP_BUILD_INFO,
   getVersionDisplay,
   getVersionFull,
+  getAppVersion,
   parseSemver,
+  parseVersion,
   isCompatible,
+  isStale,
   isNewer,
   createStaleClientDetector,
   createAppVersionInterceptor,
@@ -70,10 +73,44 @@ describe("parseSemver", () => {
   });
 });
 
+describe("getAppVersion", () => {
+  it("returns the full version string", () => {
+    const ver = getAppVersion();
+    expect(ver).toBe(APP_BUILD_INFO.full);
+    expect(ver).toContain("+");
+  });
+});
+
+describe("parseVersion", () => {
+  it("parses version with sha", () => {
+    const result = parseVersion("1.2.3+abc1234");
+    expect(result).toEqual({ major: 1, minor: 2, patch: 3, sha: "abc1234" });
+  });
+
+  it("parses version without sha", () => {
+    const result = parseVersion("1.2.3");
+    expect(result).toEqual({ major: 1, minor: 2, patch: 3, sha: null });
+  });
+
+  it("strips leading v", () => {
+    const result = parseVersion("v2.0.1+def5678");
+    expect(result).toEqual({ major: 2, minor: 0, patch: 1, sha: "def5678" });
+  });
+
+  it("returns null for invalid input", () => {
+    expect(parseVersion("not-a-version")).toBeNull();
+    expect(parseVersion("")).toBeNull();
+  });
+});
+
 describe("isCompatible", () => {
-  it("returns true for same major version", () => {
-    expect(isCompatible("1.0.0", "1.5.0")).toBe(true);
-    expect(isCompatible("2.1.0", "2.99.99")).toBe(true);
+  it("returns true for same major and app minor >= api minor", () => {
+    expect(isCompatible("1.5.0", "1.3.0")).toBe(true);
+    expect(isCompatible("2.1.0", "2.1.0")).toBe(true);
+  });
+
+  it("returns false when app minor < api minor", () => {
+    expect(isCompatible("1.0.0", "1.5.0")).toBe(false);
   });
 
   it("returns false for different major version", () => {
@@ -83,6 +120,28 @@ describe("isCompatible", () => {
 
   it("returns true for unparseable input", () => {
     expect(isCompatible("bad", "1.0.0")).toBe(true);
+  });
+});
+
+describe("isStale", () => {
+  it("returns true when versions differ", () => {
+    expect(isStale("1.0.0", "1.0.1")).toBe(true);
+    expect(isStale("1.0.0", "1.1.0")).toBe(true);
+    expect(isStale("1.0.0", "2.0.0")).toBe(true);
+  });
+
+  it("returns false when versions are the same", () => {
+    expect(isStale("1.0.0", "1.0.0")).toBe(false);
+  });
+
+  it("returns false for unparseable input", () => {
+    expect(isStale("bad", "1.0.0")).toBe(false);
+    expect(isStale("1.0.0", "bad")).toBe(false);
+  });
+
+  it("handles versions with build metadata", () => {
+    expect(isStale("1.0.0+abc", "1.0.1+def")).toBe(true);
+    expect(isStale("1.0.0+abc", "1.0.0+def")).toBe(false);
   });
 });
 
