@@ -13,7 +13,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
     <textarea
       ref={ref}
       className={cn(
-        "w-full rounded-lg border border-border bg-white px-3 py-2 text-[15px] text-foreground resize-none",
+        "w-full rounded-lg border border-border bg-card px-3 py-2 text-[15px] text-foreground resize-none",
         "placeholder:text-muted-foreground",
         "focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-accent-text",
         "disabled:cursor-not-allowed disabled:opacity-60",

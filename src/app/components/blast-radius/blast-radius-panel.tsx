@@ -109,7 +109,7 @@ function getStatusColor(status: DeviceStatus): string {
     case DeviceStatus.Maintenance:
       return "bg-amber-500";
     default:
-      return "bg-gray-400";
+      return "bg-muted-foreground";
   }
 }
 

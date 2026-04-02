@@ -302,7 +302,7 @@ function SimulationHistory({
           className={cn(
             "rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer",
             sortField === "date"
-              ? "bg-gray-900 text-white"
+              ? "bg-foreground text-background"
               : "bg-muted text-muted-foreground hover:bg-muted",
           )}
         >
@@ -313,7 +313,7 @@ function SimulationHistory({
           className={cn(
             "rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer",
             sortField === "risk"
-              ? "bg-gray-900 text-white"
+              ? "bg-foreground text-background"
               : "bg-muted text-muted-foreground hover:bg-muted",
           )}
         >
@@ -532,7 +532,7 @@ export function RiskSimulationDialog({
             disabled={isRunning}
             className={cn(
               "w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-[14px] font-medium text-white cursor-pointer",
-              isRunning ? "bg-gray-400 cursor-not-allowed" : "bg-accent hover:bg-accent-hover",
+              isRunning ? "bg-muted cursor-not-allowed" : "bg-accent hover:bg-accent-hover",
             )}
           >
             {isRunning ? (

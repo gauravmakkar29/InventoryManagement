@@ -37,9 +37,9 @@ function StatusBadge({ status }: { status: string }) {
     [DeviceStatus.Online]: { dot: "bg-emerald-500", text: "text-emerald-700", bg: "bg-emerald-50" },
     [DeviceStatus.Offline]: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50" },
     [DeviceStatus.Maintenance]: { dot: "bg-amber-500", text: "text-amber-700", bg: "bg-amber-50" },
-    [DeviceStatus.Decommissioned]: { dot: "bg-gray-400", text: "text-gray-600", bg: "bg-gray-100" },
+    [DeviceStatus.Decommissioned]: { dot: "bg-gray-400", text: "text-muted-foreground", bg: "bg-muted" },
   };
-  const c = config[status] ?? { dot: "bg-gray-400", text: "text-gray-600", bg: "bg-gray-100" };
+  const c = config[status] ?? { dot: "bg-gray-400", text: "text-muted-foreground", bg: "bg-muted" };
   return (
     <span
       className={cn(

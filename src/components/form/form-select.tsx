@@ -13,7 +13,7 @@ export const FormSelect = forwardRef<HTMLSelectElement, FormSelectProps>(
     <select
       ref={ref}
       className={cn(
-        "h-10 w-full rounded-lg border border-border bg-white px-3 text-[15px] text-foreground",
+        "h-10 w-full rounded-lg border border-border bg-card px-3 text-[15px] text-foreground",
         "focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-accent-text",
         "disabled:cursor-not-allowed disabled:opacity-60",
         error && "border-red-400 focus:border-red-500 focus:ring-red-500",
