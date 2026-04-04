@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { ShieldCheck, Bug, Send, FileText, BarChart3 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../../lib/utils";
-import { useAuth } from "../../../lib/use-auth";
-import { getPrimaryRole } from "../../../lib/rbac";
-import { useComplianceManagement } from "../../../lib/hooks/use-compliance-management";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { useComplianceManagement } from "@/lib/hooks/use-compliance-management";
 import type {
   ComplianceItem,
   CertificationType,
   Vulnerability,
-} from "../../../lib/mock-data/compliance-data";
+} from "@/lib/mock-data/compliance-data";
 import type { Tab } from "./compliance-shared";
 import { canSubmitForReview } from "./compliance-shared";
 import { ComplianceTab } from "./compliance-tab";
@@ -63,11 +63,21 @@ export function CompliancePage() {
   } | null>(null);
 
   const handleApprove = (itemId: string) => {
+    if (!canPerformAction(role, "approve")) {
+      toast.error("Access denied — insufficient permissions");
+      setConfirmAction(null);
+      return;
+    }
     hookApprove(itemId);
     setConfirmAction(null);
   };
 
   const handleDeprecate = (itemId: string) => {
+    if (!canPerformAction(role, "edit")) {
+      toast.error("Access denied — insufficient permissions");
+      setConfirmAction(null);
+      return;
+    }
     hookDeprecate(itemId);
     setConfirmAction(null);
   };
@@ -163,6 +173,10 @@ export function CompliancePage() {
         <SubmitForReviewModal
           onClose={() => setSubmitModalOpen(false)}
           onSubmit={(data) => {
+            if (!canPerformAction(role, "create")) {
+              toast.error("Access denied — insufficient permissions");
+              return;
+            }
             try {
               const newItem: ComplianceItem = {
                 id: `CMP-${String(complianceItems.length + 1).padStart(3, "0")}`,
@@ -196,6 +210,10 @@ export function CompliancePage() {
         <CreateVulnerabilityModal
           onClose={() => setVulnModalOpen(false)}
           onSubmit={(data) => {
+            if (!canPerformAction(role, "create")) {
+              toast.error("Access denied — insufficient permissions");
+              return;
+            }
             const newVuln: Vulnerability = {
               id: `v${vulnerabilities.length + 1}`,
               cveId: data.cveId,

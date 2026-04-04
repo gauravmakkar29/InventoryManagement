@@ -19,6 +19,7 @@
 
 import type { IAuthAdapter, AuthSession, SignInResult } from "../auth-adapter";
 import type { User } from "@/lib/types";
+import { AuthSessionSchema } from "@/lib/schemas/auth-session.schema";
 
 // =============================================================================
 // Config
@@ -285,13 +286,16 @@ export function createAmplifyAuthAdapter(): IAuthAdapter {
       if (!stored) return null;
 
       try {
-        const session = JSON.parse(stored) as AuthSession;
-        if (session.accessTokenExpiresAt < Date.now()) {
-          // Token expired — will be refreshed by AuthProvider
-          return session;
+        const parsed: unknown = JSON.parse(stored);
+        const result = AuthSessionSchema.safeParse(parsed);
+        if (!result.success) {
+          console.warn("[Amplify Auth] Invalid session data in localStorage, clearing");
+          localStorage.removeItem(STORAGE_KEY);
+          return null;
         }
-        return session;
+        return result.data as AuthSession;
       } catch {
+        localStorage.removeItem(STORAGE_KEY);
         return null;
       }
     },

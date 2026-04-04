@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { FileBox } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
-import { getPrimaryRole } from "@/lib/rbac";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import { useSBOMData } from "@/lib/hooks/use-sbom-data";
 import type { Tab } from "./sbom/sbom-types";
 import { TABS, MOCK_COMPONENTS } from "./sbom/sbom-constants";
@@ -24,9 +25,31 @@ export function SBOMPage() {
     vulnerabilities,
     sbomFilter,
     setSbomFilter,
-    handleUpload,
-    handleUpdateVulnStatus,
+    handleUpload: hookUpload,
+    handleUpdateVulnStatus: hookUpdateVulnStatus,
   } = useSBOMData();
+
+  const handleUpload = useCallback(
+    (...args: Parameters<typeof hookUpload>) => {
+      if (!canPerformAction(role, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      hookUpload(...args);
+    },
+    [role, hookUpload],
+  );
+
+  const handleUpdateVulnStatus = useCallback(
+    (...args: Parameters<typeof hookUpdateVulnStatus>) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      hookUpdateVulnStatus(...args);
+    },
+    [role, hookUpdateVulnStatus],
+  );
 
   const handleViewDetails = (sbomId: string) => {
     setSbomFilter(sbomId);

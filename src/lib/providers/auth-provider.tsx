@@ -37,6 +37,8 @@ export function createAuthProvider(adapter: IAuthAdapter): ComponentType<{ child
     const sessionRef = useRef<AuthSession | null>(null);
     const refreshIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const channelRef = useRef<BroadcastChannel | null>(null);
+    const refreshFailureCount = useRef(0);
+    const MAX_REFRESH_FAILURES = 3;
 
     // --- BroadcastChannel for multi-tab sync ---
 
@@ -117,9 +119,19 @@ export function createAuthProvider(adapter: IAuthAdapter): ComponentType<{ child
         adapter.saveSession(updated);
         sessionRef.current = updated;
         setSessionExpiring(false);
+        refreshFailureCount.current = 0;
         broadcastMessage({ type: "SESSION_UPDATED", session: updated });
       } catch {
-        toast.warning("Unable to refresh session");
+        refreshFailureCount.current += 1;
+        const remaining = MAX_REFRESH_FAILURES - refreshFailureCount.current;
+        if (remaining <= 0) {
+          refreshFailureCount.current = 0;
+          forceLogout("Session expired after multiple refresh failures. Please sign in again.");
+        } else {
+          toast.warning(
+            `Unable to refresh session (${refreshFailureCount.current}/${MAX_REFRESH_FAILURES})`,
+          );
+        }
       }
     }, [forceLogout, broadcastMessage]);
 
