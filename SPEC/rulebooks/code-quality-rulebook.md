@@ -51,6 +51,138 @@ src/app/components/shared/
 
 ---
 
+## DRY — Don't Repeat Yourself
+
+### Rule: Extract When Duplicated 3+ Times
+
+If the same logic, UI pattern, or data transformation appears in **3 or more places**, extract it. Two occurrences are acceptable — three is a pattern that needs a shared abstraction.
+
+### What to Extract and Where
+
+| Duplication Type                                               | Extract To                                        | Example                                          |
+| -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------ |
+| **Same UI pattern** (badge, status chip, card layout)          | `src/app/components/shared/{Component}.tsx`       | `StatusBadge`, `EmptyState`, `DataTable`         |
+| **Same data fetching** (list devices, get firmware)            | `src/lib/hooks/use-{entity}.ts`                   | `useDevices()`, `useFirmware()`                  |
+| **Same business logic** (calculate health score, format dates) | `src/lib/utils/{domain}.ts`                       | `calculateHealthScore()`, `formatRelativeDate()` |
+| **Same form validation**                                       | `src/lib/schemas/{entity}.schema.ts`              | `deviceSchema`, `firmwareSchema`                 |
+| **Same API transform**                                         | Provider adapter (DTO ↔ Domain mapping)           | `toDevice(dto)`, `toFirmwareDTO(firmware)`       |
+| **Same type definition**                                       | `src/lib/types.ts` or `src/lib/types/{domain}.ts` | Never define the same interface in two files     |
+
+### What NOT to Extract (Acceptable Duplication)
+
+- **2 occurrences** — wait for the third before extracting. Premature abstraction is worse than duplication.
+- **Similar but not identical** logic — if two functions share 60% of their code but differ in business rules, keep them separate. Forced abstraction creates fragile shared code.
+- **Test setup** — duplicate test setup is fine. Tests should be readable in isolation.
+- **Constants used in one file** — don't create a shared constants file for values used in a single module.
+
+### Detection (How to Find DRY Violations)
+
+```bash
+# Find duplicate component patterns (same className combinations)
+grep -rn "className=\".*flex.*items-center.*gap-2.*rounded" src/app/components/ | sort
+
+# Find duplicate fetch patterns
+grep -rn "useState.*loading.*setLoading" src/app/components/ --include="*.tsx"
+
+# Find duplicate Zod schemas
+grep -rn "z\.object" src/ --include="*.ts" --include="*.tsx"
+
+# Find duplicate status/badge rendering
+grep -rn "badge\|Badge\|status.*===.*\"online\"\|status.*===.*\"active\"" src/app/components/
+```
+
+### Enforcement
+
+- Code review: reviewer checks for 3+ occurrences of same pattern
+- `/review-architecture` skill flags duplicate UI patterns
+- `/review-full` audit area #9 (Code Quality) checks for duplication
+
+---
+
+## SRP — Single Responsibility Principle
+
+### Rule: One File = One Job. One Function = One Task.
+
+Every file, component, hook, and function should have **exactly one reason to change**. If you can describe what it does with "and" — it does too much.
+
+### File-Level SRP
+
+| File Type                                       | Single Responsibility                | Max Lines | Violation Signal                                              |
+| ----------------------------------------------- | ------------------------------------ | --------- | ------------------------------------------------------------- |
+| **Page component** (`{Module}Page.tsx`)         | Route entry + layout composition     | 200       | Contains business logic, API calls, or complex state          |
+| **Feature component** (`{Feature}.tsx`)         | One feature's UI + interactions      | 400       | Has >10 useState, mixes data fetching with rendering          |
+| **Custom hook** (`use-{feature}.ts`)            | Data fetching + state for one entity | 200       | Manages state for multiple unrelated entities                 |
+| **Shared component** (`shared/{Component}.tsx`) | One reusable UI element              | 300       | Has domain-specific logic (device status, firmware version)   |
+| **Utility function** (`utils/{name}.ts`)        | Pure transformation/computation      | 100       | Has side effects (API calls, state updates, DOM manipulation) |
+| **Schema** (`schemas/{entity}.schema.ts`)       | Validation for one entity            | 100       | Validates multiple unrelated entities                         |
+
+### Function-Level SRP
+
+```typescript
+// BAD — does 3 things: fetches, transforms, AND updates state
+function loadDevicesAndUpdateDashboard() {
+  const raw = await api.listDevices();
+  const devices = raw.map(toDevice); // transform
+  setDevices(devices); // update state
+  const metrics = computeMetrics(devices); // compute
+  setDashboardMetrics(metrics); // update different state
+}
+
+// GOOD — each function does one thing
+function useDevices() {
+  return useQuery({ queryKey: ["devices"], queryFn: () => api.listDevices() });
+}
+function useDashboardMetrics(devices: Device[]) {
+  return useMemo(() => computeMetrics(devices), [devices]);
+}
+```
+
+### How to Split a God Component
+
+When a component violates SRP (>400 lines, >10 useState, multiple concerns):
+
+```
+BEFORE: MonolithPage.tsx (800 lines)
+  - Route layout
+  - Tab navigation
+  - Device table with filters
+  - Device form with validation
+  - API calls for devices
+  - Dashboard metrics computation
+
+AFTER:
+  MonolithPage.tsx (150 lines)        — Route layout + tab composition
+  DeviceTable.tsx (250 lines)         — Table + filters UI
+  DeviceForm.tsx (200 lines)          — Form + validation UI
+  use-devices.ts (120 lines)          — Device data fetching + state
+  use-dashboard-metrics.ts (50 lines) — Metrics computation hook
+```
+
+### Detection (How to Find SRP Violations)
+
+```bash
+# Files over 400 lines (warning threshold)
+find src/ -name "*.tsx" -exec wc -l {} + | awk '$1 > 400' | sort -rn
+
+# Components with excessive useState (>10 = God component)
+for f in src/app/components/**/*.tsx; do
+  count=$(grep -c "useState" "$f" 2>/dev/null)
+  if [ "$count" -gt 10 ]; then echo "$f: $count useState calls"; fi
+done
+
+# Functions with multiple responsibilities (AND in comments)
+grep -rn "// .*and\|// .*then\|// .*also" src/ --include="*.tsx" --include="*.ts"
+```
+
+### Enforcement
+
+- **400-line warning** / **600-line block** (from code-quality-rulebook)
+- **>10 useState** in one component = must extract to custom hook
+- Architecture hook warns on files created outside standard structure
+- `/review-architecture` skill checks component responsibility
+
+---
+
 ## Custom Hooks Pattern
 
 ```typescript

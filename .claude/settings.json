@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);const f=j.tool_input?.file_path||'';const sensitive=['rbac.ts','security.ts','auth-context.tsx','sign-in.tsx','-auth-adapter.ts'];if(sensitive.some(s=>f.endsWith(s))){console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PreToolUse',additionalContext:'NIST SECURITY GUARDRAIL: Editing security-sensitive file ('+f+'). You MUST follow SPEC/rulebooks/security-nist-rulebook.md. Key controls: AC-3 (RBAC via rbac.ts), AC-5 (Separation of Duties), AC-11/AC-12 (Session), SI-3 (No dangerouslySetInnerHTML), SI-10 (Zod on all inputs). Reference the NIST control ID in your changes.'}}));} })\"",
+            "timeout": 5,
+            "statusMessage": "Checking NIST security guardrails..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const j=JSON.parse(d);const f=j.tool_input?.file_path||'';if(!f.includes('/src/'))process.exit(0);const valid=['/src/app/components/','/src/lib/','/src/__tests__/','/src/app/App.tsx','/src/main.tsx','/src/index.css','/src/vite-env.d.ts'];if(!valid.some(v=>f.includes(v))){console.log(JSON.stringify({hookSpecificOutput:{hookEventName:'PostToolUse',additionalContext:'ARCHITECTURE WARNING: File '+f+' was created outside the standard structure. Valid locations: src/app/components/{feature}/, src/lib/, src/__tests__/. See SPEC/rulebooks/architecture-rulebook.md.'}}));} })\"",
+            "timeout": 5,
+            "statusMessage": "Checking architecture structure..."
+          }
+        ]
+      }
+    ]
+  }
+}
