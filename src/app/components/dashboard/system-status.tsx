@@ -140,11 +140,11 @@ export function RequiresAttention() {
       </div>
 
       <div className="px-3 pb-3 space-y-1">
-        {ATTENTION_ITEMS.map((item, i) => {
+        {ATTENTION_ITEMS.map((item) => {
           const Icon = item.icon;
           return (
             <div
-              key={i}
+              key={item.title}
               className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 hover:bg-muted/50"
             >
               <div

@@ -161,7 +161,7 @@ export function CalendarView({ orders }: { orders: ServiceOrder[] }) {
 
             {/* Day grid */}
             <div className="grid grid-cols-7 gap-px bg-border/60 rounded overflow-hidden">
-              {calendarDays.map((cell, idx) => {
+              {calendarDays.map((cell) => {
                 const dayOrders = orders.filter(
                   (o) =>
                     isSameDay(
@@ -176,7 +176,7 @@ export function CalendarView({ orders }: { orders: ServiceOrder[] }) {
 
                 return (
                   <button
-                    key={idx}
+                    key={`${cell.date.getFullYear()}-${cell.date.getMonth()}-${cell.day}-${cell.inMonth ? "in" : "out"}`}
                     onClick={() => {
                       if (cell.inMonth && dayOrders.length > 0) {
                         setSelectedDay(selectedDay === cell.day ? null : cell.day);

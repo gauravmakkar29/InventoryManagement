@@ -102,7 +102,7 @@ export function RecentActivity() {
           </thead>
           <tbody>
             {RECENT_ACTIVITY.map((row, i) => (
-              <tr key={i} className={cn("h-[44px]", i % 2 === 1 && "bg-muted/50/50")}>
+              <tr key={row.description} className={cn("h-[44px]", i % 2 === 1 && "bg-muted/50/50")}>
                 <td className="px-5">
                   <span
                     className="block h-2 w-2 rounded-full"

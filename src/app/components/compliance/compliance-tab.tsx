@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Shield, ChevronRight } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import type { Role } from "../../../lib/rbac";
@@ -177,7 +178,8 @@ interface ComplianceRowProps {
   onRemediationChange: (vulnId: string, status: RemediationStatus) => void;
 }
 
-function ComplianceRow({
+/** Memoized — rendered in .map() loop, receives stable callbacks via useCallback (#311) */
+const ComplianceRow = memo(function ComplianceRow({
   item,
   isExpanded,
   onToggle,
@@ -360,4 +362,4 @@ function ComplianceRow({
       )}
     </>
   );
-}
+});

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { Server, Package, ClipboardList, Shield, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
@@ -93,7 +93,12 @@ interface SearchResultItemProps {
   onClick: () => void;
 }
 
-export function SearchResultItem({ result, isSelected, onClick }: SearchResultItemProps) {
+/** Memoized — rendered in .map() loop inside search palette (#311) */
+export const SearchResultItem = memo(function SearchResultItem({
+  result,
+  isSelected,
+  onClick,
+}: SearchResultItemProps) {
   const config = ENTITY_CONFIG[result.entityType];
   const Icon = config.icon;
 
@@ -143,4 +148,4 @@ export function SearchResultItem({ result, isSelected, onClick }: SearchResultIt
       </span>
     </button>
   );
-}
+});
