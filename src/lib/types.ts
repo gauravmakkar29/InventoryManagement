@@ -19,6 +19,15 @@ export enum FirmwareStatus {
   Rejected = "rejected",
 }
 
+/** Firmware version lifecycle states for secure distribution (#355) */
+export enum FirmwareLifecycleState {
+  Screening = "SCREENING",
+  Staged = "STAGED",
+  Active = "ACTIVE",
+  Deprecated = "DEPRECATED",
+  Recalled = "RECALLED",
+}
+
 export enum ApprovalStage {
   Uploaded = "uploaded",
   Testing = "testing",
@@ -99,6 +108,54 @@ export interface Firmware {
   targetDeviceCount: number;
   deployedDeviceCount: number;
   _schemaVersion?: number;
+  /** Firmware family this version belongs to (#354) */
+  familyId?: string;
+  /** Lifecycle state for secure distribution (#355) */
+  lifecycleState?: FirmwareLifecycleState;
+}
+
+/** Firmware family — groups versions under a product line (#354) */
+export interface FirmwareFamily {
+  id: string;
+  name: string;
+  description: string;
+  targetModels: string[];
+  createdBy: string;
+  createdAt: string;
+  versionCount: number;
+  latestVersion?: string;
+  latestActiveVersion?: string;
+}
+
+/** Download token for one-time firmware distribution (#357) */
+export interface DownloadToken {
+  id: string;
+  tokenGuid: string;
+  firmwareId: string;
+  firmwareName: string;
+  firmwareVersion: string;
+  userId: string;
+  userEmail: string;
+  createdBy: string;
+  createdByEmail: string;
+  createdAt: string;
+  expiresAt: string;
+  consumed: boolean;
+  consumedAt?: string;
+  consumedIp?: string;
+  status: "active" | "consumed" | "expired" | "revoked";
+}
+
+/** Firmware assignment — tracks which firmware was delivered to which device/customer (#362) */
+export interface FirmwareAssignment {
+  id: string;
+  firmwareId: string;
+  firmwareVersion: string;
+  deviceId: string;
+  customerId: string;
+  assignedAt: string;
+  assignedBy: string;
+  downloadTokenId: string;
 }
 
 export interface ServiceOrder {
@@ -334,4 +391,25 @@ export interface AuthState {
   signOut: () => void;
   /** Extend the current session (dismisses the expiry warning). */
   extendSession: () => Promise<void>;
+}
+
+// --- Secure Firmware Download (Epic 26) ---
+
+/** Download token for one-time firmware distribution (#357) */
+export interface DownloadToken {
+  id: string;
+  tokenGuid: string;
+  firmwareId: string;
+  firmwareName: string;
+  firmwareVersion: string;
+  userId: string;
+  userEmail: string;
+  createdBy: string;
+  createdByEmail: string;
+  createdAt: string;
+  expiresAt: string;
+  consumed: boolean;
+  consumedAt?: string;
+  consumedIp?: string;
+  status: "active" | "consumed" | "expired" | "revoked";
 }

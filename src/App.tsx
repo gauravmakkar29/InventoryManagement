@@ -53,6 +53,11 @@ const UserManagement = lazy(() =>
 const AccessDenied = lazy(() =>
   import("./app/components/access-denied").then((m) => ({ default: m.AccessDenied })),
 );
+const SecureDownloadPage = lazy(() =>
+  import("./app/components/firmware/secure-download-page").then((m) => ({
+    default: m.SecureDownloadPage,
+  })),
+);
 
 // ---------------------------------------------------------------------------
 // App Router
@@ -63,6 +68,15 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/login" element={<SignIn />} />
+          {/* Secure download — outside ProtectedLayout; has own auth check (#358) */}
+          <Route
+            path="/download/:tokenGuid"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <SecureDownloadPage />
+              </Suspense>
+            }
+          />
           <Route element={<ProtectedLayout />}>
             <Route
               path="/"
