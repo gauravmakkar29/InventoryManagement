@@ -1,6 +1,49 @@
+import type { ReactNode } from "react";
 import { Server, Package, ClipboardList, Shield, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
+
+/**
+ * Safely renders OpenSearch highlight markup by splitting on <mark>...</mark>
+ * tags and rendering them as React elements. All other content (including any
+ * injected HTML tags) is rendered as plain text, auto-escaped by React.
+ *
+ * Enforces NIST SI-3 (Malicious Code Protection) by eliminating
+ * dangerouslySetInnerHTML usage for user-facing search output.
+ */
+export function renderHighlight(text: string): ReactNode {
+  const MARK_PATTERN = /<mark>(.*?)<\/mark>/gi;
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let keyIndex = 0;
+  let hasMarks = false;
+
+  while ((match = MARK_PATTERN.exec(text)) !== null) {
+    hasMarks = true;
+    // Add any text before this <mark> as a plain string (auto-escaped by React)
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    // Render the matched content inside a safe React <mark> element
+    parts.push(
+      <mark key={keyIndex++} className="bg-amber-200 dark:bg-amber-900/50 px-0.5 rounded-sm">
+        {match[1]}
+      </mark>,
+    );
+    lastIndex = MARK_PATTERN.lastIndex;
+  }
+
+  // If no marks were found, return the plain string directly
+  if (!hasMarks) return text;
+
+  // Add any remaining text after the last match
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+}
 
 // =============================================================================
 // Story 18.2 — SearchResultItem
@@ -79,10 +122,9 @@ export function SearchResultItem({ result, isSelected, onClick }: SearchResultIt
       {/* Title + subtitle */}
       <div className="min-w-0 flex-1">
         {highlightedTitle ? (
-          <div
-            className="truncate text-[14px] font-medium text-foreground [&_mark]:bg-amber-200 [&_mark]:px-0.5 [&_mark]:rounded-sm dark:[&_mark]:bg-amber-800"
-            dangerouslySetInnerHTML={{ __html: highlightedTitle }}
-          />
+          <div className="truncate text-[14px] font-medium text-foreground">
+            {renderHighlight(highlightedTitle)}
+          </div>
         ) : (
           <div className="truncate text-[14px] font-medium text-foreground">{result.title}</div>
         )}

@@ -241,27 +241,24 @@ export function createTerraformApiProvider(): IApiProvider {
       return notImplemented("getDashboardMetrics");
     },
 
-    // --- Mutations ---
-    async createServiceOrder(_input: Partial<ServiceOrder>): Promise<ServiceOrder | null> {
+    // --- Mutations (throw ApiMutationError on failure) ---
+    async createServiceOrder(_input: Partial<ServiceOrder>): Promise<ServiceOrder> {
       return notImplemented("createServiceOrder");
     },
 
-    async updateServiceOrder(
-      _id: string,
-      _input: Partial<ServiceOrder>,
-    ): Promise<ServiceOrder | null> {
+    async updateServiceOrder(_id: string, _input: Partial<ServiceOrder>): Promise<ServiceOrder> {
       return notImplemented("updateServiceOrder");
     },
 
-    async uploadFirmware(_input: Partial<Firmware>): Promise<Firmware | null> {
+    async uploadFirmware(_input: Partial<Firmware>): Promise<Firmware> {
       return notImplemented("uploadFirmware");
     },
 
-    async approveFirmware(_id: string, _stage: string): Promise<Firmware | null> {
+    async approveFirmware(_id: string, _stage: string): Promise<Firmware> {
       return notImplemented("approveFirmware");
     },
 
-    async submitComplianceReview(_id: string): Promise<Compliance | null> {
+    async submitComplianceReview(_id: string): Promise<Compliance> {
       return notImplemented("submitComplianceReview");
     },
 
