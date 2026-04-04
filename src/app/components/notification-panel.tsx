@@ -1,6 +1,8 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, memo } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { X, AlertTriangle, Info, AlertCircle, CheckCircle, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { isSafeUrl } from "@/lib/security";
 import { useNotificationStore, type StoredNotification } from "@/stores/notification-store";
 import type { NotificationEventType } from "@/lib/providers/notification-provider";
 
@@ -242,69 +244,122 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           </div>
         </div>
 
-        {/* Notification list */}
-        <div className="flex-1 overflow-y-auto">
-          {notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16">
-              <Bell className="h-10 w-10 text-muted-foreground/40 mb-3" />
-              <p className="text-[15px] text-muted-foreground">No notifications</p>
-            </div>
-          ) : (
-            <div>
-              {notifications.map((notification) => {
-                const config = SEVERITY_CONFIG[notification.severity];
-                const Icon = config.icon;
-                return (
-                  <a
-                    key={notification.id}
-                    href={notification.sourceUrl ?? "#"}
-                    onClick={() => markRead(notification.id)}
-                    className={cn(
-                      "flex gap-3 border-b border-border/30 px-5 py-3.5 hover:bg-muted transition-colors",
-                      !notification.read && "bg-orange-50/30",
-                    )}
-                  >
-                    <div
-                      className={cn(
-                        "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
-                        config.bgColor,
-                      )}
-                    >
-                      <Icon className={cn("h-4 w-4", config.iconColor)} />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-start justify-between gap-2">
-                        <p
-                          className={cn(
-                            "text-[14px] leading-snug",
-                            notification.read
-                              ? "font-medium text-foreground/80"
-                              : "font-semibold text-foreground",
-                          )}
-                        >
-                          {notification.title}
-                        </p>
-                        {!notification.read && (
-                          <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />
-                        )}
-                      </div>
-                      <p className="mt-0.5 text-[14px] leading-snug text-muted-foreground line-clamp-2">
-                        {notification.message}
-                      </p>
-                      <p className="mt-1 text-[13px] text-muted-foreground">
-                        {notification.timestamp}
-                      </p>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-          )}
-        </div>
+        {/* Notification list — virtualized for performance (#312) */}
+        <VirtualizedNotificationList notifications={notifications} onMarkRead={markRead} />
       </div>
     </>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Virtualized list + memoized row (#312, #350)
+// ---------------------------------------------------------------------------
+
+const ESTIMATED_ROW_HEIGHT = 88;
+
+function VirtualizedNotificationList({
+  notifications,
+  onMarkRead,
+}: {
+  notifications: DisplayNotification[];
+  onMarkRead: (id: string) => void;
+}) {
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const virtualizer = useVirtualizer({
+    count: notifications.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => ESTIMATED_ROW_HEIGHT,
+    overscan: 5,
+  });
+
+  if (notifications.length === 0) {
+    return (
+      <div className="flex flex-1 flex-col items-center justify-center py-16">
+        <Bell className="h-10 w-10 text-muted-foreground/40 mb-3" />
+        <p className="text-[15px] text-muted-foreground">No notifications</p>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={parentRef} className="flex-1 overflow-y-auto">
+      <div className="relative w-full" style={{ height: `${virtualizer.getTotalSize()}px` }}>
+        {virtualizer.getVirtualItems().map((virtualRow) => (
+          <div
+            key={virtualRow.key}
+            className="absolute left-0 top-0 w-full"
+            style={{ transform: `translateY(${virtualRow.start}px)` }}
+            ref={virtualizer.measureElement}
+            data-index={virtualRow.index}
+          >
+            <NotificationRow
+              notification={notifications[virtualRow.index]!}
+              onMarkRead={onMarkRead}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Memoized notification row — rendered in virtualized list (#311) */
+const NotificationRow = memo(function NotificationRow({
+  notification,
+  onMarkRead,
+}: {
+  notification: DisplayNotification;
+  onMarkRead: (id: string) => void;
+}) {
+  const config = SEVERITY_CONFIG[notification.severity];
+  const Icon = config.icon;
+
+  // Validate sourceUrl before rendering as href (NIST SI-10, #350)
+  const href =
+    notification.sourceUrl && isSafeUrl(notification.sourceUrl)
+      ? notification.sourceUrl
+      : undefined;
+
+  return (
+    <a
+      href={href ?? "#"}
+      onClick={() => onMarkRead(notification.id)}
+      className={cn(
+        "flex gap-3 border-b border-border/30 px-5 py-3.5 hover:bg-muted transition-colors",
+        !notification.read && "bg-orange-50/30",
+      )}
+    >
+      <div
+        className={cn(
+          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
+          config.bgColor,
+        )}
+      >
+        <Icon className={cn("h-4 w-4", config.iconColor)} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-start justify-between gap-2">
+          <p
+            className={cn(
+              "text-[14px] leading-snug",
+              notification.read
+                ? "font-medium text-foreground/80"
+                : "font-semibold text-foreground",
+            )}
+          >
+            {notification.title}
+          </p>
+          {!notification.read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-accent" />}
+        </div>
+        <p className="mt-0.5 text-[14px] leading-snug text-muted-foreground line-clamp-2">
+          {notification.message}
+        </p>
+        <p className="mt-1 text-[13px] text-muted-foreground">{notification.timestamp}</p>
+      </div>
+    </a>
+  );
+});
 
 /** Returns unread count from the notification store + seed data for header badge. */
 export function useNotificationCount(): number {
