@@ -98,12 +98,12 @@ export interface IApiProvider {
   getDeviceAggregations(): Promise<AggregationResult[]>;
   getDashboardMetrics(): Promise<DashboardMetrics>;
 
-  // --- Mutations ---
-  createServiceOrder(input: Partial<ServiceOrder>): Promise<ServiceOrder | null>;
-  updateServiceOrder(id: string, input: Partial<ServiceOrder>): Promise<ServiceOrder | null>;
-  uploadFirmware(input: Partial<Firmware>): Promise<Firmware | null>;
-  approveFirmware(id: string, stage: string): Promise<Firmware | null>;
-  submitComplianceReview(id: string): Promise<Compliance | null>;
+  // --- Mutations (throw ApiMutationError on failure — callers must try/catch) ---
+  createServiceOrder(input: Partial<ServiceOrder>): Promise<ServiceOrder>;
+  updateServiceOrder(id: string, input: Partial<ServiceOrder>): Promise<ServiceOrder>;
+  uploadFirmware(input: Partial<Firmware>): Promise<Firmware>;
+  approveFirmware(id: string, stage: string): Promise<Firmware>;
+  submitComplianceReview(id: string): Promise<Compliance>;
   acknowledgeNotification(id: string): Promise<boolean>;
 
   // --- Telemetry & Environmental Monitoring ---

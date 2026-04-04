@@ -39,6 +39,15 @@ import type {
 } from "./opensearch-types";
 
 import { APP_BUILD_INFO } from "./app-version";
+import {
+  handleMutationResult,
+  handleBooleanMutationResult,
+  type MutationResult,
+} from "./api-error-handler";
+
+// Re-export for consumers that need to catch specific errors
+export { ApiMutationError } from "./api-error-handler";
+export type { MutationResult } from "./api-error-handler";
 
 /**
  * Default headers attached to every API request, including the
@@ -56,10 +65,10 @@ function stub<T>(name: string, fallback: T): T {
   const ctx = { source: "hlm-api", method: name, version: APP_BUILD_INFO.full };
   const logger = (globalThis as Record<string, unknown>)["structuredLog"];
   if (typeof logger === "function") {
-    (logger as (level: string, meta: Record<string, string>) => void)(
-      "warn",
-      { ...ctx, message: `${name}() — returning mock data` },
-    );
+    (logger as (level: string, meta: Record<string, string>) => void)("warn", {
+      ...ctx,
+      message: `${name}() — returning mock data`,
+    });
   }
   return fallback;
 }
@@ -174,35 +183,46 @@ export async function getDashboardMetrics(): Promise<{
 
 // =============================================================================
 // Mutations (6)
+//
+// Each mutation processes its result through handleMutationResult /
+// handleBooleanMutationResult so that GraphQL errors, authorization
+// failures, and unexpected null responses surface as toast notifications
+// and thrown ApiMutationError instances. Callers MUST wrap calls in
+// try/catch to keep modals open on failure.
 // =============================================================================
 
-export async function createServiceOrder(
-  _input: Partial<ServiceOrder>,
-): Promise<ServiceOrder | null> {
-  return stub("createServiceOrder", null);
+export async function createServiceOrder(_input: Partial<ServiceOrder>): Promise<ServiceOrder> {
+  // TODO: replace stub with real GraphQL call that returns MutationResult<ServiceOrder>
+  const raw: MutationResult<ServiceOrder> = { data: stub("createServiceOrder", null) };
+  return handleMutationResult(raw, "createServiceOrder");
 }
 
 export async function updateServiceOrder(
   _id: string,
   _input: Partial<ServiceOrder>,
-): Promise<ServiceOrder | null> {
-  return stub("updateServiceOrder", null);
+): Promise<ServiceOrder> {
+  const raw: MutationResult<ServiceOrder> = { data: stub("updateServiceOrder", null) };
+  return handleMutationResult(raw, "updateServiceOrder");
 }
 
-export async function uploadFirmware(_input: Partial<Firmware>): Promise<Firmware | null> {
-  return stub("uploadFirmware", null);
+export async function uploadFirmware(_input: Partial<Firmware>): Promise<Firmware> {
+  const raw: MutationResult<Firmware> = { data: stub("uploadFirmware", null) };
+  return handleMutationResult(raw, "uploadFirmware");
 }
 
-export async function approveFirmware(_id: string, _stage: string): Promise<Firmware | null> {
-  return stub("approveFirmware", null);
+export async function approveFirmware(_id: string, _stage: string): Promise<Firmware> {
+  const raw: MutationResult<Firmware> = { data: stub("approveFirmware", null) };
+  return handleMutationResult(raw, "approveFirmware");
 }
 
-export async function submitComplianceReview(_id: string): Promise<Compliance | null> {
-  return stub("submitComplianceReview", null);
+export async function submitComplianceReview(_id: string): Promise<Compliance> {
+  const raw: MutationResult<Compliance> = { data: stub("submitComplianceReview", null) };
+  return handleMutationResult(raw, "submitComplianceReview");
 }
 
 export async function acknowledgeNotification(_id: string): Promise<boolean> {
-  return stub("acknowledgeNotification", true);
+  const raw: MutationResult<boolean> = { data: stub("acknowledgeNotification", true) };
+  return handleBooleanMutationResult(raw, "acknowledgeNotification");
 }
 
 // =============================================================================

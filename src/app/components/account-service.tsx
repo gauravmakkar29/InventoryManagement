@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Calendar, LayoutGrid } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
@@ -40,8 +41,17 @@ export function AccountService() {
   } = useServiceOrders();
 
   const handleCreate = (order: ServiceOrder) => {
-    hookCreate(order);
-    setShowCreateModal(false);
+    try {
+      hookCreate(order);
+      setShowCreateModal(false);
+    } catch (error: unknown) {
+      // Modal stays open — form input is preserved so the user can retry.
+      // hookCreate already shows a toast on API errors; only add a fallback
+      // for truly unexpected failures.
+      if (error instanceof Error && !error.message.includes("failed")) {
+        toast.error("Failed to create service order. Please try again.");
+      }
+    }
   };
 
   return (

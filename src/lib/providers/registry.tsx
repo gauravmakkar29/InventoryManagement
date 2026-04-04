@@ -3,6 +3,7 @@ import {
   Suspense,
   createContext,
   useContext,
+  useMemo,
   type ReactNode,
   type ComponentType,
 } from "react";
@@ -42,9 +43,11 @@ interface ProviderRegistryProps {
  * API and Storage are plain object instances provided via context.
  */
 export function ProviderRegistry({ api, storage, AuthProvider, children }: ProviderRegistryProps) {
+  const registryValue = useMemo(() => ({ api, storage }), [api, storage]);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ProviderRegistryContext.Provider value={{ api, storage }}>
+      <ProviderRegistryContext.Provider value={registryValue}>
         <AuthProvider>{children}</AuthProvider>
       </ProviderRegistryContext.Provider>
       {import.meta.env.VITE_SHOW_DEVTOOLS === "true" && (

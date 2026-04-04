@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Upload, Package, Shield, Clock, Bug, FileText, Plus } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "../../lib/utils";
 import { useAuth } from "../../lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
@@ -61,7 +62,14 @@ export function Deployment() {
       fileSize: string;
       checksum: string;
     }) => {
-      hookUpload(data, () => setUploadModalOpen(false));
+      try {
+        hookUpload(data, () => setUploadModalOpen(false));
+      } catch (error: unknown) {
+        // Modal stays open — form input preserved for retry.
+        if (error instanceof Error && !error.message.includes("failed")) {
+          toast.error("Failed to upload firmware. Please try again.");
+        }
+      }
     },
     [hookUpload],
   );

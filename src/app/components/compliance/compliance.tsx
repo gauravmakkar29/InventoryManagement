@@ -163,24 +163,31 @@ export function CompliancePage() {
         <SubmitForReviewModal
           onClose={() => setSubmitModalOpen(false)}
           onSubmit={(data) => {
-            const newItem: ComplianceItem = {
-              id: `CMP-${String(complianceItems.length + 1).padStart(3, "0")}`,
-              name: `${data.certification} — ${data.deviceModel}`,
-              certType: data.certification as CertificationType,
-              status: "Pending",
-              lastAudit: new Date().toLocaleDateString("en-US", {
-                month: "short",
-                day: "2-digit",
-                year: "numeric",
-              }),
-              nextAudit: "TBD",
-              findings: 0,
-              assignedTo: "Unassigned",
-              vulnerabilities: [],
-            };
-            addComplianceItem(newItem);
-            setSubmitModalOpen(false);
-            toast.success("Compliance item submitted for review");
+            try {
+              const newItem: ComplianceItem = {
+                id: `CMP-${String(complianceItems.length + 1).padStart(3, "0")}`,
+                name: `${data.certification} — ${data.deviceModel}`,
+                certType: data.certification as CertificationType,
+                status: "Pending",
+                lastAudit: new Date().toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                }),
+                nextAudit: "TBD",
+                findings: 0,
+                assignedTo: "Unassigned",
+                vulnerabilities: [],
+              };
+              addComplianceItem(newItem);
+              setSubmitModalOpen(false);
+              toast.success("Compliance item submitted for review");
+            } catch (error: unknown) {
+              // Modal stays open — form input preserved for retry.
+              if (error instanceof Error && !error.message.includes("failed")) {
+                toast.error("Failed to submit compliance review. Please try again.");
+              }
+            }
           }}
         />
       )}

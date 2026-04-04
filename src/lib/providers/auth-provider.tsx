@@ -9,6 +9,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   useRef,
   type ReactNode,
   type ComponentType,
@@ -317,30 +318,46 @@ export function createAuthProvider(adapter: IAuthAdapter): ComponentType<{ child
       broadcastMessage({ type: "SIGN_OUT" });
     }, [stopRefreshLoop, broadcastMessage]);
 
-    return (
-      <AuthContext.Provider
-        value={{
-          user,
-          email: user?.email ?? null,
-          groups: user?.groups ?? [],
-          isAuthenticated: !!user,
-          isLoading,
-          customerId: user?.customerId ?? null,
-          signInError,
-          mfaRequired,
-          mfaEnabled,
-          sessionExpiring,
-          signIn,
-          verifyMfa,
-          setupMfa,
-          confirmMfaSetup,
-          signOut,
-          extendSession,
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
+    // Memoize groups to prevent new array ref when user is null (#310)
+    const groups = useMemo(() => user?.groups ?? [], [user?.groups]);
+
+    const contextValue = useMemo(
+      () => ({
+        user,
+        email: user?.email ?? null,
+        groups,
+        isAuthenticated: !!user,
+        isLoading,
+        customerId: user?.customerId ?? null,
+        signInError,
+        mfaRequired,
+        mfaEnabled,
+        sessionExpiring,
+        signIn,
+        verifyMfa,
+        setupMfa,
+        confirmMfaSetup,
+        signOut,
+        extendSession,
+      }),
+      [
+        user,
+        groups,
+        isLoading,
+        signInError,
+        mfaRequired,
+        mfaEnabled,
+        sessionExpiring,
+        signIn,
+        verifyMfa,
+        setupMfa,
+        confirmMfaSetup,
+        signOut,
+        extendSession,
+      ],
     );
+
+    return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
   }
 
   AuthProvider.displayName = "AuthProvider";

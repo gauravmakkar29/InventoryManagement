@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canAccessPage } from "@/lib/rbac";
 import { useUIStore } from "@/stores/ui-store";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
@@ -73,8 +74,28 @@ function LayoutSkeleton() {
   );
 }
 
+/**
+ * Map URL pathname to RBAC page slug.
+ * "/" maps to "dashboard"; "/access-denied" is always allowed.
+ */
+const ROUTE_TO_PAGE: Record<string, string> = {
+  "/": "dashboard",
+  "/inventory": "inventory",
+  "/deployment": "deployment",
+  "/compliance": "compliance",
+  "/sbom": "sbom",
+  "/account-service": "account-service",
+  "/analytics": "analytics",
+  "/telemetry": "telemetry",
+  "/incidents": "incidents",
+  "/digital-twin": "digital-twin",
+  "/executive-summary": "executive-summary",
+  "/user-management": "user-management",
+};
+
 export function ProtectedLayout() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, groups } = useAuth();
+  const location = useLocation();
   const connectivity = useConnectivityMonitor();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
@@ -98,6 +119,15 @@ export function ProtectedLayout() {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
+  }
+
+  // NIST AC-3: Route-level RBAC enforcement (#337)
+  const pageSlug = ROUTE_TO_PAGE[location.pathname];
+  if (pageSlug) {
+    const role = getPrimaryRole(groups);
+    if (!canAccessPage(role, pageSlug)) {
+      return <Navigate to="/access-denied" replace />;
+    }
   }
 
   return (

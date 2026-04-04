@@ -144,29 +144,24 @@ describe("HLM API query stubs", () => {
 // =============================================================================
 
 describe("HLM API mutation stubs", () => {
-  it("createServiceOrder returns null", async () => {
-    const result = await createServiceOrder({});
-    expect(result).toBeNull();
+  it("createServiceOrder throws ApiMutationError (stub returns null data)", async () => {
+    await expect(createServiceOrder({})).rejects.toThrow("Unexpected empty response");
   });
 
-  it("updateServiceOrder returns null", async () => {
-    const result = await updateServiceOrder("so-1", {});
-    expect(result).toBeNull();
+  it("updateServiceOrder throws ApiMutationError (stub returns null data)", async () => {
+    await expect(updateServiceOrder("so-1", {})).rejects.toThrow("Unexpected empty response");
   });
 
-  it("uploadFirmware returns null", async () => {
-    const result = await uploadFirmware({});
-    expect(result).toBeNull();
+  it("uploadFirmware throws ApiMutationError (stub returns null data)", async () => {
+    await expect(uploadFirmware({})).rejects.toThrow("Unexpected empty response");
   });
 
-  it("approveFirmware returns null", async () => {
-    const result = await approveFirmware("fw-1", "testing");
-    expect(result).toBeNull();
+  it("approveFirmware throws ApiMutationError (stub returns null data)", async () => {
+    await expect(approveFirmware("fw-1", "testing")).rejects.toThrow("Unexpected empty response");
   });
 
-  it("submitComplianceReview returns null", async () => {
-    const result = await submitComplianceReview("c-1");
-    expect(result).toBeNull();
+  it("submitComplianceReview throws ApiMutationError (stub returns null data)", async () => {
+    await expect(submitComplianceReview("c-1")).rejects.toThrow("Unexpected empty response");
   });
 
   it("acknowledgeNotification returns true", async () => {
