@@ -59,6 +59,7 @@ export default defineConfig({
         },
       },
     },
+    chunkSizeWarningLimit: 500, // KB — CI guard for bundle bloat (#317)
   },
   test: {
     globals: true,

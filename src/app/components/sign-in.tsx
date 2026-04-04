@@ -25,6 +25,8 @@ function SolarOverlay() {
 
     let animationId: number;
     let time = 0;
+    let lastFrameTime = 0;
+    const FRAME_INTERVAL = 33; // ~30fps throttle (#317)
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * 2;
@@ -101,11 +103,18 @@ function SolarOverlay() {
       ctx.fillStyle = scanGrad;
       ctx.fillRect(0, scanY - 30, w, 60);
 
-      time += 0.012;
-      animationId = requestAnimationFrame(draw);
+      time += 0.016; // adjusted for 30fps (#317)
     };
 
-    draw();
+    const tick = (timestamp: number) => {
+      if (timestamp - lastFrameTime >= FRAME_INTERVAL) {
+        lastFrameTime = timestamp;
+        draw();
+      }
+      animationId = requestAnimationFrame(tick);
+    };
+
+    animationId = requestAnimationFrame(tick);
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener("resize", resize);

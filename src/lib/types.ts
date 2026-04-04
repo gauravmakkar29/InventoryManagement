@@ -149,13 +149,18 @@ export interface DownloadToken {
 /** Firmware assignment — tracks which firmware was delivered to which device/customer (#362) */
 export interface FirmwareAssignment {
   id: string;
+  deviceId: string;
+  deviceName: string;
   firmwareId: string;
   firmwareVersion: string;
-  deviceId: string;
-  customerId: string;
-  assignedAt: string;
+  firmwareName: string;
   assignedBy: string;
-  downloadTokenId: string;
+  assignedByEmail: string;
+  assignedAt: string; // ISO 8601
+  assignmentMethod: "DOWNLOAD_TOKEN" | "MANUAL" | "OTA";
+  previousFirmwareId?: string;
+  previousFirmwareVersion?: string;
+  downloadTokenId?: string;
 }
 
 export interface ServiceOrder {
@@ -412,4 +417,32 @@ export interface DownloadToken {
   consumedAt?: string;
   consumedIp?: string;
   status: "active" | "consumed" | "expired" | "revoked";
+}
+
+/** Download attempt audit record (NIST AU-2/3, #359) */
+export type DownloadAttemptResult =
+  | "SUCCESS"
+  | "TOKEN_NOT_FOUND"
+  | "TOKEN_EXPIRED"
+  | "TOKEN_CONSUMED"
+  | "USER_MISMATCH"
+  | "FIRMWARE_RECALLED"
+  | "MFA_MISSING"
+  | "RATE_LIMITED";
+
+export interface DownloadAuditEntry {
+  id: string;
+  tokenId: string;
+  tokenGuid: string;
+  firmwareId: string;
+  firmwareName: string;
+  firmwareVersion: string;
+  userId: string;
+  userEmail: string;
+  clientIp: string;
+  userAgent: string;
+  timestamp: string;
+  result: DownloadAttemptResult;
+  reason?: string;
+  sha256?: string;
 }
