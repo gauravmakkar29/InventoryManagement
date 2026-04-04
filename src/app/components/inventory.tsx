@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Package, Plus } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { DeviceStatus } from "@/lib/types";
 import { useAuth } from "@/lib/use-auth";
@@ -56,14 +57,36 @@ export function Inventory() {
     sortField,
     sortDir,
     handleSort,
-    handleStatusChange,
-    handleCreateDevice,
+    handleStatusChange: hookStatusChange,
+    handleCreateDevice: hookCreateDevice,
     page: safeCurrentPage,
     setPage,
     totalPages,
     startIdx,
     endIdx,
   } = useDeviceInventory();
+
+  const handleStatusChange = useCallback(
+    (deviceId: string, newStatus: DeviceStatus) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      hookStatusChange(deviceId, newStatus);
+    },
+    [role, hookStatusChange],
+  );
+
+  const handleCreateDevice = useCallback(
+    (...args: Parameters<typeof hookCreateDevice>) => {
+      if (!canPerformAction(role, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      hookCreateDevice(...args);
+    },
+    [role, hookCreateDevice],
+  );
 
   return (
     <div className="space-y-5">

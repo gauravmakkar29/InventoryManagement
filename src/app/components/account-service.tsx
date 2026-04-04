@@ -41,6 +41,10 @@ export function AccountService() {
   } = useServiceOrders();
 
   const handleCreate = (order: ServiceOrder) => {
+    if (!canPerformAction(role, "create")) {
+      toast.error("Access denied — insufficient permissions");
+      return;
+    }
     try {
       hookCreate(order);
       setShowCreateModal(false);

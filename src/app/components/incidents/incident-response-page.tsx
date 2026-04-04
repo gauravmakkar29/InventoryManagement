@@ -3,7 +3,10 @@
  * Main page component implementing Stories 14.1–14.6
  */
 import { useState, useCallback, useEffect } from "react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import type {
   Incident,
   IncidentStatus,
@@ -26,6 +29,9 @@ import { MetricsDashboardTab } from "./metrics-dashboard-tab";
 // Main Page Component
 // ---------------------------------------------------------------------------
 export function IncidentResponsePage() {
+  const { groups } = useAuth();
+  const role = getPrimaryRole(groups);
+
   const {
     incidents,
     quarantineZones,
@@ -54,27 +60,50 @@ export function IncidentResponsePage() {
     }
   }, [incidents, selectedIncident]);
 
+  const handleCreateIncidentGuarded = useCallback(
+    (newIncident: Incident) => {
+      if (!canPerformAction(role, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      handleCreateIncident(newIncident);
+    },
+    [role, handleCreateIncident],
+  );
+
   const handleStatusChange = useCallback(
     (incidentId: string, newStatus: IncidentStatus, note: string) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
       hookStatusChange(incidentId, newStatus, note);
     },
-    [hookStatusChange],
+    [role, hookStatusChange],
   );
 
   const handleIsolateConfirm = useCallback(
     (deviceId: string, policy: IsolationPolicy) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
       hookIsolateConfirm(deviceId, policy);
       setIsolateDevice(null);
     },
-    [hookIsolateConfirm],
+    [role, hookIsolateConfirm],
   );
 
   const handleReleaseConfirm = useCallback(
     (deviceId: string, reason: string) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
       hookReleaseConfirm(deviceId, reason);
       setReleaseDevice(null);
     },
-    [hookReleaseConfirm],
+    [role, hookReleaseConfirm],
   );
 
   const handleStepComplete = useCallback(
@@ -167,7 +196,7 @@ export function IncidentResponsePage() {
       <CreateIncidentDialog
         open={showCreateDialog}
         onClose={() => setShowCreateDialog(false)}
-        onCreate={handleCreateIncident}
+        onCreate={handleCreateIncidentGuarded}
       />
       <IsolationDialog
         device={isolateDevice}

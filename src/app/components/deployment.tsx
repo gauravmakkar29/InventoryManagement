@@ -1,9 +1,9 @@
 import { useState, useCallback } from "react";
 import { Upload, Package, Shield, Clock, Bug, FileText, Plus } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "../../lib/utils";
-import { useAuth } from "../../lib/use-auth";
-import { getPrimaryRole, canPerformAction } from "../../lib/rbac";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 
 import type { Tab } from "./deployment/deployment-types";
 import { UploadFirmwareModal } from "./deployment/upload-firmware-modal";
@@ -13,9 +13,9 @@ import { FirmwareList } from "./deployment/firmware-list";
 import { VulnerabilityTab } from "./deployment/vulnerability-tab";
 import { ReportsTab } from "./deployment/reports-tab";
 import { AuditLogTab } from "./deployment/audit-log-tab";
-import { useAuditLog } from "../../lib/hooks/use-audit-log";
-import { useFirmwareDeployment } from "../../lib/hooks/use-firmware-deployment";
-import { useVulnerabilityTracker } from "../../lib/hooks/use-vulnerability-tracker";
+import { useAuditLog } from "@/lib/hooks/use-audit-log";
+import { useFirmwareDeployment } from "@/lib/hooks/use-firmware-deployment";
+import { useVulnerabilityTracker } from "@/lib/hooks/use-vulnerability-tracker";
 
 // =============================================================================
 // Main Deployment Component
@@ -53,6 +53,54 @@ export function Deployment() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [vulnModalOpen, setVulnModalOpen] = useState(false);
 
+  // RBAC-guarded vulnerability creation
+  const guardedCreateVulnerability = useCallback(
+    (...args: Parameters<typeof vulnTracker.handleCreateVulnerability>) => {
+      if (!canPerformAction(role, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      vulnTracker.handleCreateVulnerability(...args);
+    },
+    [role, vulnTracker.handleCreateVulnerability],
+  );
+
+  // RBAC-guarded firmware stage advancement (AC-3 + AC-5 SoD enforced in hook)
+  const guardedAdvanceStage = useCallback(
+    (id: string) => {
+      if (!canPerformAction(role, "approve")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      advanceStage(id);
+    },
+    [role, advanceStage],
+  );
+
+  // RBAC-guarded deprecation
+  const guardedDeprecate = useCallback(
+    (id: string) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      deprecateFirmware(id);
+    },
+    [role, deprecateFirmware],
+  );
+
+  // RBAC-guarded reactivation
+  const guardedActivate = useCallback(
+    (id: string) => {
+      if (!canPerformAction(role, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      activateFirmware(id);
+    },
+    [role, activateFirmware],
+  );
+
   const handleUpload = useCallback(
     (data: {
       version: string;
@@ -62,6 +110,10 @@ export function Deployment() {
       fileSize: string;
       checksum: string;
     }) => {
+      if (!canPerformAction(role, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
       try {
         hookUpload(data, () => setUploadModalOpen(false));
       } catch (error: unknown) {
@@ -71,7 +123,7 @@ export function Deployment() {
         }
       }
     },
-    [hookUpload],
+    [hookUpload, role],
   );
 
   // ---------------------------------------------------------------------------
@@ -147,9 +199,9 @@ export function Deployment() {
             canManage={canManage}
             isAdmin={isAdmin}
             onUploadClick={() => setUploadModalOpen(true)}
-            advanceStage={advanceStage}
-            deprecateFirmware={deprecateFirmware}
-            activateFirmware={activateFirmware}
+            advanceStage={guardedAdvanceStage}
+            deprecateFirmware={guardedDeprecate}
+            activateFirmware={guardedActivate}
           />
         </>
       )}
@@ -217,7 +269,7 @@ export function Deployment() {
         <CreateVulnerabilityModal
           firmwareList={firmware}
           onClose={() => setVulnModalOpen(false)}
-          onSubmit={vulnTracker.handleCreateVulnerability}
+          onSubmit={guardedCreateVulnerability}
         />
       )}
     </div>

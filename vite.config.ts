@@ -55,6 +55,7 @@ export default defineConfig({
           "react-vendor": ["react", "react-dom", "react-router"],
           "query-vendor": ["@tanstack/react-query"],
           "ui-vendor": ["sonner", "lucide-react"],
+          "form-vendor": ["zod", "react-hook-form", "@hookform/resolvers"],
         },
       },
     },

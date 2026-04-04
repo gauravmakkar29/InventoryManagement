@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { NavLink, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -125,6 +125,28 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     items: group.items.filter((item) => canAccessPage(role, item.page)),
   })).filter((group) => group.items.length > 0);
 
+  // Route chunk prefetching on hover (#314)
+  const prefetchedRoutes = useRef(new Set<string>());
+  const prefetchRoute = useCallback((path: string) => {
+    if (prefetchedRoutes.current.has(path)) return;
+    prefetchedRoutes.current.add(path);
+    const chunkMap: Record<string, () => Promise<unknown>> = {
+      "/": () => import("../dashboard/dashboard"),
+      "/inventory": () => import("../inventory"),
+      "/account-service": () => import("../account-service"),
+      "/deployment": () => import("../deployment"),
+      "/compliance": () => import("../compliance"),
+      "/sbom": () => import("../sbom"),
+      "/analytics": () => import("../analytics"),
+      "/telemetry": () => import("../telemetry/telemetry-heatmap-page"),
+      "/incidents": () => import("../incidents/incident-response-page"),
+      "/digital-twin": () => import("../digital-twin/digital-twin-page"),
+      "/executive-summary": () => import("../executive/executive-summary-page"),
+      "/user-management": () => import("../user-management"),
+    };
+    chunkMap[path]?.();
+  }, []);
+
   const handleSignOut = useCallback(() => {
     signOut();
   }, [signOut]);
@@ -203,6 +225,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                       title={collapsed ? t(item.labelKey) : undefined}
                       aria-label={t(item.labelKey)}
                       aria-current={isActive ? "page" : undefined}
+                      onMouseEnter={() => prefetchRoute(item.path)}
                       className={cn(
                         "group relative flex cursor-pointer items-center gap-3 rounded-lg text-[14px] font-medium",
                         collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",

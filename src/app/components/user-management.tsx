@@ -3,7 +3,7 @@ import { Search, UserPlus, Pencil, Ban, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
-import { getPrimaryRole } from "@/lib/rbac";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import type { Role } from "@/lib/rbac";
 import { InviteUserModal } from "./dialogs/invite-user-modal";
 import type { InviteUserPayload } from "./dialogs/invite-user-modal";
@@ -185,18 +185,25 @@ export function UserManagement() {
   // Handlers
   // ---------------------------------------------------------------------------
 
-  const handleInvite = useCallback((payload: InviteUserPayload) => {
-    const newUser: ManagedUser = {
-      id: `usr-${Date.now()}`,
-      name: `${payload.firstName} ${payload.lastName}`,
-      email: payload.email,
-      role: payload.role,
-      department: payload.department,
-      status: "Invited",
-      lastLogin: null,
-    };
-    setUsers((prev) => [newUser, ...prev]);
-  }, []);
+  const handleInvite = useCallback(
+    (payload: InviteUserPayload) => {
+      if (!canPerformAction(currentRole, "create")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      const newUser: ManagedUser = {
+        id: `usr-${Date.now()}`,
+        name: `${payload.firstName} ${payload.lastName}`,
+        email: payload.email,
+        role: payload.role,
+        department: payload.department,
+        status: "Invited",
+        lastLogin: null,
+      };
+      setUsers((prev) => [newUser, ...prev]);
+    },
+    [currentRole],
+  );
 
   const handleEdit = useCallback((user: ManagedUser) => {
     setEditingUser({
@@ -209,21 +216,35 @@ export function UserManagement() {
     setEditOpen(true);
   }, []);
 
-  const handleSaveEdit = useCallback((payload: EditUserPayload) => {
-    setUsers((prev) =>
-      prev.map((u) =>
-        u.id === payload.id ? { ...u, role: payload.role, department: payload.department } : u,
-      ),
-    );
-  }, []);
+  const handleSaveEdit = useCallback(
+    (payload: EditUserPayload) => {
+      if (!canPerformAction(currentRole, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === payload.id ? { ...u, role: payload.role, department: payload.department } : u,
+        ),
+      );
+    },
+    [currentRole],
+  );
 
-  const handleToggleStatus = useCallback((user: ManagedUser) => {
-    const nextStatus: UserStatus = user.status === "Disabled" ? "Active" : "Disabled";
-    setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, status: nextStatus } : u)));
-    toast.success(nextStatus === "Disabled" ? "User disabled" : "User enabled", {
-      description: `${user.name} is now ${nextStatus.toLowerCase()}.`,
-    });
-  }, []);
+  const handleToggleStatus = useCallback(
+    (user: ManagedUser) => {
+      if (!canPerformAction(currentRole, "edit")) {
+        toast.error("Access denied — insufficient permissions");
+        return;
+      }
+      const nextStatus: UserStatus = user.status === "Disabled" ? "Active" : "Disabled";
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? { ...u, status: nextStatus } : u)));
+      toast.success(nextStatus === "Disabled" ? "User disabled" : "User enabled", {
+        description: `${user.name} is now ${nextStatus.toLowerCase()}.`,
+      });
+    },
+    [currentRole],
+  );
 
   // ---------------------------------------------------------------------------
   // Render

@@ -48,6 +48,7 @@ import type {
 } from "@/lib/types";
 import { createApiClient, type IApiClient } from "@/lib/api-client";
 import { createAppVersionInterceptor } from "@/lib/app-version";
+import { createCsrfInterceptor } from "@/lib/csrf";
 
 // =============================================================================
 // Config
@@ -125,7 +126,7 @@ export function createAmplifyApiProvider(): IApiProvider {
 
   const client = createApiClient({
     baseUrl: config.endpoint,
-    requestInterceptors: [createAppVersionInterceptor()],
+    requestInterceptors: [createAppVersionInterceptor(), createCsrfInterceptor()],
   });
 
   // Helper for methods not yet connected to a live backend
