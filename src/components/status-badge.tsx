@@ -32,6 +32,9 @@ const STATUS_STYLES: Record<string, string> = {
   Contained: "bg-amber-50 text-amber-700 border-amber-200",
   Resolved: "bg-emerald-50 text-emerald-700 border-emerald-200",
   Closed: "bg-muted text-muted-foreground border-border",
+  Consumed: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  Expired: "bg-muted text-muted-foreground border-border",
+  Revoked: "bg-red-50 text-red-700 border-red-200",
 };
 
 /** Category values (incident, compliance, device type) */
