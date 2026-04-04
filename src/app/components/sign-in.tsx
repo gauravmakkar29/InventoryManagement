@@ -53,10 +53,7 @@ function SolarOverlay() {
         ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.moveTo(sunX, sunY);
-        ctx.lineTo(
-          sunX + Math.cos(angle) * length,
-          sunY + Math.sin(angle) * length,
-        );
+        ctx.lineTo(sunX + Math.cos(angle) * length, sunY + Math.sin(angle) * length);
         ctx.stroke();
       }
 
@@ -73,7 +70,7 @@ function SolarOverlay() {
 
       // ─── Rising energy particles ───
       for (let i = 0; i < 16; i++) {
-        const baseX = w * 0.05 + (i * w * 0.06);
+        const baseX = w * 0.05 + i * w * 0.06;
         const px = baseX + Math.sin(time * 0.4 + i * 1.3) * 15;
         const py = h - ((time * 25 + i * 70) % (h + 60)) + 30;
         const size = 2 + Math.sin(time * 0.8 + i) * 1;
@@ -96,7 +93,7 @@ function SolarOverlay() {
       }
 
       // ─── Subtle horizontal scan line (like energy flowing) ───
-      const scanY = ((time * 40) % h);
+      const scanY = (time * 40) % h;
       const scanGrad = ctx.createLinearGradient(0, scanY - 30, 0, scanY + 30);
       scanGrad.addColorStop(0, "transparent");
       scanGrad.addColorStop(0.5, "rgba(255, 160, 40, 0.04)");
@@ -115,7 +112,9 @@ function SolarOverlay() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[2]" aria-hidden="true" />;
+  return (
+    <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[2]" aria-hidden="true" />
+  );
 }
 
 /* ─── Live metrics ticker ─────────────────────────────────────────── */
@@ -147,7 +146,9 @@ function MetricsTicker() {
           )}
         >
           <p className="text-[22px] font-bold text-white tabular-nums tracking-tight">{m.value}</p>
-          <p className="text-[12px] text-white/60 uppercase tracking-wider font-medium">{m.label}</p>
+          <p className="text-[12px] text-white/60 uppercase tracking-wider font-medium">
+            {m.label}
+          </p>
           {i === activeIndex && (
             <p className="text-[11px] text-orange-300 mt-0.5 font-medium">{m.trend}</p>
           )}
@@ -167,17 +168,38 @@ function BrandMark({ variant = "light" }: { variant?: "light" | "dark" }) {
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/25">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <circle cx="12" cy="12" r="4" fill="white" />
-            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="white" strokeWidth="2" strokeLinecap="round" />
-            <path d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+            <path
+              d="M12 2v3M12 19v3M2 12h3M19 12h3"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <path
+              d="M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12"
+              stroke="white"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              opacity="0.7"
+            />
           </svg>
         </div>
-        <div className="absolute inset-0 rounded-xl bg-orange-500/20 animate-ping" style={{ animationDuration: "3s" }} />
+        <div className="absolute inset-0 rounded-xl bg-orange-500/20 animate-ping [animation-duration:3s]" />
       </div>
       <div>
-        <h1 className={cn("text-[20px] font-bold tracking-tight leading-none", isDark ? "text-gray-900" : "text-white")}>
+        <h1
+          className={cn(
+            "text-[20px] font-bold tracking-tight leading-none",
+            isDark ? "text-gray-900" : "text-white",
+          )}
+        >
           IMS Gen<span className={isDark ? "text-orange-500" : "text-orange-300"}>2</span>
         </h1>
-        <p className={cn("text-[11px] tracking-[0.15em] uppercase font-medium mt-0.5", isDark ? "text-gray-400" : "text-white/50")}>
+        <p
+          className={cn(
+            "text-[11px] tracking-[0.15em] uppercase font-medium mt-0.5",
+            isDark ? "text-gray-400" : "text-white/50",
+          )}
+        >
           Hardware Lifecycle Platform
         </p>
       </div>
@@ -230,6 +252,8 @@ export function SignIn() {
           src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1400&q=85&auto=format"
           alt=""
           aria-hidden="true"
+          width={1400}
+          height={934}
           className="absolute inset-0 h-full w-full object-cover"
         />
 
@@ -268,26 +292,23 @@ export function SignIn() {
                 </span>
               </h2>
               <p className="mt-4 text-[15px] leading-relaxed text-white/70 max-w-md">
-                Manage inverters, track firmware deployments, enforce compliance,
-                and monitor fleet health — all from one unified command center.
+                Manage inverters, track firmware deployments, enforce compliance, and monitor fleet
+                health — all from one unified command center.
               </p>
             </div>
 
             {/* Capability pills */}
             <div className="flex flex-wrap gap-2">
-              {[
-                "Device Inventory",
-                "Firmware OTA",
-                "Compliance Audit",
-                "Fleet Analytics",
-              ].map((label) => (
-                <div
-                  key={label}
-                  className="rounded-full bg-white/10 backdrop-blur-sm border border-white/15 px-3.5 py-1.5"
-                >
-                  <span className="text-[12px] font-medium text-white/80">{label}</span>
-                </div>
-              ))}
+              {["Device Inventory", "Firmware OTA", "Compliance Audit", "Fleet Analytics"].map(
+                (label) => (
+                  <div
+                    key={label}
+                    className="rounded-full bg-white/10 backdrop-blur-sm border border-white/15 px-3.5 py-1.5"
+                  >
+                    <span className="text-[12px] font-medium text-white/80">{label}</span>
+                  </div>
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -314,9 +335,7 @@ export function SignIn() {
               <h2 className="text-[24px] font-semibold text-gray-900 tracking-tight">
                 Welcome back
               </h2>
-              <p className="mt-1.5 text-[15px] text-gray-500">
-                Sign in to your management console
-              </p>
+              <p className="mt-1.5 text-[15px] text-gray-500">Sign in to your management console</p>
             </div>
 
             {/* Error banner */}
@@ -333,16 +352,21 @@ export function SignIn() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
               {/* Email */}
               <div className="space-y-1.5">
-                <label htmlFor="signin-email" className="block text-[13px] font-medium text-gray-700">
+                <label
+                  htmlFor="signin-email"
+                  className="block text-[13px] font-medium text-gray-700"
+                >
                   Email address
                 </label>
-                <div className={cn(
-                  "rounded-lg border transition-all duration-150",
-                  focusedField === "email"
-                    ? "border-orange-400 ring-[3px] ring-orange-500/10"
-                    : "border-gray-200 hover:border-gray-300",
-                  errors.email && "border-red-400 ring-[3px] ring-red-500/10",
-                )}>
+                <div
+                  className={cn(
+                    "rounded-lg border transition-all duration-150",
+                    focusedField === "email"
+                      ? "border-orange-400 ring-[3px] ring-orange-500/10"
+                      : "border-gray-200 hover:border-gray-300",
+                    errors.email && "border-red-400 ring-[3px] ring-red-500/10",
+                  )}
+                >
                   <input
                     id="signin-email"
                     type="email"
@@ -372,7 +396,10 @@ export function SignIn() {
               {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="signin-password" className="block text-[13px] font-medium text-gray-700">
+                  <label
+                    htmlFor="signin-password"
+                    className="block text-[13px] font-medium text-gray-700"
+                  >
                     Password
                   </label>
                   <button
@@ -382,13 +409,15 @@ export function SignIn() {
                     Forgot password?
                   </button>
                 </div>
-                <div className={cn(
-                  "relative rounded-lg border transition-all duration-150",
-                  focusedField === "password"
-                    ? "border-orange-400 ring-[3px] ring-orange-500/10"
-                    : "border-gray-200 hover:border-gray-300",
-                  errors.password && "border-red-400 ring-[3px] ring-red-500/10",
-                )}>
+                <div
+                  className={cn(
+                    "relative rounded-lg border transition-all duration-150",
+                    focusedField === "password"
+                      ? "border-orange-400 ring-[3px] ring-orange-500/10"
+                      : "border-gray-200 hover:border-gray-300",
+                    errors.password && "border-red-400 ring-[3px] ring-red-500/10",
+                  )}
+                >
                   <input
                     id="signin-password"
                     type={showPassword ? "text" : "password"}
@@ -444,7 +473,10 @@ export function SignIn() {
                 ) : (
                   <span className="flex items-center gap-1.5">
                     Sign in to Console
-                    <ChevronRight className="h-4 w-4 opacity-60 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+                    <ChevronRight
+                      className="h-4 w-4 opacity-60 group-hover:translate-x-0.5 transition-transform"
+                      aria-hidden="true"
+                    />
                   </span>
                 )}
               </button>
@@ -461,14 +493,18 @@ export function SignIn() {
           <div className="mt-5 rounded-xl border border-gray-200 bg-white px-4 py-3.5">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <p className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider">Demo Access</p>
+              <p className="text-[12px] font-semibold text-gray-500 uppercase tracking-wider">
+                Demo Access
+              </p>
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-[13px] text-gray-500 font-mono">admin@sungrow.com</p>
                 <p className="text-[13px] text-gray-400 font-mono">Admin@12345678</p>
               </div>
-              <span className="text-[11px] text-gray-400 bg-gray-100 rounded-md px-2 py-1 font-medium">Admin role</span>
+              <span className="text-[11px] text-gray-400 bg-gray-100 rounded-md px-2 py-1 font-medium">
+                Admin role
+              </span>
             </div>
           </div>
 

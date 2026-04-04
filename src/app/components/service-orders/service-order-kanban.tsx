@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Clock, MapPin, ArrowRight, CheckCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type {
@@ -72,7 +73,8 @@ function TechnicianAvatar({ name }: { name: string }) {
 
 /* ─── Kanban Card ─────────────────────────────────────────────────── */
 
-function KanbanCard({
+/** Memoized — rendered in .map() loop inside KanbanColumn (#311) */
+const KanbanCard = memo(function KanbanCard({
   order,
   onMove,
 }: {
@@ -136,7 +138,7 @@ function KanbanCard({
       </div>
     </div>
   );
-}
+});
 
 /* ─── Kanban Column ───────────────────────────────────────────────── */
 

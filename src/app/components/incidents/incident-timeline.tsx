@@ -95,7 +95,7 @@ export function IncidentTimeline({ events }: { events: Incident["timelineEvents"
   return (
     <div className="space-y-0">
       {sorted.map((event, i) => (
-        <div key={i} className="relative flex gap-3 pb-4">
+        <div key={`${event.timestamp}-${event.action}`} className="relative flex gap-3 pb-4">
           {i < sorted.length - 1 && (
             <div className="absolute left-[15px] top-8 h-[calc(100%-16px)] w-px bg-border/60" />
           )}

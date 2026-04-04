@@ -176,7 +176,7 @@ export function ReportsTab({ firmware, vulnerabilities }: ReportsTabProps) {
               <tbody>
                 {reportData.map((row, idx) => (
                   <tr
-                    key={idx}
+                    key={`report-row-${idx}-${String(Object.values(row)[0] ?? idx)}`}
                     className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors duration-150"
                   >
                     {Object.values(row).map((val, colIdx) => (

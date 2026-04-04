@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import { Search, Package, Filter, X, ChevronDown, ChevronRight, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SBOMComponent, ComponentVulnerability } from "./sbom-types";
@@ -166,7 +166,8 @@ export function ComponentExplorerTab({
   );
 }
 
-function ComponentRow({
+/** Memoized — rendered in .map() loop (#311) */
+const ComponentRow = memo(function ComponentRow({
   comp,
   isExpanded,
   compVulns,
@@ -306,4 +307,4 @@ function ComponentRow({
       )}
     </>
   );
-}
+});
