@@ -5,6 +5,7 @@ import type { DeviceSearchFilters } from "../opensearch-types";
 import type { MockDevice } from "../mock-data/inventory-data";
 import { MOCK_DEVICES } from "../mock-data/inventory-data";
 import type { CreateDevicePayload } from "../types/device";
+import { useLocalPagination } from "./use-paginated-query";
 
 const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
 
@@ -22,40 +23,55 @@ export function useDeviceInventory() {
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
   const [devices, setDevices] = useState<MockDevice[]>(isMock ? MOCK_DEVICES : []);
-  const [page, setPage] = useState(1);
-
   const handleStatusChange = useCallback(
     (deviceId: string, newStatus: DeviceStatus) => {
-      const device = devices.find((d) => d.id === deviceId);
-      setDevices((prev) =>
-        prev.map((d) =>
-          d.id === deviceId
-            ? { ...d, status: newStatus, health: newStatus === DeviceStatus.Offline ? 0 : d.health }
-            : d,
-        ),
-      );
-      if (device) {
-        toast.success(`Device ${device.name} status updated to ${newStatus}`);
+      try {
+        const device = devices.find((d) => d.id === deviceId);
+        setDevices((prev) =>
+          prev.map((d) =>
+            d.id === deviceId
+              ? {
+                  ...d,
+                  status: newStatus,
+                  health: newStatus === DeviceStatus.Offline ? 0 : d.health,
+                }
+              : d,
+          ),
+        );
+        if (device) {
+          toast.success(`Device ${device.name} status updated to ${newStatus}`);
+        }
+      } catch (err) {
+        toast.error(
+          `Failed to update device status: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
       }
     },
     [devices],
   );
 
   const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
-    const newDevice: MockDevice = {
-      id: `d${Date.now()}`,
-      name: payload.name,
-      serial: payload.serial,
-      model: payload.model,
-      status: payload.status,
-      location: payload.location,
-      health: payload.status === DeviceStatus.Online ? 100 : 0,
-      firmware: payload.firmware,
-      lastSeen: "just now",
-      lat: payload.lat,
-      lng: payload.lng,
-    };
-    setDevices((prev) => [newDevice, ...prev]);
+    try {
+      const newDevice: MockDevice = {
+        id: `d${Date.now()}`,
+        name: payload.name,
+        serial: payload.serial,
+        model: payload.model,
+        status: payload.status,
+        location: payload.location,
+        health: payload.status === DeviceStatus.Online ? 100 : 0,
+        firmware: payload.firmware,
+        lastSeen: "just now",
+        lat: payload.lat,
+        lng: payload.lng,
+      };
+      setDevices((prev) => [newDevice, ...prev]);
+      toast.success(`Device ${payload.name} created`);
+    } catch (err) {
+      toast.error(
+        `Failed to create device: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleSort = useCallback(
@@ -136,11 +152,18 @@ export function useDeviceInventory() {
     return result;
   }, [devices, search, statusFilter, locationFilter, advancedFilters, sortField, sortDir]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredDevices.length / PAGE_SIZE));
-  const safeCurrentPage = Math.min(page, totalPages);
-  const startIdx = (safeCurrentPage - 1) * PAGE_SIZE;
-  const endIdx = Math.min(startIdx + PAGE_SIZE, filteredDevices.length);
-  const paginatedDevices = filteredDevices.slice(startIdx, endIdx);
+  // Story 22.4: Standardized local pagination via useLocalPagination
+  const pagination = useLocalPagination(filteredDevices, { pageSize: PAGE_SIZE });
+  const { paginatedItems: paginatedDevices, totalPages, startIdx, endIdx } = pagination;
+  // Expose page/setPage compatible with React.Dispatch<SetStateAction<number>>
+  const page = pagination.page;
+  const setPage = useCallback(
+    (value: number | ((prev: number) => number)) => {
+      const next = typeof value === "function" ? value(pagination.page) : value;
+      pagination.goToPage(next);
+    },
+    [pagination],
+  );
 
   const exportCsv = useCallback(() => {
     if (filteredDevices.length === 0) return;
@@ -191,7 +214,7 @@ export function useDeviceInventory() {
     handleStatusChange,
     handleCreateDevice,
     exportCsv,
-    page: safeCurrentPage,
+    page,
     setPage,
     totalPages,
     startIdx,

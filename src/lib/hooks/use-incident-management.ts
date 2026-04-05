@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
+import { toast } from "sonner";
 import type {
   Incident,
   IncidentStatus,
@@ -24,71 +25,99 @@ export function useIncidentManagement() {
   }, [incidents]);
 
   const handleCreateIncident = useCallback((newIncident: Incident) => {
-    setIncidents((prev) => [newIncident, ...prev]);
+    try {
+      setIncidents((prev) => [newIncident, ...prev]);
+      toast.success(`Incident ${newIncident.id} created`);
+    } catch (err) {
+      toast.error(
+        `Failed to create incident: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleStatusChange = useCallback(
     (incidentId: string, newStatus: IncidentStatus, note: string) => {
-      setIncidents((prev) =>
-        prev.map((inc) => {
-          if (inc.id !== incidentId) return inc;
-          const event = {
-            timestamp: new Date().toISOString(),
-            action: "status_changed" as const,
-            performedBy: "USR-001",
-            performedByName: "Sarah Chen",
-            fromStatus: inc.status,
-            toStatus: newStatus,
-            note: note || undefined,
-          };
-          return {
-            ...inc,
-            status: newStatus,
-            updatedAt: new Date().toISOString(),
-            containedAt: newStatus === "Contained" ? new Date().toISOString() : inc.containedAt,
-            resolvedAt: newStatus === "Resolved" ? new Date().toISOString() : inc.resolvedAt,
-            timelineEvents: [...inc.timelineEvents, event],
-          };
-        }),
-      );
+      try {
+        setIncidents((prev) =>
+          prev.map((inc) => {
+            if (inc.id !== incidentId) return inc;
+            const event = {
+              timestamp: new Date().toISOString(),
+              action: "status_changed" as const,
+              performedBy: "USR-001",
+              performedByName: "Sarah Chen",
+              fromStatus: inc.status,
+              toStatus: newStatus,
+              note: note || undefined,
+            };
+            return {
+              ...inc,
+              status: newStatus,
+              updatedAt: new Date().toISOString(),
+              containedAt: newStatus === "Contained" ? new Date().toISOString() : inc.containedAt,
+              resolvedAt: newStatus === "Resolved" ? new Date().toISOString() : inc.resolvedAt,
+              timelineEvents: [...inc.timelineEvents, event],
+            };
+          }),
+        );
+        toast.success(`Incident status updated to ${newStatus}`);
+      } catch (err) {
+        toast.error(
+          `Failed to update incident status: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
     },
     [],
   );
 
   const handleIsolateConfirm = useCallback((deviceId: string, policy: IsolationPolicy) => {
-    setIncidents((prev) =>
-      prev.map((inc) => ({
-        ...inc,
-        affectedDevices: inc.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Isolated" as const,
-                isolatedAt: new Date().toISOString(),
-                isolationPolicy: policy,
-              }
-            : dev,
-        ),
-      })),
-    );
+    try {
+      setIncidents((prev) =>
+        prev.map((inc) => ({
+          ...inc,
+          affectedDevices: inc.affectedDevices.map((dev) =>
+            dev.id === deviceId
+              ? {
+                  ...dev,
+                  status: "Isolated" as const,
+                  isolatedAt: new Date().toISOString(),
+                  isolationPolicy: policy,
+                }
+              : dev,
+          ),
+        })),
+      );
+      toast.success("Device isolated successfully");
+    } catch (err) {
+      toast.error(
+        `Failed to isolate device: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleReleaseConfirm = useCallback((deviceId: string, _reason: string) => {
-    setIncidents((prev) =>
-      prev.map((inc) => ({
-        ...inc,
-        affectedDevices: inc.affectedDevices.map((dev) =>
-          dev.id === deviceId
-            ? {
-                ...dev,
-                status: "Online" as const,
-                isolatedAt: undefined,
-                isolationPolicy: undefined,
-              }
-            : dev,
-        ),
-      })),
-    );
+    try {
+      setIncidents((prev) =>
+        prev.map((inc) => ({
+          ...inc,
+          affectedDevices: inc.affectedDevices.map((dev) =>
+            dev.id === deviceId
+              ? {
+                  ...dev,
+                  status: "Online" as const,
+                  isolatedAt: undefined,
+                  isolationPolicy: undefined,
+                }
+              : dev,
+          ),
+        })),
+      );
+      toast.success("Device released from isolation");
+    } catch (err) {
+      toast.error(
+        `Failed to release device: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleStepComplete = useCallback((incidentId: string, stepNumber: number) => {

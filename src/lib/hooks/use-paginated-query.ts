@@ -12,6 +12,102 @@ import { useQuery, useInfiniteQuery, type UseQueryOptions } from "@tanstack/reac
 import type { PaginatedResponse } from "../types";
 
 // =============================================================================
+// Local (in-memory) pagination — Story 22.4
+// =============================================================================
+
+export interface UseLocalPaginationOptions {
+  /** Items per page (default: 10) */
+  pageSize?: number;
+  /** Initial page (default: 1) */
+  initialPage?: number;
+}
+
+export interface LocalPaginationResult<T> {
+  /** Current page items */
+  paginatedItems: T[];
+  /** Current page number (1-based) */
+  page: number;
+  /** Total number of pages */
+  totalPages: number;
+  /** Items per page */
+  pageSize: number;
+  /** Whether there are more pages after current */
+  hasMore: boolean;
+  /** Starting index in the full array (0-based) */
+  startIdx: number;
+  /** Ending index in the full array (exclusive) */
+  endIdx: number;
+  /** Go to a specific page */
+  goToPage: (page: number) => void;
+  /** Go to the next page */
+  nextPage: () => void;
+  /** Go to the previous page */
+  prevPage: () => void;
+  /** Change page size (resets to page 1) */
+  setPageSize: (size: number) => void;
+  /** Reset to page 1 (e.g., after filter change) */
+  resetPage: () => void;
+}
+
+/**
+ * Standardized local pagination for in-memory arrays.
+ * Use this when data is client-side (mock/useState); switch to
+ * `usePaginatedQuery` when migrating to server-side pagination.
+ *
+ * @see Story 22.4 — Standardize pagination
+ */
+export function useLocalPagination<T>(
+  items: T[],
+  options: UseLocalPaginationOptions = {},
+): LocalPaginationResult<T> {
+  const { pageSize: initialPageSize = 10, initialPage = 1 } = options;
+  const [page, setPage] = useState(initialPage);
+  const [pageSize, setPageSizeState] = useState(initialPageSize);
+
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const startIdx = (safePage - 1) * pageSize;
+  const endIdx = Math.min(startIdx + pageSize, items.length);
+
+  const paginatedItems = useMemo(() => items.slice(startIdx, endIdx), [items, startIdx, endIdx]);
+
+  const goToPage = useCallback(
+    (p: number) => setPage(Math.max(1, Math.min(p, totalPages))),
+    [totalPages],
+  );
+
+  const nextPage = useCallback(() => {
+    setPage((p) => Math.min(p + 1, totalPages));
+  }, [totalPages]);
+
+  const prevPage = useCallback(() => {
+    setPage((p) => Math.max(p - 1, 1));
+  }, []);
+
+  const setPageSize = useCallback((size: number) => {
+    setPageSizeState(size);
+    setPage(1);
+  }, []);
+
+  const resetPage = useCallback(() => setPage(1), []);
+
+  return {
+    paginatedItems,
+    page: safePage,
+    totalPages,
+    pageSize,
+    hasMore: safePage < totalPages,
+    startIdx,
+    endIdx,
+    goToPage,
+    nextPage,
+    prevPage,
+    setPageSize,
+    resetPage,
+  };
+}
+
+// =============================================================================
 // Offset-based pagination
 // =============================================================================
 

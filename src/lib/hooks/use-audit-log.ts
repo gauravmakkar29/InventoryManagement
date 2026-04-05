@@ -1,17 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { generateCSV } from "../../lib/report-generator";
-import type {
-  AuditEntry,
-  AuditAction,
-  AuditSortField,
-  SortDirection,
-} from "../types/deployment";
-import {
-  INITIAL_AUDIT,
-  AUDIT_PAGE_SIZE,
-} from "../types/deployment-constants";
+import type { AuditEntry, AuditAction, AuditSortField, SortDirection } from "../types/deployment";
+import { INITIAL_AUDIT, AUDIT_PAGE_SIZE } from "../types/deployment-constants";
 import { getDefaultDateRange } from "../types/deployment-utils";
+import { useLocalPagination } from "./use-paginated-query";
 
 export function useAuditLog(currentUser: string) {
   const [auditLog, setAuditLog] = useState<AuditEntry[]>(INITIAL_AUDIT);
@@ -21,7 +14,6 @@ export function useAuditLog(currentUser: string) {
   const [auditDateError, setAuditDateError] = useState("");
   const [auditUserFilter, setAuditUserFilter] = useState("");
   const [auditUserInput, setAuditUserInput] = useState("");
-  const [auditPage, setAuditPage] = useState(1);
   const [auditSortField, setAuditSortField] = useState<AuditSortField>("timestamp");
   const [auditSortDir, setAuditSortDir] = useState<SortDirection>("desc");
   const [auditLoading, setAuditLoading] = useState(false);
@@ -68,11 +60,20 @@ export function useAuditLog(currentUser: string) {
     });
   }, [filteredAudit, auditSortField, auditSortDir]);
 
-  const totalAuditPages = Math.max(1, Math.ceil(sortedAudit.length / AUDIT_PAGE_SIZE));
-  const paginatedAudit = useMemo(() => {
-    const start = (auditPage - 1) * AUDIT_PAGE_SIZE;
-    return sortedAudit.slice(start, start + AUDIT_PAGE_SIZE);
-  }, [sortedAudit, auditPage]);
+  // Story 22.4: Standardized local pagination via useLocalPagination
+  const auditPagination = useLocalPagination(sortedAudit, { pageSize: AUDIT_PAGE_SIZE });
+  const {
+    paginatedItems: paginatedAudit,
+    page: auditPage,
+    totalPages: totalAuditPages,
+  } = auditPagination;
+  const setAuditPage = useCallback(
+    (value: number | ((prev: number) => number)) => {
+      const next = typeof value === "function" ? value(auditPagination.page) : value;
+      auditPagination.goToPage(next);
+    },
+    [auditPagination],
+  );
 
   const handleApplyDateRange = useCallback(() => {
     if (auditStartDate && auditEndDate && auditEndDate < auditStartDate) {

@@ -68,19 +68,30 @@ export function useServiceOrders() {
   }, [filteredOrders]);
 
   const handleMove = useCallback((id: string, newStatus: Status) => {
-    setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o)));
-    toast.success(`Order moved to ${STATUS_LABELS[newStatus]}`);
+    try {
+      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o)));
+      toast.success(`Order moved to ${STATUS_LABELS[newStatus]}`);
+    } catch (err) {
+      toast.error(`Failed to move order: ${err instanceof Error ? err.message : "Unknown error"}`);
+    }
   }, []);
 
   const handleCreate = useCallback(
     (order: ServiceOrder) => {
-      const newOrder: ServiceOrder = {
-        ...order,
-        id: generateNextId(orders),
-      };
-      setOrders((prev) => [...prev, newOrder]);
-      toast.success(`Service order ${newOrder.id} created`);
-      return newOrder;
+      try {
+        const newOrder: ServiceOrder = {
+          ...order,
+          id: generateNextId(orders),
+        };
+        setOrders((prev) => [...prev, newOrder]);
+        toast.success(`Service order ${newOrder.id} created`);
+        return newOrder;
+      } catch (err) {
+        toast.error(
+          `Failed to create service order: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+        return order;
+      }
     },
     [orders],
   );

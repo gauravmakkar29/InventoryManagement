@@ -40,35 +40,30 @@ function loadStorageConfig(): AmplifyStorageConfig {
 // S3 presigned URL helpers (for future file upload features)
 // =============================================================================
 
-/** Upload a file to S3 via a presigned URL. */
+/**
+ * Upload a file to S3 via a presigned URL.
+ * Routes through resilient-fetch for timeout handling.
+ * @see Story 22.2 — NIST SC-8 (transmission integrity)
+ */
 export async function uploadToS3(presignedUrl: string, file: File): Promise<void> {
-  const response = await fetch(presignedUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": file.type || "application/octet-stream",
-    },
-    body: file,
-  });
-
-  if (!response.ok) {
-    throw new Error(`S3 upload failed: ${response.status} ${response.statusText}`);
-  }
+  const { resilientS3Upload } = await import("../../resilient-fetch");
+  return resilientS3Upload(presignedUrl, file);
 }
 
-/** Download a file from S3 via a presigned URL. */
+/**
+ * Download a file from S3 via a presigned URL.
+ * Routes through resilient-fetch for timeout handling.
+ * @see Story 22.2 — NIST SC-8 (transmission integrity)
+ */
 export async function downloadFromS3(presignedUrl: string): Promise<Blob> {
-  const response = await fetch(presignedUrl);
-
-  if (!response.ok) {
-    throw new Error(`S3 download failed: ${response.status} ${response.statusText}`);
-  }
-
-  return response.blob();
+  const { resilientS3Download } = await import("../../resilient-fetch");
+  return resilientS3Download(presignedUrl);
 }
 
 /**
  * Request a presigned URL from the backend API.
- * The backend generates presigned URLs to avoid exposing AWS credentials.
+ * Routes through api-client for retry, backoff, and circuit breaker.
+ * @see Story 22.2 — NIST SC-8 (transmission integrity)
  */
 export async function getPresignedUrl(
   storageEndpoint: string,
@@ -76,21 +71,8 @@ export async function getPresignedUrl(
   operation: "GET" | "PUT",
   authToken?: string,
 ): Promise<string> {
-  const response = await fetch(`${storageEndpoint}/presign`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-    },
-    body: JSON.stringify({ key, operation }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to get presigned URL: ${response.status}`);
-  }
-
-  const data = (await response.json()) as { url: string };
-  return data.url;
+  const { resilientGetPresignedUrl } = await import("../../resilient-fetch");
+  return resilientGetPresignedUrl(storageEndpoint, key, operation, authToken);
 }
 
 // =============================================================================

@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { logger } from "../lib/logger";
 
 interface Props {
   children: ReactNode;
@@ -21,7 +22,19 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("[ErrorBoundary]", error, errorInfo);
+    // Story 22.5: Structured logging with breadcrumbs (NIST AU-2/AU-3)
+    logger.error(`Component crash: ${error.message}`, {
+      action: "component_crash",
+      error: {
+        code: "REACT_ERROR_BOUNDARY",
+        stack: error.stack,
+      },
+    });
+    logger.addBreadcrumb(
+      "error-boundary",
+      `componentStack: ${errorInfo.componentStack?.slice(0, 200) ?? "unknown"}`,
+      "error",
+    );
   }
 
   render() {
