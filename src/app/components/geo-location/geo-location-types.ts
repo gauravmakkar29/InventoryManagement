@@ -65,7 +65,8 @@ export type ResolvedDevice = GeoDevice & { resolvedLat: number; resolvedLng: num
 // Constants
 // ---------------------------------------------------------------------------
 
-export const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+/** Self-hosted world-atlas — no CDN dependency (NIST SI-10, Story 25.9) */
+export const GEO_URL = "/geo/countries-110m.json";
 
 export const STATUS_COLORS: Record<string, string> = {
   [DeviceStatus.Online]: "#10b981",

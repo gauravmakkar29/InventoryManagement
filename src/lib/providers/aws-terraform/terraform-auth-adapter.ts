@@ -180,6 +180,21 @@ export function createTerraformAuthAdapter(): IAuthAdapter {
     },
 
     async signOut(): Promise<void> {
+      // NIST AC-12: Server-side token revocation (best-effort) — Story 25.5
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const session = JSON.parse(raw) as { accessToken?: string };
+          if (session.accessToken) {
+            await cognitoRequest(config.region, "GlobalSignOut", {
+              AccessToken: session.accessToken,
+            });
+          }
+        }
+      } catch {
+        // Don't block local cleanup if server revocation fails
+      }
+
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(REFRESH_TOKEN_KEY);
       localStorage.removeItem(MFA_SESSION_KEY);
