@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { useDialogManager } from "@/lib/hooks/use-dialog-manager";
 import type {
   Incident,
   IncidentStatus,
@@ -46,9 +47,10 @@ export function IncidentResponsePage() {
 
   const [activeTab, setActiveTab] = useState<TabId>("incidents");
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [isolateDevice, setIsolateDevice] = useState<AffectedDevice | null>(null);
-  const [releaseDevice, setReleaseDevice] = useState<AffectedDevice | null>(null);
+
+  // Story 21.5: Unified dialog manager — guarantees one dialog at a time
+  type IncidentDialog = "create" | "isolate" | "release";
+  const dialogs = useDialogManager<IncidentDialog>();
 
   // Sync selectedIncident with incidents array after mutations
   useEffect(() => {
@@ -89,7 +91,7 @@ export function IncidentResponsePage() {
         return;
       }
       hookIsolateConfirm(deviceId, policy);
-      setIsolateDevice(null);
+      dialogs.close();
     },
     [role, hookIsolateConfirm],
   );
@@ -101,7 +103,7 @@ export function IncidentResponsePage() {
         return;
       }
       hookReleaseConfirm(deviceId, reason);
-      setReleaseDevice(null);
+      dialogs.close();
     },
     [role, hookReleaseConfirm],
   );
@@ -163,11 +165,14 @@ export function IncidentResponsePage() {
         <IncidentListTab
           incidents={incidents}
           onSelectIncident={(inc) => setSelectedIncident(inc)}
-          onCreateIncident={() => setShowCreateDialog(true)}
+          onCreateIncident={() => dialogs.open("create")}
         />
       )}
       {activeTab === "isolated" && (
-        <IsolatedDevicesTab incidents={incidents} onRelease={(dev) => setReleaseDevice(dev)} />
+        <IsolatedDevicesTab
+          incidents={incidents}
+          onRelease={(dev) => dialogs.open("release", { device: dev })}
+        />
       )}
       {activeTab === "quarantine" && (
         <QuarantineZonesTab
@@ -186,28 +191,28 @@ export function IncidentResponsePage() {
           incident={selectedIncident}
           onClose={() => setSelectedIncident(null)}
           onStatusChange={handleStatusChange}
-          onIsolate={(dev) => setIsolateDevice(dev)}
-          onRelease={(dev) => setReleaseDevice(dev)}
+          onIsolate={(dev) => dialogs.open("isolate", { device: dev })}
+          onRelease={(dev) => dialogs.open("release", { device: dev })}
           onStepComplete={handleStepComplete}
         />
       )}
 
       {/* Dialogs */}
       <CreateIncidentDialog
-        open={showCreateDialog}
-        onClose={() => setShowCreateDialog(false)}
+        open={dialogs.isDialogOpen("create")}
+        onClose={dialogs.close}
         onCreate={handleCreateIncidentGuarded}
       />
       <IsolationDialog
-        device={isolateDevice}
-        open={!!isolateDevice}
-        onClose={() => setIsolateDevice(null)}
+        device={dialogs.getContext<AffectedDevice>("device") ?? null}
+        open={dialogs.isDialogOpen("isolate")}
+        onClose={dialogs.close}
         onConfirm={handleIsolateConfirm}
       />
       <ReleaseDialog
-        device={releaseDevice}
-        open={!!releaseDevice}
-        onClose={() => setReleaseDevice(null)}
+        device={dialogs.getContext<AffectedDevice>("device") ?? null}
+        open={dialogs.isDialogOpen("release")}
+        onClose={dialogs.close}
         onConfirm={handleReleaseConfirm}
       />
     </div>

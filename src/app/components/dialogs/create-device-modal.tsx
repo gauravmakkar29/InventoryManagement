@@ -4,6 +4,9 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { DeviceStatus } from "@/lib/types";
+import { FormField } from "@/components/form/form-field";
+import { FormInput } from "@/components/form/form-input";
+import { FormSelect } from "@/components/form/form-select";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -141,25 +144,16 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
 
   if (!open) return null;
 
-  const inputClass =
-    "h-10 w-full border border-border bg-card px-3 text-[15px] text-foreground placeholder:text-muted-foreground rounded-lg focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]";
-
-  const labelClass = "block text-[14px] font-medium text-foreground/80 mb-1";
-
   return (
     <FocusTrap>
       <div className="fixed inset-0 z-[60] flex items-center justify-center">
-        {/* Backdrop */}
         <div className="absolute inset-0 bg-black/30" onClick={handleClose} aria-hidden="true" />
-
-        {/* Modal */}
         <div
           className="relative z-10 w-full max-w-[520px] rounded-2xl bg-card shadow-xl"
           role="dialog"
           aria-modal="true"
           aria-label="Create device"
         >
-          {/* Header */}
           <div className="flex items-center justify-between border-b border-border/60 px-6 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Create Device</h3>
             <button
@@ -175,67 +169,40 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
             </button>
           </div>
 
-          {/* Body */}
+          {/* Story 23.4: Shared FormField/FormInput/FormSelect */}
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-            {/* Device Name */}
-            <div>
-              <label htmlFor="device-name" className={labelClass}>
-                Device Name <span className="text-red-500">*</span>
-              </label>
-              <input
+            <FormField label="Device Name" htmlFor="device-name" required error={errors.name}>
+              <FormInput
                 id="device-name"
-                type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. INV-3200A"
+                error={!!errors.name}
                 aria-describedby={errors.name ? "device-name-error" : undefined}
-                aria-invalid={!!errors.name || undefined}
-                className={cn(inputClass, errors.name && "border-red-400")}
               />
-              {errors.name && (
-                <p id="device-name-error" className="mt-1 text-[14px] text-red-500" role="alert">
-                  {errors.name}
-                </p>
-              )}
-            </div>
+            </FormField>
 
-            {/* Serial Number + Device Model row */}
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="device-serial" className={labelClass}>
-                  Serial Number <span className="text-red-500">*</span>
-                </label>
-                <input
+              <FormField
+                label="Serial Number"
+                htmlFor="device-serial"
+                required
+                error={errors.serial}
+              >
+                <FormInput
                   id="device-serial"
-                  type="text"
                   value={serial}
                   onChange={(e) => setSerial(e.target.value)}
                   placeholder="e.g. SN-4821"
-                  aria-describedby={errors.serial ? "device-serial-error" : undefined}
-                  aria-invalid={!!errors.serial || undefined}
-                  className={cn(inputClass, errors.serial && "border-red-400")}
+                  error={!!errors.serial}
                 />
-                {errors.serial && (
-                  <p
-                    id="device-serial-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.serial}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="device-model" className={labelClass}>
-                  Device Model <span className="text-red-500">*</span>
-                </label>
-                <select
+              </FormField>
+              <FormField label="Device Model" htmlFor="device-model" required error={errors.model}>
+                <FormSelect
                   id="device-model"
                   value={model}
                   onChange={(e) => setModel(e.target.value)}
-                  aria-describedby={errors.model ? "device-model-error" : undefined}
-                  aria-invalid={!!errors.model || undefined}
-                  className={cn(inputClass, errors.model && "border-red-400")}
+                  error={!!errors.model}
                 >
                   <option value="">Select model</option>
                   {DEVICE_MODELS.map((m) => (
@@ -243,144 +210,74 @@ export function CreateDeviceModal({ open, onClose, onCreateDevice }: CreateDevic
                       {m}
                     </option>
                   ))}
-                </select>
-                {errors.model && (
-                  <p id="device-model-error" className="mt-1 text-[14px] text-red-500" role="alert">
-                    {errors.model}
-                  </p>
-                )}
-              </div>
+                </FormSelect>
+              </FormField>
             </div>
 
-            {/* Firmware Version + Status row */}
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="device-firmware" className={labelClass}>
-                  Firmware Version <span className="text-red-500">*</span>
-                </label>
-                <input
+              <FormField
+                label="Firmware Version"
+                htmlFor="device-firmware"
+                required
+                error={errors.firmware}
+              >
+                <FormInput
                   id="device-firmware"
-                  type="text"
                   value={firmware}
                   onChange={(e) => setFirmware(e.target.value)}
                   placeholder="e.g. v4.0.0"
-                  aria-describedby={errors.firmware ? "device-firmware-error" : undefined}
-                  aria-invalid={!!errors.firmware || undefined}
-                  className={cn(inputClass, errors.firmware && "border-red-400")}
+                  error={!!errors.firmware}
                 />
-                {errors.firmware && (
-                  <p
-                    id="device-firmware-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.firmware}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="device-status" className={labelClass}>
-                  Status <span className="text-red-500">*</span>
-                </label>
-                <select
+              </FormField>
+              <FormField label="Status" htmlFor="device-status" required error={errors.status}>
+                <FormSelect
                   id="device-status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value as DeviceStatus)}
-                  aria-describedby={errors.status ? "device-status-error" : undefined}
-                  aria-invalid={!!errors.status || undefined}
-                  className={cn(inputClass, errors.status && "border-red-400")}
+                  error={!!errors.status}
                 >
                   {DEVICE_STATUSES.map((s) => (
                     <option key={s.value} value={s.value}>
                       {s.label}
                     </option>
                   ))}
-                </select>
-                {errors.status && (
-                  <p
-                    id="device-status-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.status}
-                  </p>
-                )}
-              </div>
+                </FormSelect>
+              </FormField>
             </div>
 
-            {/* Location */}
-            <div>
-              <label htmlFor="device-location" className={labelClass}>
-                Location <span className="text-red-500">*</span>
-              </label>
-              <input
+            <FormField label="Location" htmlFor="device-location" required error={errors.location}>
+              <FormInput
                 id="device-location"
-                type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Denver, CO"
-                aria-describedby={errors.location ? "device-location-error" : undefined}
-                aria-invalid={!!errors.location || undefined}
-                className={cn(inputClass, errors.location && "border-red-400")}
+                error={!!errors.location}
               />
-              {errors.location && (
-                <p
-                  id="device-location-error"
-                  className="mt-1 text-[14px] text-red-500"
-                  role="alert"
-                >
-                  {errors.location}
-                </p>
-              )}
-            </div>
+            </FormField>
 
-            {/* Latitude + Longitude row */}
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="device-lat" className={labelClass}>
-                  Latitude
-                </label>
-                <input
+              <FormField label="Latitude" htmlFor="device-lat" error={errors.lat}>
+                <FormInput
                   id="device-lat"
-                  type="text"
                   inputMode="decimal"
                   value={lat}
                   onChange={(e) => setLat(e.target.value)}
                   placeholder="e.g. 39.74"
-                  aria-describedby={errors.lat ? "device-lat-error" : undefined}
-                  aria-invalid={!!errors.lat || undefined}
-                  className={cn(inputClass, errors.lat && "border-red-400")}
+                  error={!!errors.lat}
                 />
-                {errors.lat && (
-                  <p id="device-lat-error" className="mt-1 text-[14px] text-red-500" role="alert">
-                    {errors.lat}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="device-lng" className={labelClass}>
-                  Longitude
-                </label>
-                <input
+              </FormField>
+              <FormField label="Longitude" htmlFor="device-lng" error={errors.lng}>
+                <FormInput
                   id="device-lng"
-                  type="text"
                   inputMode="decimal"
                   value={lng}
                   onChange={(e) => setLng(e.target.value)}
                   placeholder="e.g. -104.99"
-                  aria-describedby={errors.lng ? "device-lng-error" : undefined}
-                  aria-invalid={!!errors.lng || undefined}
-                  className={cn(inputClass, errors.lng && "border-red-400")}
+                  error={!!errors.lng}
                 />
-                {errors.lng && (
-                  <p id="device-lng-error" className="mt-1 text-[14px] text-red-500" role="alert">
-                    {errors.lng}
-                  </p>
-                )}
-              </div>
+              </FormField>
             </div>
 
-            {/* Actions */}
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"

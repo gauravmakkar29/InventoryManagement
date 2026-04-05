@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import { useComplianceManagement } from "@/lib/hooks/use-compliance-management";
+import { useDialogManager } from "@/lib/hooks/use-dialog-manager";
 import type {
   ComplianceItem,
   CertificationType,
@@ -53,33 +54,28 @@ export function CompliancePage() {
   // Expanded vulnerability panel
   const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
 
-  // Modals
-  const [submitModalOpen, setSubmitModalOpen] = useState(false);
-  const [vulnModalOpen, setVulnModalOpen] = useState(false);
-  const [reportModalOpen, setReportModalOpen] = useState(false);
-  const [confirmAction, setConfirmAction] = useState<{
-    type: "approve" | "deprecate";
-    itemId: string;
-  } | null>(null);
+  // Story 21.5: Unified dialog manager — guarantees one dialog at a time
+  type ComplianceDialog = "submit" | "vuln" | "report" | "confirm-approve" | "confirm-deprecate";
+  const dialogs = useDialogManager<ComplianceDialog>();
 
   const handleApprove = (itemId: string) => {
     if (!canPerformAction(role, "approve")) {
       toast.error("Access denied — insufficient permissions");
-      setConfirmAction(null);
+      dialogs.close();
       return;
     }
     hookApprove(itemId);
-    setConfirmAction(null);
+    dialogs.close();
   };
 
   const handleDeprecate = (itemId: string) => {
     if (!canPerformAction(role, "edit")) {
       toast.error("Access denied — insufficient permissions");
-      setConfirmAction(null);
+      dialogs.close();
       return;
     }
     hookDeprecate(itemId);
-    setConfirmAction(null);
+    dialogs.close();
   };
 
   // ---------------------------------------------------------------------------
@@ -99,7 +95,7 @@ export function CompliancePage() {
         <div className="flex items-center gap-2">
           {canSubmitForReview(role) && (
             <button
-              onClick={() => setSubmitModalOpen(true)}
+              onClick={() => dialogs.open("submit")}
               className="flex items-center gap-1.5 rounded border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground/80 hover:border-accent-text/50 hover:text-foreground transition-colors duration-150"
             >
               <Send className="h-3.5 w-3.5" />
@@ -107,7 +103,7 @@ export function CompliancePage() {
             </button>
           )}
           <button
-            onClick={() => setReportModalOpen(true)}
+            onClick={() => dialogs.open("report")}
             className="flex items-center gap-1.5 rounded bg-accent px-3 py-1.5 text-sm font-semibold text-white hover:bg-accent-hover transition-colors duration-150"
           >
             <FileText className="h-3.5 w-3.5" />
@@ -150,8 +146,8 @@ export function CompliancePage() {
           setExpandedItemId={setExpandedItemId}
           role={role}
           onSubmitForReview={handleSubmitForReview}
-          onApprove={(id) => setConfirmAction({ type: "approve", itemId: id })}
-          onDeprecate={(id) => setConfirmAction({ type: "deprecate", itemId: id })}
+          onApprove={(id) => dialogs.open("confirm-approve", { itemId: id })}
+          onDeprecate={(id) => dialogs.open("confirm-deprecate", { itemId: id })}
           onRemediationChange={handleRemediationChange}
         />
       )}
@@ -161,17 +157,17 @@ export function CompliancePage() {
         <VulnerabilitiesTab
           vulnerabilities={sortedVulnerabilities}
           role={role}
-          onCreateVuln={() => setVulnModalOpen(true)}
+          onCreateVuln={() => dialogs.open("vuln")}
         />
       )}
 
       {/* === Reports Tab === */}
       {activeTab === "reports" && <ReportsTab items={filteredItems} allItems={complianceItems} />}
 
-      {/* Modals */}
-      {submitModalOpen && (
+      {/* Modals — Story 21.5: useDialogManager ensures one-at-a-time */}
+      {dialogs.isDialogOpen("submit") && (
         <SubmitForReviewModal
-          onClose={() => setSubmitModalOpen(false)}
+          onClose={dialogs.close}
           onSubmit={(data) => {
             if (!canPerformAction(role, "create")) {
               toast.error("Access denied — insufficient permissions");
@@ -194,7 +190,7 @@ export function CompliancePage() {
                 vulnerabilities: [],
               };
               addComplianceItem(newItem);
-              setSubmitModalOpen(false);
+              dialogs.close();
               toast.success("Compliance item submitted for review");
             } catch (error: unknown) {
               // Modal stays open — form input preserved for retry.
@@ -206,9 +202,9 @@ export function CompliancePage() {
         />
       )}
 
-      {vulnModalOpen && (
+      {dialogs.isDialogOpen("vuln") && (
         <CreateVulnerabilityModal
-          onClose={() => setVulnModalOpen(false)}
+          onClose={dialogs.close}
           onSubmit={(data) => {
             if (!canPerformAction(role, "create")) {
               toast.error("Access denied — insufficient permissions");
@@ -227,42 +223,44 @@ export function CompliancePage() {
               resolvedDate: null,
             };
             addVulnerability(newVuln);
-            setVulnModalOpen(false);
+            dialogs.close();
             toast.success("Vulnerability record created");
           }}
         />
       )}
 
-      {reportModalOpen && (
-        <ReportModal items={complianceItems} onClose={() => setReportModalOpen(false)} />
+      {dialogs.isDialogOpen("report") && (
+        <ReportModal items={complianceItems} onClose={dialogs.close} />
       )}
 
-      {confirmAction && (
+      {(dialogs.isDialogOpen("confirm-approve") || dialogs.isDialogOpen("confirm-deprecate")) && (
         <ConfirmDialog
           title={
-            confirmAction.type === "approve"
+            dialogs.isDialogOpen("confirm-approve")
               ? "Approve Compliance Item"
               : "Deprecate Compliance Item"
           }
           message={
-            confirmAction.type === "approve"
+            dialogs.isDialogOpen("confirm-approve")
               ? "Approve this compliance item? It will be marked as compliant."
               : "Deprecate this compliance item? It will no longer be considered current."
           }
-          confirmLabel={confirmAction.type === "approve" ? "Approve" : "Deprecate"}
+          confirmLabel={dialogs.isDialogOpen("confirm-approve") ? "Approve" : "Deprecate"}
           confirmClass={
-            confirmAction.type === "approve"
+            dialogs.isDialogOpen("confirm-approve")
               ? "bg-emerald-600 hover:bg-emerald-700"
               : "bg-amber-600 hover:bg-amber-700"
           }
           onConfirm={() => {
-            if (confirmAction.type === "approve") {
-              handleApprove(confirmAction.itemId);
+            const itemId = dialogs.getContext<string>("itemId");
+            if (!itemId) return;
+            if (dialogs.isDialogOpen("confirm-approve")) {
+              handleApprove(itemId);
             } else {
-              handleDeprecate(confirmAction.itemId);
+              handleDeprecate(itemId);
             }
           }}
-          onCancel={() => setConfirmAction(null)}
+          onCancel={dialogs.close}
         />
       )}
     </div>

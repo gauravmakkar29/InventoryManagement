@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { useDialogManager } from "@/lib/hooks/use-dialog-manager";
 
 import type { Tab } from "./deployment/deployment-types";
 import { UploadFirmwareModal } from "./deployment/upload-firmware-modal";
@@ -54,8 +55,10 @@ export function Deployment() {
   const vulnTracker = useVulnerabilityTracker(auditLog.addAuditEntry);
 
   const [activeTab, setActiveTab] = useState<Tab>("firmware");
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const [vulnModalOpen, setVulnModalOpen] = useState(false);
+
+  // Story 21.5: Unified dialog manager
+  type DeploymentDialog = "upload" | "vuln";
+  const dialogs = useDialogManager<DeploymentDialog>();
 
   // RBAC-guarded vulnerability creation
   const guardedCreateVulnerability = useCallback(
@@ -119,7 +122,7 @@ export function Deployment() {
         return;
       }
       try {
-        hookUpload(data, () => setUploadModalOpen(false));
+        hookUpload(data, () => dialogs.close());
       } catch (error: unknown) {
         // Modal stays open — form input preserved for retry.
         if (error instanceof Error && !error.message.includes("failed")) {
@@ -168,7 +171,7 @@ export function Deployment() {
         </div>
         {activeTab === "firmware" && canManage && (
           <button
-            onClick={() => setUploadModalOpen(true)}
+            onClick={() => dialogs.open("upload")}
             className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
           >
             <Upload className="h-3 w-3" />
@@ -177,7 +180,7 @@ export function Deployment() {
         )}
         {activeTab === "vulnerabilities" && canManageVulns && (
           <button
-            onClick={() => setVulnModalOpen(true)}
+            onClick={() => dialogs.open("vuln")}
             className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
           >
             <Plus className="h-3 w-3" />
@@ -202,7 +205,7 @@ export function Deployment() {
             currentUser={currentUser}
             canManage={canManage}
             isAdmin={isAdmin}
-            onUploadClick={() => setUploadModalOpen(true)}
+            onUploadClick={() => dialogs.open("upload")}
             advanceStage={guardedAdvanceStage}
             deprecateFirmware={guardedDeprecate}
             activateFirmware={guardedActivate}
@@ -263,16 +266,16 @@ export function Deployment() {
 
       {/* Upload Modal -- Story 11.1 */}
       <UploadFirmwareModal
-        open={uploadModalOpen}
-        onClose={() => setUploadModalOpen(false)}
+        open={dialogs.isDialogOpen("upload")}
+        onClose={() => dialogs.close()}
         onSubmit={handleUpload}
       />
 
       {/* Create Vulnerability Modal -- Story 11.5 */}
-      {vulnModalOpen && (
+      {dialogs.isDialogOpen("vuln") && (
         <CreateVulnerabilityModal
           firmwareList={firmware}
-          onClose={() => setVulnModalOpen(false)}
+          onClose={() => dialogs.close()}
           onSubmit={guardedCreateVulnerability}
         />
       )}
