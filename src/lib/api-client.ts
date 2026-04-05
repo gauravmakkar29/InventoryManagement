@@ -115,6 +115,14 @@ function recordFailure(cb: CircuitBreaker): void {
   cb.lastFailureAt = Date.now();
   if (cb.failures >= cb.threshold) {
     cb.state = "open";
+    // Story 22.5: Log circuit breaker state change (NIST AU-2)
+    const log = (globalThis as Record<string, unknown>)["structuredLog"];
+    if (typeof log === "function") {
+      (log as (level: string, meta: Record<string, string>) => void)("warn", {
+        source: "api-client",
+        message: "Circuit breaker opened — API temporarily unavailable",
+      });
+    }
   }
 }
 

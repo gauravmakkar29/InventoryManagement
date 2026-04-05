@@ -68,30 +68,17 @@ interface CognitoAuthResult {
 }
 
 /**
- * Call Cognito Identity Provider API via HTTP (no SDK dependency).
- * Uses the public API with X-Amz-Target header for USER_PASSWORD_AUTH flows.
+ * Call Cognito Identity Provider API via the resilient HTTP client.
+ * Routes through api-client.ts for retry, backoff, and circuit breaker.
+ * @see Story 22.2 — Route auth/storage fetch() through api-client.ts
  */
 async function cognitoRequest(
   region: string,
   target: string,
   payload: Record<string, unknown>,
 ): Promise<Record<string, unknown>> {
-  const endpoint = `https://cognito-idp.${region}.amazonaws.com/`;
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-amz-json-1.1",
-      "X-Amz-Target": `AWSCognitoIdentityProviderService.${target}`,
-    },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    const error = (await response.json()) as { __type?: string; message?: string };
-    throw new Error(error.message ?? `Cognito ${target} failed: ${response.status}`);
-  }
-
-  return response.json() as Promise<Record<string, unknown>>;
+  const { resilientCognitoRequest } = await import("../../resilient-fetch");
+  return resilientCognitoRequest(region, target, payload);
 }
 
 // =============================================================================

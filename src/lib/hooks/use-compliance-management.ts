@@ -62,36 +62,54 @@ export function useComplianceManagement() {
   );
 
   const handleSubmitForReview = useCallback((itemId: string) => {
-    setComplianceItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId && item.status === "Pending"
-          ? { ...item, status: "In Review" as ComplianceStatus }
-          : item,
-      ),
-    );
-    toast.success("Compliance item submitted for review");
+    try {
+      setComplianceItems((prev) =>
+        prev.map((item) =>
+          item.id === itemId && item.status === "Pending"
+            ? { ...item, status: "In Review" as ComplianceStatus }
+            : item,
+        ),
+      );
+      toast.success("Compliance item submitted for review");
+    } catch (err) {
+      toast.error(
+        `Failed to submit for review: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleApprove = useCallback((itemId: string) => {
-    setComplianceItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId && item.status === "In Review"
-          ? { ...item, status: "Approved" as ComplianceStatus }
-          : item,
-      ),
-    );
-    toast.success("Compliance item approved");
+    try {
+      setComplianceItems((prev) =>
+        prev.map((item) =>
+          item.id === itemId && item.status === "In Review"
+            ? { ...item, status: "Approved" as ComplianceStatus }
+            : item,
+        ),
+      );
+      toast.success("Compliance item approved");
+    } catch (err) {
+      toast.error(
+        `Failed to approve compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleDeprecate = useCallback((itemId: string) => {
-    setComplianceItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId && (item.status === "Approved" || item.status === "Pending")
-          ? { ...item, status: "Deprecated" as ComplianceStatus }
-          : item,
-      ),
-    );
-    toast.success("Compliance item deprecated");
+    try {
+      setComplianceItems((prev) =>
+        prev.map((item) =>
+          item.id === itemId && (item.status === "Approved" || item.status === "Pending")
+            ? { ...item, status: "Deprecated" as ComplianceStatus }
+            : item,
+        ),
+      );
+      toast.success("Compliance item deprecated");
+    } catch (err) {
+      toast.error(
+        `Failed to deprecate compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
+      );
+    }
   }, []);
 
   const handleRemediationChange = useCallback((vulnId: string, newStatus: RemediationStatus) => {

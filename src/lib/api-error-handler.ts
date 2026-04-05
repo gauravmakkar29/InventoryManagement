@@ -43,8 +43,20 @@ const OPERATION_LABELS: Record<string, string> = {
   updateServiceOrder: "Update service order",
   uploadFirmware: "Upload firmware",
   approveFirmware: "Approve firmware",
+  deprecateFirmware: "Deprecate firmware",
+  activateFirmware: "Reactivate firmware",
   submitComplianceReview: "Submit compliance review",
+  approveComplianceItem: "Approve compliance item",
+  deprecateComplianceItem: "Deprecate compliance item",
   acknowledgeNotification: "Acknowledge notification",
+  createDevice: "Create device",
+  updateDeviceStatus: "Update device status",
+  createIncident: "Create incident",
+  updateIncidentStatus: "Update incident status",
+  isolateDevice: "Isolate device",
+  releaseDevice: "Release device",
+  uploadSBOM: "Upload SBOM",
+  updateVulnerabilityStatus: "Update vulnerability status",
 };
 
 function labelFor(operationName: string): string {

@@ -204,13 +204,12 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
     if (mapError) return;
     let cancelled = false;
 
-    fetch(GEO_URL, { method: "HEAD" })
-      .then((res) => {
-        if (!cancelled && !res.ok) setMapError(true);
-      })
-      .catch(() => {
-        if (!cancelled) setMapError(true);
-      });
+    // Story 22.2: Route through resilient-fetch for timeout handling
+    import("../../lib/resilient-fetch").then(({ checkGeoAvailability }) =>
+      checkGeoAvailability(GEO_URL).then((ok) => {
+        if (!cancelled && !ok) setMapError(true);
+      }),
+    );
 
     return () => {
       cancelled = true;

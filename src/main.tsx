@@ -8,6 +8,7 @@ import { createPlatformConfig } from "./lib/providers/platform.config";
 import { ErrorBoundary } from "./components/error-boundary";
 import App from "./App";
 import "./lib/i18n";
+import "./lib/logger"; // Story 22.5: Initialize structured logger + globalThis.structuredLog
 import "./index.css";
 
 const platform = createPlatformConfig();

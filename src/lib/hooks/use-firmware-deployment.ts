@@ -39,33 +39,39 @@ export function useFirmwareDeployment(
       },
       onComplete?: () => void,
     ) => {
-      const newEntry: FirmwareEntry = {
-        id: `fw-${Date.now()}`,
-        version: data.version,
-        name: data.name,
-        stage: "Uploaded",
-        status: "Pending",
-        uploadedBy: currentUser,
-        uploadedDate: new Date().toISOString(),
-        testedBy: null,
-        testedDate: null,
-        approvedBy: null,
-        approvedDate: null,
-        date: new Date().toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        }),
-        devices: 0,
-        models: data.models.length > 0 ? data.models : ["INV-3200"],
-        releaseNotes: data.releaseNotes,
-        fileSize: data.fileSize,
-        checksum: data.checksum,
-      };
-      setFirmware((prev) => [newEntry, ...prev]);
-      addAuditEntry("Created", "Firmware", `FW#${newEntry.id}`);
-      toast.success(`Firmware ${data.version} uploaded successfully`);
-      onComplete?.();
+      try {
+        const newEntry: FirmwareEntry = {
+          id: `fw-${Date.now()}`,
+          version: data.version,
+          name: data.name,
+          stage: "Uploaded",
+          status: "Pending",
+          uploadedBy: currentUser,
+          uploadedDate: new Date().toISOString(),
+          testedBy: null,
+          testedDate: null,
+          approvedBy: null,
+          approvedDate: null,
+          date: new Date().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+          devices: 0,
+          models: data.models.length > 0 ? data.models : ["INV-3200"],
+          releaseNotes: data.releaseNotes,
+          fileSize: data.fileSize,
+          checksum: data.checksum,
+        };
+        setFirmware((prev) => [newEntry, ...prev]);
+        addAuditEntry("Created", "Firmware", `FW#${newEntry.id}`);
+        toast.success(`Firmware ${data.version} uploaded successfully`);
+        onComplete?.();
+      } catch (err) {
+        toast.error(
+          `Firmware upload failed: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
     },
     [currentUser, addAuditEntry],
   );
@@ -131,47 +137,59 @@ export function useFirmwareDeployment(
 
   const deprecateFirmware = useCallback(
     (id: string) => {
-      const fw = firmware.find((f) => f.id === id);
-      if (!fw) return;
-      const confirmed = window.confirm(`Deprecate firmware ${fw.version}?`);
-      if (!confirmed) return;
+      try {
+        const fw = firmware.find((f) => f.id === id);
+        if (!fw) return;
+        const confirmed = window.confirm(`Deprecate firmware ${fw.version}?`);
+        if (!confirmed) return;
 
-      setFirmware((prev) =>
-        prev.map((f) =>
-          f.id === id
-            ? {
-                ...f,
-                stage: "Deprecated" as FirmwareStage,
-                status: "Deprecated" as FirmwareStatus,
-                devices: 0,
-              }
-            : f,
-        ),
-      );
-      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-      toast.success(`${fw.version} deprecated`);
+        setFirmware((prev) =>
+          prev.map((f) =>
+            f.id === id
+              ? {
+                  ...f,
+                  stage: "Deprecated" as FirmwareStage,
+                  status: "Deprecated" as FirmwareStatus,
+                  devices: 0,
+                }
+              : f,
+          ),
+        );
+        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+        toast.success(`${fw.version} deprecated`);
+      } catch (err) {
+        toast.error(
+          `Failed to deprecate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
     },
     [firmware, addAuditEntry],
   );
 
   const activateFirmware = useCallback(
     (id: string) => {
-      const fw = firmware.find((f) => f.id === id);
-      if (!fw) return;
-      const confirmed = window.confirm(
-        `Reactivate firmware ${fw.version}? It will return to Uploaded stage.`,
-      );
-      if (!confirmed) return;
+      try {
+        const fw = firmware.find((f) => f.id === id);
+        if (!fw) return;
+        const confirmed = window.confirm(
+          `Reactivate firmware ${fw.version}? It will return to Uploaded stage.`,
+        );
+        if (!confirmed) return;
 
-      setFirmware((prev) =>
-        prev.map((f) =>
-          f.id === id
-            ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
-            : f,
-        ),
-      );
-      addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-      toast.success(`${fw.version} reactivated`);
+        setFirmware((prev) =>
+          prev.map((f) =>
+            f.id === id
+              ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
+              : f,
+          ),
+        );
+        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+        toast.success(`${fw.version} reactivated`);
+      } catch (err) {
+        toast.error(
+          `Failed to reactivate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
     },
     [firmware, addAuditEntry],
   );
