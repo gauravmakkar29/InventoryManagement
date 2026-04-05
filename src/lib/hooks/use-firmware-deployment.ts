@@ -8,6 +8,15 @@ import type {
 } from "../types/deployment";
 import { INITIAL_FIRMWARE } from "../types/deployment-constants";
 
+/** Pending confirmation state exposed for ConfirmDialog rendering (Story 21.2) */
+export interface FirmwareConfirmation {
+  id: string;
+  title: string;
+  message: string;
+  variant: "danger" | "warning" | "primary";
+  confirmLabel: string;
+}
+
 export function useFirmwareDeployment(
   currentUser: string,
   addAuditEntry: (action: AuditAction, resourceType: string, resourceId: string) => void,
@@ -15,6 +24,10 @@ export function useFirmwareDeployment(
   const [firmware, setFirmware] = useState<FirmwareEntry[]>(INITIAL_FIRMWARE);
   const [fwStatusFilter, setFwStatusFilter] = useState<FirmwareStatus | "All">("All");
   const [fwModelFilter, setFwModelFilter] = useState<string>("All");
+
+  // Story 21.2: Replace window.confirm with async confirmation pattern
+  const [pendingConfirmation, setPendingConfirmation] = useState<FirmwareConfirmation | null>(null);
+  const pendingActionRef = { current: null as (() => void) | null };
 
   const filteredFirmware = useMemo(() => {
     let items = firmware;
@@ -86,50 +99,59 @@ export function useFirmwareDeployment(
           toast.error("Separation of Duties: The uploader cannot advance to Testing");
           return;
         }
-        const confirmed = window.confirm(
-          `Are you sure you want to advance ${fw.version} to Testing?`,
-        );
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? {
-                  ...f,
-                  stage: "Testing" as FirmwareStage,
-                  testedBy: currentUser,
-                  testedDate: new Date().toISOString(),
-                }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} advanced to Testing`);
+        // Story 21.2: Async confirmation via ConfirmDialog
+        setPendingConfirmation({
+          id,
+          title: "Advance to Testing",
+          message: `Are you sure you want to advance ${fw.version} to Testing?`,
+          variant: "primary",
+          confirmLabel: "Advance",
+        });
+        pendingActionRef.current = () => {
+          setFirmware((prev) =>
+            prev.map((f) =>
+              f.id === id
+                ? {
+                    ...f,
+                    stage: "Testing" as FirmwareStage,
+                    testedBy: currentUser,
+                    testedDate: new Date().toISOString(),
+                  }
+                : f,
+            ),
+          );
+          addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+          toast.success(`${fw.version} advanced to Testing`);
+        };
       } else if (fw.stage === "Testing") {
         if (fw.testedBy === currentUser) {
           toast.error("Separation of Duties: The tester cannot approve");
           return;
         }
-        const confirmed = window.confirm(
-          `Are you sure you want to advance ${fw.version} to Approved?`,
-        );
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? {
-                  ...f,
-                  stage: "Approved" as FirmwareStage,
-                  status: "Active" as FirmwareStatus,
-                  approvedBy: currentUser,
-                  approvedDate: new Date().toISOString(),
-                }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} approved`);
+        setPendingConfirmation({
+          id,
+          title: "Approve Firmware",
+          message: `Are you sure you want to advance ${fw.version} to Approved?`,
+          variant: "primary",
+          confirmLabel: "Approve",
+        });
+        pendingActionRef.current = () => {
+          setFirmware((prev) =>
+            prev.map((f) =>
+              f.id === id
+                ? {
+                    ...f,
+                    stage: "Approved" as FirmwareStage,
+                    status: "Active" as FirmwareStatus,
+                    approvedBy: currentUser,
+                    approvedDate: new Date().toISOString(),
+                  }
+                : f,
+            ),
+          );
+          addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+          toast.success(`${fw.version} approved`);
+        };
       }
     },
     [firmware, currentUser, addAuditEntry],
@@ -137,62 +159,83 @@ export function useFirmwareDeployment(
 
   const deprecateFirmware = useCallback(
     (id: string) => {
-      try {
-        const fw = firmware.find((f) => f.id === id);
-        if (!fw) return;
-        const confirmed = window.confirm(`Deprecate firmware ${fw.version}?`);
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? {
-                  ...f,
-                  stage: "Deprecated" as FirmwareStage,
-                  status: "Deprecated" as FirmwareStatus,
-                  devices: 0,
-                }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} deprecated`);
-      } catch (err) {
-        toast.error(
-          `Failed to deprecate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
-        );
-      }
+      const fw = firmware.find((f) => f.id === id);
+      if (!fw) return;
+      setPendingConfirmation({
+        id,
+        title: "Deprecate Firmware",
+        message: `Deprecate firmware ${fw.version}? This will remove it from active deployment.`,
+        variant: "danger",
+        confirmLabel: "Deprecate",
+      });
+      pendingActionRef.current = () => {
+        try {
+          setFirmware((prev) =>
+            prev.map((f) =>
+              f.id === id
+                ? {
+                    ...f,
+                    stage: "Deprecated" as FirmwareStage,
+                    status: "Deprecated" as FirmwareStatus,
+                    devices: 0,
+                  }
+                : f,
+            ),
+          );
+          addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+          toast.success(`${fw.version} deprecated`);
+        } catch (err) {
+          toast.error(
+            `Failed to deprecate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
+          );
+        }
+      };
     },
     [firmware, addAuditEntry],
   );
 
   const activateFirmware = useCallback(
     (id: string) => {
-      try {
-        const fw = firmware.find((f) => f.id === id);
-        if (!fw) return;
-        const confirmed = window.confirm(
-          `Reactivate firmware ${fw.version}? It will return to Uploaded stage.`,
-        );
-        if (!confirmed) return;
-
-        setFirmware((prev) =>
-          prev.map((f) =>
-            f.id === id
-              ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
-              : f,
-          ),
-        );
-        addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
-        toast.success(`${fw.version} reactivated`);
-      } catch (err) {
-        toast.error(
-          `Failed to reactivate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
-        );
-      }
+      const fw = firmware.find((f) => f.id === id);
+      if (!fw) return;
+      setPendingConfirmation({
+        id,
+        title: "Reactivate Firmware",
+        message: `Reactivate firmware ${fw.version}? It will return to Uploaded stage.`,
+        variant: "warning",
+        confirmLabel: "Reactivate",
+      });
+      pendingActionRef.current = () => {
+        try {
+          setFirmware((prev) =>
+            prev.map((f) =>
+              f.id === id
+                ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
+                : f,
+            ),
+          );
+          addAuditEntry("Modified", "Firmware", `FW#${fw.id}`);
+          toast.success(`${fw.version} reactivated`);
+        } catch (err) {
+          toast.error(
+            `Failed to reactivate firmware: ${err instanceof Error ? err.message : "Unknown error"}`,
+          );
+        }
+      };
     },
     [firmware, addAuditEntry],
   );
+
+  const confirmAction = useCallback(() => {
+    pendingActionRef.current?.();
+    pendingActionRef.current = null;
+    setPendingConfirmation(null);
+  }, []);
+
+  const cancelAction = useCallback(() => {
+    pendingActionRef.current = null;
+    setPendingConfirmation(null);
+  }, []);
 
   return {
     firmware,
@@ -205,5 +248,9 @@ export function useFirmwareDeployment(
     advanceStage,
     deprecateFirmware,
     activateFirmware,
+    // Story 21.2: Async confirmation support
+    pendingConfirmation,
+    confirmAction,
+    cancelAction,
   };
 }

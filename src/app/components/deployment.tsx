@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 import type { Tab } from "./deployment/deployment-types";
 import { UploadFirmwareModal } from "./deployment/upload-firmware-modal";
@@ -45,6 +46,9 @@ export function Deployment() {
     advanceStage,
     deprecateFirmware,
     activateFirmware,
+    pendingConfirmation,
+    confirmAction,
+    cancelAction,
   } = useFirmwareDeployment(currentUser, auditLog.addAuditEntry);
 
   const vulnTracker = useVulnerabilityTracker(auditLog.addAuditEntry);
@@ -272,6 +276,17 @@ export function Deployment() {
           onSubmit={guardedCreateVulnerability}
         />
       )}
+
+      {/* Story 21.2: Firmware action confirmation dialog */}
+      <ConfirmDialog
+        open={!!pendingConfirmation}
+        title={pendingConfirmation?.title ?? ""}
+        message={pendingConfirmation?.message ?? ""}
+        confirmLabel={pendingConfirmation?.confirmLabel}
+        confirmVariant={pendingConfirmation?.variant}
+        onConfirm={confirmAction}
+        onCancel={cancelAction}
+      />
     </div>
   );
 }

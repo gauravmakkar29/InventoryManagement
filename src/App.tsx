@@ -1,6 +1,7 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import { Routes, Route, Navigate } from "react-router";
 import { ErrorBoundary } from "./components/error-boundary";
+import { RouteErrorBoundary } from "./components/route-error-boundary";
 import { ProtectedLayout } from "./app/components/layouts/protected-layout";
 import { PageLoader } from "./app/components/page-loader";
 
@@ -60,6 +61,17 @@ const SecureDownloadPage = lazy(() =>
 );
 
 // ---------------------------------------------------------------------------
+// Story 21.3: Route wrapper with per-route error boundary
+// ---------------------------------------------------------------------------
+function RouteElement({ name, children }: { name: string; children: ReactNode }) {
+  return (
+    <RouteErrorBoundary routeName={name}>
+      <Suspense fallback={<PageLoader />}>{children}</Suspense>
+    </RouteErrorBoundary>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // App Router
 // ---------------------------------------------------------------------------
 export default function App() {
@@ -68,118 +80,117 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/login" element={<SignIn />} />
-          {/* Secure download — outside ProtectedLayout; has own auth check (#358) */}
           <Route
             path="/download/:tokenGuid"
             element={
-              <Suspense fallback={<PageLoader />}>
+              <RouteElement name="secure-download">
                 <SecureDownloadPage />
-              </Suspense>
+              </RouteElement>
             }
           />
           <Route element={<ProtectedLayout />}>
             <Route
               path="/"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="dashboard">
                   <Dashboard />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/inventory"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="inventory">
                   <Inventory />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/account-service"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="account-service">
                   <AccountService />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/deployment"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="deployment">
                   <Deployment />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/compliance"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="compliance">
                   <CompliancePage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/sbom"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="sbom">
                   <SBOMPage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/analytics"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="analytics">
                   <Analytics />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/telemetry"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="telemetry">
                   <TelemetryHeatmapPage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/incidents"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="incidents">
                   <IncidentResponsePage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/digital-twin"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="digital-twin">
                   <DigitalTwinPage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/executive-summary"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="executive-summary">
                   <ExecutiveSummaryPage />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/user-management"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="user-management">
                   <UserManagement />
-                </Suspense>
+                </RouteElement>
               }
             />
             <Route
               path="/access-denied"
               element={
-                <Suspense fallback={<PageLoader />}>
+                <RouteElement name="access-denied">
                   <AccessDenied />
-                </Suspense>
+                </RouteElement>
               }
             />
           </Route>
