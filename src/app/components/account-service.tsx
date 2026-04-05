@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Plus, Calendar, LayoutGrid } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import { useServiceOrders } from "@/lib/hooks/use-service-orders";
@@ -126,16 +128,18 @@ export function AccountService() {
 
       {/* Content */}
       {view === "kanban" ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {COLUMN_ORDER.map((status) => (
-            <KanbanColumn
-              key={status}
-              status={status}
-              orders={ordersByStatus[status]}
-              onMove={handleMove}
-            />
-          ))}
-        </div>
+        <DndProvider backend={HTML5Backend}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {COLUMN_ORDER.map((status) => (
+              <KanbanColumn
+                key={status}
+                status={status}
+                orders={ordersByStatus[status]}
+                onMove={handleMove}
+              />
+            ))}
+          </div>
+        </DndProvider>
       ) : (
         <CalendarView orders={filteredOrders} />
       )}

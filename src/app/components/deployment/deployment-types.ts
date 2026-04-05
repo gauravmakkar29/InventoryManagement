@@ -2,7 +2,7 @@
 // Types
 // =============================================================================
 
-export type Tab = "firmware" | "vulnerabilities" | "reports" | "audit";
+export type Tab = "firmware" | "vulnerabilities" | "download-links" | "reports" | "audit";
 export type FirmwareStage = "Uploaded" | "Testing" | "Approved" | "Deprecated";
 export type FirmwareStatus = "Active" | "Deprecated" | "Pending";
 export type VulnSeverity = "Critical" | "High" | "Medium" | "Low";

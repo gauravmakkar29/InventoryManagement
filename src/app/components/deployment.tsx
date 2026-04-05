@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Upload, Package, Shield, Clock, Bug, FileText, Plus } from "lucide-react";
+import { Upload, Package, Shield, Clock, Bug, FileText, Plus, Link2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
@@ -15,6 +15,7 @@ import { FirmwareList } from "./deployment/firmware-list";
 import { VulnerabilityTab } from "./deployment/vulnerability-tab";
 import { ReportsTab } from "./deployment/reports-tab";
 import { AuditLogTab } from "./deployment/audit-log-tab";
+import { DownloadLinksTab } from "./firmware/download-links-tab";
 import { useAuditLog } from "@/lib/hooks/use-audit-log";
 import { useFirmwareDeployment } from "@/lib/hooks/use-firmware-deployment";
 import { useVulnerabilityTracker } from "@/lib/hooks/use-vulnerability-tracker";
@@ -140,6 +141,7 @@ export function Deployment() {
   const TABS: { id: Tab; label: string; icon: typeof Shield; visible: boolean }[] = [
     { id: "firmware", label: "Firmware", icon: Package, visible: true },
     { id: "vulnerabilities", label: "Vulnerabilities", icon: Bug, visible: true },
+    { id: "download-links", label: "Download Links", icon: Link2, visible: canManage },
     { id: "reports", label: "Regulatory Reports", icon: FileText, visible: true },
     { id: "audit", label: "Audit Log", icon: Clock, visible: canViewAudit },
   ];
@@ -228,6 +230,9 @@ export function Deployment() {
           handleRemediationChange={vulnTracker.handleRemediationChange}
         />
       )}
+
+      {/* ===== Download Links Tab -- Epic 26 (Story 26.7) ===== */}
+      {activeTab === "download-links" && canManage && <DownloadLinksTab />}
 
       {/* ===== Regulatory Reports Tab -- Story 11.6 ===== */}
       {activeTab === "reports" && (

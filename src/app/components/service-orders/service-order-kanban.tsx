@@ -1,5 +1,6 @@
-import { memo } from "react";
-import { Clock, MapPin, ArrowRight, CheckCircle } from "lucide-react";
+import { memo, useRef } from "react";
+import { Clock, MapPin, ArrowRight, CheckCircle, GripVertical } from "lucide-react";
+import { useDrag, useDrop } from "react-dnd";
 import { cn } from "@/lib/utils";
 import type {
   ServiceOrder,
@@ -8,6 +9,8 @@ import type {
   ServiceType,
 } from "@/lib/mock-data/service-order-data";
 import { STATUS_LABELS } from "@/lib/mock-data/service-order-data";
+
+const DRAG_TYPE = "SERVICE_ORDER";
 
 /* ─── Constants ───────────────────────────────────────────────────── */
 
@@ -81,11 +84,28 @@ const KanbanCard = memo(function KanbanCard({
   order: ServiceOrder;
   onMove: (id: string, newStatus: Status) => void;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [{ isDragging }, drag] = useDrag({
+    type: DRAG_TYPE,
+    item: { id: order.id, status: order.status },
+    collect: (monitor) => ({ isDragging: monitor.isDragging() }),
+  });
+  drag(ref);
+
   return (
-    <div className="rounded border border-border bg-card p-3 space-y-2 hover:border-accent-text/40 transition-colors duration-150">
-      {/* Top row: ID + Priority */}
+    <div
+      ref={ref}
+      className={cn(
+        "rounded border border-border bg-card p-3 space-y-2 hover:border-accent-text/40 transition-colors duration-150 cursor-grab active:cursor-grabbing",
+        isDragging && "opacity-40 ring-2 ring-accent-text/30",
+      )}
+    >
+      {/* Top row: drag handle + ID + Priority */}
       <div className="flex items-center justify-between">
-        <span className="text-[12px] font-mono text-muted-foreground">{order.id}</span>
+        <div className="flex items-center gap-1">
+          <GripVertical className="h-3 w-3 text-muted-foreground/50" aria-hidden="true" />
+          <span className="text-[12px] font-mono text-muted-foreground">{order.id}</span>
+        </div>
         <PriorityBadge priority={order.priority} />
       </div>
 
@@ -151,12 +171,35 @@ export function KanbanColumn({
   orders: ServiceOrder[];
   onMove: (id: string, newStatus: Status) => void;
 }) {
+  const dropRef = useRef<HTMLDivElement>(null);
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: DRAG_TYPE,
+    drop: (item: { id: string; status: Status }) => {
+      if (item.status !== status) {
+        onMove(item.id, status);
+      }
+    },
+    canDrop: (item: { id: string; status: Status }) => item.status !== status,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
+  drop(dropRef);
+
   const sorted = [...orders].sort(
     (a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime(),
   );
 
   return (
-    <div className="flex flex-col rounded border border-border bg-muted min-h-[300px]">
+    <div
+      ref={dropRef}
+      className={cn(
+        "flex flex-col rounded border border-border bg-muted min-h-[300px] transition-colors duration-150",
+        isOver && canDrop && "border-accent-text bg-accent/5",
+        isOver && !canDrop && "border-muted-foreground/30",
+      )}
+    >
       {/* Column header */}
       <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
         <h3 className="text-sm font-bold text-foreground">{STATUS_LABELS[status]}</h3>
