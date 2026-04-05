@@ -16,7 +16,8 @@ import { Skeleton } from "@/components/skeleton";
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+/** Self-hosted world-atlas — no CDN dependency (NIST SI-10, Story 25.9) */
+const GEO_URL = "/geo/countries-110m.json";
 
 /** Risk Score -> Color mapping (from tech-spec.md Section 6) */
 function getRiskColor(avgRiskScore: number): string {

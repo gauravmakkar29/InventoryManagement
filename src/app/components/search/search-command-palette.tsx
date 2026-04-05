@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from "react";
 import { Search, Loader2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sanitizeUrlParam } from "@/lib/security";
 import type { GlobalSearchResult, SearchEntityType } from "@/lib/opensearch-types";
 import type { UseGlobalSearchReturn } from "./use-global-search";
 import { SearchResultGroup } from "./search-result-group";
@@ -21,19 +22,20 @@ const ENTITY_TYPE_ORDER: SearchEntityType[] = [
   "Vulnerability",
 ];
 
-/** Route mapping for entity type navigation */
+/** Route mapping for entity type navigation — NIST SI-10: sanitize IDs (Story 25.9) */
 function getEntityRoute(result: GlobalSearchResult): string {
+  const safeId = sanitizeUrlParam(result.id);
   switch (result.entityType) {
     case "Device":
-      return `/inventory?device=${result.id}`;
+      return `/inventory?device=${safeId}`;
     case "Firmware":
-      return `/deployment?firmware=${result.id}`;
+      return `/deployment?firmware=${safeId}`;
     case "ServiceOrder":
-      return `/account-service?order=${result.id}`;
+      return `/account-service?order=${safeId}`;
     case "Compliance":
-      return `/compliance?record=${result.id}`;
+      return `/compliance?record=${safeId}`;
     case "Vulnerability":
-      return `/compliance?tab=vulnerabilities&vuln=${result.id}`;
+      return `/compliance?tab=vulnerabilities&vuln=${safeId}`;
     default:
       return "/";
   }
