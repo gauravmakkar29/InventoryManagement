@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { useMemo, useCallback, useRef, useEffect, useReducer } from "react";
 import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps";
 import { MapPin } from "lucide-react";
 import { resolveDeviceCoordinates } from "../../lib/location-coords";
@@ -38,24 +38,103 @@ import {
 export type { GeoDevice } from "./geo-location/geo-location-types";
 
 // ---------------------------------------------------------------------------
+// Story 21.1: Consolidated map state via useReducer
+// ---------------------------------------------------------------------------
+interface MapState {
+  statusFilter: GeoStatusFilter;
+  selectedDevice: GeoDevice | null;
+  tooltipPosition: { x: number; y: number };
+  mapLoaded: boolean;
+  mapError: boolean;
+  zoom: number;
+  center: [number, number];
+  showGeofences: boolean;
+  trailDevice: ResolvedDevice | null;
+  trailPoints: TrailPoint[];
+}
+
+const INITIAL_MAP_STATE: MapState = {
+  statusFilter: "all",
+  selectedDevice: null,
+  tooltipPosition: { x: 0, y: 0 },
+  mapLoaded: false,
+  mapError: false,
+  zoom: 1,
+  center: [0, 20],
+  showGeofences: true,
+  trailDevice: null,
+  trailPoints: [],
+};
+
+type MapAction =
+  | { type: "SELECT_DEVICE"; device: GeoDevice; position: { x: number; y: number } }
+  | { type: "DESELECT_DEVICE" }
+  | { type: "SET_VIEW"; center: [number, number]; zoom: number }
+  | { type: "NAVIGATE"; center: [number, number]; zoom: number }
+  | { type: "ZOOM_IN" }
+  | { type: "ZOOM_OUT" }
+  | { type: "RESET_VIEW" }
+  | { type: "SET_FILTER"; filter: GeoStatusFilter }
+  | { type: "MAP_LOADED" }
+  | { type: "MAP_ERROR" }
+  | { type: "RETRY_MAP" }
+  | { type: "TOGGLE_GEOFENCES" }
+  | { type: "SHOW_TRAIL"; device: ResolvedDevice; points: TrailPoint[] }
+  | { type: "HIDE_TRAIL" };
+
+function mapReducer(state: MapState, action: MapAction): MapState {
+  switch (action.type) {
+    case "SELECT_DEVICE":
+      return { ...state, selectedDevice: action.device, tooltipPosition: action.position };
+    case "DESELECT_DEVICE":
+      return { ...state, selectedDevice: null };
+    case "SET_VIEW":
+      return { ...state, center: action.center, zoom: action.zoom };
+    case "NAVIGATE":
+      return { ...state, center: action.center, zoom: action.zoom, selectedDevice: null };
+    case "ZOOM_IN":
+      return { ...state, zoom: Math.min(state.zoom * 1.5, 8) };
+    case "ZOOM_OUT":
+      return { ...state, zoom: Math.max(state.zoom / 1.5, 1) };
+    case "RESET_VIEW":
+      return { ...state, center: [0, 20], zoom: 1 };
+    case "SET_FILTER":
+      return { ...state, statusFilter: action.filter, selectedDevice: null };
+    case "MAP_LOADED":
+      return { ...state, mapLoaded: true };
+    case "MAP_ERROR":
+      return { ...state, mapError: true };
+    case "RETRY_MAP":
+      return { ...state, mapError: false, mapLoaded: false };
+    case "TOGGLE_GEOFENCES":
+      return { ...state, showGeofences: !state.showGeofences };
+    case "SHOW_TRAIL":
+      return { ...state, trailDevice: action.device, trailPoints: action.points };
+    case "HIDE_TRAIL":
+      return { ...state, trailDevice: null, trailPoints: [] };
+    default:
+      return state;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main Component — GeoLocationMap
 // ---------------------------------------------------------------------------
 export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
-  const [statusFilter, setStatusFilter] = useState<GeoStatusFilter>("all");
-  const [selectedDevice, setSelectedDevice] = useState<GeoDevice | null>(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [mapLoaded, setMapLoaded] = useState(false);
-  const [mapError, setMapError] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const [center, setCenter] = useState<[number, number]>([0, 20]);
+  const [state, dispatch] = useReducer(mapReducer, INITIAL_MAP_STATE);
+  const {
+    statusFilter,
+    selectedDevice,
+    tooltipPosition,
+    mapLoaded,
+    mapError,
+    zoom,
+    center,
+    showGeofences,
+    trailDevice,
+    trailPoints,
+  } = state;
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Story 10.4: Geofence state
-  const [showGeofences, setShowGeofences] = useState(true);
-
-  // Story 10.5: Trail state
-  const [trailDevice, setTrailDevice] = useState<ResolvedDevice | null>(null);
-  const [trailPoints, setTrailPoints] = useState<TrailPoint[]>([]);
 
   // Story 9.3: Status filter pills
   const filteredDevices = useMemo(() => {
@@ -104,107 +183,73 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
   const handleMarkerClick = useCallback(
     (device: GeoDevice, event: React.MouseEvent) => {
       event.stopPropagation();
-
       const container = containerRef.current;
       if (!container) return;
-
       const rect = container.getBoundingClientRect();
-      const x = event.clientX - rect.left + 12;
-      const y = event.clientY - rect.top + 12;
-
       if (selectedDevice?.id === device.id) {
-        setSelectedDevice(null);
+        dispatch({ type: "DESELECT_DEVICE" });
         return;
       }
-
-      setSelectedDevice(device);
-      setTooltipPosition({ x, y });
+      dispatch({
+        type: "SELECT_DEVICE",
+        device,
+        position: { x: event.clientX - rect.left + 12, y: event.clientY - rect.top + 12 },
+      });
     },
     [selectedDevice],
   );
 
-  // Story 10.2: Cluster click — zoom in on cluster
-  const handleClusterClick = useCallback((cluster: DeviceCluster, event: React.MouseEvent) => {
-    event.stopPropagation();
-    setCenter([cluster.lng, cluster.lat]);
-    setZoom((z) => Math.min(z * 2, 8));
-    setSelectedDevice(null);
-  }, []);
+  const handleClusterClick = useCallback(
+    (cluster: DeviceCluster, event: React.MouseEvent) => {
+      event.stopPropagation();
+      dispatch({
+        type: "NAVIGATE",
+        center: [cluster.lng, cluster.lat],
+        zoom: Math.min(zoom * 2, 8),
+      });
+    },
+    [zoom],
+  );
 
-  const handleMapClick = useCallback(() => {
-    setSelectedDevice(null);
-  }, []);
-
-  const handleZoomIn = useCallback(() => {
-    setZoom((z) => Math.min(z * 1.5, 8));
-  }, []);
-
-  const handleZoomOut = useCallback(() => {
-    setZoom((z) => Math.max(z / 1.5, 1));
-  }, []);
+  const handleMapClick = useCallback(() => dispatch({ type: "DESELECT_DEVICE" }), []);
+  const handleZoomIn = useCallback(() => dispatch({ type: "ZOOM_IN" }), []);
+  const handleZoomOut = useCallback(() => dispatch({ type: "ZOOM_OUT" }), []);
 
   const handleMoveEnd = useCallback((position: { coordinates: [number, number]; zoom: number }) => {
-    setCenter(position.coordinates);
-    setZoom(position.zoom);
+    dispatch({ type: "SET_VIEW", center: position.coordinates, zoom: position.zoom });
   }, []);
 
-  const handleRetry = useCallback(() => {
-    setMapError(false);
-    setMapLoaded(false);
-  }, []);
+  const handleRetry = useCallback(() => dispatch({ type: "RETRY_MAP" }), []);
 
-  // Story 10.3: Location search handler
   const handleLocationSelect = useCallback((coords: CityCoordinates) => {
-    setCenter([coords.lng, coords.lat]);
-    setZoom(4);
-    setSelectedDevice(null);
+    dispatch({ type: "NAVIGATE", center: [coords.lng, coords.lat], zoom: 4 });
   }, []);
 
-  const handleLocationClear = useCallback(() => {
-    setCenter([0, 20]);
-    setZoom(1);
-  }, []);
+  const handleLocationClear = useCallback(() => dispatch({ type: "RESET_VIEW" }), []);
 
-  // Story 10.4: Geofence handlers
   const handleSelectGeofence = useCallback((gf: Geofence) => {
-    setCenter([gf.centerLng, gf.centerLat]);
-    setZoom(4);
-    setSelectedDevice(null);
+    dispatch({ type: "NAVIGATE", center: [gf.centerLng, gf.centerLat], zoom: 4 });
   }, []);
 
-  const handleResetView = useCallback(() => {
-    setCenter([0, 20]);
-    setZoom(1);
-  }, []);
+  const handleResetView = useCallback(() => dispatch({ type: "RESET_VIEW" }), []);
 
-  // Story 10.5: Trail handler
   const handleShowTrail = useCallback(
     (device: GeoDevice) => {
-      // If trail is active for this device, hide it
       if (trailDevice?.id === device.id) {
-        setTrailDevice(null);
-        setTrailPoints([]);
+        dispatch({ type: "HIDE_TRAIL" });
         return;
       }
-
       const resolved = mappableDevices.find((d) => d.id === device.id);
       if (!resolved) {
-        setTrailDevice(null);
-        setTrailPoints([]);
+        dispatch({ type: "HIDE_TRAIL" });
         return;
       }
-
-      const trail = generateMockTrail(resolved);
-      setTrailDevice(resolved);
-      setTrailPoints(trail);
+      dispatch({ type: "SHOW_TRAIL", device: resolved, points: generateMockTrail(resolved) });
     },
     [trailDevice, mappableDevices],
   );
 
-  const handleHideTrail = useCallback(() => {
-    setTrailDevice(null);
-    setTrailPoints([]);
-  }, []);
+  const handleHideTrail = useCallback(() => dispatch({ type: "HIDE_TRAIL" }), []);
 
   // Handle geography load error
   useEffect(() => {
@@ -214,7 +259,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
     // Story 22.2: Route through resilient-fetch for timeout handling
     import("../../lib/resilient-fetch").then(({ checkGeoAvailability }) =>
       checkGeoAvailability(GEO_URL).then((ok) => {
-        if (!cancelled && !ok) setMapError(true);
+        if (!cancelled && !ok) dispatch({ type: "MAP_ERROR" });
       }),
     );
 
@@ -233,8 +278,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
   );
 
   const handleFilterChange = useCallback((filter: GeoStatusFilter) => {
-    setStatusFilter(filter);
-    setSelectedDevice(null);
+    dispatch({ type: "SET_FILTER", filter });
   }, []);
 
   return (
@@ -308,7 +352,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
                     <Geographies geography={GEO_URL}>
                       {({ geographies }) => {
                         if (!mapLoaded && geographies.length > 0) {
-                          queueMicrotask(() => setMapLoaded(true));
+                          queueMicrotask(() => dispatch({ type: "MAP_LOADED" }));
                         }
                         return geographies.map((geo) => (
                           <Geography
@@ -362,7 +406,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
                 <DeviceTooltip
                   device={selectedDevice}
                   position={tooltipPosition}
-                  onClose={() => setSelectedDevice(null)}
+                  onClose={() => dispatch({ type: "DESELECT_DEVICE" })}
                   onShowTrail={handleShowTrail}
                   containerRef={containerRef}
                   trailActive={trailDevice?.id === selectedDevice.id}
@@ -397,7 +441,7 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
             <GeofencePanel
               geofences={geofences}
               showGeofences={showGeofences}
-              onToggleGeofences={() => setShowGeofences(!showGeofences)}
+              onToggleGeofences={() => dispatch({ type: "TOGGLE_GEOFENCES" })}
               onSelectGeofence={handleSelectGeofence}
               onCreateGeofence={() => {
                 // In production: open create geofence modal
