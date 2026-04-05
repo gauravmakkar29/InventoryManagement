@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { lttbDownsample } from "@/components/charts/downsample";
 import {
   Thermometer,
   Cpu,
@@ -182,16 +183,28 @@ function TimeSeriesChart({
 
   const visibleMetrics = metrics.filter((m) => activeMetrics.has(m.key));
 
+  // Downsample to ~2px per point when data exceeds chart pixel width (#373)
+  const maxPoints = Math.floor(chartW / 2);
+  const downsampledData = useMemo(() => {
+    if (data.length <= maxPoints) return data;
+    return lttbDownsample(
+      data,
+      maxPoints,
+      (_d, i) => i,
+      (d) => d.temperature,
+    );
+  }, [data, maxPoints]);
+
   // Compute y-axis range per metric (normalize all to 0-1 for overlay)
   const paths = visibleMetrics.map((metric) => {
-    const values = data.map((d) => d[metric.key] as number);
+    const values = downsampledData.map((d) => d[metric.key] as number);
     const min = Math.min(...values);
     const max = Math.max(...values);
     const range = max - min || 1;
 
     const points = values
       .map((v, i) => {
-        const x = padding.left + (i / (data.length - 1)) * chartW;
+        const x = padding.left + (i / (downsampledData.length - 1)) * chartW;
         const y = padding.top + chartH - ((v - min) / range) * chartH;
         return `${x},${y}`;
       })
@@ -202,20 +215,20 @@ function TimeSeriesChart({
 
   // X-axis labels
   const xLabels = useMemo(() => {
-    if (data.length === 0) return [];
+    if (downsampledData.length === 0) return [];
     const count = 6;
-    const step = Math.floor(data.length / count);
+    const step = Math.floor(downsampledData.length / count);
     return Array.from({ length: count + 1 }, (_, i) => {
-      const idx = Math.min(i * step, data.length - 1);
-      const d = new Date(data[idx]!.timestamp);
+      const idx = Math.min(i * step, downsampledData.length - 1);
+      const d = new Date(downsampledData[idx]!.timestamp);
       return {
-        x: padding.left + (idx / (data.length - 1)) * chartW,
+        x: padding.left + (idx / (downsampledData.length - 1)) * chartW,
         label: d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }),
       };
     });
-  }, [data, chartW]);
+  }, [downsampledData, chartW]);
 
-  if (data.length === 0 || visibleMetrics.length === 0) {
+  if (downsampledData.length === 0 || visibleMetrics.length === 0) {
     return (
       <div className="flex h-[280px] items-center justify-center text-[14px] text-muted-foreground">
         Select a metric to display the chart
