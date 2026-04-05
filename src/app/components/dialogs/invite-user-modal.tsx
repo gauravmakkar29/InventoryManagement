@@ -4,6 +4,9 @@ import { X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import type { Role } from "@/lib/rbac";
+import { FormField } from "@/components/form/form-field";
+import { FormInput } from "@/components/form/form-input";
+import { FormSelect } from "@/components/form/form-select";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -134,25 +137,16 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
 
   if (!open) return null;
 
-  const inputClass =
-    "h-10 w-full border border-border bg-card px-3 text-[15px] text-foreground placeholder:text-muted-foreground rounded-lg focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]";
-
-  const labelClass = "block text-[14px] font-medium text-foreground/80 mb-1";
-
   return (
     <FocusTrap>
       <div className="fixed inset-0 z-[60] flex items-center justify-center">
-        {/* Backdrop */}
         <div className="absolute inset-0 bg-black/30" onClick={handleClose} aria-hidden="true" />
-
-        {/* Modal */}
         <div
           className="relative z-10 w-full max-w-[480px] rounded-2xl bg-card shadow-xl"
           role="dialog"
           aria-modal="true"
           aria-label="Invite user"
         >
-          {/* Header */}
           <div className="flex items-center justify-between border-b border-border/60 px-6 py-4">
             <h3 className="text-[16px] font-semibold text-foreground">Invite User</h3>
             <button
@@ -168,113 +162,75 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
             </button>
           </div>
 
-          {/* Body */}
+          {/* Story 23.4: Shared FormField/FormInput/FormSelect */}
           <form onSubmit={handleSubmit} className="px-6 py-5 space-y-4">
-            {/* Email */}
-            <div>
-              <label htmlFor="invite-email" className={labelClass}>
-                Email <span className="text-red-500">*</span>
-              </label>
-              <input
+            <FormField label="Email" htmlFor="invite-email" required error={errors.email}>
+              <FormInput
                 id="invite-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="user@company.com"
-                aria-describedby={errors.email ? "invite-email-error" : undefined}
-                aria-invalid={!!errors.email || undefined}
-                className={cn(inputClass, errors.email && "border-red-400")}
+                error={!!errors.email}
               />
-              {errors.email && (
-                <p id="invite-email-error" className="mt-1 text-[14px] text-red-500" role="alert">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+            </FormField>
 
-            {/* Name row */}
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="invite-first-name" className={labelClass}>
-                  First Name <span className="text-red-500">*</span>
-                </label>
-                <input
+              <FormField
+                label="First Name"
+                htmlFor="invite-first-name"
+                required
+                error={errors.firstName}
+              >
+                <FormInput
                   id="invite-first-name"
-                  type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Jane"
-                  aria-describedby={errors.firstName ? "invite-first-name-error" : undefined}
-                  aria-invalid={!!errors.firstName || undefined}
-                  className={cn(inputClass, errors.firstName && "border-red-400")}
+                  error={!!errors.firstName}
                 />
-                {errors.firstName && (
-                  <p
-                    id="invite-first-name-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.firstName}
-                  </p>
-                )}
-              </div>
-              <div>
-                <label htmlFor="invite-last-name" className={labelClass}>
-                  Last Name <span className="text-red-500">*</span>
-                </label>
-                <input
+              </FormField>
+              <FormField
+                label="Last Name"
+                htmlFor="invite-last-name"
+                required
+                error={errors.lastName}
+              >
+                <FormInput
                   id="invite-last-name"
-                  type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Martinez"
-                  aria-describedby={errors.lastName ? "invite-last-name-error" : undefined}
-                  aria-invalid={!!errors.lastName || undefined}
-                  className={cn(inputClass, errors.lastName && "border-red-400")}
+                  error={!!errors.lastName}
                 />
-                {errors.lastName && (
-                  <p
-                    id="invite-last-name-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.lastName}
-                  </p>
-                )}
-              </div>
+              </FormField>
             </div>
 
-            {/* Role */}
-            <div>
-              <label htmlFor="invite-role" className={labelClass}>
-                Role <span className="text-red-500">*</span>
-              </label>
-              <select
+            <FormField label="Role" htmlFor="invite-role" required>
+              <FormSelect
                 id="invite-role"
                 value={role}
                 onChange={(e) => setRole(e.target.value as Role)}
-                className={inputClass}
               >
                 {ROLES.map((r) => (
                   <option key={r} value={r}>
                     {r}
                   </option>
                 ))}
-              </select>
-            </div>
+              </FormSelect>
+            </FormField>
 
-            {/* Department */}
-            <div>
-              <label htmlFor="invite-department" className={labelClass}>
-                Department <span className="text-red-500">*</span>
-              </label>
-              <select
+            <FormField
+              label="Department"
+              htmlFor="invite-department"
+              required
+              error={errors.department}
+            >
+              <FormSelect
                 id="invite-department"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                aria-describedby={errors.department ? "invite-department-error" : undefined}
-                aria-invalid={!!errors.department || undefined}
-                className={cn(inputClass, errors.department && "border-red-400")}
+                error={!!errors.department}
               >
                 <option value="">Select department</option>
                 {DEPARTMENTS.map((d) => (
@@ -282,47 +238,26 @@ export function InviteUserModal({ open, onClose, onInvite }: InviteUserModalProp
                     {d}
                   </option>
                 ))}
-              </select>
-              {errors.department && (
-                <p
-                  id="invite-department-error"
-                  className="mt-1 text-[14px] text-red-500"
-                  role="alert"
-                >
-                  {errors.department}
-                </p>
-              )}
-            </div>
+              </FormSelect>
+            </FormField>
 
-            {/* Customer — visible only for CustomerAdmin */}
             {role === "CustomerAdmin" && (
-              <div>
-                <label htmlFor="invite-customer" className={labelClass}>
-                  Customer <span className="text-red-500">*</span>
-                </label>
-                <input
+              <FormField
+                label="Customer"
+                htmlFor="invite-customer"
+                required
+                error={errors.customer}
+              >
+                <FormInput
                   id="invite-customer"
-                  type="text"
                   value={customer}
                   onChange={(e) => setCustomer(e.target.value)}
                   placeholder="e.g. Sungrow Power"
-                  aria-describedby={errors.customer ? "invite-customer-error" : undefined}
-                  aria-invalid={!!errors.customer || undefined}
-                  className={cn(inputClass, errors.customer && "border-red-400")}
+                  error={!!errors.customer}
                 />
-                {errors.customer && (
-                  <p
-                    id="invite-customer-error"
-                    className="mt-1 text-[14px] text-red-500"
-                    role="alert"
-                  >
-                    {errors.customer}
-                  </p>
-                )}
-              </div>
+              </FormField>
             )}
 
-            {/* Actions */}
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 type="button"
