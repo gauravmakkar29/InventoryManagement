@@ -31,6 +31,7 @@ import {
   generateMockTrail,
   clusterDevices,
   computeGeofences,
+  filterByViewport,
 } from "./geo-location/geo-location-types";
 
 // Re-export for external consumers
@@ -73,13 +74,19 @@ export function GeoLocationMap({ devices }: { devices: GeoDevice[] }) {
       .filter((d): d is ResolvedDevice => d !== null);
   }, [filteredDevices]);
 
-  // Story 10.2: Compute clusters
-  const { clusters, singles } = useMemo(
-    () => clusterDevices(mappableDevices, zoom),
-    [mappableDevices, zoom],
+  // Story #374: Viewport culling — only process visible devices for clustering/rendering
+  const viewportDevices = useMemo(
+    () => filterByViewport(mappableDevices, center, zoom),
+    [mappableDevices, center, zoom],
   );
 
-  // Story 10.4: Compute geofences with device counts
+  // Story 10.2: Compute clusters (from viewport-filtered devices)
+  const { clusters, singles } = useMemo(
+    () => clusterDevices(viewportDevices, zoom),
+    [viewportDevices, zoom],
+  );
+
+  // Story 10.4: Compute geofences with device counts (full dataset for accurate counts)
   const geofences = useMemo(
     () => computeGeofences(mappableDevices, DEFAULT_GEOFENCES),
     [mappableDevices],

@@ -235,6 +235,36 @@ export function clusterDevices(
   return { clusters, singles };
 }
 
+/**
+ * Filter devices to those visible in the current map viewport plus a buffer.
+ * Prevents processing off-screen devices in clustering and geofence calculations.
+ * @see Story #374 — Viewport culling for 500+ device scale
+ */
+export function filterByViewport(
+  devices: ResolvedDevice[],
+  center: [number, number],
+  zoom: number,
+  bufferFactor = 0.1,
+): ResolvedDevice[] {
+  // Mercator projection: visible lat/lng range shrinks with zoom
+  const latRange = 180 / zoom;
+  const lngRange = 360 / zoom;
+  const latBuffer = latRange * bufferFactor;
+  const lngBuffer = lngRange * bufferFactor;
+  const minLat = center[1] - latRange / 2 - latBuffer;
+  const maxLat = center[1] + latRange / 2 + latBuffer;
+  const minLng = center[0] - lngRange / 2 - lngBuffer;
+  const maxLng = center[0] + lngRange / 2 + lngBuffer;
+
+  return devices.filter(
+    (d) =>
+      d.resolvedLat >= minLat &&
+      d.resolvedLat <= maxLat &&
+      d.resolvedLng >= minLng &&
+      d.resolvedLng <= maxLng,
+  );
+}
+
 /** Compute geofences with device counts */
 export function computeGeofences(devices: ResolvedDevice[], baseGeofences: Geofence[]): Geofence[] {
   return baseGeofences.map((gf) => {
