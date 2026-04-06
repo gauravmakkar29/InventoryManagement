@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { TimeRange, KpiCard, AnalyticsAuditEntry } from "../mock-data/analytics-data";
 import { TIME_RANGE_OPTIONS, KPI_DATA, AUDIT_LOG_DATA } from "../mock-data/analytics-data";
-
-const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
 // ---------------------------------------------------------------------------
 // Export Helpers
@@ -65,8 +66,24 @@ export function useAnalyticsData() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Server state via TanStack Query (mock data with simulated latency)
+  const {
+    data: auditData = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: queryKeys.auditLogs.list({ scope: "analytics" }),
+    queryFn: mockQueryFn(AUDIT_LOG_DATA),
+    initialData: AUDIT_LOG_DATA,
+  });
+
+  const { data: kpiData = [] } = useQuery({
+    queryKey: queryKeys.dashboard.metrics(),
+    queryFn: mockQueryFn(KPI_DATA),
+    initialData: KPI_DATA,
+  });
+
   const filteredAuditLogs = useMemo(() => {
-    const auditData = isMock ? AUDIT_LOG_DATA : [];
     if (!searchQuery.trim()) return auditData;
     const q = searchQuery.toLowerCase();
     return auditData.filter(
@@ -77,7 +94,7 @@ export function useAnalyticsData() {
         entry.details.toLowerCase().includes(q) ||
         new Date(entry.timestamp).toLocaleString("en-US").toLowerCase().includes(q),
     );
-  }, [searchQuery]);
+  }, [auditData, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(filteredAuditLogs.length / PAGE_SIZE));
   const paginatedLogs = filteredAuditLogs.slice(
@@ -102,7 +119,7 @@ export function useAnalyticsData() {
   };
 
   const handleExportJSON = () => {
-    generateJSON(filteredAuditLogs, isMock ? KPI_DATA : [], range);
+    generateJSON(filteredAuditLogs, kpiData, range);
   };
 
   return {
@@ -119,5 +136,7 @@ export function useAnalyticsData() {
     handleRangeChange,
     handleExportCSV,
     handleExportJSON,
+    isLoading,
+    error,
   };
 }

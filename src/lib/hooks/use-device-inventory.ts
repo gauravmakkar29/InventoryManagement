@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { DeviceStatus } from "../types";
 import type { DeviceSearchFilters } from "../opensearch-types";
@@ -6,8 +7,8 @@ import type { MockDevice } from "../mock-data/inventory-data";
 import { MOCK_DEVICES } from "../mock-data/inventory-data";
 import type { CreateDevicePayload } from "../types/device";
 import { useLocalPagination } from "./use-paginated-query";
-
-const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
 type SortField = "name" | "serial" | "model" | "status" | "location" | "health";
 type SortDir = "asc" | "desc";
@@ -15,20 +16,34 @@ const PAGE_SIZE = 6;
 
 export type { SortField, SortDir };
 
+const deviceQueryKey = queryKeys.devices.list();
+
 export function useDeviceInventory() {
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState("");
   const [statusFilter] = useState<string>("all");
   const [locationFilter] = useState<string>("all");
   const [advancedFilters, setAdvancedFilters] = useState<DeviceSearchFilters>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
-  const [devices, setDevices] = useState<MockDevice[]>(isMock ? MOCK_DEVICES : []);
+
+  const {
+    data: devices = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: deviceQueryKey,
+    queryFn: mockQueryFn(MOCK_DEVICES),
+    initialData: MOCK_DEVICES,
+  });
+
   const handleStatusChange = useCallback(
     (deviceId: string, newStatus: DeviceStatus) => {
       try {
         const device = devices.find((d) => d.id === deviceId);
-        setDevices((prev) =>
-          prev.map((d) =>
+        queryClient.setQueryData<MockDevice[]>(deviceQueryKey, (old) =>
+          (old ?? []).map((d) =>
             d.id === deviceId
               ? {
                   ...d,
@@ -47,32 +62,38 @@ export function useDeviceInventory() {
         );
       }
     },
-    [devices],
+    [devices, queryClient],
   );
 
-  const handleCreateDevice = useCallback((payload: CreateDevicePayload) => {
-    try {
-      const newDevice: MockDevice = {
-        id: `d${Date.now()}`,
-        name: payload.name,
-        serial: payload.serial,
-        model: payload.model,
-        status: payload.status,
-        location: payload.location,
-        health: payload.status === DeviceStatus.Online ? 100 : 0,
-        firmware: payload.firmware,
-        lastSeen: "just now",
-        lat: payload.lat,
-        lng: payload.lng,
-      };
-      setDevices((prev) => [newDevice, ...prev]);
-      toast.success(`Device ${payload.name} created`);
-    } catch (err) {
-      toast.error(
-        `Failed to create device: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
+  const handleCreateDevice = useCallback(
+    (payload: CreateDevicePayload) => {
+      try {
+        const newDevice: MockDevice = {
+          id: `d${Date.now()}`,
+          name: payload.name,
+          serial: payload.serial,
+          model: payload.model,
+          status: payload.status,
+          location: payload.location,
+          health: payload.status === DeviceStatus.Online ? 100 : 0,
+          firmware: payload.firmware,
+          lastSeen: "just now",
+          lat: payload.lat,
+          lng: payload.lng,
+        };
+        queryClient.setQueryData<MockDevice[]>(deviceQueryKey, (old) => [
+          newDevice,
+          ...(old ?? []),
+        ]);
+        toast.success(`Device ${payload.name} created`);
+      } catch (err) {
+        toast.error(
+          `Failed to create device: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient],
+  );
 
   const handleSort = useCallback(
     (field: SortField) => {
@@ -219,5 +240,7 @@ export function useDeviceInventory() {
     totalPages,
     startIdx,
     endIdx,
+    isLoading,
+    error,
   };
 }

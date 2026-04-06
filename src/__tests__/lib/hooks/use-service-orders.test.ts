@@ -1,6 +1,17 @@
 import { describe, it, expect, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createElement, type ReactNode } from "react";
 import { useServiceOrders } from "@/lib/hooks/use-service-orders";
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(QueryClientProvider, { client: queryClient }, children);
+  };
+}
 
 // Mock sonner toast
 vi.mock("sonner", () => ({
@@ -13,12 +24,12 @@ vi.mock("sonner", () => ({
 
 describe("useServiceOrders", () => {
   it("initializes with orders from INITIAL_ORDERS", () => {
-    const { result } = renderHook(() => useServiceOrders());
+    const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
     expect(result.current.orders.length).toBeGreaterThan(0);
   });
 
   it("starts with 'all' filters", () => {
-    const { result } = renderHook(() => useServiceOrders());
+    const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
     expect(result.current.statusFilter).toBe("all");
     expect(result.current.priorityFilter).toBe("all");
     expect(result.current.searchQuery).toBe("");
@@ -30,7 +41,7 @@ describe("useServiceOrders", () => {
 
   describe("filtering", () => {
     it("filters by status", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setStatusFilter("Scheduled");
@@ -40,7 +51,7 @@ describe("useServiceOrders", () => {
     });
 
     it("filters by priority", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setPriorityFilter("High");
@@ -50,7 +61,7 @@ describe("useServiceOrders", () => {
     });
 
     it("filters by search query", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
       const firstOrder = result.current.orders[0]!;
 
       act(() => {
@@ -61,7 +72,7 @@ describe("useServiceOrders", () => {
     });
 
     it("search matches technician name", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setSearchQuery("Martinez");
@@ -73,7 +84,7 @@ describe("useServiceOrders", () => {
     });
 
     it("can combine status and priority filters", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setStatusFilter("Scheduled");
@@ -87,7 +98,7 @@ describe("useServiceOrders", () => {
     });
 
     it("clears all filters", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
       const totalCount = result.current.orders.length;
 
       act(() => {
@@ -113,7 +124,7 @@ describe("useServiceOrders", () => {
 
   describe("ordersByStatus", () => {
     it("groups orders by status", () => {
-      const { result } = renderHook(() => useServiceOrders());
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
 
       const grouped = result.current.ordersByStatus;
       expect(grouped).toHaveProperty("Scheduled");
@@ -130,8 +141,8 @@ describe("useServiceOrders", () => {
   // ===========================================================================
 
   describe("handleMove", () => {
-    it("moves an order to a new status", () => {
-      const { result } = renderHook(() => useServiceOrders());
+    it("moves an order to a new status", async () => {
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
       const scheduledOrder = result.current.orders.find((o) => o.status === "Scheduled");
       if (!scheduledOrder) return;
 
@@ -139,20 +150,24 @@ describe("useServiceOrders", () => {
         result.current.handleMove(scheduledOrder.id, "InProgress");
       });
 
-      const updated = result.current.orders.find((o) => o.id === scheduledOrder.id);
-      expect(updated?.status).toBe("InProgress");
+      await waitFor(() => {
+        const updated = result.current.orders.find((o) => o.id === scheduledOrder.id);
+        expect(updated?.status).toBe("InProgress");
+      });
     });
 
-    it("moves to Completed status", () => {
-      const { result } = renderHook(() => useServiceOrders());
+    it("moves to Completed status", async () => {
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
       const order = result.current.orders[0]!;
 
       act(() => {
         result.current.handleMove(order.id, "Completed");
       });
 
-      const updated = result.current.orders.find((o) => o.id === order.id);
-      expect(updated?.status).toBe("Completed");
+      await waitFor(() => {
+        const updated = result.current.orders.find((o) => o.id === order.id);
+        expect(updated?.status).toBe("Completed");
+      });
     });
   });
 
@@ -161,8 +176,8 @@ describe("useServiceOrders", () => {
   // ===========================================================================
 
   describe("handleCreate", () => {
-    it("creates a new order with auto-generated ID", () => {
-      const { result } = renderHook(() => useServiceOrders());
+    it("creates a new order with auto-generated ID", async () => {
+      const { result } = renderHook(() => useServiceOrders(), { wrapper: createWrapper() });
       const countBefore = result.current.orders.length;
 
       act(() => {
@@ -180,7 +195,9 @@ describe("useServiceOrders", () => {
         });
       });
 
-      expect(result.current.orders.length).toBe(countBefore + 1);
+      await waitFor(() => {
+        expect(result.current.orders.length).toBe(countBefore + 1);
+      });
       const newOrder = result.current.orders.find((o) => o.title === "New Test Order");
       expect(newOrder).toBeDefined();
       expect(newOrder!.id).toMatch(/^SO-\d+$/);

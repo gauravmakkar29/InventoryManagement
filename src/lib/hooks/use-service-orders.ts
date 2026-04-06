@@ -1,9 +1,10 @@
 import { useState, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { ServiceOrder, Status } from "../mock-data/service-order-data";
 import { INITIAL_ORDERS, STATUS_LABELS } from "../mock-data/service-order-data";
-
-const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
 function generateNextId(orders: ServiceOrder[]): string {
   const maxNum = orders.reduce((max, o) => {
@@ -31,8 +32,21 @@ function exportToCsv(orders: ServiceOrder[]): void {
   toast.success("CSV exported successfully");
 }
 
+const orderQueryKey = queryKeys.serviceOrders.list();
+
 export function useServiceOrders() {
-  const [orders, setOrders] = useState<ServiceOrder[]>(isMock ? INITIAL_ORDERS : []);
+  const queryClient = useQueryClient();
+
+  const {
+    data: orders = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: orderQueryKey,
+    queryFn: mockQueryFn(INITIAL_ORDERS),
+    initialData: INITIAL_ORDERS,
+  });
+
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -67,14 +81,21 @@ export function useServiceOrders() {
     return grouped;
   }, [filteredOrders]);
 
-  const handleMove = useCallback((id: string, newStatus: Status) => {
-    try {
-      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, status: newStatus } : o)));
-      toast.success(`Order moved to ${STATUS_LABELS[newStatus]}`);
-    } catch (err) {
-      toast.error(`Failed to move order: ${err instanceof Error ? err.message : "Unknown error"}`);
-    }
-  }, []);
+  const handleMove = useCallback(
+    (id: string, newStatus: Status) => {
+      try {
+        queryClient.setQueryData<ServiceOrder[]>(orderQueryKey, (old) =>
+          (old ?? []).map((o) => (o.id === id ? { ...o, status: newStatus } : o)),
+        );
+        toast.success(`Order moved to ${STATUS_LABELS[newStatus]}`);
+      } catch (err) {
+        toast.error(
+          `Failed to move order: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient],
+  );
 
   const handleCreate = useCallback(
     (order: ServiceOrder) => {
@@ -83,7 +104,10 @@ export function useServiceOrders() {
           ...order,
           id: generateNextId(orders),
         };
-        setOrders((prev) => [...prev, newOrder]);
+        queryClient.setQueryData<ServiceOrder[]>(orderQueryKey, (old) => [
+          ...(old ?? []),
+          newOrder,
+        ]);
         toast.success(`Service order ${newOrder.id} created`);
         return newOrder;
       } catch (err) {
@@ -93,7 +117,7 @@ export function useServiceOrders() {
         return order;
       }
     },
-    [orders],
+    [orders, queryClient],
   );
 
   const handleClearFilters = useCallback(() => {
@@ -120,5 +144,7 @@ export function useServiceOrders() {
     handleCreate,
     handleClearFilters,
     handleExport,
+    isLoading,
+    error,
   };
 }

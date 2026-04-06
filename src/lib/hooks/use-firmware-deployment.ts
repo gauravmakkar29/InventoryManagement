@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type {
   FirmwareEntry,
@@ -7,6 +8,8 @@ import type {
   AuditAction,
 } from "../types/deployment";
 import { INITIAL_FIRMWARE } from "../types/deployment-constants";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
 /** Pending confirmation state exposed for ConfirmDialog rendering (Story 21.2) */
 export interface FirmwareConfirmation {
@@ -17,11 +20,24 @@ export interface FirmwareConfirmation {
   confirmLabel: string;
 }
 
+const firmwareQueryKey = queryKeys.firmware.list();
+
 export function useFirmwareDeployment(
   currentUser: string,
   addAuditEntry: (action: AuditAction, resourceType: string, resourceId: string) => void,
 ) {
-  const [firmware, setFirmware] = useState<FirmwareEntry[]>(INITIAL_FIRMWARE);
+  const queryClient = useQueryClient();
+
+  const {
+    data: firmware = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: firmwareQueryKey,
+    queryFn: mockQueryFn(INITIAL_FIRMWARE),
+    initialData: INITIAL_FIRMWARE,
+  });
+
   const [fwStatusFilter, setFwStatusFilter] = useState<FirmwareStatus | "All">("All");
   const [fwModelFilter, setFwModelFilter] = useState<string>("All");
 
@@ -76,7 +92,10 @@ export function useFirmwareDeployment(
           fileSize: data.fileSize,
           checksum: data.checksum,
         };
-        setFirmware((prev) => [newEntry, ...prev]);
+        queryClient.setQueryData<FirmwareEntry[]>(firmwareQueryKey, (old) => [
+          newEntry,
+          ...(old ?? []),
+        ]);
         addAuditEntry("Created", "Firmware", `FW#${newEntry.id}`);
         toast.success(`Firmware ${data.version} uploaded successfully`);
         onComplete?.();
@@ -86,7 +105,7 @@ export function useFirmwareDeployment(
         );
       }
     },
-    [currentUser, addAuditEntry],
+    [currentUser, addAuditEntry, queryClient],
   );
 
   const advanceStage = useCallback(
@@ -108,8 +127,8 @@ export function useFirmwareDeployment(
           confirmLabel: "Advance",
         });
         pendingActionRef.current = () => {
-          setFirmware((prev) =>
-            prev.map((f) =>
+          queryClient.setQueryData<FirmwareEntry[]>(firmwareQueryKey, (old) =>
+            (old ?? []).map((f) =>
               f.id === id
                 ? {
                     ...f,
@@ -136,8 +155,8 @@ export function useFirmwareDeployment(
           confirmLabel: "Approve",
         });
         pendingActionRef.current = () => {
-          setFirmware((prev) =>
-            prev.map((f) =>
+          queryClient.setQueryData<FirmwareEntry[]>(firmwareQueryKey, (old) =>
+            (old ?? []).map((f) =>
               f.id === id
                 ? {
                     ...f,
@@ -154,7 +173,7 @@ export function useFirmwareDeployment(
         };
       }
     },
-    [firmware, currentUser, addAuditEntry],
+    [firmware, currentUser, addAuditEntry, queryClient],
   );
 
   const deprecateFirmware = useCallback(
@@ -170,8 +189,8 @@ export function useFirmwareDeployment(
       });
       pendingActionRef.current = () => {
         try {
-          setFirmware((prev) =>
-            prev.map((f) =>
+          queryClient.setQueryData<FirmwareEntry[]>(firmwareQueryKey, (old) =>
+            (old ?? []).map((f) =>
               f.id === id
                 ? {
                     ...f,
@@ -191,7 +210,7 @@ export function useFirmwareDeployment(
         }
       };
     },
-    [firmware, addAuditEntry],
+    [firmware, addAuditEntry, queryClient],
   );
 
   const activateFirmware = useCallback(
@@ -207,8 +226,8 @@ export function useFirmwareDeployment(
       });
       pendingActionRef.current = () => {
         try {
-          setFirmware((prev) =>
-            prev.map((f) =>
+          queryClient.setQueryData<FirmwareEntry[]>(firmwareQueryKey, (old) =>
+            (old ?? []).map((f) =>
               f.id === id
                 ? { ...f, stage: "Uploaded" as FirmwareStage, status: "Pending" as FirmwareStatus }
                 : f,
@@ -223,7 +242,7 @@ export function useFirmwareDeployment(
         }
       };
     },
-    [firmware, addAuditEntry],
+    [firmware, addAuditEntry, queryClient],
   );
 
   const confirmAction = useCallback(() => {
@@ -252,5 +271,7 @@ export function useFirmwareDeployment(
     pendingConfirmation,
     confirmAction,
     cancelAction,
+    isLoading,
+    error,
   };
 }

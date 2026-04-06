@@ -1,13 +1,29 @@
 import { useState, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { generateCSV } from "../../lib/report-generator";
 import type { AuditEntry, AuditAction, AuditSortField, SortDirection } from "../types/deployment";
 import { INITIAL_AUDIT, AUDIT_PAGE_SIZE } from "../types/deployment-constants";
 import { getDefaultDateRange } from "../types/deployment-utils";
 import { useLocalPagination } from "./use-paginated-query";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
+
+const auditQueryKey = queryKeys.auditLogs.list();
 
 export function useAuditLog(currentUser: string) {
-  const [auditLog, setAuditLog] = useState<AuditEntry[]>(INITIAL_AUDIT);
+  const queryClient = useQueryClient();
+
+  const {
+    data: auditLog = [],
+    isLoading: queryLoading,
+    error: queryError,
+  } = useQuery({
+    queryKey: auditQueryKey,
+    queryFn: mockQueryFn(INITIAL_AUDIT),
+    initialData: INITIAL_AUDIT,
+  });
+
   const defaultRange = useMemo(() => getDefaultDateRange(), []);
   const [auditStartDate, setAuditStartDate] = useState(defaultRange.start);
   const [auditEndDate, setAuditEndDate] = useState(defaultRange.end);
@@ -18,6 +34,10 @@ export function useAuditLog(currentUser: string) {
   const [auditSortDir, setAuditSortDir] = useState<SortDirection>("desc");
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditError, setAuditError] = useState<string | null>(null);
+
+  // Combine query loading with local loading state for compatibility
+  const isLoading = queryLoading || auditLoading;
+  const error = queryError ? String(queryError) : auditError;
 
   const addAuditEntry = useCallback(
     (action: AuditAction, resourceType: string, resourceId: string) => {
@@ -31,9 +51,9 @@ export function useAuditLog(currentUser: string) {
         ipAddress: "10.0.12.45",
         status: "Success",
       };
-      setAuditLog((prev) => [entry, ...prev]);
+      queryClient.setQueryData<AuditEntry[]>(auditQueryKey, (old) => [entry, ...(old ?? [])]);
     },
-    [currentUser],
+    [currentUser, queryClient],
   );
 
   const filteredAudit = useMemo(() => {
@@ -166,8 +186,8 @@ export function useAuditLog(currentUser: string) {
     setAuditPage,
     auditSortField,
     auditSortDir,
-    auditLoading,
-    auditError,
+    auditLoading: isLoading,
+    auditError: error,
     handleApplyDateRange,
     handleApplyUserFilter,
     handleClearUserFilter,

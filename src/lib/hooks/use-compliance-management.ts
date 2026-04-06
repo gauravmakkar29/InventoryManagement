@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type {
   ComplianceItem,
@@ -14,19 +15,34 @@ import {
   generateCSV,
   generateJSON,
 } from "../mock-data/compliance-data";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
-const isMock = !import.meta.env.VITE_PLATFORM || import.meta.env.VITE_PLATFORM === "mock";
+const complianceQueryKey = queryKeys.compliance.list();
+const complianceVulnQueryKey = [...queryKeys.compliance.all, "vulnerabilities"] as const;
 
 export function useComplianceManagement() {
+  const queryClient = useQueryClient();
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<ComplianceStatus | "All">("All");
   const [certFilter, setCertFilter] = useState<CertificationType | "All">("All");
-  const [complianceItems, setComplianceItems] = useState<ComplianceItem[]>(
-    isMock ? MOCK_COMPLIANCE : [],
-  );
-  const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>(
-    isMock ? MOCK_VULNERABILITIES : [],
-  );
+
+  const {
+    data: complianceItems = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: complianceQueryKey,
+    queryFn: mockQueryFn(MOCK_COMPLIANCE),
+    initialData: MOCK_COMPLIANCE,
+  });
+
+  const { data: vulnerabilities = [] } = useQuery({
+    queryKey: complianceVulnQueryKey,
+    queryFn: mockQueryFn(MOCK_VULNERABILITIES),
+    initialData: MOCK_VULNERABILITIES,
+  });
 
   const filteredItems = useMemo(() => {
     let items = complianceItems;
@@ -61,76 +77,89 @@ export function useComplianceManagement() {
     [vulnerabilities],
   );
 
-  const handleSubmitForReview = useCallback((itemId: string) => {
-    try {
-      setComplianceItems((prev) =>
-        prev.map((item) =>
-          item.id === itemId && item.status === "Pending"
-            ? { ...item, status: "In Review" as ComplianceStatus }
-            : item,
-        ),
-      );
-      toast.success("Compliance item submitted for review");
-    } catch (err) {
-      toast.error(
-        `Failed to submit for review: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
-
-  const handleApprove = useCallback((itemId: string) => {
-    try {
-      setComplianceItems((prev) =>
-        prev.map((item) =>
-          item.id === itemId && item.status === "In Review"
-            ? { ...item, status: "Approved" as ComplianceStatus }
-            : item,
-        ),
-      );
-      toast.success("Compliance item approved");
-    } catch (err) {
-      toast.error(
-        `Failed to approve compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
-
-  const handleDeprecate = useCallback((itemId: string) => {
-    try {
-      setComplianceItems((prev) =>
-        prev.map((item) =>
-          item.id === itemId && (item.status === "Approved" || item.status === "Pending")
-            ? { ...item, status: "Deprecated" as ComplianceStatus }
-            : item,
-        ),
-      );
-      toast.success("Compliance item deprecated");
-    } catch (err) {
-      toast.error(
-        `Failed to deprecate compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
-
-  const handleRemediationChange = useCallback((vulnId: string, newStatus: RemediationStatus) => {
-    const resolvedDate: string | null =
-      newStatus === "Resolved" ? (new Date().toISOString().split("T")[0] ?? null) : null;
-    const patch = { remediationStatus: newStatus, resolvedDate };
-    setVulnerabilities((prev) =>
-      prev.map((v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v)),
-    );
-    setComplianceItems((prev) =>
-      prev.map(
-        (item): ComplianceItem => ({
-          ...item,
-          vulnerabilities: item.vulnerabilities.map(
-            (v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v),
+  const handleSubmitForReview = useCallback(
+    (itemId: string) => {
+      try {
+        queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) =>
+          (old ?? []).map((item) =>
+            item.id === itemId && item.status === "Pending"
+              ? { ...item, status: "In Review" as ComplianceStatus }
+              : item,
           ),
-        }),
-      ),
-    );
-    toast.success(`Vulnerability status updated to ${newStatus}`);
-  }, []);
+        );
+        toast.success("Compliance item submitted for review");
+      } catch (err) {
+        toast.error(
+          `Failed to submit for review: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient],
+  );
+
+  const handleApprove = useCallback(
+    (itemId: string) => {
+      try {
+        queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) =>
+          (old ?? []).map((item) =>
+            item.id === itemId && item.status === "In Review"
+              ? { ...item, status: "Approved" as ComplianceStatus }
+              : item,
+          ),
+        );
+        toast.success("Compliance item approved");
+      } catch (err) {
+        toast.error(
+          `Failed to approve compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient],
+  );
+
+  const handleDeprecate = useCallback(
+    (itemId: string) => {
+      try {
+        queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) =>
+          (old ?? []).map((item) =>
+            item.id === itemId && (item.status === "Approved" || item.status === "Pending")
+              ? { ...item, status: "Deprecated" as ComplianceStatus }
+              : item,
+          ),
+        );
+        toast.success("Compliance item deprecated");
+      } catch (err) {
+        toast.error(
+          `Failed to deprecate compliance item: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient],
+  );
+
+  const handleRemediationChange = useCallback(
+    (vulnId: string, newStatus: RemediationStatus) => {
+      const resolvedDate: string | null =
+        newStatus === "Resolved" ? (new Date().toISOString().split("T")[0] ?? null) : null;
+      const patch = { remediationStatus: newStatus, resolvedDate };
+
+      queryClient.setQueryData<Vulnerability[]>(complianceVulnQueryKey, (old) =>
+        (old ?? []).map((v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v)),
+      );
+      queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) =>
+        (old ?? []).map(
+          (item): ComplianceItem => ({
+            ...item,
+            vulnerabilities: item.vulnerabilities.map(
+              (v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v),
+            ),
+          }),
+        ),
+      );
+      toast.success(`Vulnerability status updated to ${newStatus}`);
+    },
+    [queryClient],
+  );
 
   const handleExportCSV = useCallback(() => {
     const csv = generateCSV(filteredItems);
@@ -152,13 +181,25 @@ export function useComplianceManagement() {
     toast.success("Compliance report exported as JSON");
   }, [filteredItems]);
 
-  const addComplianceItem = useCallback((item: ComplianceItem) => {
-    setComplianceItems((prev) => [item, ...prev]);
-  }, []);
+  const addComplianceItem = useCallback(
+    (item: ComplianceItem) => {
+      queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) => [
+        item,
+        ...(old ?? []),
+      ]);
+    },
+    [queryClient],
+  );
 
-  const addVulnerability = useCallback((vuln: Vulnerability) => {
-    setVulnerabilities((prev) => [vuln, ...prev]);
-  }, []);
+  const addVulnerability = useCallback(
+    (vuln: Vulnerability) => {
+      queryClient.setQueryData<Vulnerability[]>(complianceVulnQueryKey, (old) => [
+        vuln,
+        ...(old ?? []),
+      ]);
+    },
+    [queryClient],
+  );
 
   return {
     search,
@@ -180,5 +221,7 @@ export function useComplianceManagement() {
     handleExportJSON,
     addComplianceItem,
     addVulnerability,
+    isLoading,
+    error,
   };
 }

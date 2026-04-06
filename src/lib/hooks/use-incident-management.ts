@@ -1,18 +1,37 @@
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type {
-  Incident,
-  IncidentStatus,
-  IsolationPolicy,
-  QuarantineZone,
-  Playbook,
-} from "../incident-types";
+import type { Incident, IncidentStatus, IsolationPolicy } from "../incident-types";
 import { MOCK_INCIDENTS, MOCK_QUARANTINE_ZONES, MOCK_PLAYBOOKS } from "../incident-mock-data";
+import { queryKeys } from "../query-keys";
+import { mockQueryFn } from "./use-mock-query";
 
 export function useIncidentManagement() {
-  const [incidents, setIncidents] = useState<Incident[]>(MOCK_INCIDENTS);
-  const [quarantineZones] = useState<QuarantineZone[]>(MOCK_QUARANTINE_ZONES);
-  const [playbooks] = useState<Playbook[]>(MOCK_PLAYBOOKS);
+  const queryClient = useQueryClient();
+
+  const {
+    data: incidents = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: queryKeys.incidents.list(),
+    queryFn: mockQueryFn(MOCK_INCIDENTS),
+    initialData: MOCK_INCIDENTS,
+  });
+
+  const { data: quarantineZones = [] } = useQuery({
+    queryKey: [...queryKeys.incidents.all, "quarantineZones"] as const,
+    queryFn: mockQueryFn(MOCK_QUARANTINE_ZONES),
+    initialData: MOCK_QUARANTINE_ZONES,
+  });
+
+  const { data: playbooks = [] } = useQuery({
+    queryKey: [...queryKeys.incidents.all, "playbooks"] as const,
+    queryFn: mockQueryFn(MOCK_PLAYBOOKS),
+    initialData: MOCK_PLAYBOOKS,
+  });
+
+  const incidentQueryKey = queryKeys.incidents.list();
 
   const isolatedCount = useMemo(() => {
     let count = 0;
@@ -24,22 +43,28 @@ export function useIncidentManagement() {
     return count;
   }, [incidents]);
 
-  const handleCreateIncident = useCallback((newIncident: Incident) => {
-    try {
-      setIncidents((prev) => [newIncident, ...prev]);
-      toast.success(`Incident ${newIncident.id} created`);
-    } catch (err) {
-      toast.error(
-        `Failed to create incident: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
+  const handleCreateIncident = useCallback(
+    (newIncident: Incident) => {
+      try {
+        queryClient.setQueryData<Incident[]>(incidentQueryKey, (old) => [
+          newIncident,
+          ...(old ?? []),
+        ]);
+        toast.success(`Incident ${newIncident.id} created`);
+      } catch (err) {
+        toast.error(
+          `Failed to create incident: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient, incidentQueryKey],
+  );
 
   const handleStatusChange = useCallback(
     (incidentId: string, newStatus: IncidentStatus, note: string) => {
       try {
-        setIncidents((prev) =>
-          prev.map((inc) => {
+        queryClient.setQueryData<Incident[]>(incidentQueryKey, (old) =>
+          (old ?? []).map((inc) => {
             if (inc.id !== incidentId) return inc;
             const event = {
               timestamp: new Date().toISOString(),
@@ -67,88 +92,97 @@ export function useIncidentManagement() {
         );
       }
     },
-    [],
+    [queryClient, incidentQueryKey],
   );
 
-  const handleIsolateConfirm = useCallback((deviceId: string, policy: IsolationPolicy) => {
-    try {
-      setIncidents((prev) =>
-        prev.map((inc) => ({
-          ...inc,
-          affectedDevices: inc.affectedDevices.map((dev) =>
-            dev.id === deviceId
-              ? {
-                  ...dev,
-                  status: "Isolated" as const,
-                  isolatedAt: new Date().toISOString(),
-                  isolationPolicy: policy,
-                }
-              : dev,
-          ),
-        })),
-      );
-      toast.success("Device isolated successfully");
-    } catch (err) {
-      toast.error(
-        `Failed to isolate device: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
+  const handleIsolateConfirm = useCallback(
+    (deviceId: string, policy: IsolationPolicy) => {
+      try {
+        queryClient.setQueryData<Incident[]>(incidentQueryKey, (old) =>
+          (old ?? []).map((inc) => ({
+            ...inc,
+            affectedDevices: inc.affectedDevices.map((dev) =>
+              dev.id === deviceId
+                ? {
+                    ...dev,
+                    status: "Isolated" as const,
+                    isolatedAt: new Date().toISOString(),
+                    isolationPolicy: policy,
+                  }
+                : dev,
+            ),
+          })),
+        );
+        toast.success("Device isolated successfully");
+      } catch (err) {
+        toast.error(
+          `Failed to isolate device: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient, incidentQueryKey],
+  );
 
-  const handleReleaseConfirm = useCallback((deviceId: string, _reason: string) => {
-    try {
-      setIncidents((prev) =>
-        prev.map((inc) => ({
-          ...inc,
-          affectedDevices: inc.affectedDevices.map((dev) =>
-            dev.id === deviceId
-              ? {
-                  ...dev,
-                  status: "Online" as const,
-                  isolatedAt: undefined,
-                  isolationPolicy: undefined,
-                }
-              : dev,
-          ),
-        })),
-      );
-      toast.success("Device released from isolation");
-    } catch (err) {
-      toast.error(
-        `Failed to release device: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
-  }, []);
+  const handleReleaseConfirm = useCallback(
+    (deviceId: string, _reason: string) => {
+      try {
+        queryClient.setQueryData<Incident[]>(incidentQueryKey, (old) =>
+          (old ?? []).map((inc) => ({
+            ...inc,
+            affectedDevices: inc.affectedDevices.map((dev) =>
+              dev.id === deviceId
+                ? {
+                    ...dev,
+                    status: "Online" as const,
+                    isolatedAt: undefined,
+                    isolationPolicy: undefined,
+                  }
+                : dev,
+            ),
+          })),
+        );
+        toast.success("Device released from isolation");
+      } catch (err) {
+        toast.error(
+          `Failed to release device: ${err instanceof Error ? err.message : "Unknown error"}`,
+        );
+      }
+    },
+    [queryClient, incidentQueryKey],
+  );
 
-  const handleStepComplete = useCallback((incidentId: string, stepNumber: number) => {
-    const updateProgress = (progress: Incident["playbookProgress"]) => {
-      if (!progress) return progress;
-      const updatedSteps = progress.steps.map((s) =>
-        s.stepNumber === stepNumber
-          ? {
-              ...s,
-              isCompleted: true,
-              completedBy: "USR-001",
-              completedByName: "Sarah Chen",
-              completedAt: new Date().toISOString(),
-            }
-          : s,
-      );
-      return {
-        ...progress,
-        completedSteps: updatedSteps.filter((s) => s.isCompleted).length,
-        steps: updatedSteps,
+  const handleStepComplete = useCallback(
+    (incidentId: string, stepNumber: number) => {
+      const updateProgress = (progress: Incident["playbookProgress"]) => {
+        if (!progress) return progress;
+        const updatedSteps = progress.steps.map((s) =>
+          s.stepNumber === stepNumber
+            ? {
+                ...s,
+                isCompleted: true,
+                completedBy: "USR-001",
+                completedByName: "Sarah Chen",
+                completedAt: new Date().toISOString(),
+              }
+            : s,
+        );
+        return {
+          ...progress,
+          completedSteps: updatedSteps.filter((s) => s.isCompleted).length,
+          steps: updatedSteps,
+        };
       };
-    };
 
-    setIncidents((prev) =>
-      prev.map((inc) =>
-        inc.id === incidentId
-          ? { ...inc, playbookProgress: updateProgress(inc.playbookProgress) }
-          : inc,
-      ),
-    );
-  }, []);
+      queryClient.setQueryData<Incident[]>(incidentQueryKey, (old) =>
+        (old ?? []).map((inc) =>
+          inc.id === incidentId
+            ? { ...inc, playbookProgress: updateProgress(inc.playbookProgress) }
+            : inc,
+        ),
+      );
+    },
+    [queryClient, incidentQueryKey],
+  );
 
   return {
     incidents,
@@ -160,5 +194,7 @@ export function useIncidentManagement() {
     handleIsolateConfirm,
     handleReleaseConfirm,
     handleStepComplete,
+    isLoading,
+    error,
   };
 }

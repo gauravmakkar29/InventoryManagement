@@ -1,6 +1,17 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createElement, type ReactNode } from "react";
 import { useAnalyticsData } from "@/lib/hooks/use-analytics-data";
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(QueryClientProvider, { client: queryClient }, children);
+  };
+}
 
 // Mock sonner toast
 vi.mock("sonner", () => ({
@@ -17,19 +28,19 @@ globalThis.URL.revokeObjectURL = vi.fn();
 
 describe("useAnalyticsData", () => {
   it("initializes with default range of 30d", () => {
-    const { result } = renderHook(() => useAnalyticsData());
+    const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
     expect(result.current.range).toBe("30d");
     expect(result.current.rangeLabel).toBe("Last 30 Days");
   });
 
   it("starts on page 1 with empty search", () => {
-    const { result } = renderHook(() => useAnalyticsData());
+    const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
     expect(result.current.currentPage).toBe(1);
     expect(result.current.searchQuery).toBe("");
   });
 
   it("has audit log data available", () => {
-    const { result } = renderHook(() => useAnalyticsData());
+    const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
     expect(result.current.filteredAuditLogs.length).toBeGreaterThan(0);
   });
 
@@ -39,7 +50,7 @@ describe("useAnalyticsData", () => {
 
   describe("time range", () => {
     it("changes range and resets page", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setCurrentPage(2);
@@ -54,7 +65,7 @@ describe("useAnalyticsData", () => {
     });
 
     it("updates range label", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleRangeChange("90d");
@@ -64,7 +75,7 @@ describe("useAnalyticsData", () => {
     });
 
     it("handles ytd range", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleRangeChange("ytd");
@@ -81,7 +92,7 @@ describe("useAnalyticsData", () => {
 
   describe("search", () => {
     it("filters audit logs by search query", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
       const totalBefore = result.current.filteredAuditLogs.length;
 
       act(() => {
@@ -101,7 +112,7 @@ describe("useAnalyticsData", () => {
     });
 
     it("resets page to 1 when searching", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setCurrentPage(2);
@@ -115,7 +126,7 @@ describe("useAnalyticsData", () => {
     });
 
     it("returns all logs for empty search", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
       const allCount = result.current.filteredAuditLogs.length;
 
       act(() => {
@@ -136,13 +147,13 @@ describe("useAnalyticsData", () => {
 
   describe("pagination", () => {
     it("paginates logs (page size = 6)", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
       expect(result.current.pageSize).toBe(6);
       expect(result.current.paginatedLogs.length).toBeLessThanOrEqual(6);
     });
 
     it("calculates total pages correctly", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
       const expectedPages = Math.max(
         1,
         Math.ceil(result.current.filteredAuditLogs.length / result.current.pageSize),
@@ -151,7 +162,7 @@ describe("useAnalyticsData", () => {
     });
 
     it("navigates to different pages", () => {
-      const { result } = renderHook(() => useAnalyticsData());
+      const { result } = renderHook(() => useAnalyticsData(), { wrapper: createWrapper() });
 
       if (result.current.totalPages > 1) {
         act(() => {

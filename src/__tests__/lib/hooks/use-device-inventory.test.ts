@@ -1,7 +1,18 @@
 import { describe, it, expect, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createElement, type ReactNode } from "react";
 import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
 import { DeviceStatus } from "@/lib/types";
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false } },
+  });
+  return function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(QueryClientProvider, { client: queryClient }, children);
+  };
+}
 
 // Mock sonner toast
 vi.mock("sonner", () => ({
@@ -14,7 +25,7 @@ vi.mock("sonner", () => ({
 
 describe("useDeviceInventory", () => {
   it("initializes with default state", () => {
-    const { result } = renderHook(() => useDeviceInventory());
+    const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
     expect(result.current.devices.length).toBeGreaterThan(0);
     expect(result.current.search).toBe("");
@@ -29,7 +40,7 @@ describe("useDeviceInventory", () => {
 
   describe("search", () => {
     it("filters devices by name", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
       const totalBefore = result.current.filteredDevices.length;
 
       act(() => {
@@ -41,7 +52,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("filters devices by serial number", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setSearch("SN-4821");
@@ -53,7 +64,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("filters by location", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setSearch("Denver");
@@ -65,7 +76,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("returns all devices for empty search", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
       const allCount = result.current.filteredDevices.length;
 
       act(() => {
@@ -86,7 +97,7 @@ describe("useDeviceInventory", () => {
 
   describe("advanced filters", () => {
     it("filters by status", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setAdvancedFilters({ status: DeviceStatus.Online });
@@ -98,7 +109,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("filters by health score range", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setAdvancedFilters({ healthScoreMin: 90, healthScoreMax: 100 });
@@ -117,7 +128,7 @@ describe("useDeviceInventory", () => {
 
   describe("sorting", () => {
     it("toggles sort direction on same field", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       expect(result.current.sortDir).toBe("asc");
 
@@ -133,7 +144,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("resets to asc when changing sort field", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleSort("name"); // toggle to desc
@@ -148,7 +159,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("sorts by health numerically", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleSort("health");
@@ -169,14 +180,14 @@ describe("useDeviceInventory", () => {
 
   describe("pagination", () => {
     it("paginates devices (page size = 6)", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       expect(result.current.paginatedDevices.length).toBeLessThanOrEqual(6);
       expect(result.current.totalPages).toBeGreaterThanOrEqual(1);
     });
 
     it("changes page correctly", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       if (result.current.totalPages > 1) {
         act(() => {
@@ -187,7 +198,7 @@ describe("useDeviceInventory", () => {
     });
 
     it("clamps page to totalPages", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.setPage(999);
@@ -201,20 +212,22 @@ describe("useDeviceInventory", () => {
   // ===========================================================================
 
   describe("handleStatusChange", () => {
-    it("updates device status", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+    it("updates device status", async () => {
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
       const firstDevice = result.current.devices[0]!;
 
       act(() => {
         result.current.handleStatusChange(firstDevice.id, DeviceStatus.Maintenance);
       });
 
-      const updated = result.current.devices.find((d) => d.id === firstDevice.id);
-      expect(updated?.status).toBe(DeviceStatus.Maintenance);
+      await waitFor(() => {
+        const updated = result.current.devices.find((d) => d.id === firstDevice.id);
+        expect(updated?.status).toBe(DeviceStatus.Maintenance);
+      });
     });
 
-    it("sets health to 0 when going offline", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+    it("sets health to 0 when going offline", async () => {
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
       const device = result.current.devices.find((d) => d.status === DeviceStatus.Online);
       if (!device) return;
 
@@ -222,8 +235,10 @@ describe("useDeviceInventory", () => {
         result.current.handleStatusChange(device.id, DeviceStatus.Offline);
       });
 
-      const updated = result.current.devices.find((d) => d.id === device.id);
-      expect(updated?.health).toBe(0);
+      await waitFor(() => {
+        const updated = result.current.devices.find((d) => d.id === device.id);
+        expect(updated?.health).toBe(0);
+      });
     });
   });
 
@@ -232,8 +247,8 @@ describe("useDeviceInventory", () => {
   // ===========================================================================
 
   describe("handleCreateDevice", () => {
-    it("adds a new device to the list", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+    it("adds a new device to the list", async () => {
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
       const countBefore = result.current.devices.length;
 
       act(() => {
@@ -247,12 +262,14 @@ describe("useDeviceInventory", () => {
         });
       });
 
-      expect(result.current.devices.length).toBe(countBefore + 1);
+      await waitFor(() => {
+        expect(result.current.devices.length).toBe(countBefore + 1);
+      });
       expect(result.current.devices[0]?.name).toBe("Test Device");
     });
 
-    it("assigns health 100 for online devices", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+    it("assigns health 100 for online devices", async () => {
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleCreateDevice({
@@ -265,11 +282,13 @@ describe("useDeviceInventory", () => {
         });
       });
 
-      expect(result.current.devices[0]?.health).toBe(100);
+      await waitFor(() => {
+        expect(result.current.devices[0]?.health).toBe(100);
+      });
     });
 
-    it("assigns health 0 for offline devices", () => {
-      const { result } = renderHook(() => useDeviceInventory());
+    it("assigns health 0 for offline devices", async () => {
+      const { result } = renderHook(() => useDeviceInventory(), { wrapper: createWrapper() });
 
       act(() => {
         result.current.handleCreateDevice({
@@ -282,7 +301,9 @@ describe("useDeviceInventory", () => {
         });
       });
 
-      expect(result.current.devices[0]?.health).toBe(0);
+      await waitFor(() => {
+        expect(result.current.devices[0]?.health).toBe(0);
+      });
     });
   });
 });
