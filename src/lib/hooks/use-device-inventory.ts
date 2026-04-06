@@ -22,8 +22,6 @@ export function useDeviceInventory() {
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState("");
-  const [statusFilter] = useState<string>("all");
-  const [locationFilter] = useState<string>("all");
   const [advancedFilters, setAdvancedFilters] = useState<DeviceSearchFilters>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDir>("asc");
@@ -121,16 +119,12 @@ export function useDeviceInventory() {
       );
     }
 
-    const activeStatus =
-      advancedFilters.status ?? (statusFilter !== "all" ? statusFilter : undefined);
-    if (activeStatus) {
-      result = result.filter((d) => d.status === activeStatus);
+    if (advancedFilters.status) {
+      result = result.filter((d) => d.status === advancedFilters.status);
     }
 
-    const activeLocation =
-      advancedFilters.location ?? (locationFilter !== "all" ? locationFilter : undefined);
-    if (activeLocation) {
-      result = result.filter((d) => d.location === activeLocation);
+    if (advancedFilters.location) {
+      result = result.filter((d) => d.location === advancedFilters.location);
     }
 
     if (advancedFilters.model) {
@@ -171,7 +165,7 @@ export function useDeviceInventory() {
     });
 
     return result;
-  }, [devices, search, statusFilter, locationFilter, advancedFilters, sortField, sortDir]);
+  }, [devices, search, advancedFilters, sortField, sortDir]);
 
   // Story 22.4: Standardized local pagination via useLocalPagination
   const pagination = useLocalPagination(filteredDevices, { pageSize: PAGE_SIZE });

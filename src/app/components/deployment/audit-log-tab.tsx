@@ -17,61 +17,41 @@ import { cn } from "../../../lib/utils";
 import { Skeleton } from "../../../components/skeleton";
 import { AUDIT_PAGE_SIZE } from "./deployment-constants";
 import { formatTimestamp, getActionBadgeClass } from "./deployment-utils";
-import type { AuditEntry, AuditSortField, SortDirection } from "./deployment-types";
+import type { AuditSortField } from "./deployment-types";
+import { useAuditLog } from "@/lib/hooks/use-audit-log";
 
 interface AuditLogTabProps {
-  sortedAudit: AuditEntry[];
-  paginatedAudit: AuditEntry[];
-  totalAuditPages: number;
-  auditStartDate: string;
-  setAuditStartDate: (value: string) => void;
-  auditEndDate: string;
-  setAuditEndDate: (value: string) => void;
-  auditDateError: string;
-  setAuditDateError: (value: string) => void;
-  auditUserFilter: string;
-  auditUserInput: string;
-  setAuditUserInput: (value: string) => void;
-  auditPage: number;
-  setAuditPage: (value: number | ((prev: number) => number)) => void;
-  auditSortField: AuditSortField | null;
-  auditSortDir: SortDirection;
-  auditLoading: boolean;
-  auditError: string | null;
-  handleApplyDateRange: () => void;
-  handleApplyUserFilter: () => void;
-  handleClearUserFilter: () => void;
-  handleSort: (field: AuditSortField) => void;
-  handleRetryAudit: () => void;
-  exportAuditCsv: () => void;
+  currentUser: string;
 }
 
-export function AuditLogTab({
-  sortedAudit,
-  paginatedAudit,
-  totalAuditPages,
-  auditStartDate,
-  setAuditStartDate,
-  auditEndDate,
-  setAuditEndDate,
-  auditDateError,
-  setAuditDateError,
-  auditUserFilter,
-  auditUserInput,
-  setAuditUserInput,
-  auditPage,
-  setAuditPage,
-  auditSortField,
-  auditSortDir,
-  auditLoading,
-  auditError,
-  handleApplyDateRange,
-  handleApplyUserFilter,
-  handleClearUserFilter,
-  handleSort,
-  handleRetryAudit,
-  exportAuditCsv,
-}: AuditLogTabProps) {
+export function AuditLogTab({ currentUser }: AuditLogTabProps) {
+  const {
+    sortedAudit,
+    paginatedAudit,
+    totalAuditPages,
+    auditStartDate,
+    setAuditStartDate,
+    auditEndDate,
+    setAuditEndDate,
+    auditDateError,
+    setAuditDateError,
+    auditUserFilter,
+    auditUserInput,
+    setAuditUserInput,
+    auditPage,
+    setAuditPage,
+    auditSortField,
+    auditSortDir,
+    auditLoading,
+    auditError,
+    handleApplyDateRange,
+    handleApplyUserFilter,
+    handleClearUserFilter,
+    handleSort,
+    handleRetryAudit,
+    exportAuditCsv,
+  } = useAuditLog(currentUser);
+
   return (
     <div className="space-y-3">
       {/* Filter Controls */}
@@ -214,14 +194,16 @@ export function AuditLogTab({
             <caption className="sr-only">Deployment audit log</caption>
             <thead className="sticky top-0 z-10">
               <tr className="border-b border-border bg-muted/50">
-                {[
-                  { field: "user" as const, label: "User" },
-                  { field: "action" as const, label: "Action" },
-                  { field: "resourceType" as const, label: "Resource Type" },
-                  { field: "timestamp" as const, label: "Timestamp" },
-                  { field: "ipAddress" as const, label: "IP Address" },
-                  { field: "status" as const, label: "Status" },
-                ].map(({ field, label }) => (
+                {(
+                  [
+                    { field: "user" as const, label: "User" },
+                    { field: "action" as const, label: "Action" },
+                    { field: "resourceType" as const, label: "Resource Type" },
+                    { field: "timestamp" as const, label: "Timestamp" },
+                    { field: "ipAddress" as const, label: "IP Address" },
+                    { field: "status" as const, label: "Status" },
+                  ] satisfies { field: AuditSortField; label: string }[]
+                ).map(({ field, label }) => (
                   <th
                     key={field}
                     scope="col"

@@ -31,7 +31,6 @@ export function Deployment() {
   const canManage = canPerformAction(role, "approve");
   const isAdmin = canPerformAction(role, "delete");
   const canViewAudit = canPerformAction(role, "approve");
-  const canManageVulns = canPerformAction(role, "approve");
 
   const currentUser = email ?? "admin@hlm.com";
 
@@ -222,18 +221,7 @@ export function Deployment() {
 
       {/* ===== Vulnerabilities Tab -- Stories 11.4, 11.5 ===== */}
       {activeTab === "vulnerabilities" && (
-        <VulnerabilityTab
-          vulnerabilities={vulnTracker.vulnerabilities}
-          filteredVulnerabilities={vulnTracker.filteredVulnerabilities}
-          paginatedVulnerabilities={vulnTracker.paginatedVulnerabilities}
-          totalVulnPages={vulnTracker.totalVulnPages}
-          vulnSeverityFilter={vulnTracker.vulnSeverityFilter}
-          setVulnSeverityFilter={vulnTracker.setVulnSeverityFilter}
-          vulnPage={vulnTracker.vulnPage}
-          setVulnPage={vulnTracker.setVulnPage}
-          canManageVulns={canManageVulns}
-          handleRemediationChange={vulnTracker.handleRemediationChange}
-        />
+        <VulnerabilityTab addAuditEntry={auditLog.addAuditEntry} />
       )}
 
       {/* ===== Download Links Tab -- Epic 26 (Story 26.7) ===== */}
@@ -245,34 +233,7 @@ export function Deployment() {
       )}
 
       {/* ===== Audit Log Tab -- Epic 8 ===== */}
-      {activeTab === "audit" && canViewAudit && (
-        <AuditLogTab
-          sortedAudit={auditLog.sortedAudit}
-          paginatedAudit={auditLog.paginatedAudit}
-          totalAuditPages={auditLog.totalAuditPages}
-          auditStartDate={auditLog.auditStartDate}
-          setAuditStartDate={auditLog.setAuditStartDate}
-          auditEndDate={auditLog.auditEndDate}
-          setAuditEndDate={auditLog.setAuditEndDate}
-          auditDateError={auditLog.auditDateError}
-          setAuditDateError={auditLog.setAuditDateError}
-          auditUserFilter={auditLog.auditUserFilter}
-          auditUserInput={auditLog.auditUserInput}
-          setAuditUserInput={auditLog.setAuditUserInput}
-          auditPage={auditLog.auditPage}
-          setAuditPage={auditLog.setAuditPage}
-          auditSortField={auditLog.auditSortField}
-          auditSortDir={auditLog.auditSortDir}
-          auditLoading={auditLog.auditLoading}
-          auditError={auditLog.auditError}
-          handleApplyDateRange={auditLog.handleApplyDateRange}
-          handleApplyUserFilter={auditLog.handleApplyUserFilter}
-          handleClearUserFilter={auditLog.handleClearUserFilter}
-          handleSort={auditLog.handleSort}
-          handleRetryAudit={auditLog.handleRetryAudit}
-          exportAuditCsv={auditLog.exportAuditCsv}
-        />
-      )}
+      {activeTab === "audit" && canViewAudit && <AuditLogTab currentUser={currentUser} />}
 
       {/* Upload Modal -- Story 11.1 */}
       <UploadFirmwareModal
