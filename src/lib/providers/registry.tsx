@@ -16,6 +16,33 @@ const ReactQueryDevtools = lazy(() =>
 import type { IApiProvider, IStorageProvider } from "./types";
 
 // =============================================================================
+// Module-level singleton — non-React access to the API provider
+// =============================================================================
+
+let _apiProvider: IApiProvider | null = null;
+
+/**
+ * Set the active API provider instance. Called by ProviderRegistry during
+ * render so the singleton is available before any queryFn fires.
+ */
+export function setApiProvider(provider: IApiProvider): void {
+  _apiProvider = provider;
+}
+
+/**
+ * Get the active API provider for non-hook contexts (e.g. hlm-api.ts facade).
+ * Throws if called before ProviderRegistry has mounted.
+ */
+export function getApiProvider(): IApiProvider {
+  if (!_apiProvider) {
+    throw new Error(
+      "API provider not initialized. Ensure ProviderRegistry has mounted before calling API functions.",
+    );
+  }
+  return _apiProvider;
+}
+
+// =============================================================================
 // Context
 // =============================================================================
 
@@ -43,6 +70,10 @@ interface ProviderRegistryProps {
  * API and Storage are plain object instances provided via context.
  */
 export function ProviderRegistry({ api, storage, AuthProvider, children }: ProviderRegistryProps) {
+  // Sync the module-level singleton so hlm-api.ts facade can delegate
+  // to the active provider without needing React context.
+  setApiProvider(api);
+
   const registryValue = useMemo(() => ({ api, storage }), [api, storage]);
 
   return (

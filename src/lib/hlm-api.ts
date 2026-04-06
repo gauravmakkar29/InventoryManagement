@@ -1,8 +1,12 @@
 /**
- * IMS Gen 2 — HLM API Client (Stub)
+ * IMS Gen 2 — HLM API Client (Facade)
  *
- * All methods return empty/mock data and log a warning.
- * Replace with real AppSync/GraphQL calls in production.
+ * Thin delegation layer: every function forwards to the active IApiProvider
+ * registered by ProviderRegistry. The provider is resolved at call time via
+ * the module-level singleton in registry.tsx.
+ *
+ * Components import from this file — the underlying provider (mock, Amplify,
+ * Terraform, CDK) is transparent to callers.
  */
 
 import type {
@@ -39,11 +43,7 @@ import type {
 } from "./opensearch-types";
 
 import { APP_BUILD_INFO } from "./app-version";
-import {
-  handleMutationResult,
-  handleBooleanMutationResult,
-  type MutationResult,
-} from "./api-error-handler";
+import { getApiProvider } from "./providers/registry";
 
 // Re-export for consumers that need to catch specific errors
 export { ApiMutationError } from "./api-error-handler";
@@ -60,109 +60,81 @@ export function getDefaultHeaders(): Record<string, string> {
   };
 }
 
-function stub<T>(name: string, fallback: T): T {
-  // Structured log context includes app version for traceability
-  const ctx = { source: "hlm-api", method: name, version: APP_BUILD_INFO.full };
-  const logger = (globalThis as Record<string, unknown>)["structuredLog"];
-  if (typeof logger === "function") {
-    (logger as (level: string, meta: Record<string, string>) => void)("warn", {
-      ...ctx,
-      message: `${name}() — returning mock data`,
-    });
-  }
-  return fallback;
-}
-
-const emptyPage = <T>(): PaginatedResponse<T> => ({
-  items: [],
-  total: 0,
-  page: 1,
-  pageSize: 25,
-  hasMore: false,
-});
-
-const emptySearch = <T>(): SearchResult<T> => ({
-  hits: [],
-  total: 0,
-  took: 0,
-  maxScore: 0,
-});
-
 // =============================================================================
-// Queries (13)
+// Queries
 // =============================================================================
 
 export async function listDevices(
-  _page?: number,
-  _pageSize?: number,
-  _filters?: Record<string, string>,
+  page?: number,
+  pageSize?: number,
+  filters?: Record<string, string>,
 ): Promise<PaginatedResponse<Device>> {
-  return stub("listDevices", emptyPage<Device>());
+  return getApiProvider().listDevices(page, pageSize, filters);
 }
 
-export async function getDevice(_id: string): Promise<Device | null> {
-  return stub("getDevice", null);
+export async function getDevice(id: string): Promise<Device | null> {
+  return getApiProvider().getDevice(id);
 }
 
-export async function searchDevices(_query: string): Promise<SearchResult<Device>> {
-  return stub("searchDevices", emptySearch<Device>());
+export async function searchDevices(query: string): Promise<SearchResult<Device>> {
+  return getApiProvider().searchDevices(query);
 }
 
 export async function listFirmware(
-  _page?: number,
-  _pageSize?: number,
+  page?: number,
+  pageSize?: number,
 ): Promise<PaginatedResponse<Firmware>> {
-  return stub("listFirmware", emptyPage<Firmware>());
+  return getApiProvider().listFirmware(page, pageSize);
 }
 
-export async function getFirmware(_id: string): Promise<Firmware | null> {
-  return stub("getFirmware", null);
+export async function getFirmware(id: string): Promise<Firmware | null> {
+  return getApiProvider().getFirmware(id);
 }
 
 export async function listServiceOrders(
-  _page?: number,
-  _pageSize?: number,
-  _status?: string,
+  page?: number,
+  pageSize?: number,
+  status?: string,
 ): Promise<PaginatedResponse<ServiceOrder>> {
-  return stub("listServiceOrders", emptyPage<ServiceOrder>());
+  return getApiProvider().listServiceOrders(page, pageSize, status);
 }
 
 export async function listCompliance(
-  _status?: string,
-  _certType?: string,
+  status?: string,
+  certType?: string,
 ): Promise<PaginatedResponse<Compliance>> {
-  return stub("listCompliance", emptyPage<Compliance>());
+  return getApiProvider().listCompliance(status, certType);
 }
 
 export async function listVulnerabilities(
-  _severity?: string,
+  severity?: string,
 ): Promise<PaginatedResponse<Vulnerability>> {
-  return stub("listVulnerabilities", emptyPage<Vulnerability>());
+  return getApiProvider().listVulnerabilities(severity);
 }
 
 export async function listAuditLogs(
-  _startDate: string,
-  _endDate: string,
-  _limit?: number,
-  _nextToken?: string,
+  startDate: string,
+  endDate: string,
+  limit?: number,
+  nextToken?: string,
 ): Promise<PaginatedResponse<AuditLog>> {
-  return stub("listAuditLogs", emptyPage<AuditLog>());
+  return getApiProvider().listAuditLogs(startDate, endDate, limit, nextToken);
 }
 
-export async function getAuditLogsByUser(_userId: string): Promise<AuditLog[]> {
-  return stub("getAuditLogsByUser", []);
+export async function getAuditLogsByUser(userId: string): Promise<AuditLog[]> {
+  return getApiProvider().getAuditLogsByUser(userId);
 }
 
-export async function getCustomer(_id: string): Promise<Customer | null> {
-  return stub("getCustomer", null);
+export async function getCustomer(id: string): Promise<Customer | null> {
+  return getApiProvider().getCustomer(id);
 }
 
 export async function listNotifications(): Promise<Notification[]> {
-  return stub("listNotifications", []);
+  return getApiProvider().listNotifications();
 }
 
 export async function getDeviceAggregations(): Promise<AggregationResult[]> {
-  return stub("getDeviceAggregations", []);
+  return getApiProvider().getDeviceAggregations();
 }
 
 export async function getDashboardMetrics(): Promise<{
@@ -172,57 +144,38 @@ export async function getDashboardMetrics(): Promise<{
   pendingApprovals: number;
   healthScore: number;
 }> {
-  return stub("getDashboardMetrics", {
-    totalDevices: 0,
-    onlineDevices: 0,
-    activeDeployments: 0,
-    pendingApprovals: 0,
-    healthScore: 0,
-  });
+  return getApiProvider().getDashboardMetrics();
 }
 
 // =============================================================================
-// Mutations (6)
-//
-// Each mutation processes its result through handleMutationResult /
-// handleBooleanMutationResult so that GraphQL errors, authorization
-// failures, and unexpected null responses surface as toast notifications
-// and thrown ApiMutationError instances. Callers MUST wrap calls in
-// try/catch to keep modals open on failure.
+// Mutations
 // =============================================================================
 
-export async function createServiceOrder(_input: Partial<ServiceOrder>): Promise<ServiceOrder> {
-  // TODO: replace stub with real GraphQL call that returns MutationResult<ServiceOrder>
-  const raw: MutationResult<ServiceOrder> = { data: stub("createServiceOrder", null) };
-  return handleMutationResult(raw, "createServiceOrder");
+export async function createServiceOrder(input: Partial<ServiceOrder>): Promise<ServiceOrder> {
+  return getApiProvider().createServiceOrder(input);
 }
 
 export async function updateServiceOrder(
-  _id: string,
-  _input: Partial<ServiceOrder>,
+  id: string,
+  input: Partial<ServiceOrder>,
 ): Promise<ServiceOrder> {
-  const raw: MutationResult<ServiceOrder> = { data: stub("updateServiceOrder", null) };
-  return handleMutationResult(raw, "updateServiceOrder");
+  return getApiProvider().updateServiceOrder(id, input);
 }
 
-export async function uploadFirmware(_input: Partial<Firmware>): Promise<Firmware> {
-  const raw: MutationResult<Firmware> = { data: stub("uploadFirmware", null) };
-  return handleMutationResult(raw, "uploadFirmware");
+export async function uploadFirmware(input: Partial<Firmware>): Promise<Firmware> {
+  return getApiProvider().uploadFirmware(input);
 }
 
-export async function approveFirmware(_id: string, _stage: string): Promise<Firmware> {
-  const raw: MutationResult<Firmware> = { data: stub("approveFirmware", null) };
-  return handleMutationResult(raw, "approveFirmware");
+export async function approveFirmware(id: string, stage: string): Promise<Firmware> {
+  return getApiProvider().approveFirmware(id, stage);
 }
 
-export async function submitComplianceReview(_id: string): Promise<Compliance> {
-  const raw: MutationResult<Compliance> = { data: stub("submitComplianceReview", null) };
-  return handleMutationResult(raw, "submitComplianceReview");
+export async function submitComplianceReview(id: string): Promise<Compliance> {
+  return getApiProvider().submitComplianceReview(id);
 }
 
-export async function acknowledgeNotification(_id: string): Promise<boolean> {
-  const raw: MutationResult<boolean> = { data: stub("acknowledgeNotification", true) };
-  return handleBooleanMutationResult(raw, "acknowledgeNotification");
+export async function acknowledgeNotification(id: string): Promise<boolean> {
+  return getApiProvider().acknowledgeNotification(id);
 }
 
 // =============================================================================
@@ -230,56 +183,52 @@ export async function acknowledgeNotification(_id: string): Promise<boolean> {
 // =============================================================================
 
 export async function getDeviceTelemetry(
-  _deviceId: string,
-  _startDate: string,
-  _endDate: string,
+  deviceId: string,
+  startDate: string,
+  endDate: string,
 ): Promise<TelemetryReading[]> {
-  return stub("getDeviceTelemetry", []);
+  return getApiProvider().getDeviceTelemetry(deviceId, startDate, endDate);
 }
 
 export async function getHeatmapAggregation(
-  _bounds?: { northLat: number; southLat: number; eastLng: number; westLng: number },
-  _precision?: number,
-  _riskThreshold?: number,
+  bounds?: { northLat: number; southLat: number; eastLng: number; westLng: number },
+  precision?: number,
+  riskThreshold?: number,
 ): Promise<HeatmapAggregation> {
-  return stub("getHeatmapAggregation", { cells: [], totalDevices: 0 });
+  return getApiProvider().getHeatmapAggregation(bounds, precision, riskThreshold);
 }
 
 export async function getBlastRadius(
-  _lat: number,
-  _lng: number,
-  _radiusKm: number,
-  _includeOffline?: boolean,
+  lat: number,
+  lng: number,
+  radiusKm: number,
+  includeOffline?: boolean,
 ): Promise<BlastRadiusResult | null> {
-  return stub("getBlastRadius", null);
+  return getApiProvider().getBlastRadius(lat, lng, radiusKm, includeOffline);
 }
 
-export async function getBlastRadiusHistory(_deviceId?: string): Promise<BlastRadiusResult[]> {
-  return stub("getBlastRadiusHistory", []);
+export async function getBlastRadiusHistory(deviceId?: string): Promise<BlastRadiusResult[]> {
+  return getApiProvider().getBlastRadiusHistory(deviceId);
 }
 
 export async function ingestTelemetry(
-  _deviceId: string,
-  _metrics: Partial<TelemetryReading>,
+  deviceId: string,
+  metrics: Partial<TelemetryReading>,
 ): Promise<TelemetryReading | null> {
-  return stub("ingestTelemetry", null);
+  return getApiProvider().ingestTelemetry(deviceId, metrics);
 }
 
 export async function runBlastRadiusSimulation(
-  _deviceId: string,
-  _radiusKm: number,
-  _failureType: FailureType,
-  _severity?: number,
+  deviceId: string,
+  radiusKm: number,
+  failureType: FailureType,
+  severity?: number,
 ): Promise<BlastRadiusResult | null> {
-  return stub("runBlastRadiusSimulation", null);
+  return getApiProvider().runBlastRadiusSimulation(deviceId, radiusKm, failureType, severity);
 }
 
 export async function getTelemetryPipelineStatus(): Promise<TelemetryPipelineStatus> {
-  return stub("getTelemetryPipelineStatus", {
-    recordsIngestedLastHour: 0,
-    health: "healthy" as const,
-    lastSuccessfulIngestion: new Date().toISOString(),
-  });
+  return getApiProvider().getTelemetryPipelineStatus();
 }
 
 // =============================================================================
@@ -288,73 +237,68 @@ export async function getTelemetryPipelineStatus(): Promise<TelemetryPipelineSta
 
 /** Story 18.2: Global search across all entity types with fuzzy matching */
 export async function searchGlobal(
-  _query: string,
-  _entityTypes?: string[],
-  _limit?: number,
+  query: string,
+  entityTypes?: string[],
+  limit?: number,
 ): Promise<GlobalSearchResponse> {
-  return stub("searchGlobal", { total: 0, results: [] });
+  return getApiProvider().searchGlobal(query, entityTypes, limit);
 }
 
 /** Story 18.3: Advanced device search with combined text + filter criteria */
 export async function searchDevicesAdvanced(
-  _query: string,
-  _filters?: DeviceSearchFilters,
+  query: string,
+  filters?: DeviceSearchFilters,
 ): Promise<SearchResult<Device>> {
-  return stub("searchDevicesAdvanced", emptySearch<Device>());
+  return getApiProvider().searchDevicesAdvanced(query, filters);
 }
 
 /** Story 18.4: Vulnerability search by CVE ID, component, or description */
 export async function searchVulnerabilities(
-  _query: string,
-  _severity?: string,
+  query: string,
+  severity?: string,
 ): Promise<SearchResult<Vulnerability>> {
-  return stub("searchVulnerabilities", emptySearch<Vulnerability>());
+  return getApiProvider().searchVulnerabilities(query, severity);
 }
 
 /** Story 18.5: Server-side aggregations for analytics charts */
 export async function getAggregation(
-  _metric: AggregationMetric,
-  _timeRange?: TimeRange,
+  metric: AggregationMetric,
+  timeRange?: TimeRange,
 ): Promise<AggregationResponse> {
-  return stub("getAggregation", { metric: _metric, data: {} });
+  return getApiProvider().getAggregation(metric, timeRange);
 }
 
 /** Story 18.6: Geo bounding box query — devices in map viewport */
 export async function searchDevicesByBounds(
-  _bounds: GeoBoundingBox,
-  _status?: string,
+  bounds: GeoBoundingBox,
+  status?: string,
 ): Promise<GeoDeviceResult[]> {
-  return stub("searchDevicesByBounds", []);
+  return getApiProvider().searchDevicesByBounds(bounds, status);
 }
 
 /** Story 18.6: Geo distance query — devices within radius of a point */
 export async function searchDevicesByDistance(
-  _params: GeoDistanceQuery,
+  params: GeoDistanceQuery,
 ): Promise<GeoDeviceResult[]> {
-  return stub("searchDevicesByDistance", []);
+  return getApiProvider().searchDevicesByDistance(params);
 }
 
 /** Story 18.6: Geo clustering — geohash_grid aggregation for map clusters */
 export async function getDeviceGeoClusters(
-  _bounds?: GeoBoundingBox,
-  _precision?: number,
+  bounds?: GeoBoundingBox,
+  precision?: number,
 ): Promise<GeoCluster[]> {
-  return stub("getDeviceGeoClusters", []);
+  return getApiProvider().getDeviceGeoClusters(bounds, precision);
 }
 
 /** Story 18.1: OSIS pipeline health status */
 export async function getOsisPipelineHealth(): Promise<PipelineHealthStatus> {
-  return stub("getOsisPipelineHealth", {
-    state: "Running" as const,
-    recordsSyncedLastHour: 0,
-    currentLagSeconds: 0,
-    lastUpdated: new Date().toISOString(),
-  });
+  return getApiProvider().getOsisPipelineHealth();
 }
 
 /** Story 18.1: Trigger full re-index from DynamoDB (Admin only) */
 export async function triggerReindex(): Promise<boolean> {
-  return stub("triggerReindex", true);
+  return getApiProvider().triggerReindex();
 }
 
 // Re-export OpenSearch types for convenience
