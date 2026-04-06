@@ -44,6 +44,18 @@ import type {
 
 import { APP_BUILD_INFO } from "./app-version";
 import { getApiProvider } from "./providers/registry";
+import {
+  safeParseResponse,
+  paginatedResponseSchema,
+  deviceResponseSchema,
+  firmwareResponseSchema,
+  serviceOrderResponseSchema,
+  complianceResponseSchema,
+  vulnerabilityResponseSchema,
+  auditLogResponseSchema,
+  customerResponseSchema,
+  dashboardMetricsResponseSchema,
+} from "./schemas/response-schemas";
 
 // Re-export for consumers that need to catch specific errors
 export { ApiMutationError } from "./api-error-handler";
@@ -69,11 +81,15 @@ export async function listDevices(
   pageSize?: number,
   filters?: Record<string, string>,
 ): Promise<PaginatedResponse<Device>> {
-  return getApiProvider().listDevices(page, pageSize, filters);
+  const result = await getApiProvider().listDevices(page, pageSize, filters);
+  safeParseResponse(paginatedResponseSchema(deviceResponseSchema), result, "listDevices");
+  return result;
 }
 
 export async function getDevice(id: string): Promise<Device | null> {
-  return getApiProvider().getDevice(id);
+  const result = await getApiProvider().getDevice(id);
+  if (result) safeParseResponse(deviceResponseSchema, result, "getDevice");
+  return result;
 }
 
 export async function searchDevices(query: string): Promise<SearchResult<Device>> {
@@ -84,11 +100,15 @@ export async function listFirmware(
   page?: number,
   pageSize?: number,
 ): Promise<PaginatedResponse<Firmware>> {
-  return getApiProvider().listFirmware(page, pageSize);
+  const result = await getApiProvider().listFirmware(page, pageSize);
+  safeParseResponse(paginatedResponseSchema(firmwareResponseSchema), result, "listFirmware");
+  return result;
 }
 
 export async function getFirmware(id: string): Promise<Firmware | null> {
-  return getApiProvider().getFirmware(id);
+  const result = await getApiProvider().getFirmware(id);
+  if (result) safeParseResponse(firmwareResponseSchema, result, "getFirmware");
+  return result;
 }
 
 export async function listServiceOrders(
@@ -96,20 +116,34 @@ export async function listServiceOrders(
   pageSize?: number,
   status?: string,
 ): Promise<PaginatedResponse<ServiceOrder>> {
-  return getApiProvider().listServiceOrders(page, pageSize, status);
+  const result = await getApiProvider().listServiceOrders(page, pageSize, status);
+  safeParseResponse(
+    paginatedResponseSchema(serviceOrderResponseSchema),
+    result,
+    "listServiceOrders",
+  );
+  return result;
 }
 
 export async function listCompliance(
   status?: string,
   certType?: string,
 ): Promise<PaginatedResponse<Compliance>> {
-  return getApiProvider().listCompliance(status, certType);
+  const result = await getApiProvider().listCompliance(status, certType);
+  safeParseResponse(paginatedResponseSchema(complianceResponseSchema), result, "listCompliance");
+  return result;
 }
 
 export async function listVulnerabilities(
   severity?: string,
 ): Promise<PaginatedResponse<Vulnerability>> {
-  return getApiProvider().listVulnerabilities(severity);
+  const result = await getApiProvider().listVulnerabilities(severity);
+  safeParseResponse(
+    paginatedResponseSchema(vulnerabilityResponseSchema),
+    result,
+    "listVulnerabilities",
+  );
+  return result;
 }
 
 export async function listAuditLogs(
@@ -118,7 +152,9 @@ export async function listAuditLogs(
   limit?: number,
   nextToken?: string,
 ): Promise<PaginatedResponse<AuditLog>> {
-  return getApiProvider().listAuditLogs(startDate, endDate, limit, nextToken);
+  const result = await getApiProvider().listAuditLogs(startDate, endDate, limit, nextToken);
+  safeParseResponse(paginatedResponseSchema(auditLogResponseSchema), result, "listAuditLogs");
+  return result;
 }
 
 export async function getAuditLogsByUser(userId: string): Promise<AuditLog[]> {
@@ -126,7 +162,9 @@ export async function getAuditLogsByUser(userId: string): Promise<AuditLog[]> {
 }
 
 export async function getCustomer(id: string): Promise<Customer | null> {
-  return getApiProvider().getCustomer(id);
+  const result = await getApiProvider().getCustomer(id);
+  if (result) safeParseResponse(customerResponseSchema, result, "getCustomer");
+  return result;
 }
 
 export async function listNotifications(): Promise<Notification[]> {
@@ -144,7 +182,9 @@ export async function getDashboardMetrics(): Promise<{
   pendingApprovals: number;
   healthScore: number;
 }> {
-  return getApiProvider().getDashboardMetrics();
+  const result = await getApiProvider().getDashboardMetrics();
+  safeParseResponse(dashboardMetricsResponseSchema, result, "getDashboardMetrics");
+  return result;
 }
 
 // =============================================================================

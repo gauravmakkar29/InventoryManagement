@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { usePolling } from "@/lib/hooks/use-polling";
 
 /**
  * Story 16.2: Connectivity Monitoring & Service Health
@@ -88,10 +89,7 @@ export function useConnectivityMonitor(intervalMs = 30000): ConnectivityState {
     setServices(newServices);
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(runChecks, intervalMs);
-    return () => clearInterval(timer);
-  }, [runChecks, intervalMs]);
+  usePolling(runChecks, intervalMs);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);

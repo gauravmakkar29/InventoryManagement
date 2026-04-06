@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { usePolling } from "@/lib/hooks/use-polling";
 import { Server, HeartPulse, Clock, AlertTriangle, Download, Printer } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -229,11 +230,8 @@ export function ExecutiveSummaryPage() {
     setLastRefresh(new Date());
   }, []);
 
-  // Auto-refresh every 60 seconds (AC5)
-  useEffect(() => {
-    const timer = setInterval(refresh, 60000);
-    return () => clearInterval(timer);
-  }, [refresh]);
+  // Auto-refresh every 60 seconds with visibility-aware backoff (AC5)
+  usePolling(refresh, 60_000);
 
   const handleExport = () => {
     // In production, use html2canvas to capture the page as PNG

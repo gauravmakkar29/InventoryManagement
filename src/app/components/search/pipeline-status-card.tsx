@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Activity, RefreshCw, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -6,6 +6,7 @@ import { getOsisPipelineHealth, triggerReindex } from "@/lib/hlm-api";
 import type { PipelineHealthStatus } from "@/lib/opensearch-types";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { usePolling } from "@/lib/hooks/use-polling";
 
 // =============================================================================
 // Story 18.1 — PipelineStatusCard
@@ -45,28 +46,14 @@ export function PipelineStatusCard() {
   const [status, setStatus] = useState<PipelineHealthStatus>(MOCK_STATUS);
   const [isReindexing, setIsReindexing] = useState(false);
 
-  // Poll pipeline health every 60 seconds
-  useEffect(() => {
-    let active = true;
-
-    const fetchStatus = async () => {
-      try {
-        const result = await getOsisPipelineHealth();
-        if (active && result) {
-          setStatus(result);
-        }
-      } catch {
-        // API stub returns mock data, errors handled silently
-      }
-    };
-
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 60_000);
-    return () => {
-      active = false;
-      clearInterval(interval);
-    };
-  }, []);
+  // Poll pipeline health every 60 seconds with visibility-aware backoff
+  usePolling(
+    useCallback(async () => {
+      const result = await getOsisPipelineHealth();
+      if (result) setStatus(result);
+    }, []),
+    60_000,
+  );
 
   const handleReindex = useCallback(async () => {
     setIsReindexing(true);
