@@ -11,6 +11,7 @@ import {
 import { cn, formatDate } from "@/lib/utils";
 import type { SBOM, SBOMFormat } from "./sbom-types";
 import type { Role } from "@/lib/rbac";
+import { canPerformAction } from "@/lib/rbac";
 import { UploadSBOMModal } from "./upload-sbom-modal";
 
 // =============================================================================
@@ -31,7 +32,7 @@ export function SBOMManagementTab({
   const [showUpload, setShowUpload] = useState(false);
   const [modelFilter, setModelFilter] = useState("all");
 
-  const canUpload = role === "Admin" || role === "Manager";
+  const canUpload = canPerformAction(role, "create");
 
   const firmwareModels = useMemo(() => {
     const models = new Set(sboms.map((s) => s.firmwareName));

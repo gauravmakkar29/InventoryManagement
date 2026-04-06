@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { DeviceStatus } from "@/lib/types";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { RequireRole } from "./require-role";
 import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
 import { ALL_STATUSES, ALL_LOCATIONS, ALL_MODELS } from "@/lib/mock-data/inventory-data";
 import type { MockDevice } from "@/lib/mock-data/inventory-data";
@@ -40,7 +41,6 @@ const DEVICE_EXPORT_COLUMNS: ExportColumn<MockDevice>[] = [
 export function Inventory() {
   const { groups } = useAuth();
   const role = getPrimaryRole(groups);
-  const canCreate = canPerformAction(role, "create");
   const canEdit = canPerformAction(role, "edit");
 
   const [activeTab, setActiveTab] = useState<Tab>("hardware");
@@ -135,7 +135,7 @@ export function Inventory() {
                 className="h-10"
               />
 
-              {canCreate && (
+              <RequireRole action="create">
                 <button
                   onClick={() => setCreateModalOpen(true)}
                   className={cn(
@@ -147,7 +147,7 @@ export function Inventory() {
                   <Plus className="h-4 w-4" aria-hidden="true" />
                   Add Device
                 </button>
-              )}
+              </RequireRole>
             </div>
           </div>
 

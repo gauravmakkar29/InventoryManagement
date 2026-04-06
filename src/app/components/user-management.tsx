@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { RequireRole } from "./require-role";
 import type { Role } from "@/lib/rbac";
 import { InviteUserModal } from "./dialogs/invite-user-modal";
 import type { InviteUserPayload } from "./dialogs/invite-user-modal";
@@ -156,7 +157,7 @@ const ROLE_OPTIONS: Array<{ label: string; value: string }> = [
 export function UserManagement() {
   const { groups } = useAuth();
   const currentRole = getPrimaryRole(groups);
-  const isAdmin = currentRole === "Admin";
+  const isAdmin = canPerformAction(currentRole, "delete");
 
   const [users, setUsers] = useState<ManagedUser[]>(INITIAL_USERS);
   const [searchQuery, setSearchQuery] = useState("");
@@ -260,7 +261,7 @@ export function UserManagement() {
             Manage platform users, roles, and access permissions
           </p>
         </div>
-        {isAdmin && (
+        <RequireRole roles={["Admin"]}>
           <button
             onClick={() => setInviteOpen(true)}
             className={cn(
@@ -272,7 +273,7 @@ export function UserManagement() {
             <UserPlus className="h-4 w-4" aria-hidden="true" />
             Invite User
           </button>
-        )}
+        </RequireRole>
       </div>
 
       {/* Filters row */}

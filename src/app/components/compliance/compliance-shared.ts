@@ -1,5 +1,6 @@
 import { Shield, ShieldCheck, ShieldX, Clock, Archive } from "lucide-react";
 import type { Role } from "../../../lib/rbac";
+import { canPerformAction } from "../../../lib/rbac";
 import type {
   ComplianceStatus,
   VulnSeverity,
@@ -46,21 +47,21 @@ export const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
 // =============================================================================
 
 export function canSubmitForReview(role: Role): boolean {
-  return role === "Admin" || role === "Manager";
+  return canPerformAction(role, "create");
 }
 
 export function canApprove(role: Role): boolean {
-  return role === "Admin";
+  return canPerformAction(role, "approve");
 }
 
 export function canDeprecate(role: Role): boolean {
-  return role === "Admin" || role === "Manager";
+  return canPerformAction(role, "approve");
 }
 
 export function canCreateVulnerability(role: Role): boolean {
-  return role === "Admin" || role === "Manager";
+  return canPerformAction(role, "create");
 }
 
 export function canUpdateRemediation(role: Role): boolean {
-  return role === "Admin" || role === "Manager";
+  return canPerformAction(role, "edit");
 }

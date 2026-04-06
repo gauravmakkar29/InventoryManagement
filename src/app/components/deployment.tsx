@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
+import { RequireRole } from "./require-role";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { useDialogManager } from "@/lib/hooks/use-dialog-manager";
 
@@ -28,9 +29,9 @@ export function Deployment() {
   const { groups, email } = useAuth();
   const role = getPrimaryRole(groups);
   const canManage = canPerformAction(role, "approve");
-  const isAdmin = role === "Admin";
-  const canViewAudit = role === "Admin" || role === "Manager";
-  const canManageVulns = role === "Admin" || role === "Manager";
+  const isAdmin = canPerformAction(role, "delete");
+  const canViewAudit = canPerformAction(role, "approve");
+  const canManageVulns = canPerformAction(role, "approve");
 
   const currentUser = email ?? "admin@hlm.com";
 
@@ -171,23 +172,27 @@ export function Deployment() {
             </button>
           ))}
         </div>
-        {activeTab === "firmware" && canManage && (
-          <button
-            onClick={() => dialogs.open("upload")}
-            className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
-          >
-            <Upload className="h-3 w-3" />
-            Upload Firmware
-          </button>
+        {activeTab === "firmware" && (
+          <RequireRole action="approve">
+            <button
+              onClick={() => dialogs.open("upload")}
+              className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
+            >
+              <Upload className="h-3 w-3" />
+              Upload Firmware
+            </button>
+          </RequireRole>
         )}
-        {activeTab === "vulnerabilities" && canManageVulns && (
-          <button
-            onClick={() => dialogs.open("vuln")}
-            className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
-          >
-            <Plus className="h-3 w-3" />
-            Add Vulnerability
-          </button>
+        {activeTab === "vulnerabilities" && (
+          <RequireRole action="approve">
+            <button
+              onClick={() => dialogs.open("vuln")}
+              className="flex items-center gap-1 rounded-sm bg-accent px-2.5 py-1.5 text-sm font-medium text-white hover:bg-accent/90 transition-colors duration-150"
+            >
+              <Plus className="h-3 w-3" />
+              Add Vulnerability
+            </button>
+          </RequireRole>
         )}
       </div>
 

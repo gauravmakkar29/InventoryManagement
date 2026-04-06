@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { getOsisPipelineHealth, triggerReindex } from "@/lib/hlm-api";
 import type { PipelineHealthStatus } from "@/lib/opensearch-types";
 import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 
 // =============================================================================
 // Story 18.1 — PipelineStatusCard
@@ -40,7 +41,7 @@ function getCardBorderColor(status: PipelineHealthStatus): string {
 
 export function PipelineStatusCard() {
   const { groups } = useAuth();
-  const isAdmin = groups.includes("Admin") || groups.includes("PlatformAdmin");
+  const isAdmin = canPerformAction(getPrimaryRole(groups), "delete");
   const [status, setStatus] = useState<PipelineHealthStatus>(MOCK_STATUS);
   const [isReindexing, setIsReindexing] = useState(false);
 
