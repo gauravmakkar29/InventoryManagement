@@ -22,7 +22,6 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canAccessPage } from "@/lib/rbac";
 import { AppVersionBadge } from "../app-version-badge";
-import { LocaleSwitcher } from "../locale-switcher";
 
 interface NavItem {
   labelKey: string;
@@ -303,11 +302,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </button>
           </>
         )}
-      </div>
-
-      {/* Locale switcher */}
-      <div className={cn("border-t border-border/40 px-3 py-2", collapsed ? "px-2" : "")}>
-        <LocaleSwitcher compact={collapsed} />
       </div>
 
       {/* App version */}
