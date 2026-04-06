@@ -135,6 +135,7 @@ export function CompliancePage() {
       {activeTab === "compliance" && (
         <ComplianceTab
           items={filteredItems}
+          vulnerabilities={vulnerabilities}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
           certFilter={certFilter}
@@ -162,7 +163,13 @@ export function CompliancePage() {
       )}
 
       {/* === Reports Tab === */}
-      {activeTab === "reports" && <ReportsTab items={filteredItems} allItems={complianceItems} />}
+      {activeTab === "reports" && (
+        <ReportsTab
+          items={filteredItems}
+          allItems={complianceItems}
+          vulnerabilities={vulnerabilities}
+        />
+      )}
 
       {/* Modals — Story 21.5: useDialogManager ensures one-at-a-time */}
       {dialogs.isDialogOpen("submit") && (
@@ -187,7 +194,7 @@ export function CompliancePage() {
                 nextAudit: "TBD",
                 findings: 0,
                 assignedTo: "Unassigned",
-                vulnerabilities: [],
+                vulnerabilityIds: [],
               };
               addComplianceItem(newItem);
               dialogs.close();

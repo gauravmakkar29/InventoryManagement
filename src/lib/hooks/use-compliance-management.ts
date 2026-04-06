@@ -143,18 +143,9 @@ export function useComplianceManagement() {
         newStatus === "Resolved" ? (new Date().toISOString().split("T")[0] ?? null) : null;
       const patch = { remediationStatus: newStatus, resolvedDate };
 
+      // Single update — no more dual-update of embedded copies (Story #297)
       queryClient.setQueryData<Vulnerability[]>(complianceVulnQueryKey, (old) =>
         (old ?? []).map((v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v)),
-      );
-      queryClient.setQueryData<ComplianceItem[]>(complianceQueryKey, (old) =>
-        (old ?? []).map(
-          (item): ComplianceItem => ({
-            ...item,
-            vulnerabilities: item.vulnerabilities.map(
-              (v): Vulnerability => (v.id === vulnId ? { ...v, ...patch } : v),
-            ),
-          }),
-        ),
       );
       toast.success(`Vulnerability status updated to ${newStatus}`);
     },
@@ -162,7 +153,7 @@ export function useComplianceManagement() {
   );
 
   const handleExportCSV = useCallback(() => {
-    const csv = generateCSV(filteredItems);
+    const csv = generateCSV(filteredItems, vulnerabilities);
     downloadFile(
       csv,
       `compliance-report-${new Date().toISOString().split("T")[0]}.csv`,
@@ -172,14 +163,14 @@ export function useComplianceManagement() {
   }, [filteredItems]);
 
   const handleExportJSON = useCallback(() => {
-    const json = generateJSON(filteredItems);
+    const json = generateJSON(filteredItems, vulnerabilities);
     downloadFile(
       json,
       `compliance-report-${new Date().toISOString().split("T")[0]}.json`,
       "application/json",
     );
     toast.success("Compliance report exported as JSON");
-  }, [filteredItems]);
+  }, [filteredItems, vulnerabilities]);
 
   const addComplianceItem = useCallback(
     (item: ComplianceItem) => {

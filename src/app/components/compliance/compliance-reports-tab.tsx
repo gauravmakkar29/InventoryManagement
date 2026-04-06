@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "../../../lib/utils";
-import type { ComplianceItem } from "../../../lib/mock-data/compliance-data";
+import type { ComplianceItem, Vulnerability } from "../../../lib/mock-data/compliance-data";
 import { REPORT_TYPES, downloadFile, generateJSON } from "../../../lib/mock-data/compliance-data";
 
 // =============================================================================
@@ -23,18 +23,21 @@ import { REPORT_TYPES, downloadFile, generateJSON } from "../../../lib/mock-data
 interface ReportsTabProps {
   items: ComplianceItem[];
   allItems: ComplianceItem[];
+  vulnerabilities: Vulnerability[];
 }
 
-export function ReportsTab({ items: _items, allItems }: ReportsTabProps) {
+export function ReportsTab({ items: _items, allItems, vulnerabilities }: ReportsTabProps) {
   const stats = useMemo(() => {
+    const vulnMap = new Map(vulnerabilities.map((v) => [v.id, v]));
     const approved = allItems.filter((i) => i.status === "Approved").length;
     const pending = allItems.filter((i) => i.status === "Pending").length;
     const inReview = allItems.filter((i) => i.status === "In Review").length;
     const deprecated = allItems.filter((i) => i.status === "Deprecated").length;
     const nonCompliant = allItems.filter((i) => i.status === "Non-Compliant").length;
-    const totalVulns = allItems.reduce((acc, i) => acc + i.vulnerabilities.length, 0);
+    const totalVulns = allItems.reduce((acc, i) => acc + i.vulnerabilityIds.length, 0);
     const criticalVulns = allItems.reduce(
-      (acc, i) => acc + i.vulnerabilities.filter((v) => v.severity === "Critical").length,
+      (acc, i) =>
+        acc + i.vulnerabilityIds.filter((id) => vulnMap.get(id)?.severity === "Critical").length,
       0,
     );
     return {

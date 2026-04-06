@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Shield, ChevronRight } from "lucide-react";
 import { cn } from "../../../lib/utils";
 import type { Role } from "../../../lib/rbac";
@@ -6,6 +6,7 @@ import type {
   ComplianceItem,
   ComplianceStatus,
   CertificationType,
+  Vulnerability,
   RemediationStatus,
 } from "../../../lib/mock-data/compliance-data";
 import {
@@ -25,6 +26,7 @@ import { ComplianceFilters } from "./compliance-filters";
 
 export interface ComplianceTabProps {
   items: ComplianceItem[];
+  vulnerabilities: Vulnerability[];
   statusFilter: ComplianceStatus | "All";
   setStatusFilter: (s: ComplianceStatus | "All") => void;
   certFilter: CertificationType | "All";
@@ -43,6 +45,7 @@ export interface ComplianceTabProps {
 
 export function ComplianceTab({
   items,
+  vulnerabilities,
   statusFilter,
   setStatusFilter,
   certFilter,
@@ -58,6 +61,8 @@ export function ComplianceTab({
   onDeprecate,
   onRemediationChange,
 }: ComplianceTabProps) {
+  const vulnMap = useMemo(() => new Map(vulnerabilities.map((v) => [v.id, v])), [vulnerabilities]);
+
   return (
     <div className="space-y-3">
       <ComplianceFilters
@@ -145,6 +150,9 @@ export function ComplianceTab({
                   <ComplianceRow
                     key={item.id}
                     item={item}
+                    itemVulns={item.vulnerabilityIds
+                      .map((id) => vulnMap.get(id))
+                      .filter((v): v is Vulnerability => v != null)}
                     isExpanded={expandedItemId === item.id}
                     onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
                     role={role}
@@ -169,6 +177,7 @@ export function ComplianceTab({
 
 interface ComplianceRowProps {
   item: ComplianceItem;
+  itemVulns: Vulnerability[];
   isExpanded: boolean;
   onToggle: () => void;
   role: Role;
@@ -181,6 +190,7 @@ interface ComplianceRowProps {
 /** Memoized — rendered in .map() loop, receives stable callbacks via useCallback (#311) */
 const ComplianceRow = memo(function ComplianceRow({
   item,
+  itemVulns,
   isExpanded,
   onToggle,
   role,
@@ -282,14 +292,14 @@ const ComplianceRow = memo(function ComplianceRow({
             <div className="border-t border-border bg-muted/50 px-6 py-3 animate-in slide-in-from-top-1 duration-200">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-[13px] font-semibold text-muted-foreground uppercase tracking-wider">
-                  Vulnerabilities ({item.vulnerabilities.length})
+                  Vulnerabilities ({itemVulns.length})
                 </h3>
               </div>
-              {item.vulnerabilities.length === 0 ? (
+              {itemVulns.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-3">No vulnerabilities recorded</p>
               ) : (
                 <div className="space-y-2">
-                  {item.vulnerabilities.map((vuln) => {
+                  {itemVulns.map((vuln) => {
                     const sevCfg = SEVERITY_CONFIG[vuln.severity];
                     return (
                       <div

@@ -246,7 +246,7 @@ export function SubmitForReviewModal({
 
 export function ReportModal({ items, onClose }: { items: ComplianceItem[]; onClose: () => void }) {
   const [format, setFormat] = useState<"csv" | "json">("csv");
-  const totalVulns = items.reduce((acc, i) => acc + i.vulnerabilities.length, 0);
+  const totalVulns = items.reduce((acc, i) => acc + i.vulnerabilityIds.length, 0);
 
   const handleDownload = () => {
     if (items.length === 0) return;

@@ -10,13 +10,14 @@ import {
   SingleDeviceMarkers,
 } from "./geo-location/device-markers";
 import { DeviceTooltip } from "./geo-location/device-map-tooltip";
-import {
-  LocationSearchBar,
-  ZoomControls,
-  ScaleBar,
-  StatusFilterPills,
-} from "./geo-location/map-controls";
-import { GeofencePanel, TrailTimeline, MapSkeleton, MapError } from "./geo-location/map-panels";
+import { LocationSearchBar } from "./geo-location/location-search-bar";
+import { ZoomControls } from "./geo-location/zoom-controls";
+import { ScaleBar } from "./geo-location/scale-bar";
+import { StatusFilterPills } from "./geo-location/status-filter-pills";
+import { GeofencePanel } from "./geo-location/geofence-panel";
+import { TrailTimeline } from "./geo-location/trail-timeline";
+import { MapSkeleton } from "./geo-location/map-skeleton";
+import { MapError } from "./geo-location/map-error";
 import type {
   GeoDevice,
   GeoStatusFilter,

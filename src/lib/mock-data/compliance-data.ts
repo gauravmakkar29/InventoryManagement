@@ -37,7 +37,8 @@ export interface ComplianceItem {
   nextAudit: string;
   findings: number;
   assignedTo: string;
-  vulnerabilities: Vulnerability[];
+  /** Normalized: IDs referencing MOCK_VULNERABILITIES instead of embedded copies */
+  vulnerabilityIds: string[];
 }
 
 export const MOCK_VULNERABILITIES: Vulnerability[] = [
@@ -139,8 +140,8 @@ export const MOCK_VULNERABILITIES: Vulnerability[] = [
   },
 ];
 
-function vuln(index: number): Vulnerability {
-  return MOCK_VULNERABILITIES[index]!;
+function vulnId(index: number): string {
+  return MOCK_VULNERABILITIES[index]!.id;
 }
 
 export const MOCK_COMPLIANCE: ComplianceItem[] = [
@@ -153,7 +154,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Aug 15, 2026",
     findings: 0,
     assignedTo: "Lisa Chen",
-    vulnerabilities: [vuln(4)],
+    vulnerabilityIds: [vulnId(4)],
   },
   {
     id: "CMP-002",
@@ -164,7 +165,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Jul 20, 2026",
     findings: 3,
     assignedTo: "Raj Patel",
-    vulnerabilities: [vuln(2), vuln(5)],
+    vulnerabilityIds: [vulnId(2), vulnId(5)],
   },
   {
     id: "CMP-003",
@@ -175,7 +176,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Sep 01, 2026",
     findings: 1,
     assignedTo: "Sarah Kim",
-    vulnerabilities: [vuln(6)],
+    vulnerabilityIds: [vulnId(6)],
   },
   {
     id: "CMP-004",
@@ -186,7 +187,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "N/A",
     findings: 5,
     assignedTo: "Mike Torres",
-    vulnerabilities: [vuln(0), vuln(1)],
+    vulnerabilityIds: [vulnId(0), vulnId(1)],
   },
   {
     id: "CMP-005",
@@ -197,7 +198,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Jun 05, 2026",
     findings: 2,
     assignedTo: "Lisa Chen",
-    vulnerabilities: [vuln(3)],
+    vulnerabilityIds: [vulnId(3)],
   },
   {
     id: "CMP-006",
@@ -208,7 +209,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Sep 10, 2026",
     findings: 0,
     assignedTo: "Raj Patel",
-    vulnerabilities: [],
+    vulnerabilityIds: [],
   },
   {
     id: "CMP-007",
@@ -219,7 +220,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "May 28, 2026",
     findings: 7,
     assignedTo: "Sarah Kim",
-    vulnerabilities: [vuln(0), vuln(2), vuln(5)],
+    vulnerabilityIds: [vulnId(0), vulnId(2), vulnId(5)],
   },
   {
     id: "CMP-008",
@@ -230,7 +231,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Sep 15, 2026",
     findings: 1,
     assignedTo: "Mike Torres",
-    vulnerabilities: [vuln(7)],
+    vulnerabilityIds: [vulnId(7)],
   },
   {
     id: "CMP-009",
@@ -241,7 +242,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Jul 05, 2026",
     findings: 0,
     assignedTo: "Lisa Chen",
-    vulnerabilities: [],
+    vulnerabilityIds: [],
   },
   {
     id: "CMP-010",
@@ -252,7 +253,7 @@ export const MOCK_COMPLIANCE: ComplianceItem[] = [
     nextAudit: "Sep 20, 2026",
     findings: 4,
     assignedTo: "Raj Patel",
-    vulnerabilities: [vuln(1), vuln(3)],
+    vulnerabilityIds: [vulnId(1), vulnId(3)],
   },
 ];
 
@@ -283,7 +284,11 @@ export function downloadFile(content: string, filename: string, mimeType: string
   URL.revokeObjectURL(url);
 }
 
-export function generateCSV(items: ComplianceItem[]): string {
+export function generateCSV(
+  items: ComplianceItem[],
+  vulnerabilities: Vulnerability[] = MOCK_VULNERABILITIES,
+): string {
+  const vulnMap = new Map(vulnerabilities.map((v) => [v.id, v]));
   const headers = [
     "ID",
     "Name",
@@ -302,47 +307,33 @@ export function generateCSV(items: ComplianceItem[]): string {
     "Remediation Status",
   ];
   const rows: string[] = [headers.join(",")];
+  const itemFields = (item: ComplianceItem) => [
+    item.id,
+    `"${item.name}"`,
+    item.certType,
+    item.status,
+    item.lastAudit,
+    item.nextAudit,
+    String(item.findings),
+    item.assignedTo,
+  ];
 
   for (const item of items) {
-    if (item.vulnerabilities.length === 0) {
-      rows.push(
-        [
-          item.id,
-          `"${item.name}"`,
-          item.certType,
-          item.status,
-          item.lastAudit,
-          item.nextAudit,
-          String(item.findings),
-          item.assignedTo,
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-        ].join(","),
-      );
+    const itemVulns = item.vulnerabilityIds.map((id) => vulnMap.get(id)).filter(Boolean);
+    if (itemVulns.length === 0) {
+      rows.push([...itemFields(item), "", "", "", "", "", "", ""].join(","));
     } else {
-      for (const v of item.vulnerabilities) {
+      for (const v of itemVulns) {
         rows.push(
           [
-            item.id,
-            `"${item.name}"`,
-            item.certType,
-            item.status,
-            item.lastAudit,
-            item.nextAudit,
-            String(item.findings),
-            item.assignedTo,
-            v.cveId,
-            `"${v.title}"`,
-            v.severity,
-            String(v.cvssScore),
-            String(v.affectedDevices),
-            v.patchAvailable ? "Yes" : "No",
-            v.remediationStatus,
+            ...itemFields(item),
+            v!.cveId,
+            `"${v!.title}"`,
+            v!.severity,
+            String(v!.cvssScore),
+            String(v!.affectedDevices),
+            v!.patchAvailable ? "Yes" : "No",
+            v!.remediationStatus,
           ].join(","),
         );
       }
@@ -352,12 +343,16 @@ export function generateCSV(items: ComplianceItem[]): string {
   return rows.join("\n");
 }
 
-export function generateJSON(items: ComplianceItem[]): string {
+export function generateJSON(
+  items: ComplianceItem[],
+  vulnerabilities: Vulnerability[] = MOCK_VULNERABILITIES,
+): string {
+  const vulnMap = new Map(vulnerabilities.map((v) => [v.id, v]));
   const report = {
     generatedAt: new Date().toISOString(),
     platform: "IMS Gen2",
     totalComplianceItems: items.length,
-    totalVulnerabilities: items.reduce((acc, i) => acc + i.vulnerabilities.length, 0),
+    totalVulnerabilities: items.reduce((acc, i) => acc + i.vulnerabilityIds.length, 0),
     complianceItems: items.map((item) => ({
       id: item.id,
       name: item.name,
@@ -367,16 +362,19 @@ export function generateJSON(items: ComplianceItem[]): string {
       nextAudit: item.nextAudit,
       findings: item.findings,
       assignedTo: item.assignedTo,
-      vulnerabilities: item.vulnerabilities.map((v) => ({
-        cveId: v.cveId,
-        title: v.title,
-        severity: v.severity,
-        cvssScore: v.cvssScore,
-        affectedDevices: v.affectedDevices,
-        patchAvailable: v.patchAvailable,
-        remediationStatus: v.remediationStatus,
-        resolvedDate: v.resolvedDate,
-      })),
+      vulnerabilities: item.vulnerabilityIds
+        .map((id) => vulnMap.get(id))
+        .filter(Boolean)
+        .map((v) => ({
+          cveId: v!.cveId,
+          title: v!.title,
+          severity: v!.severity,
+          cvssScore: v!.cvssScore,
+          affectedDevices: v!.affectedDevices,
+          patchAvailable: v!.patchAvailable,
+          remediationStatus: v!.remediationStatus,
+          resolvedDate: v!.resolvedDate,
+        })),
     })),
   };
   return JSON.stringify(report, null, 2);
