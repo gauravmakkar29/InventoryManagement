@@ -328,39 +328,37 @@ function RiskDistributionChart() {
     { label: "Critical (0-30)", count: 63, pct: 5, color: "#ef4444" },
   ];
 
-  const barWidth = 680;
-  const barHeight = 28;
-
-  let offsetX = 0;
+  // Pre-compute offsets (no mutable variable in render)
+  const barWidth = 100; // percentage-based for responsiveness
+  const offsets = segments.reduce<number[]>((acc, _seg, i) => {
+    acc.push(i === 0 ? 0 : acc[i - 1]! + segments[i - 1]!.pct);
+    return acc;
+  }, []);
 
   return (
     <div>
-      {/* Stacked bar */}
+      {/* Stacked bar — percentage-based viewBox for consistent sizing */}
       <svg
-        viewBox={`0 0 ${barWidth} ${barHeight}`}
-        className="w-full h-auto rounded-lg overflow-hidden"
+        viewBox="0 0 100 6"
+        preserveAspectRatio="none"
+        className="w-full h-7 rounded-lg overflow-hidden"
+        role="img"
+        aria-label="Fleet risk distribution bar chart"
       >
-        {segments.map((seg) => {
-          const w = (seg.pct / 100) * barWidth;
-          const x = offsetX;
-          offsetX += w;
-          return (
-            <rect
-              key={seg.label}
-              x={x}
-              y={0}
-              width={w}
-              height={barHeight}
-              fill={seg.color}
-              rx={x === 0 ? 6 : 0}
-              ry={x === 0 ? 6 : 0}
-            />
-          );
-        })}
+        {segments.map((seg, i) => (
+          <rect
+            key={seg.label}
+            x={offsets[i]}
+            y={0}
+            width={(seg.pct / 100) * barWidth}
+            height={6}
+            fill={seg.color}
+          />
+        ))}
       </svg>
 
-      {/* Legend */}
-      <div className="mt-3 grid grid-cols-5 gap-3">
+      {/* Legend — responsive grid */}
+      <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {segments.map((seg) => (
           <div key={seg.label} className="flex items-center gap-2">
             <span

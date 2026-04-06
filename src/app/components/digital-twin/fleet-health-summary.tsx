@@ -66,45 +66,37 @@ export function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
         <p className="text-[12px] font-semibold uppercase text-muted-foreground mb-2">
           Health Distribution
         </p>
-        <div className="flex items-end gap-3 h-[48px]">
-          <div className="flex flex-col items-center gap-1 flex-1">
-            <div
-              className="w-full rounded-t"
-              style={{
-                height: `${(critical / maxBucket) * 40}px`,
-                backgroundColor: "#ef4444",
-                minHeight: critical > 0 ? 4 : 0,
-              }}
-            />
-            <span className="text-[12px] text-muted-foreground">Crit</span>
-            <span className="text-[14px] font-bold tabular-nums text-foreground/80">
-              {critical}
-            </span>
-          </div>
-          <div className="flex flex-col items-center gap-1 flex-1">
-            <div
-              className="w-full rounded-t"
-              style={{
-                height: `${(warning / maxBucket) * 40}px`,
-                backgroundColor: "#f59e0b",
-                minHeight: warning > 0 ? 4 : 0,
-              }}
-            />
-            <span className="text-[12px] text-muted-foreground">Warn</span>
-            <span className="text-[14px] font-bold tabular-nums text-foreground/80">{warning}</span>
-          </div>
-          <div className="flex flex-col items-center gap-1 flex-1">
-            <div
-              className="w-full rounded-t"
-              style={{
-                height: `${(healthy / maxBucket) * 40}px`,
-                backgroundColor: "#10b981",
-                minHeight: healthy > 0 ? 4 : 0,
-              }}
-            />
-            <span className="text-[12px] text-muted-foreground">OK</span>
-            <span className="text-[14px] font-bold tabular-nums text-foreground/80">{healthy}</span>
-          </div>
+        {/* Bar area — fixed height with bottom-aligned bars */}
+        <div className="flex items-end gap-3 h-[44px] mb-1.5">
+          {[
+            { value: critical, color: "#ef4444" },
+            { value: warning, color: "#f59e0b" },
+            { value: healthy, color: "#10b981" },
+          ].map(({ value, color }) => (
+            <div key={color} className="flex-1">
+              <div
+                className="w-full rounded-t"
+                style={{
+                  height: `${maxBucket > 0 ? (value / maxBucket) * 40 : 0}px`,
+                  backgroundColor: color,
+                  minHeight: value > 0 ? 4 : 0,
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        {/* Labels — separate row for consistent alignment */}
+        <div className="flex gap-3">
+          {[
+            { label: "Crit", value: critical },
+            { label: "Warn", value: warning },
+            { label: "OK", value: healthy },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex-1 text-center">
+              <span className="text-[12px] text-muted-foreground block">{label}</span>
+              <span className="text-[14px] font-bold tabular-nums text-foreground/80">{value}</span>
+            </div>
+          ))}
         </div>
       </div>
 
