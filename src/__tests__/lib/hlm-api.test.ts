@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
+import { setApiProvider } from "@/lib/providers/registry";
+import { createMockApiProvider } from "@/lib/providers/mock/mock-api-provider";
 import {
   getDefaultHeaders,
   listDevices,
@@ -40,6 +42,11 @@ import {
 } from "@/lib/hlm-api";
 import { APP_BUILD_INFO } from "@/lib/app-version";
 import { FailureType } from "@/lib/types";
+
+// Wire mock provider so hlm-api facade functions can delegate
+beforeAll(() => {
+  setApiProvider(createMockApiProvider());
+});
 
 // =============================================================================
 // getDefaultHeaders
