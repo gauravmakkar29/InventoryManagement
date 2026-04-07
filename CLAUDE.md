@@ -78,6 +78,7 @@ All technical standards are enforced through dedicated rulebooks in `SPEC/rulebo
 | `api-data-layer-rulebook.md` | API client patterns, DTO/domain mapping, TanStack Query caching, error classification, pagination                                     |
 | `performance-rulebook.md`    | Bundle budgets, memoization, code splitting, virtualization, animations                                                               |
 | `e2e-rulebook.md`            | E2E test plans, framework patterns, selectors, naming                                                                                 |
+| `git-workflow-rulebook.md`   | Branch naming, commit format, PR process, release promotion, story-to-code traceability                                               |
 
 ### Git Workflow
 
