@@ -2,7 +2,7 @@
 
 > **Production-ready, cloud-agnostic enterprise application template** with pluggable providers, NIST 800-53 security controls, and infrastructure-as-code. Fork it, set 3 env vars, deploy to any cloud.
 
-`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Terraform IaC`
+`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Multi-IaC (Terraform + CDK + Amplify)`
 
 ![Build](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-85%25+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Node](https://img.shields.io/badge/node-20+-purple) ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue) ![React](https://img.shields.io/badge/React-18-61dafb)
 
@@ -12,16 +12,16 @@
 
 Most enterprise React starters give you a login page and a dashboard. This gives you **everything between "git clone" and "production deployment"**:
 
-| What You Get                     | What You Skip                                        |
-| -------------------------------- | ---------------------------------------------------- |
-| 8 pluggable provider interfaces  | 6-8 weeks of architecture and abstraction design     |
-| 5 cloud adapter implementations  | Vendor lock-in and multi-cloud portability debates   |
-| 37 NIST 800-53 security controls | 3-4 months of security audit and remediation cycles  |
-| 16 Terraform modules             | 4-6 weeks of infrastructure scaffolding from scratch |
-| 12 feature modules with full UI  | 200+ hours of boilerplate page scaffolding           |
-| 530+ unit tests + E2E framework  | 2-3 sprints building test infrastructure             |
-| Role-based access (5 roles)      | Custom RBAC design, implementation, and QA           |
-| CI/CD pipelines (3 workflows)    | DevOps toolchain configuration and tuning            |
+| What You Get                              | What You Skip                                        |
+| ----------------------------------------- | ---------------------------------------------------- |
+| 8 pluggable provider interfaces           | 6-8 weeks of architecture and abstraction design     |
+| 5 cloud adapter implementations           | Vendor lock-in and multi-cloud portability debates   |
+| 37 NIST 800-53 security controls          | 3-4 months of security audit and remediation cycles  |
+| 3 IaC options (Terraform + CDK + Amplify) | 4-6 weeks of infrastructure scaffolding from scratch |
+| 12 feature modules with full UI           | 200+ hours of boilerplate page scaffolding           |
+| 530+ unit tests + E2E framework           | 2-3 sprints building test infrastructure             |
+| Role-based access (5 roles)               | Custom RBAC design, implementation, and QA           |
+| CI/CD pipelines (3 workflows)             | DevOps toolchain configuration and tuning            |
 
 **Zero cloud dependency in development.** The app runs entirely in mock mode -- no AWS account, no API keys, no database. When you're ready, flip `VITE_PLATFORM` to connect to real services.
 
@@ -205,11 +205,17 @@ Enforced at 3 levels: sidebar filtering, route guards (`ProtectedLayout`), and m
 
 ---
 
-## Infrastructure as Code
+## Infrastructure as Code (Multi-IaC)
 
-### Terraform (16 AWS Modules)
+Three IaC approaches are provided as **reference implementations** -- pick the one that matches your team's workflow.
 
-Located at `infra/reference/aws-terraform/modules/`:
+| IaC Option            | Location                         | Status                       | Best For                                |
+| --------------------- | -------------------------------- | ---------------------------- | --------------------------------------- |
+| **Terraform**         | `infra/reference/aws-terraform/` | 16 modules, production-ready | Teams with existing Terraform workflows |
+| **AWS CDK**           | `infra/reference/aws-cdk/`       | Reference skeleton           | TypeScript-native infrastructure teams  |
+| **AWS Amplify Gen 2** | Built into `aws-amplify` adapter | Integrated                   | Greenfield projects wanting zero-config |
+
+### Terraform Modules (16)
 
 | Module             | AWS Service                                         |
 | ------------------ | --------------------------------------------------- |
@@ -230,8 +236,6 @@ Located at `infra/reference/aws-terraform/modules/`:
 | `cloudtrail`       | API audit logging                                   |
 
 **Environment configs:** `dev.tfvars`, `staging.tfvars`, `prod.tfvars`
-
-AWS CDK reference skeleton also available at `infra/reference/aws-cdk/`.
 
 ---
 
@@ -262,21 +266,30 @@ Edit `src/lib/types.ts` to match your domain. The existing types (Device, Firmwa
 
 Create `src/lib/providers/your-platform/your-api-provider.ts` implementing `IApiProvider`. Start by copying `mock-api-provider.ts` and replacing mock data with real API calls.
 
-### Step 5: Deploy Infrastructure
+### Step 5: Deploy Infrastructure (pick one)
+
+**Option A: Terraform**
 
 ```bash
 cd infra/reference/aws-terraform
-terraform init
-terraform plan -var-file=environments/dev.tfvars
-terraform apply -var-file=environments/dev.tfvars
+terraform init && terraform apply -var-file=environments/dev.tfvars
 ```
+
+**Option B: AWS CDK**
+
+```bash
+cd infra/reference/aws-cdk
+npx cdk deploy --all
+```
+
+**Option C: Amplify Gen 2** -- infrastructure is managed automatically by the Amplify adapter. No separate deploy step needed.
 
 ### Step 6: Configure CI/CD
 
 The GitHub Actions workflows at `.github/workflows/` are ready to use:
 
 - `ci.yml` -- Lint, build, test on every PR
-- `deploy.yml` -- Terraform + S3 deploy on merge to main
+- `deploy.yml` -- IaC deploy + S3 sync on merge to main
 - `e2e-nightly.yml` -- Scheduled regression tests
 
 ---
@@ -339,7 +352,7 @@ SPEC Method workflows and rulebooks are located in `SPEC/workflows/` and `SPEC/r
 | E2E Tests  | Java 17 + Playwright              | --      |
 | Linting    | ESLint 9 + Prettier + commitlint  | --      |
 | Git Hooks  | Husky + lint-staged               | --      |
-| IaC        | Terraform (16 modules)            | --      |
+| IaC        | Terraform + CDK + Amplify         | --      |
 | CI/CD      | GitHub Actions (3 workflows)      | --      |
 
 ---
@@ -370,8 +383,8 @@ src/
   __tests__/                  # 530+ unit tests
 e2e/ims-e2e/                  # E2E framework (Java/Maven/Playwright)
 infra/reference/
-  aws-terraform/              # 16 Terraform modules + env configs
-  aws-cdk/                    # CDK reference skeleton
+  aws-terraform/              # 16 Terraform modules + env configs (production-ready)
+  aws-cdk/                    # CDK reference skeleton (TypeScript constructs)
 Docs/                         # Architecture decisions, epic specs
 .github/workflows/            # CI/CD pipelines
 SPEC/                         # SPEC Method rulebooks + workflows
