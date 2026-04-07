@@ -21,6 +21,7 @@
 12. [Best Practices](#12-best-practices)
 13. [CLI (gh) Commands Reference](#13-cli-gh-commands-reference)
 14. [IMS Gen2 Project Setup (Real Example)](#14-ims-gen2-project-setup-real-example)
+15. [Releases](#15-releases)
 
 ---
 
@@ -1207,6 +1208,41 @@ Shows progress over time. This is the equivalent of a JIRA burn-down chart (inve
 | Epic Progress   | Current    | Epic      | Count of items    | Status   | (none)               |
 | Team Workload   | Current    | Assignee  | Count of items    | Status   | `is:open`            |
 
+### Setting Up Charts Step-by-Step
+
+#### Chart 1: Sprint Burn-Up (Most Important)
+
+1. Click **Insights** tab → **New chart** → **Historical**.
+2. X-Axis: Time (automatic).
+3. Y-Axis: Count of items.
+4. Group by: Status.
+5. Filter: `iteration:@current`.
+6. This shows scope (total items) vs completion (Done items) over the sprint.
+
+#### Chart 2: Velocity Across Sprints
+
+1. Click **New chart** → **Current** (bar chart).
+2. X-Axis: Iteration (Sprint).
+3. Y-Axis: Sum of Story Points.
+4. Filter: `status:Done`.
+5. Each bar = story points completed per sprint. Look for stabilization over 3-4 sprints.
+
+#### Chart 3: Epic Completion Dashboard
+
+1. Click **New chart** → **Current** (stacked bar).
+2. X-Axis: Epic (custom field or label).
+3. Y-Axis: Count of items.
+4. Group by: Status.
+5. Shows which epics are nearly done vs still in progress.
+
+#### Chart 4: Bug Inflow vs Resolution
+
+1. Click **New chart** → **Historical**.
+2. Y-Axis: Count of items.
+3. Group by: Status.
+4. Filter: `label:bug`.
+5. If the "open" area grows faster than "done", you have a quality problem.
+
 ### Sprint Velocity Tracking
 
 Sprint velocity measures how many story points the team completes per sprint.
@@ -1780,32 +1816,124 @@ All checks must pass before a PR can be merged. The branch protection rule on `m
 ### Developer Workflow Summary
 
 ```
-1. Pick a story from "Sprint Ready" on the board
-2. Move it to "In Development"
-3. Create branch:
-   git checkout -b feature/IMS-42-device-crud-create
-
-4. Develop with TDD:
-   - Write failing test
-   - Implement feature
-   - Verify tests pass: npm test
-   - Check lint: npm run lint
-   - Check build: npm run build
-
-5. Commit with conventional format:
-   git commit -m "feat(inventory): add device creation form #42"
-
-6. Push and create PR:
-   git push -u origin feature/IMS-42-device-crud-create
-   gh pr create \
-     --title "[Story 2.1] Device CRUD — Create New Device" \
-     --body "Closes #42"
-
-7. PR triggers CI — all checks must pass
-8. Code review (issue auto-moves to "In Review")
-9. Review approved (issue auto-moves to "In QA")
-10. QA verified, PR merged (issue auto-closes, moves to "Done")
+Traditional Git Workflow          Claude Code Workflow
+─────────────────────────        ─────────────────────────
+1. Pick story from board          1. "what next to pick?"
+2. git checkout -b feature/...    2. Claude creates branch
+3. Write code manually            3. "implement story #42"
+4. git add, git commit            4. Claude stages + commits
+5. git push                       5. Claude pushes
+6. gh pr create                   6. Claude creates PR with body
+7. Wait for review                7. "/review-full" for auto-audit
+8. Fix review comments            8. Claude fixes and re-commits
+9. gh pr merge                    9. "merge now"
+10. Manual issue close            10. Claude closes with comment
 ```
+
+### AI-Powered Development with Claude Code
+
+The IMS Gen2 project uses **Claude Code** (Anthropic's CLI) as the primary development interface. Instead of manually running git commands, the entire SDLC is driven through conversational AI:
+
+#### What Claude Code Handles
+
+| Task            | Traditional                             | With Claude Code                                                 |
+| --------------- | --------------------------------------- | ---------------------------------------------------------------- |
+| Story creation  | Write issue manually in GitHub UI       | Describe the feature → Claude creates structured issue with ACs  |
+| Implementation  | Code manually, commit, push             | Describe intent → Claude reads codebase, writes code, runs tests |
+| Code review     | Manual PR review                        | `/review-full` runs 11-point automated audit                     |
+| PR management   | `git add`, `git commit`, `gh pr create` | Claude stages, commits, pushes, creates PR with structured body  |
+| Backlog audit   | Manually check each issue               | Claude verifies code vs issues, closes completed stories in bulk |
+| Security review | Manual NIST checklist                   | `/review-security` runs NIST 800-53 compliance scorecard         |
+
+#### SPEC Method Integration
+
+The project uses SPEC Method workflows (defined in `SPEC/workflows/`) for structured AI-native development:
+
+- `dev-implement` — Story implementation with TDD
+- `review-code` — Automated code review
+- `test-plan` — QA test plan generation
+- `generate-e2e` — E2E test code generation from approved plans
+- `review-security` — NIST 800-53 security audit
+- `review-architecture` — Architecture health check
+
+#### MCP Server Integration
+
+Claude Code connects to GitHub via MCP (Model Context Protocol) servers, enabling direct interaction with:
+
+- **GitHub Issues API** — create, close, comment, label issues
+- **GitHub PRs API** — create, review, merge pull requests
+- **Playwright MCP** — browser automation for visual testing
+
+---
+
+## 15. Releases
+
+### What Are GitHub Releases?
+
+Releases are tagged snapshots of your codebase, tied to a git tag. They provide downloadable source archives, release notes, and optional binary assets (firmware files, build artifacts, etc.).
+
+**Releases vs Milestones:** Milestones track progress _toward_ a release — they group issues and show completion percentage. Releases ARE the shipped artifact — they represent a specific version of the code that has been tagged, packaged, and published.
+
+### Creating a Release (Web UI)
+
+1. Navigate to your repository → click **Releases** in the right sidebar (or from the Code tab).
+2. Click **Draft a new release**.
+3. Choose or create a tag (e.g., `v1.0.0`) — follows [semver](https://semver.org/).
+4. Select the target branch (usually `main`).
+5. Enter a release title: e.g., `v1.0.0 — MVP Launch`.
+6. Click **Auto-generate release notes** (pulls from merged PR titles) or write notes manually.
+7. Attach binary assets if needed (e.g., firmware files, build artifacts) by dragging into the assets area.
+8. Check **Set as a pre-release** if this is not production-ready (beta, RC).
+9. Click **Publish release**.
+
+### Creating a Release (CLI)
+
+```bash
+# Create a tag and release in one command
+gh release create v1.0.0 \
+  --title "v1.0.0 — MVP Launch" \
+  --notes "$(cat <<'EOF'
+## What's New
+- Device inventory with geo-location maps
+- Firmware lifecycle with multi-stage approval
+- NIST 800-53 compliance framework
+- 530+ unit tests, 85%+ coverage
+
+## Breaking Changes
+None — initial release.
+EOF
+)" \
+  --target main
+
+# Create release with auto-generated notes from merged PRs
+gh release create v1.1.0 --generate-notes --target main
+
+# Upload binary assets to an existing release
+gh release upload v1.0.0 ./dist/firmware-bundle.zip
+
+# List releases
+gh release list
+
+# View a specific release
+gh release view v1.0.0
+
+# Delete a release (careful!)
+gh release delete v1.0.0 --yes
+```
+
+### Release Strategy
+
+- **Semver**: `MAJOR.MINOR.PATCH` (e.g., `v1.2.3`)
+- **Pre-release tags**: `v1.0.0-beta.1`, `v1.0.0-rc.1`
+- **Release branches**: Created from dev after QA sign-off, spawns PRs to QA → pre-prod → prod
+- **Changelog**: Auto-generated from PR titles using `--generate-notes`
+
+### Linking Milestones to Releases
+
+1. Create milestone `v1.0.0 — MVP` with a due date.
+2. Assign all stories for the release to the milestone.
+3. When the milestone reaches 100%, create the GitHub Release.
+4. Close the milestone after the release is published.
 
 ---
 

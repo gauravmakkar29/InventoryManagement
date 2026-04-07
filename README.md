@@ -2,6 +2,8 @@
 
 > **Production-ready, cloud-agnostic enterprise application template** with pluggable providers, NIST 800-53 security controls, and infrastructure-as-code. Fork it, set 3 env vars, deploy to any cloud.
 
+`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Terraform IaC`
+
 ![Build](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-85%25+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Node](https://img.shields.io/badge/node-20+-purple) ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue) ![React](https://img.shields.io/badge/React-18-61dafb)
 
 ---
@@ -10,16 +12,16 @@
 
 Most enterprise React starters give you a login page and a dashboard. This gives you **everything between "git clone" and "production deployment"**:
 
-| What You Get                     | What You Skip Building                |
-| -------------------------------- | ------------------------------------- |
-| 8 pluggable provider interfaces  | Months designing an abstraction layer |
-| 5 cloud adapter implementations  | Vendor lock-in debates                |
-| 37 NIST 800-53 security controls | Security audit remediation cycles     |
-| 16 Terraform modules             | Infrastructure from scratch           |
-| 12 feature modules with full UI  | Boilerplate page scaffolding          |
-| 530+ unit tests + E2E framework  | Test infrastructure setup             |
-| Role-based access (5 roles)      | RBAC design and implementation        |
-| CI/CD pipelines                  | DevOps configuration                  |
+| What You Get                     | What You Skip                                        |
+| -------------------------------- | ---------------------------------------------------- |
+| 8 pluggable provider interfaces  | 6-8 weeks of architecture and abstraction design     |
+| 5 cloud adapter implementations  | Vendor lock-in and multi-cloud portability debates   |
+| 37 NIST 800-53 security controls | 3-4 months of security audit and remediation cycles  |
+| 16 Terraform modules             | 4-6 weeks of infrastructure scaffolding from scratch |
+| 12 feature modules with full UI  | 200+ hours of boilerplate page scaffolding           |
+| 530+ unit tests + E2E framework  | 2-3 sprints building test infrastructure             |
+| Role-based access (5 roles)      | Custom RBAC design, implementation, and QA           |
+| CI/CD pipelines (3 workflows)    | DevOps toolchain configuration and tuning            |
 
 **Zero cloud dependency in development.** The app runs entirely in mock mode -- no AWS account, no API keys, no database. When you're ready, flip `VITE_PLATFORM` to connect to real services.
 
@@ -45,6 +47,27 @@ Open [http://localhost:5173](http://localhost:5173). Login with any mock credent
 
 ---
 
+## Live Preview (Mock Data)
+
+Once running, every route below is fully functional with realistic sample data -- no backend required.
+
+| Route              | Module         | What You See                                           |
+| ------------------ | -------------- | ------------------------------------------------------ |
+| `/dashboard`       | Dashboard      | Fleet KPIs, health gauge, activity feed, quick actions |
+| `/inventory`       | Inventory      | Device table with search, map view, bulk operations    |
+| `/deployment`      | Deployment     | Firmware lifecycle, approval workflow, version history |
+| `/compliance`      | Compliance     | Certification tracking, NIST control mapping           |
+| `/sbom`            | SBOM           | Software bill of materials for tracked devices         |
+| `/account-service` | Service Orders | Maintenance scheduling, priority and status workflow   |
+| `/analytics`       | Analytics      | Time-series charts, audit logs, CSV/JSON export        |
+| `/telemetry`       | Telemetry      | Heatmaps, blast radius simulation, risk scoring        |
+| `/incidents`       | Incidents      | Response playbooks, network topology, quarantine       |
+| `/digital-twin`    | Digital Twin   | State replay, config drift detection, health trends    |
+| `/customers`       | Customers      | Customer/site management, deployment tracking          |
+| `/user-management` | Users          | Account creation, role assignment, session management  |
+
+---
+
 ## What's Pluggable (Template Architecture)
 
 The app never imports a cloud SDK directly. Every external dependency flows through a **provider interface**. Swap implementations without touching a single component.
@@ -64,6 +87,8 @@ The app never imports a cloud SDK directly. Every external dependency flows thro
   Cognito Amplify  --    S3     SvcNow  Ignite   --    Azure   WebSocket
   AzureAD Terraform --   JFrog    --      --     --    Route53  SSE
 ```
+
+App code never imports a cloud SDK. Change `VITE_PLATFORM` and everything reconnects.
 
 ### 8 Provider Interfaces
 
@@ -118,6 +143,35 @@ Each module is a complete, production-styled feature -- not a placeholder.
 | **Digital Twin**    | State replay, config drift detection, health trending              |
 | **Customers**       | Customer/site management with firmware deployment tracking         |
 | **User Management** | Account creation, role assignment, session management              |
+
+---
+
+## Design System
+
+Built on **shadcn/ui (Radix)** with semantic design tokens. Dark/light mode. WCAG 2.1 AA compliant.
+
+16 shared UI primitives power every feature module:
+
+| Primitive          | Purpose                                             |
+| ------------------ | --------------------------------------------------- |
+| `dialog-base`      | Consistent modal shell with focus trapping          |
+| `data-table`       | Sortable, filterable tables with pagination         |
+| `form-field`       | Label + input + error with Zod validation wiring    |
+| `status-badge`     | Semantic status indicators (active, warning, error) |
+| `page-header`      | Page title, breadcrumbs, and action buttons         |
+| `search-input`     | Debounced search with clear and keyboard shortcuts  |
+| `confirm-dialog`   | Destructive action confirmation with double-check   |
+| `loading-skeleton` | Content-shaped placeholders during data fetches     |
+| `empty-state`      | Contextual zero-data illustrations and CTAs         |
+| `stat-card`        | KPI display with trend indicator and sparkline      |
+| `toast`            | Non-blocking notifications with auto-dismiss        |
+| `dropdown-menu`    | Accessible context menus and action menus           |
+| `tabs`             | Accessible tab navigation with lazy panel loading   |
+| `tooltip`          | Accessible hover hints with keyboard support        |
+| `sidebar-nav`      | Collapsible navigation with role-based filtering    |
+| `command-palette`  | Keyboard-driven search and navigation               |
+
+All primitives are located in `src/components/` and follow the pattern: Radix primitive, Tailwind styling via `class-variance-authority`, semantic tokens for theming.
 
 ---
 
@@ -247,6 +301,22 @@ npm run test:e2e:headed    # Headed browser for debugging
 ```
 
 Located at `e2e/ims-e2e/` with Page Object Model, test listeners, and HTML reporting.
+
+---
+
+## AI-Powered Development
+
+This project uses **Claude Code** (Anthropic CLI) for AI-native software development lifecycle management. The entire SDLC -- from story creation through code review -- is orchestrated through conversational AI using the **SPEC Method** framework.
+
+| Capability     | How It Works                                                             |
+| -------------- | ------------------------------------------------------------------------ |
+| Story creation | Claude drafts stories from epics with ACs, preconditions, and test hints |
+| Implementation | TDD-driven coding with automatic rulebook enforcement                    |
+| Code review    | Security (NIST), architecture, and performance audits on demand          |
+| PR management  | Branch creation, commit formatting, and PR submission with traceability  |
+| Backlog audit  | Gap analysis across 18 epics with prioritized recommendations            |
+
+SPEC Method workflows and rulebooks are located in `SPEC/workflows/` and `SPEC/rulebooks/`. Hooks in `.claude/settings.json` enforce NIST security checks and architecture guardrails automatically during development.
 
 ---
 
