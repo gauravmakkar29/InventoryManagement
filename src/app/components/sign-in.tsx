@@ -256,14 +256,10 @@ export function SignIn() {
     <div className="flex min-h-screen bg-white">
       {/* ─── Left panel: Solar farm photo + animated overlay ─── */}
       <div className="hidden lg:flex lg:w-[55%] flex-col justify-between relative overflow-hidden">
-        {/* Background photo — solar farm at golden hour */}
-        <img
-          src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1400&q=85&auto=format"
-          alt=""
+        {/* Background — solar energy gradient (no external image dependency) */}
+        <div
           aria-hidden="true"
-          width={1400}
-          height={934}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-500 to-yellow-600"
         />
 
         {/* Light warm overlay — keeps it bright, not dark */}
