@@ -49,8 +49,8 @@ describe("firmware version mock data", () => {
   it("events have chronological timestamps", () => {
     for (const version of ALL_FIRMWARE_VERSIONS) {
       for (let i = 1; i < version.events.length; i++) {
-        const prev = new Date(version.events[i - 1].timestamp).getTime();
-        const curr = new Date(version.events[i].timestamp).getTime();
+        const prev = new Date(version.events[i - 1]!.timestamp).getTime();
+        const curr = new Date(version.events[i]!.timestamp).getTime();
         expect(
           curr,
           `${version.id} event ${i} should be after event ${i - 1}`,
@@ -60,7 +60,7 @@ describe("firmware version mock data", () => {
   });
 
   it("includes rejected → resubmitted lifecycle path", () => {
-    const fam1Versions = MOCK_FIRMWARE_VERSIONS["fam-1"];
+    const fam1Versions = MOCK_FIRMWARE_VERSIONS["fam-1"]!;
     const rejected = fam1Versions.find((v) => v.events.some((e) => e.type === "REJECTED"));
     expect(rejected).toBeDefined();
   });
