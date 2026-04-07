@@ -61,19 +61,19 @@ export function ReportsTab({ items: _items, allItems, vulnerabilities }: Reports
           label="Approved"
           value={stats.approved}
           icon={ShieldCheck}
-          valueClass="text-emerald-600"
+          valueClass="text-success-text"
         />
         <StatCard
           label="Pending / In Review"
           value={stats.pending + stats.inReview}
           icon={Clock}
-          valueClass="text-amber-600"
+          valueClass="text-warning-text"
         />
         <StatCard
           label="Non-Compliant"
           value={stats.nonCompliant}
           icon={ShieldX}
-          valueClass="text-red-600"
+          valueClass="text-danger-text"
         />
       </div>
 
@@ -89,7 +89,7 @@ export function ReportsTab({ items: _items, allItems, vulnerabilities }: Reports
           label="Critical Vulns"
           value={stats.criticalVulns}
           icon={AlertTriangle}
-          valueClass="text-red-600"
+          valueClass="text-danger-text"
         />
         <StatCard
           label="Compliance Rate"

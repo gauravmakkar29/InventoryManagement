@@ -255,8 +255,8 @@ export function CompliancePage() {
           confirmLabel={dialogs.isDialogOpen("confirm-approve") ? "Approve" : "Deprecate"}
           confirmClass={
             dialogs.isDialogOpen("confirm-approve")
-              ? "bg-emerald-600 hover:bg-emerald-700"
-              : "bg-amber-600 hover:bg-amber-700"
+              ? "bg-success hover:bg-success-text"
+              : "bg-warning hover:bg-warning-text"
           }
           onConfirm={() => {
             const itemId = dialogs.getContext<string>("itemId");

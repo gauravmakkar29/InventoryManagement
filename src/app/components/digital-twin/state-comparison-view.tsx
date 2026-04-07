@@ -71,11 +71,13 @@ export function StateComparisonView({
           return (
             <div key={f.label} className="contents">
               <span className="text-muted-foreground font-medium">{f.label}</span>
-              <span className={cn("font-mono", changed ? "bg-red-50 px-1 rounded" : "")}>{l}</span>
+              <span className={cn("font-mono", changed ? "bg-danger-bg px-1 rounded" : "")}>
+                {l}
+              </span>
               <span
                 className={cn(
                   "font-mono",
-                  changed ? (improved ? "bg-green-50" : "bg-red-50") + " px-1 rounded" : "",
+                  changed ? (improved ? "bg-success-bg" : "bg-danger-bg") + " px-1 rounded" : "",
                 )}
               >
                 {r}

@@ -227,7 +227,7 @@ export function DashboardCharts() {
       <div className="col-span-2 card-elevated">
         <div className="flex items-center justify-between px-5 py-4">
           <h3 className="text-[16px] font-semibold text-foreground">Health Score</h3>
-          <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[13px] font-semibold text-emerald-700">
+          <span className="rounded-full bg-success-bg px-2.5 py-1 text-[13px] font-semibold text-success-text">
             Healthy
           </span>
         </div>
@@ -272,13 +272,13 @@ export function DashboardCharts() {
                   key={stat.label}
                   className={cn(
                     "rounded-xl border px-3 py-2.5 text-center",
-                    isAlert ? "border-red-200 bg-red-50" : "border-border/50 bg-muted/50",
+                    isAlert ? "border-danger-border bg-danger-bg" : "border-border/50 bg-muted/50",
                   )}
                 >
                   <p
                     className={cn(
                       "text-[16px] font-bold tabular-nums",
-                      isAlert ? "text-red-600" : "text-foreground",
+                      isAlert ? "text-danger-text" : "text-foreground",
                     )}
                   >
                     {stat.value}

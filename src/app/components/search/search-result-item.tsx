@@ -27,7 +27,7 @@ export function renderHighlight(text: string): ReactNode {
     }
     // Render the matched content inside a safe React <mark> element
     parts.push(
-      <mark key={keyIndex++} className="bg-amber-200 dark:bg-amber-900/50 px-0.5 rounded-sm">
+      <mark key={keyIndex++} className="bg-warning-bg px-0.5 rounded-sm">
         {match[1]}
       </mark>,
     );
@@ -58,8 +58,8 @@ const ENTITY_CONFIG: Record<
   Device: {
     icon: Server,
     label: "Device",
-    badgeBg: "bg-blue-50 dark:bg-blue-950",
-    badgeText: "text-blue-700 dark:text-blue-300",
+    badgeBg: "bg-info-bg",
+    badgeText: "text-info-text",
   },
   Firmware: {
     icon: Package,
@@ -70,20 +70,20 @@ const ENTITY_CONFIG: Record<
   ServiceOrder: {
     icon: ClipboardList,
     label: "Service Order",
-    badgeBg: "bg-amber-50 dark:bg-amber-950",
-    badgeText: "text-amber-700 dark:text-amber-300",
+    badgeBg: "bg-warning-bg",
+    badgeText: "text-warning-text",
   },
   Compliance: {
     icon: Shield,
     label: "Compliance",
-    badgeBg: "bg-emerald-50 dark:bg-emerald-950",
-    badgeText: "text-emerald-700 dark:text-emerald-300",
+    badgeBg: "bg-success-bg",
+    badgeText: "text-success-text",
   },
   Vulnerability: {
     icon: AlertTriangle,
     label: "Vulnerability",
-    badgeBg: "bg-red-50 dark:bg-red-950",
-    badgeText: "text-red-700 dark:text-red-300",
+    badgeBg: "bg-danger-bg",
+    badgeText: "text-danger-text",
   },
 };
 

@@ -210,7 +210,7 @@ function HeatmapTooltip({
           <span
             className={cn(
               "text-[14px] font-bold tabular-nums",
-              cell.criticalCount > 0 ? "text-red-600" : "text-foreground",
+              cell.criticalCount > 0 ? "text-danger-text" : "text-foreground",
             )}
           >
             {cell.criticalCount}
@@ -552,16 +552,16 @@ export function HeatmapPage({ onSelectDevice }: HeatmapPageProps) {
             value: filteredCells.length.toString(),
             color: "text-foreground",
           },
-          { label: "Total Devices", value: totalDevices.toString(), color: "text-blue-600" },
+          { label: "Total Devices", value: totalDevices.toString(), color: "text-info-text" },
           {
             label: "Critical Regions",
             value: filteredCells.filter((c) => c.avgRiskScore <= 30).length.toString(),
-            color: "text-red-600",
+            color: "text-danger-text",
           },
           {
             label: "Healthy Regions",
             value: filteredCells.filter((c) => c.avgRiskScore > 85).length.toString(),
-            color: "text-emerald-600",
+            color: "text-success-text",
           },
         ].map((stat) => (
           <div key={stat.label} className="card-elevated px-4 py-3 text-center">

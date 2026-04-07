@@ -110,14 +110,14 @@ export function QuarantineZonesTab({
                     className={cn(
                       "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[13px] font-semibold",
                       zone.status === "Active"
-                        ? "bg-red-50 text-red-700 border-red-200"
+                        ? "bg-danger-bg text-danger-text border-danger-border"
                         : "bg-muted text-muted-foreground border-border",
                     )}
                   >
                     <span
                       className={cn(
                         "h-1.5 w-1.5 rounded-full",
-                        zone.status === "Active" ? "bg-red-500" : "bg-muted-foreground/70",
+                        zone.status === "Active" ? "bg-danger" : "bg-muted-foreground/70",
                       )}
                     />
                     {zone.status}
@@ -126,9 +126,9 @@ export function QuarantineZonesTab({
                 <td className="px-4 text-center text-[14px] font-medium text-foreground/80">
                   {zone.isolatedDeviceCount}
                 </td>
-                <td className="px-4 text-[14px] text-blue-600 font-medium">{zone.incidentId}</td>
+                <td className="px-4 text-[14px] text-info-text font-medium">{zone.incidentId}</td>
                 <td className="px-4">
-                  <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-medium text-amber-700">
+                  <span className="inline-flex rounded-full bg-warning-bg px-2 py-0.5 text-[12px] font-medium text-warning-text">
                     {zone.isolationPolicy}
                   </span>
                 </td>

@@ -11,14 +11,14 @@ import type { GeoDevice } from "./geo-location-types";
 export function MapError({ devices, onRetry }: { devices: GeoDevice[]; onRetry: () => void }) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
-        <AlertTriangle className="h-4 w-4 shrink-0 text-amber-600" />
-        <p className="text-[14px] text-amber-800">
+      <div className="flex items-center gap-2 rounded-lg border border-warning-bg bg-warning-bg px-4 py-3">
+        <AlertTriangle className="h-4 w-4 shrink-0 text-warning-text" />
+        <p className="text-[14px] text-warning-text">
           Unable to load map. Showing device list instead.
         </p>
         <button
           onClick={onRetry}
-          className="ml-auto shrink-0 rounded-md border border-amber-300 bg-card px-3 py-1 text-[13px] font-medium text-amber-700 hover:bg-amber-50 cursor-pointer"
+          className="ml-auto shrink-0 rounded-md border border-warning-bg bg-card px-3 py-1 text-[13px] font-medium text-warning-text hover:bg-warning-bg cursor-pointer"
         >
           Retry
         </button>

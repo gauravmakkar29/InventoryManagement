@@ -570,14 +570,14 @@ export const VULN_PAGE_SIZE = 25;
 export const AVAILABLE_MODELS = ["INV-3200", "INV-3100", "INV-5000", "INV-4000", "INV-2500"];
 
 export const SEVERITY_CONFIG: Record<VulnSeverity, { bg: string; text: string }> = {
-  Critical: { bg: "bg-red-50", text: "text-red-700" },
-  High: { bg: "bg-orange-50", text: "text-orange-700" },
-  Medium: { bg: "bg-amber-50", text: "text-amber-700" },
-  Low: { bg: "bg-emerald-50", text: "text-emerald-700" },
+  Critical: { bg: "bg-danger-bg", text: "text-danger-text" },
+  High: { bg: "bg-high-bg", text: "text-high-text" },
+  Medium: { bg: "bg-warning-bg", text: "text-warning-text" },
+  Low: { bg: "bg-success-bg", text: "text-success-text" },
 };
 
 export const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
-  Open: "bg-red-50 text-red-700",
-  "In Progress": "bg-amber-50 text-amber-700",
-  Resolved: "bg-emerald-50 text-emerald-700",
+  Open: "bg-danger-bg text-danger-text",
+  "In Progress": "bg-warning-bg text-warning-text",
+  Resolved: "bg-success-bg text-success-text",
 };

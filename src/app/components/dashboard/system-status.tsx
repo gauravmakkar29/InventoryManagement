@@ -43,8 +43,8 @@ const ATTENTION_ITEMS = [
   },
   {
     icon: Shield,
-    iconBg: "bg-red-50",
-    iconColor: "text-red-500",
+    iconBg: "bg-danger-bg",
+    iconColor: "text-danger",
     title: "Critical CVE detected",
     subtitle: "CVE-2026-1234 affects 42 devices",
   },
@@ -57,8 +57,8 @@ const ATTENTION_ITEMS = [
   },
   {
     icon: FileWarning,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
+    iconBg: "bg-warning-bg",
+    iconColor: "text-warning",
     title: "Compliance review due",
     subtitle: "IEC 62443 cert expires in 7 days",
   },
@@ -83,7 +83,7 @@ export function SystemStatusRow() {
               <span
                 className={cn(
                   "h-2 w-2 shrink-0 rounded-full",
-                  svc.status === "healthy" ? "bg-emerald-500" : "bg-red-500",
+                  svc.status === "healthy" ? "bg-success" : "bg-danger",
                 )}
               />
               <div className="min-w-0">
@@ -116,7 +116,7 @@ export function SystemStatusRow() {
                 </div>
                 <span className="text-[14px] font-medium text-foreground/80">{action.label}</span>
                 {action.badge > 0 && (
-                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[12px] font-bold text-white shadow-sm">
+                  <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[12px] font-bold text-white shadow-sm">
                     {action.badge}
                   </span>
                 )}

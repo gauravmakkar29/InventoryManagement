@@ -4,8 +4,8 @@ import { Link } from "react-router";
 export function AccessDenied() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-4 py-20">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
-        <ShieldX className="h-8 w-8 text-red-500" />
+      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-danger-bg">
+        <ShieldX className="h-8 w-8 text-danger" />
       </div>
       <h1 className="text-[20px] font-semibold text-foreground">Access Denied</h1>
       <p className="max-w-sm text-center text-[15px] text-muted-foreground">

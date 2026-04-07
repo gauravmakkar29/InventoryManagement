@@ -47,7 +47,7 @@ export function ApprovalStageIndicator({
               <div
                 className={cn(
                   "h-0.5 w-4",
-                  isCompleted || isCurrent ? "bg-emerald-500" : "bg-border/60",
+                  isCompleted || isCurrent ? "bg-success" : "bg-border/60",
                 )}
               />
             )}
@@ -56,8 +56,8 @@ export function ApprovalStageIndicator({
               <div
                 className={cn(
                   "flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold transition-all duration-200",
-                  isCompleted && "bg-emerald-500 text-white",
-                  isCurrent && "bg-blue-600 text-white animate-pulse",
+                  isCompleted && "bg-success text-white",
+                  isCurrent && "bg-info text-white animate-pulse",
                   isFuture && "border border-border bg-card text-muted-foreground",
                   isDeprecated && "border border-border bg-muted text-muted-foreground",
                 )}
@@ -87,8 +87,8 @@ export function ApprovalStageIndicator({
               className={cn(
                 "text-[12px] font-medium",
                 i > 0 && "ml-1",
-                isCompleted && "text-emerald-600",
-                isCurrent && "text-blue-600",
+                isCompleted && "text-success-text",
+                isCurrent && "text-info-text",
                 !isCompleted && !isCurrent && "text-muted-foreground",
                 isDeprecated && "text-muted-foreground line-through",
               )}

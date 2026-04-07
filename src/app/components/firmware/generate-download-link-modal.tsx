@@ -171,7 +171,7 @@ export function GenerateDownloadLinkModal({
                 "flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-semibold text-white transition-colors",
                 isSelfAssign
                   ? "bg-muted-foreground/40 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700",
+                  : "bg-info hover:bg-info-text",
               )}
             >
               <Link2 className="h-3.5 w-3.5" />
@@ -181,7 +181,7 @@ export function GenerateDownloadLinkModal({
         ) : (
           <button
             onClick={handleClose}
-            className="rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+            className="rounded bg-info px-3 py-1.5 text-sm font-semibold text-white hover:bg-info-text transition-colors"
           >
             Done
           </button>
@@ -204,7 +204,7 @@ export function GenerateDownloadLinkModal({
                   id="firmwareId"
                   className={cn(
                     "w-full rounded border bg-card px-3 py-2 text-sm text-foreground",
-                    errors.firmwareId ? "border-red-500" : "border-border",
+                    errors.firmwareId ? "border-danger" : "border-border",
                   )}
                 >
                   <option value="">Select firmware...</option>
@@ -217,7 +217,7 @@ export function GenerateDownloadLinkModal({
               )}
             />
             {errors.firmwareId && (
-              <p className="mt-1 text-xs text-red-500">{errors.firmwareId.message}</p>
+              <p className="mt-1 text-xs text-danger-text">{errors.firmwareId.message}</p>
             )}
           </div>
 
@@ -235,7 +235,7 @@ export function GenerateDownloadLinkModal({
                   id="userId"
                   className={cn(
                     "w-full rounded border bg-card px-3 py-2 text-sm text-foreground",
-                    errors.userId ? "border-red-500" : "border-border",
+                    errors.userId ? "border-danger" : "border-border",
                   )}
                 >
                   <option value="">Select technician...</option>
@@ -247,9 +247,11 @@ export function GenerateDownloadLinkModal({
                 </select>
               )}
             />
-            {errors.userId && <p className="mt-1 text-xs text-red-500">{errors.userId.message}</p>}
+            {errors.userId && (
+              <p className="mt-1 text-xs text-danger-text">{errors.userId.message}</p>
+            )}
             {isSelfAssign && (
-              <p className="mt-1 flex items-center gap-1 text-xs text-amber-500">
+              <p className="mt-1 flex items-center gap-1 text-xs text-warning">
                 <AlertTriangle className="h-3 w-3" />
                 AC-5: You cannot generate a link for yourself (separation of duties)
               </p>
@@ -283,7 +285,7 @@ export function GenerateDownloadLinkModal({
               )}
             />
             {errors.expiresInHours && (
-              <p className="mt-1 text-xs text-red-500">{errors.expiresInHours.message}</p>
+              <p className="mt-1 text-xs text-danger-text">{errors.expiresInHours.message}</p>
             )}
           </div>
         </form>
@@ -298,7 +300,7 @@ export function GenerateDownloadLinkModal({
             <code className="flex-1 truncate text-xs text-foreground">{generatedUrl}</code>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors"
+              className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-info-text hover:bg-info-bg dark:hover:bg-info-bg transition-colors"
               aria-label="Copy download link"
             >
               {copied ? (

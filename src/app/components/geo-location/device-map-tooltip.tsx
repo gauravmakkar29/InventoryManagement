@@ -11,19 +11,19 @@ import type { GeoDevice } from "./geo-location-types";
 export function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { dot: string; text: string; bg: string }> = {
     [DeviceStatus.Online]: {
-      dot: "bg-emerald-500",
-      text: "text-emerald-700",
-      bg: "bg-emerald-50",
+      dot: "bg-success",
+      text: "text-success-text",
+      bg: "bg-success-bg",
     },
     [DeviceStatus.Offline]: {
-      dot: "bg-red-500",
-      text: "text-red-700",
-      bg: "bg-red-50",
+      dot: "bg-danger",
+      text: "text-danger-text",
+      bg: "bg-danger-bg",
     },
     [DeviceStatus.Maintenance]: {
-      dot: "bg-amber-500",
-      text: "text-amber-700",
-      bg: "bg-amber-50",
+      dot: "bg-warning",
+      text: "text-warning-text",
+      bg: "bg-warning-bg",
     },
     [DeviceStatus.Decommissioned]: {
       dot: "bg-gray-400",
@@ -113,12 +113,12 @@ export function DeviceTooltip({
 
   const healthColor =
     device.health >= 90
-      ? "text-emerald-600"
+      ? "text-success-text"
       : device.health >= 70
-        ? "text-amber-600"
+        ? "text-warning-text"
         : device.health >= 50
-          ? "text-orange-600"
-          : "text-red-600";
+          ? "text-high-text"
+          : "text-danger-text";
 
   return (
     <div
@@ -164,7 +164,7 @@ export function DeviceTooltip({
       <div className="border-t border-border/60 px-3 py-2">
         <button
           onClick={() => onShowTrail(device)}
-          className="flex w-full items-center justify-center gap-1.5 rounded-md bg-blue-50 px-2 py-1.5 text-[13px] font-medium text-blue-700 hover:bg-blue-100 cursor-pointer transition-colors"
+          className="flex w-full items-center justify-center gap-1.5 rounded-md bg-info-bg px-2 py-1.5 text-[13px] font-medium text-info-text hover:bg-info-bg cursor-pointer transition-colors"
         >
           {trailActive ? (
             <>

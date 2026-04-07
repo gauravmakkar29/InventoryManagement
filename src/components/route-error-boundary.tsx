@@ -51,9 +51,9 @@ export class RouteErrorBoundary extends Component<Props, State> {
       return (
         <div className="flex h-full items-center justify-center p-8">
           <div className="text-center max-w-md">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-danger-bg">
               <svg
-                className="h-6 w-6 text-red-600"
+                className="h-6 w-6 text-danger-text"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"

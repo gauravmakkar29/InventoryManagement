@@ -80,13 +80,13 @@ const MOCK_AFFECTED_DEVICES: BlastRadiusDevice[] = [
 function getRiskLevelBg(level: RiskLevel): string {
   switch (level) {
     case RiskLevel.Critical:
-      return "bg-red-50 text-red-700";
+      return "bg-danger-bg text-danger-text";
     case RiskLevel.High:
-      return "bg-orange-50 text-orange-700";
+      return "bg-high-bg text-high-text";
     case RiskLevel.Medium:
-      return "bg-amber-50 text-amber-700";
+      return "bg-warning-bg text-warning-text";
     case RiskLevel.Low:
-      return "bg-emerald-50 text-emerald-700";
+      return "bg-success-bg text-success-text";
   }
 }
 
@@ -103,11 +103,11 @@ function computeRiskLevel(devices: BlastRadiusDevice[]): RiskLevel {
 function getStatusColor(status: DeviceStatus): string {
   switch (status) {
     case DeviceStatus.Online:
-      return "bg-emerald-500";
+      return "bg-success";
     case DeviceStatus.Offline:
-      return "bg-red-500";
+      return "bg-danger";
     case DeviceStatus.Maintenance:
-      return "bg-amber-500";
+      return "bg-warning";
     default:
       return "bg-muted-foreground";
   }
@@ -169,14 +169,14 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
           key={device.id}
           className={cn(
             "flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-muted cursor-pointer",
-            device.riskScore <= 30 && "bg-red-50/50",
+            device.riskScore <= 30 && "bg-danger-bg/50",
           )}
         >
           <div className="relative">
             <MapPin
               className={cn(
                 "h-4 w-4",
-                device.riskScore <= 30 ? "text-red-500" : "text-muted-foreground",
+                device.riskScore <= 30 ? "text-danger" : "text-muted-foreground",
               )}
             />
             <span
@@ -197,12 +197,12 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
               className={cn(
                 "text-[14px] font-bold tabular-nums",
                 device.riskScore <= 30
-                  ? "text-red-600"
+                  ? "text-danger-text"
                   : device.riskScore <= 50
-                    ? "text-orange-600"
+                    ? "text-high-text"
                     : device.riskScore <= 70
-                      ? "text-amber-600"
-                      : "text-emerald-600",
+                      ? "text-warning-text"
+                      : "text-success-text",
               )}
             >
               {device.riskScore}

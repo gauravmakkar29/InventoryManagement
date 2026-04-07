@@ -30,9 +30,9 @@ export function Dashboard() {
     <div className="space-y-6">
       {/* Offline Banner */}
       {!navigator.onLine && (
-        <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
-          <WifiOff className="h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
-          <p className="text-[14px] font-medium text-amber-700">
+        <div className="flex items-center gap-2 rounded-lg border border-warning-bg bg-warning-bg px-4 py-3">
+          <WifiOff className="h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
+          <p className="text-[14px] font-medium text-warning-text">
             You are offline. Some data may be stale.
           </p>
         </div>

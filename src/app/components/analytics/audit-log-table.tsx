@@ -18,11 +18,11 @@ const AUDIT_EXPORT_COLUMNS: ExportColumn<AnalyticsAuditEntry>[] = [
 function actionBadgeClass(action: AnalyticsAuditEntry["action"]): string {
   switch (action) {
     case "Created":
-      return "bg-blue-50 text-blue-700";
+      return "bg-info-bg text-info-text";
     case "Modified":
-      return "bg-amber-50 text-amber-700";
+      return "bg-warning-bg text-warning-text";
     case "Deleted":
-      return "bg-red-50 text-red-700";
+      return "bg-danger-bg text-danger-text";
   }
 }
 

@@ -83,7 +83,7 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex w-full items-center justify-between px-3 py-2 text-left text-[14px] cursor-pointer",
                     selectedFirmware === fw.id
-                      ? "bg-orange-50 text-accent-text font-medium"
+                      ? "bg-high-bg text-accent-text font-medium"
                       : "text-foreground/80 hover:bg-muted",
                   )}
                 >
@@ -117,7 +117,7 @@ export function UploadSBOMModal({
                   className={cn(
                     "flex items-center gap-2 rounded-lg border px-4 py-2.5 text-[14px] font-medium cursor-pointer",
                     format === f
-                      ? "border-accent-text bg-orange-50 text-accent-text"
+                      ? "border-accent-text bg-high-bg text-accent-text"
                       : "border-border text-muted-foreground hover:bg-muted",
                   )}
                 >
@@ -171,9 +171,9 @@ export function UploadSBOMModal({
               className={cn(
                 "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 cursor-pointer",
                 dragOver
-                  ? "border-accent-text bg-orange-50"
+                  ? "border-accent-text bg-high-bg"
                   : fileName
-                    ? "border-green-300 bg-green-50"
+                    ? "border-success-bg bg-success-bg"
                     : "border-border hover:border-border",
               )}
               onClick={() => {
@@ -189,8 +189,8 @@ export function UploadSBOMModal({
             >
               {fileName ? (
                 <>
-                  <FileText className="mb-2 h-8 w-8 text-green-500" />
-                  <span className="text-[14px] font-medium text-green-700">{fileName}</span>
+                  <FileText className="mb-2 h-8 w-8 text-success" />
+                  <span className="text-[14px] font-medium text-success-text">{fileName}</span>
                   <span className="mt-1 text-[13px] text-muted-foreground">
                     Click to change file
                   </span>
@@ -223,7 +223,7 @@ export function UploadSBOMModal({
             className={cn(
               "rounded-lg px-4 py-2 text-[14px] font-medium text-white cursor-pointer",
               selectedFirmware && fileName
-                ? "bg-accent hover:bg-[#e66e00]"
+                ? "bg-accent hover:bg-accent-hover"
                 : "bg-muted cursor-not-allowed",
             )}
           >

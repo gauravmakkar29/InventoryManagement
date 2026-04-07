@@ -18,8 +18,8 @@ interface ConfirmDialogProps {
 }
 
 const VARIANT_CLASSES: Record<string, string> = {
-  danger: "bg-red-600 hover:bg-red-700",
-  warning: "bg-amber-600 hover:bg-amber-700",
+  danger: "bg-danger hover:bg-danger-text",
+  warning: "bg-warning hover:bg-warning-text",
   primary: "bg-accent hover:bg-accent/90",
 };
 

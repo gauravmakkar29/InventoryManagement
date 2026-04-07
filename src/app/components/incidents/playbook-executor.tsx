@@ -25,7 +25,7 @@ export function PlaybookExecutor({
           Playbook: {progress.playbookName}
         </h4>
         {pct === 100 && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[12px] font-semibold text-emerald-700">
+          <span className="inline-flex items-center gap-1 rounded-full bg-success-bg px-2 py-0.5 text-[12px] font-semibold text-success-text">
             <CheckCircle2 className="h-3 w-3" /> Complete
           </span>
         )}
@@ -52,13 +52,13 @@ export function PlaybookExecutor({
             key={step.stepNumber}
             className={cn(
               "rounded-lg border p-3",
-              step.isCompleted ? "border-emerald-200 bg-emerald-50/50" : "border-border",
+              step.isCompleted ? "border-success-bg bg-success-bg/50" : "border-border",
             )}
           >
             <div className="flex items-start gap-3">
               <div className="mt-0.5">
                 {step.isCompleted ? (
-                  <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                  <CheckCircle2 className="h-5 w-5 text-success" />
                 ) : (
                   <button
                     onClick={() => onStepComplete(step.stepNumber)}
@@ -83,7 +83,7 @@ export function PlaybookExecutor({
                     {step.title}
                   </p>
                   {step.actionType === "automated" && (
-                    <span className="inline-flex items-center gap-0.5 rounded bg-blue-50 px-1.5 py-0.5 text-[12px] font-semibold text-blue-600">
+                    <span className="inline-flex items-center gap-0.5 rounded bg-info-bg px-1.5 py-0.5 text-[12px] font-semibold text-info-text">
                       <Zap className="h-2.5 w-2.5" /> AUTO
                     </span>
                   )}
@@ -99,7 +99,7 @@ export function PlaybookExecutor({
               {!step.isCompleted && step.actionType === "automated" && (
                 <button
                   onClick={() => onStepComplete(step.stepNumber)}
-                  className="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-[13px] font-medium text-white hover:bg-blue-700 cursor-pointer"
+                  className="shrink-0 rounded-lg bg-info px-3 py-1.5 text-[13px] font-medium text-white hover:bg-info-text cursor-pointer"
                 >
                   Execute
                 </button>

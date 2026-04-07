@@ -30,17 +30,17 @@ interface MethodConfig {
 const METHOD_CONFIG: Record<FirmwareAssignment["assignmentMethod"], MethodConfig> = {
   DOWNLOAD_TOKEN: {
     label: "Download Token",
-    className: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+    className: "bg-info-bg text-info-text dark:bg-info-bg dark:text-info-text",
     icon: Download,
   },
   MANUAL: {
     label: "Manual",
-    className: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300",
+    className: "bg-warning-bg text-warning-text dark:bg-warning-bg dark:text-warning-text",
     icon: Wrench,
   },
   OTA: {
     label: "OTA",
-    className: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+    className: "bg-success-bg text-success-text dark:bg-success-bg dark:text-success-text",
     icon: Wifi,
   },
 };
@@ -83,9 +83,9 @@ function TimelineEntry({ assignment, isCurrent, isRecalled, isLast }: TimelineEn
           className={cn(
             "z-10 flex h-3 w-3 shrink-0 rounded-full border-2",
             isCurrent
-              ? "border-blue-600 bg-blue-600"
+              ? "border-info bg-info"
               : isRecalled
-                ? "border-red-500 bg-red-500"
+                ? "border-danger bg-danger"
                 : "border-slate-400 bg-slate-400 dark:border-slate-500 dark:bg-slate-500",
           )}
         />
@@ -97,7 +97,7 @@ function TimelineEntry({ assignment, isCurrent, isRecalled, isLast }: TimelineEn
         className={cn(
           "mb-6 flex-1 rounded-lg border p-4",
           isCurrent
-            ? "border-blue-300 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/30"
+            ? "border-info-bg bg-info-bg dark:border-info-bg dark:bg-info-bg"
             : "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900",
         )}
       >
@@ -109,7 +109,7 @@ function TimelineEntry({ assignment, isCurrent, isRecalled, isLast }: TimelineEn
           <span className="text-[13px] text-muted-foreground">{assignment.firmwareName}</span>
 
           {isCurrent && (
-            <span className="rounded-full bg-blue-600 px-2 py-0.5 text-[11px] font-medium text-white">
+            <span className="rounded-full bg-info px-2 py-0.5 text-[11px] font-medium text-white">
               Current
             </span>
           )}
@@ -143,7 +143,7 @@ function TimelineEntry({ assignment, isCurrent, isRecalled, isLast }: TimelineEn
 
         {/* Recall warning */}
         {isRecalled && (
-          <div className="mt-2 flex items-center gap-1.5 rounded-md bg-red-50 px-2.5 py-1.5 text-[12px] font-medium text-red-700 dark:bg-red-950/40 dark:text-red-400">
+          <div className="mt-2 flex items-center gap-1.5 rounded-md bg-danger-bg px-2.5 py-1.5 text-[12px] font-medium text-danger-text dark:bg-danger-bg dark:text-danger-text">
             <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
             This version was later recalled
           </div>

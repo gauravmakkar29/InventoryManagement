@@ -138,7 +138,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               htmlFor="fw-version"
               className="mb-1 block text-[13px] font-medium text-muted-foreground"
             >
-              Version <span className="text-red-500">*</span>
+              Version <span className="text-danger">*</span>
             </label>
             <input
               id="fw-version"
@@ -151,11 +151,11 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               placeholder="e.g. v4.3.0"
               className={cn(
                 "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring",
-                errors.version ? "border-red-500" : "border-border",
+                errors.version ? "border-danger" : "border-border",
               )}
             />
             {errors.version && (
-              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-danger" role="alert">
                 {errors.version}
               </p>
             )}
@@ -167,7 +167,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               htmlFor="fw-name"
               className="mb-1 block text-[13px] font-medium text-muted-foreground"
             >
-              Name <span className="text-red-500">*</span>
+              Name <span className="text-danger">*</span>
             </label>
             <input
               id="fw-name"
@@ -180,11 +180,11 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               placeholder="e.g. Security Patch Bundle"
               className={cn(
                 "w-full rounded-sm border bg-background px-2.5 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring",
-                errors.name ? "border-red-500" : "border-border",
+                errors.name ? "border-danger" : "border-border",
               )}
             />
             {errors.name && (
-              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-danger" role="alert">
                 {errors.name}
               </p>
             )}
@@ -241,7 +241,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               id="fw-file-label"
               className="mb-1 block text-[13px] font-medium text-muted-foreground"
             >
-              Firmware File <span className="text-red-500">*</span>
+              Firmware File <span className="text-danger">*</span>
             </label>
             <div
               role="button"
@@ -265,7 +265,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
                 isDragging
                   ? "border-accent-text bg-accent/5"
                   : errors.file
-                    ? "border-red-400 bg-red-50/30"
+                    ? "border-danger bg-danger-bg/30"
                     : "border-border bg-muted/30 hover:border-accent-text/50",
               )}
             >
@@ -294,7 +294,7 @@ export function UploadFirmwareModal({ open, onClose, onSubmit }: UploadModalProp
               )}
             </div>
             {errors.file && (
-              <p className="mt-0.5 text-[12px] text-red-500" role="alert">
+              <p className="mt-0.5 text-[12px] text-danger" role="alert">
                 {errors.file}
               </p>
             )}

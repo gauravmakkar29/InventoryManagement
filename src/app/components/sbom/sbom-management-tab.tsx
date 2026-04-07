@@ -75,7 +75,7 @@ export function SBOMManagementTab({
         {canUpload && (
           <button
             onClick={() => setShowUpload(true)}
-            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-[#e66e00] cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-[14px] font-medium text-white hover:bg-accent-hover cursor-pointer"
           >
             <Upload className="h-4 w-4" />
             Upload SBOM
@@ -125,7 +125,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
             className={cn(
               "rounded-md px-2 py-0.5 text-[13px] font-medium",
               sbom.format === "CycloneDX"
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-info-bg text-info-text"
                 : "bg-purple-50 text-purple-700",
             )}
           >
@@ -133,19 +133,19 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
           </span>
           {/* Status badge */}
           {sbom.status === "Complete" && (
-            <span className="rounded-md bg-green-50 px-2 py-0.5 text-[13px] font-medium text-green-700">
+            <span className="rounded-md bg-success-bg px-2 py-0.5 text-[13px] font-medium text-success-text">
               Complete
             </span>
           )}
           {sbom.status === "Processing" && (
-            <span className="flex items-center gap-1 rounded-md bg-blue-50 px-2 py-0.5 text-[13px] font-medium text-blue-700">
+            <span className="flex items-center gap-1 rounded-md bg-info-bg px-2 py-0.5 text-[13px] font-medium text-info-text">
               <Loader2 className="h-3 w-3 animate-spin" />
               Processing
             </span>
           )}
           {sbom.status === "Error" && (
             <span
-              className="rounded-md bg-red-50 px-2 py-0.5 text-[13px] font-medium text-red-700 cursor-help"
+              className="rounded-md bg-danger-bg px-2 py-0.5 text-[13px] font-medium text-danger-text cursor-help"
               title={sbom.errorMessage}
             >
               Error
@@ -167,7 +167,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
               <div
                 className={cn(
                   "text-[16px] font-semibold",
-                  sbom.vulnerabilityCount > 0 ? "text-red-600" : "text-foreground",
+                  sbom.vulnerabilityCount > 0 ? "text-danger-text" : "text-foreground",
                 )}
               >
                 {sbom.vulnerabilityCount}
@@ -185,28 +185,28 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
               <div className="flex h-2 overflow-hidden rounded-full bg-muted">
                 {sbom.criticalVulnCount > 0 && (
                   <div
-                    className="bg-red-500"
+                    className="bg-danger"
                     style={{ width: `${(sbom.criticalVulnCount / totalVulns) * 100}%` }}
                     title={`Critical: ${sbom.criticalVulnCount}`}
                   />
                 )}
                 {sbom.highVulnCount > 0 && (
                   <div
-                    className="bg-orange-500"
+                    className="bg-high"
                     style={{ width: `${(sbom.highVulnCount / totalVulns) * 100}%` }}
                     title={`High: ${sbom.highVulnCount}`}
                   />
                 )}
                 {sbom.mediumVulnCount > 0 && (
                   <div
-                    className="bg-amber-500"
+                    className="bg-warning"
                     style={{ width: `${(sbom.mediumVulnCount / totalVulns) * 100}%` }}
                     title={`Medium: ${sbom.mediumVulnCount}`}
                   />
                 )}
                 {sbom.lowVulnCount > 0 && (
                   <div
-                    className="bg-green-500"
+                    className="bg-success"
                     style={{ width: `${(sbom.lowVulnCount / totalVulns) * 100}%` }}
                     title={`Low: ${sbom.lowVulnCount}`}
                   />
@@ -215,25 +215,25 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
               <div className="mt-1 flex gap-3 text-[12px] text-muted-foreground">
                 {sbom.criticalVulnCount > 0 && (
                   <span className="flex items-center gap-1">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-red-500" />
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-danger" />
                     {sbom.criticalVulnCount} Critical
                   </span>
                 )}
                 {sbom.highVulnCount > 0 && (
                   <span className="flex items-center gap-1">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-orange-500" />
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-high" />
                     {sbom.highVulnCount} High
                   </span>
                 )}
                 {sbom.mediumVulnCount > 0 && (
                   <span className="flex items-center gap-1">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500" />
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-warning" />
                     {sbom.mediumVulnCount} Medium
                   </span>
                 )}
                 {sbom.lowVulnCount > 0 && (
                   <span className="flex items-center gap-1">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-green-500" />
+                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
                     {sbom.lowVulnCount} Low
                   </span>
                 )}
@@ -251,10 +251,10 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
       )}
 
       {sbom.status === "Error" && (
-        <div className="mb-3 rounded-lg bg-red-50 p-3">
+        <div className="mb-3 rounded-lg bg-danger-bg p-3">
           <div className="flex items-start gap-2">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-            <p className="text-[14px] text-red-700">{sbom.errorMessage}</p>
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-danger-text" />
+            <p className="text-[14px] text-danger-text">{sbom.errorMessage}</p>
           </div>
         </div>
       )}
@@ -263,7 +263,7 @@ function SBOMCard({ sbom, onViewDetails }: { sbom: SBOM; onViewDetails: () => vo
         <div className="flex justify-end">
           <button
             onClick={onViewDetails}
-            className="flex items-center gap-1 text-[14px] font-medium text-accent-text hover:text-[#e66e00] cursor-pointer"
+            className="flex items-center gap-1 text-[14px] font-medium text-accent-text hover:text-accent-hover cursor-pointer"
           >
             View Details
             <ChevronRight className="h-3.5 w-3.5" />

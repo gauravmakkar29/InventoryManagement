@@ -37,12 +37,17 @@ const HEALTH_CONFIG: Record<
 > = {
   healthy: {
     label: "Healthy",
-    color: "text-emerald-700",
-    bg: "bg-emerald-50",
-    dot: "bg-emerald-500",
+    color: "text-success-text",
+    bg: "bg-success-bg",
+    dot: "bg-success",
   },
-  degraded: { label: "Degraded", color: "text-amber-700", bg: "bg-amber-50", dot: "bg-amber-500" },
-  failed: { label: "Failed", color: "text-red-700", bg: "bg-red-50", dot: "bg-red-500" },
+  degraded: {
+    label: "Degraded",
+    color: "text-warning-text",
+    bg: "bg-warning-bg",
+    dot: "bg-warning",
+  },
+  failed: { label: "Failed", color: "text-danger-text", bg: "bg-danger-bg", dot: "bg-danger" },
 };
 
 // ---------------------------------------------------------------------------
@@ -117,7 +122,7 @@ export function TelemetryIngestStatus() {
       <div className="grid grid-cols-3 gap-3">
         {/* Records ingested */}
         <div className="rounded-xl border border-border/60 bg-muted px-3 py-3 text-center">
-          <Database className="mx-auto h-4 w-4 text-blue-500 mb-1.5" />
+          <Database className="mx-auto h-4 w-4 text-info mb-1.5" />
           <p className="text-[16px] font-bold tabular-nums text-foreground">
             {status.recordsIngestedLastHour.toLocaleString()}
           </p>
@@ -137,19 +142,21 @@ export function TelemetryIngestStatus() {
         <div
           className={cn(
             "rounded-xl border px-3 py-3 text-center",
-            status.errorCount > 0 ? "border-red-200 bg-red-50" : "border-border/60 bg-muted",
+            status.errorCount > 0
+              ? "border-danger-border bg-danger-bg"
+              : "border-border/60 bg-muted",
           )}
         >
           <AlertCircle
             className={cn(
               "mx-auto h-4 w-4 mb-1.5",
-              status.errorCount > 0 ? "text-red-500" : "text-muted-foreground",
+              status.errorCount > 0 ? "text-danger-text" : "text-muted-foreground",
             )}
           />
           <p
             className={cn(
               "text-[16px] font-bold tabular-nums",
-              status.errorCount > 0 ? "text-red-600" : "text-foreground",
+              status.errorCount > 0 ? "text-danger-text" : "text-foreground",
             )}
           >
             {status.errorCount}

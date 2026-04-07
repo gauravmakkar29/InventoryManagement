@@ -87,22 +87,22 @@ export const FILTER_OPTIONS: FilterOption[] = [
     id: DeviceStatus.Online,
     label: "Online",
     color: "bg-muted text-muted-foreground hover:bg-muted",
-    activeColor: "bg-emerald-600 text-white",
-    dotColor: "bg-emerald-500",
+    activeColor: "bg-success text-white",
+    dotColor: "bg-success",
   },
   {
     id: DeviceStatus.Offline,
     label: "Offline",
     color: "bg-muted text-muted-foreground hover:bg-muted",
-    activeColor: "bg-red-600 text-white",
-    dotColor: "bg-red-500",
+    activeColor: "bg-danger text-white",
+    dotColor: "bg-danger",
   },
   {
     id: DeviceStatus.Maintenance,
     label: "Maintenance",
     color: "bg-muted text-muted-foreground hover:bg-muted",
-    activeColor: "bg-amber-600 text-white",
-    dotColor: "bg-amber-500",
+    activeColor: "bg-warning text-white",
+    dotColor: "bg-warning",
   },
 ];
 

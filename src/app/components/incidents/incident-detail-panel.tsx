@@ -175,16 +175,16 @@ export function IncidentDetailPanel({
             {incident.affectedDevices.map((device) => (
               <div key={device.id} className="rounded-lg border border-border p-3">
                 {device.status === "Isolated" && (
-                  <div className="mb-2 flex items-center gap-2 rounded-md bg-red-50 border border-red-200 px-3 py-1.5">
-                    <Lock className="h-3.5 w-3.5 text-red-500" />
-                    <span className="text-[13px] font-semibold text-red-700">ISOLATED</span>
+                  <div className="mb-2 flex items-center gap-2 rounded-md bg-danger-bg border border-danger-border px-3 py-1.5">
+                    <Lock className="h-3.5 w-3.5 text-danger-text" />
+                    <span className="text-[13px] font-semibold text-danger-text">ISOLATED</span>
                     {device.isolatedAt && (
-                      <span className="text-[12px] text-red-500">
+                      <span className="text-[12px] text-danger-text">
                         &middot; {formatRelativeTime(device.isolatedAt)}
                       </span>
                     )}
                     {device.isolationPolicy && (
-                      <span className="text-[12px] text-red-500">
+                      <span className="text-[12px] text-danger-text">
                         &middot; {device.isolationPolicy}
                       </span>
                     )}
@@ -202,14 +202,14 @@ export function IncidentDetailPanel({
                     {device.status !== "Isolated" ? (
                       <button
                         onClick={() => onIsolate(device)}
-                        className="rounded-lg bg-red-50 px-3 py-1.5 text-[13px] font-medium text-red-700 hover:bg-red-100 cursor-pointer"
+                        className="rounded-lg bg-danger-bg px-3 py-1.5 text-[13px] font-medium text-danger-text hover:bg-danger-bg cursor-pointer"
                       >
                         <Lock className="mr-1 inline h-3 w-3" /> Isolate
                       </button>
                     ) : (
                       <button
                         onClick={() => onRelease(device)}
-                        className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[13px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
+                        className="rounded-lg bg-success-bg px-3 py-1.5 text-[13px] font-medium text-success-text hover:bg-success-bg cursor-pointer"
                       >
                         <Unlock className="mr-1 inline h-3 w-3" /> Release
                       </button>

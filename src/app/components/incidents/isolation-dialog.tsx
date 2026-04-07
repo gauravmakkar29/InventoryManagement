@@ -51,10 +51,10 @@ export function IsolationDialog({
         className="w-full max-w-md rounded-xl bg-card shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="rounded-t-xl bg-amber-50 border-b border-amber-200 px-6 py-4">
+        <div className="rounded-t-xl bg-warning-bg border-b border-warning-bg px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
-              <AlertTriangle className="h-5 w-5 text-amber-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-warning-bg">
+              <AlertTriangle className="h-5 w-5 text-warning-text" />
             </div>
             <div>
               <h3 className="text-[16px] font-semibold text-foreground">Isolate Device</h3>
@@ -89,7 +89,7 @@ export function IsolationDialog({
                   className={cn(
                     "flex cursor-pointer items-start gap-3 rounded-lg border p-3",
                     policy === p.value
-                      ? "border-accent-text bg-orange-50"
+                      ? "border-accent-text bg-high-bg"
                       : "border-border hover:bg-muted",
                   )}
                 >
@@ -118,7 +118,7 @@ export function IsolationDialog({
           </button>
           <button
             onClick={() => onConfirm(device.id, policy)}
-            className="rounded-lg bg-red-600 px-4 py-2 text-[14px] font-medium text-white hover:bg-red-700 cursor-pointer"
+            className="rounded-lg bg-danger px-4 py-2 text-[14px] font-medium text-white hover:bg-danger cursor-pointer"
           >
             <Lock className="mr-1.5 inline h-3.5 w-3.5" />
             Confirm Isolation

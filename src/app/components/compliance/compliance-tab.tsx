@@ -248,7 +248,7 @@ const ComplianceRow = memo(function ComplianceRow({
           <span
             className={cn(
               "text-sm tabular-nums font-medium",
-              item.findings > 0 ? "text-red-600" : "text-muted-foreground",
+              item.findings > 0 ? "text-danger-text" : "text-muted-foreground",
             )}
           >
             {item.findings}
@@ -260,7 +260,7 @@ const ComplianceRow = memo(function ComplianceRow({
             {canSubmitForReview(role) && item.status === "Pending" && (
               <button
                 onClick={() => onSubmitForReview(item.id)}
-                className="rounded px-2 py-1 text-[12px] font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-info-text bg-info-bg hover:bg-info-bg transition-colors"
               >
                 Submit
               </button>
@@ -268,7 +268,7 @@ const ComplianceRow = memo(function ComplianceRow({
             {canApprove(role) && item.status === "In Review" && (
               <button
                 onClick={() => onApprove(item.id)}
-                className="rounded px-2 py-1 text-[12px] font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-success-text bg-success-bg hover:bg-success-bg transition-colors"
               >
                 Approve
               </button>
@@ -276,7 +276,7 @@ const ComplianceRow = memo(function ComplianceRow({
             {canDeprecate(role) && (item.status === "Approved" || item.status === "Pending") && (
               <button
                 onClick={() => onDeprecate(item.id)}
-                className="rounded px-2 py-1 text-[12px] font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 transition-colors"
+                className="rounded px-2 py-1 text-[12px] font-medium text-warning-text bg-warning-bg hover:bg-warning-bg transition-colors"
               >
                 Deprecate
               </button>
@@ -307,7 +307,7 @@ const ComplianceRow = memo(function ComplianceRow({
                         className={cn(
                           "flex items-center justify-between rounded border p-2.5",
                           vuln.severity === "Critical"
-                            ? "border-red-200 bg-red-50/50"
+                            ? "border-danger-border bg-danger-bg/50"
                             : "border-border bg-card",
                         )}
                       >

@@ -141,7 +141,7 @@ export function AuditLogTab({ currentUser }: AuditLogTabProps) {
           {auditUserFilter && (
             <button
               onClick={handleClearUserFilter}
-              className="flex items-center gap-1 rounded-sm bg-blue-500/10 px-2 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-500/20 transition-colors duration-150"
+              className="flex items-center gap-1 rounded-sm bg-info/10 px-2 py-1.5 text-sm font-medium text-info-text hover:bg-info/20 transition-colors duration-150"
             >
               {auditUserFilter}
               <X className="h-3 w-3" />
@@ -162,16 +162,16 @@ export function AuditLogTab({ currentUser }: AuditLogTabProps) {
         </button>
       </div>
 
-      {auditDateError && <p className="text-sm text-red-500">{auditDateError}</p>}
+      {auditDateError && <p className="text-sm text-danger">{auditDateError}</p>}
 
       {auditError && (
-        <div className="flex flex-col items-center justify-center rounded-sm border border-red-200 bg-red-50 py-8">
-          <AlertTriangle className="mb-2 h-6 w-6 text-red-500" />
-          <p className="text-sm font-medium text-red-600">Failed to load audit logs</p>
-          <p className="mt-1 text-sm text-red-500">{auditError}</p>
+        <div className="flex flex-col items-center justify-center rounded-sm border border-danger-border bg-danger-bg py-8">
+          <AlertTriangle className="mb-2 h-6 w-6 text-danger" />
+          <p className="text-sm font-medium text-danger-text">Failed to load audit logs</p>
+          <p className="mt-1 text-sm text-danger">{auditError}</p>
           <button
             onClick={handleRetryAudit}
-            className="mt-3 flex items-center gap-1 rounded-sm border border-red-200 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-100 transition-colors duration-150"
+            className="mt-3 flex items-center gap-1 rounded-sm border border-danger-border px-3 py-1.5 text-sm font-medium text-danger-text hover:bg-danger-bg transition-colors duration-150"
           >
             <RefreshCw className="h-3 w-3" />
             Retry
@@ -288,7 +288,7 @@ export function AuditLogTab({ currentUser }: AuditLogTabProps) {
                     </td>
                     <td className="px-3 py-2 font-mono text-muted-foreground">{log.ipAddress}</td>
                     <td className="px-3 py-2">
-                      <span className="rounded-sm bg-emerald-500/10 px-1.5 py-0.5 text-[12px] font-medium text-emerald-600">
+                      <span className="rounded-sm bg-success/10 px-1.5 py-0.5 text-[12px] font-medium text-success-text">
                         {log.status}
                       </span>
                     </td>

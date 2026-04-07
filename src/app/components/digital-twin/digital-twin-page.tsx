@@ -51,7 +51,7 @@ export function DigitalTwinPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-orange-50 px-2.5 py-1 text-[14px] font-medium text-accent-text">
+          <span className="rounded-full bg-high-bg px-2.5 py-1 text-[14px] font-medium text-accent-text">
             {twins.length} twins
           </span>
         </div>
@@ -92,11 +92,11 @@ export function DigitalTwinPage() {
                 "rounded-lg px-3 py-1.5 text-[14px] font-medium cursor-pointer",
                 healthFilter === bucket.key
                   ? bucket.key === "critical"
-                    ? "bg-red-50 text-red-700"
+                    ? "bg-danger-bg text-danger-text"
                     : bucket.key === "warning"
-                      ? "bg-amber-50 text-amber-700"
+                      ? "bg-warning-bg text-warning-text"
                       : bucket.key === "healthy"
-                        ? "bg-emerald-50 text-emerald-700"
+                        ? "bg-success-bg text-success-text"
                         : "bg-accent text-white"
                   : "bg-muted text-muted-foreground hover:bg-muted/70",
               )}

@@ -38,11 +38,11 @@ export function getDefaultDateRange(): { start: string; end: string } {
 export function getActionBadgeClass(action: AuditAction): string {
   switch (action) {
     case "Created":
-      return "bg-blue-500/10 text-blue-600";
+      return "bg-info/10 text-info-text";
     case "Modified":
-      return "bg-amber-500/10 text-amber-600";
+      return "bg-warning/10 text-warning-text";
     case "Deleted":
-      return "bg-red-500/10 text-red-600";
+      return "bg-danger/10 text-danger-text";
     default:
       return "bg-muted text-muted-foreground";
   }

@@ -9,9 +9,13 @@ import type { SortField, SortDir } from "@/lib/hooks/use-device-inventory";
 
 export function StatusBadge({ status }: { status: string }) {
   const config: Record<string, { dot: string; text: string; bg: string }> = {
-    [DeviceStatus.Online]: { dot: "bg-emerald-500", text: "text-emerald-700", bg: "bg-emerald-50" },
-    [DeviceStatus.Offline]: { dot: "bg-red-500", text: "text-red-700", bg: "bg-red-50" },
-    [DeviceStatus.Maintenance]: { dot: "bg-amber-500", text: "text-amber-700", bg: "bg-amber-50" },
+    [DeviceStatus.Online]: { dot: "bg-success", text: "text-success-text", bg: "bg-success-bg" },
+    [DeviceStatus.Offline]: { dot: "bg-danger", text: "text-danger-text", bg: "bg-danger-bg" },
+    [DeviceStatus.Maintenance]: {
+      dot: "bg-warning",
+      text: "text-warning-text",
+      bg: "bg-warning-bg",
+    },
     [DeviceStatus.Decommissioned]: {
       dot: "bg-gray-400",
       text: "text-muted-foreground",
@@ -39,13 +43,7 @@ export function StatusBadge({ status }: { status: string }) {
 
 export function HealthBar({ value }: { value: number }) {
   const color =
-    value >= 90
-      ? "bg-emerald-500"
-      : value >= 70
-        ? "bg-amber-500"
-        : value >= 50
-          ? "bg-orange-500"
-          : "bg-red-500";
+    value >= 90 ? "bg-success" : value >= 70 ? "bg-warning" : value >= 50 ? "bg-high" : "bg-danger";
   return (
     <div className="flex items-center gap-2">
       <div className="h-1.5 w-20 rounded-full bg-muted">

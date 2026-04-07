@@ -203,7 +203,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
               className={cn(
                 "flex items-center gap-1.5 rounded px-3 py-1.5 text-sm font-semibold text-white transition-colors cursor-pointer",
                 canGenerate
-                  ? "bg-blue-600 hover:bg-blue-700"
+                  ? "bg-info hover:bg-info-text"
                   : "bg-muted-foreground/40 cursor-not-allowed",
               )}
             >
@@ -216,7 +216,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
         ) : (
           <button
             onClick={handleClose}
-            className="rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors cursor-pointer"
+            className="rounded bg-info px-3 py-1.5 text-sm font-semibold text-white hover:bg-info-text transition-colors cursor-pointer"
           >
             Done
           </button>
@@ -257,7 +257,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
               <label className="block text-sm font-medium text-foreground">Technicians</label>
               <button
                 onClick={toggleAll}
-                className="text-xs text-blue-600 hover:text-blue-700 cursor-pointer"
+                className="text-xs text-info-text hover:text-info-text cursor-pointer"
               >
                 {selectedTechIds.size === availableTechnicians.length
                   ? "Deselect all"
@@ -274,7 +274,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
                     type="checkbox"
                     checked={selectedTechIds.has(tech.id)}
                     onChange={() => toggleTechnician(tech.id)}
-                    className="h-4 w-4 rounded border-border text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-border text-info-text focus:ring-info"
                   />
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-foreground">{tech.name}</span>
@@ -284,7 +284,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
               ))}
             </div>
             {selfSelected && (
-              <p className="mt-1 flex items-center gap-1 text-xs text-amber-500">
+              <p className="mt-1 flex items-center gap-1 text-xs text-warning">
                 <AlertTriangle className="h-3 w-3" />
                 AC-5: You cannot generate a link for yourself (separation of duties)
               </p>
@@ -328,7 +328,7 @@ export function BulkGenerateModal({ open, onClose }: BulkGenerateModalProps) {
             </p>
             <button
               onClick={handleCopyAll}
-              className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors cursor-pointer"
+              className="flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-info-text hover:bg-info-bg dark:hover:bg-info-bg transition-colors cursor-pointer"
             >
               {allCopied ? (
                 <>
