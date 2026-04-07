@@ -128,4 +128,32 @@ export const queryKeys = {
     records: () => [...queryKeys.dns.all, "records"] as const,
     propagation: (name: string) => [...queryKeys.dns.all, "propagation", name] as const,
   },
+
+  // Firmware Families / Versions (Story #388)
+  firmwareFamilies: {
+    all: ["firmwareFamilies"] as const,
+    detail: (familyId: string) => [...queryKeys.firmwareFamilies.all, "detail", familyId] as const,
+    versions: (familyId: string, filters?: Record<string, unknown>) =>
+      [...queryKeys.firmwareFamilies.all, "versions", familyId, filters] as const,
+    version: (familyId: string, versionId: string) =>
+      [...queryKeys.firmwareFamilies.all, "version", familyId, versionId] as const,
+  },
+
+  // Customers (Story #389)
+  customers: {
+    all: ["customers"] as const,
+    list: (filters?: Record<string, unknown>) =>
+      [...queryKeys.customers.all, "list", filters] as const,
+    detail: (id: string) => [...queryKeys.customers.all, "detail", id] as const,
+  },
+
+  // Sites (Story #389)
+  sites: {
+    all: ["sites"] as const,
+    list: (customerId: string) => [...queryKeys.sites.all, "list", customerId] as const,
+    detail: (id: string) => [...queryKeys.sites.all, "detail", id] as const,
+    deployments: (siteId: string) => [...queryKeys.sites.all, "deployments", siteId] as const,
+    byFirmwareVersion: (fwVersionId: string) =>
+      [...queryKeys.sites.all, "byFirmwareVersion", fwVersionId] as const,
+  },
 };

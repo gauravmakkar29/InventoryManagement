@@ -42,7 +42,8 @@
     "incidents": "Incidents",
     "digitalTwin": "Digital Twin",
     "executiveSummary": "Executive Summary",
-    "userManagement": "User Management"
+    "userManagement": "User Management",
+    "customers": "Customers"
   },
   "auth": {
     "signIn": "Sign In",

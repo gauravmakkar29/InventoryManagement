@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   Fingerprint,
   FileText,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
@@ -48,6 +49,7 @@ const NAV_GROUPS: NavGroup[] = [
     labelKey: "nav.operations",
     items: [
       { labelKey: "nav.deployment", path: "/deployment", page: "deployment", icon: Rocket },
+      { labelKey: "nav.customers", path: "/customers", page: "customers", icon: Building2 },
       { labelKey: "nav.compliance", path: "/compliance", page: "compliance", icon: Shield },
       { labelKey: "nav.sbom", path: "/sbom", page: "sbom", icon: FileBox },
       {

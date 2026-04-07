@@ -23,6 +23,7 @@ import type {
   BlastRadiusResult,
   TelemetryPipelineStatus,
   FailureType,
+  FirmwareFamily,
 } from "../types";
 import type {
   GlobalSearchResponse,
@@ -153,6 +154,34 @@ export interface IApiProvider {
   getDeviceGeoClusters(bounds?: GeoBoundingBox, precision?: number): Promise<GeoCluster[]>;
   getOsisPipelineHealth(): Promise<PipelineHealthStatus>;
   triggerReindex(): Promise<boolean>;
+
+  // --- Story #388: Firmware Version History ---
+  getFirmwareFamily(familyId: string): Promise<FirmwareFamily | null>;
+  listFirmwareVersions(
+    familyId: string,
+    page?: number,
+    pageSize?: number,
+  ): Promise<PaginatedResponse<FirmwareVersion>>;
+  getFirmwareVersion(familyId: string, versionId: string): Promise<FirmwareVersion | null>;
+
+  // --- Story #389: Customer & Site Management ---
+  listCustomers(
+    page?: number,
+    pageSize?: number,
+    search?: string,
+  ): Promise<PaginatedResponse<Customer>>;
+  listSites(customerId: string, page?: number, pageSize?: number): Promise<PaginatedResponse<Site>>;
+  getSite(siteId: string): Promise<Site | null>;
+  listSiteDeployments(
+    siteId: string,
+    page?: number,
+    pageSize?: number,
+  ): Promise<PaginatedResponse<SiteDeployment>>;
+  listSitesByFirmwareVersion(
+    firmwareVersionId: string,
+    page?: number,
+    pageSize?: number,
+  ): Promise<PaginatedResponse<Site>>;
 }
 
 // =============================================================================
@@ -172,6 +201,9 @@ export interface IStorageProvider {
 // =============================================================================
 // Provider Interfaces (Epic 20 — re-exported from dedicated type files)
 // =============================================================================
+
+import type { FirmwareVersion } from "../types/firmware-version";
+import type { Site, SiteDeployment } from "../types/customer-site";
 
 import type { IArtifactProvider } from "./artifact-provider.types";
 import type { ICRMProvider } from "./crm-provider.types";

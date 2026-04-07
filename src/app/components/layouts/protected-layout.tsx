@@ -91,6 +91,7 @@ const ROUTE_TO_PAGE: Record<string, string> = {
   "/digital-twin": "digital-twin",
   "/executive-summary": "executive-summary",
   "/user-management": "user-management",
+  "/customers": "customers",
 };
 
 export function ProtectedLayout() {
@@ -122,7 +123,12 @@ export function ProtectedLayout() {
   }
 
   // NIST AC-3: Route-level RBAC enforcement (#337)
-  const pageSlug = ROUTE_TO_PAGE[location.pathname];
+  // Exact match first, then prefix match for parameterized routes (e.g. /customers/:id)
+  const pageSlug =
+    ROUTE_TO_PAGE[location.pathname] ??
+    Object.entries(ROUTE_TO_PAGE).find(
+      ([prefix]) => prefix !== "/" && location.pathname.startsWith(prefix + "/"),
+    )?.[1];
   if (pageSlug) {
     const role = getPrimaryRole(groups);
     if (!canAccessPage(role, pageSlug)) {
