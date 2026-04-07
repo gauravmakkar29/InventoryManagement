@@ -13,7 +13,15 @@ import { queryClient } from "../query-client";
 const ReactQueryDevtools = lazy(() =>
   import("@tanstack/react-query-devtools").then((m) => ({ default: m.ReactQueryDevtools })),
 );
-import type { IApiProvider, IStorageProvider } from "./types";
+import type {
+  IApiProvider,
+  IStorageProvider,
+  IArtifactProvider,
+  ICRMProvider,
+  IComplianceScannerProvider,
+  ICDCProvider,
+  IDNSProvider,
+} from "./types";
 
 // =============================================================================
 // Module-level singleton — non-React access to the API provider
@@ -49,6 +57,11 @@ export function getApiProvider(): IApiProvider {
 interface ProviderRegistryValue {
   api: IApiProvider;
   storage: IStorageProvider;
+  artifact: IArtifactProvider | null;
+  crm: ICRMProvider | null;
+  complianceScanner: IComplianceScannerProvider | null;
+  cdc: ICDCProvider | null;
+  dns: IDNSProvider | null;
 }
 
 const ProviderRegistryContext = createContext<ProviderRegistryValue | null>(null);
@@ -61,6 +74,11 @@ interface ProviderRegistryProps {
   api: IApiProvider;
   storage: IStorageProvider;
   AuthProvider: ComponentType<{ children: ReactNode }>;
+  artifact?: IArtifactProvider | null;
+  crm?: ICRMProvider | null;
+  complianceScanner?: IComplianceScannerProvider | null;
+  cdc?: ICDCProvider | null;
+  dns?: IDNSProvider | null;
   children: ReactNode;
 }
 
@@ -69,12 +87,25 @@ interface ProviderRegistryProps {
  * AuthProvider is rendered as a component (it manages React state internally).
  * API and Storage are plain object instances provided via context.
  */
-export function ProviderRegistry({ api, storage, AuthProvider, children }: ProviderRegistryProps) {
+export function ProviderRegistry({
+  api,
+  storage,
+  AuthProvider,
+  artifact = null,
+  crm = null,
+  complianceScanner = null,
+  cdc = null,
+  dns = null,
+  children,
+}: ProviderRegistryProps) {
   // Sync the module-level singleton so hlm-api.ts facade can delegate
   // to the active provider without needing React context.
   setApiProvider(api);
 
-  const registryValue = useMemo(() => ({ api, storage }), [api, storage]);
+  const registryValue = useMemo(
+    () => ({ api, storage, artifact, crm, complianceScanner, cdc, dns }),
+    [api, storage, artifact, crm, complianceScanner, cdc, dns],
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -144,4 +175,94 @@ export function useApiProvider(): IApiProvider {
  */
 export function useStorageProvider(): IStorageProvider {
   return useProviders().storage;
+}
+
+/**
+ * Access the artifact provider for binary artifact operations.
+ *
+ * Returns null if no artifact provider is configured for the current platform.
+ *
+ * @example
+ * ```tsx
+ * function FirmwareUpload() {
+ *   const artifact = useArtifactProvider();
+ *   if (!artifact) return <p>Artifact provider not configured</p>;
+ *   const upload = () => artifact.uploadArtifact(input, file);
+ * }
+ * ```
+ */
+export function useArtifactProvider(): IArtifactProvider | null {
+  return useProviders().artifact;
+}
+
+/**
+ * Access the CRM provider for customer and ticket operations.
+ *
+ * Returns null if no CRM provider is configured for the current platform.
+ *
+ * @example
+ * ```tsx
+ * function TicketList() {
+ *   const crm = useCRMProvider();
+ *   if (!crm) return <p>CRM not configured</p>;
+ *   const { data } = useQuery({ queryKey: queryKeys.crm.tickets(), queryFn: () => crm.listTickets() });
+ * }
+ * ```
+ */
+export function useCRMProvider(): ICRMProvider | null {
+  return useProviders().crm;
+}
+
+/**
+ * Access the compliance scanner provider for vulnerability scanning.
+ *
+ * Returns null if no scanner is configured for the current platform.
+ *
+ * @example
+ * ```tsx
+ * function ScanStatus({ scanId }: { scanId: string }) {
+ *   const scanner = useComplianceScannerProvider();
+ *   if (!scanner) return null;
+ *   const { data } = useQuery({ queryKey: queryKeys.scans.status(scanId), queryFn: () => scanner.getScanStatus(scanId) });
+ * }
+ * ```
+ */
+export function useComplianceScannerProvider(): IComplianceScannerProvider | null {
+  return useProviders().complianceScanner;
+}
+
+/**
+ * Access the CDC provider for change data capture and audit events.
+ *
+ * Returns null if no CDC provider is configured for the current platform.
+ *
+ * @example
+ * ```tsx
+ * function AuditFeed({ entityType }: { entityType: string }) {
+ *   const cdc = useCDCProvider();
+ *   if (!cdc) return null;
+ *   const { data } = useQuery({ queryKey: queryKeys.cdc.recent(entityType), queryFn: () => cdc.listRecentChanges(entityType) });
+ * }
+ * ```
+ */
+export function useCDCProvider(): ICDCProvider | null {
+  return useProviders().cdc;
+}
+
+/**
+ * Access the DNS provider for domain record management.
+ *
+ * Returns null if no DNS provider is configured for the current platform.
+ *
+ * @example
+ * ```tsx
+ * function DNSRecords() {
+ *   const dns = useDNSProvider();
+ *   if (!dns) return null;
+ *   const { data } = useQuery({ queryKey: queryKeys.dns.records(), queryFn: () => dns.listRecords() });
+ * }
+ * ```
+ */
+export function useDNSProvider(): IDNSProvider | null {
+  return useProviders().dns;
 }
