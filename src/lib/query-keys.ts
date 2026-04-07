@@ -87,4 +87,45 @@ export const queryKeys = {
   notifications: {
     all: ["notifications"] as const,
   },
+
+  // Artifacts (Epic 20 — IArtifactProvider)
+  artifacts: {
+    all: ["artifacts"] as const,
+    detail: (id: string) => [...queryKeys.artifacts.all, "detail", id] as const,
+    versions: (id: string) => [...queryKeys.artifacts.all, "versions", id] as const,
+  },
+
+  // CRM (Epic 20 — ICRMProvider)
+  crm: {
+    all: ["crm"] as const,
+    customers: (filters?: Record<string, unknown>) =>
+      [...queryKeys.crm.all, "customers", filters] as const,
+    customer: (id: string) => [...queryKeys.crm.all, "customer", id] as const,
+    tickets: (filters?: Record<string, unknown>) =>
+      [...queryKeys.crm.all, "tickets", filters] as const,
+    ticket: (id: string) => [...queryKeys.crm.all, "ticket", id] as const,
+  },
+
+  // Compliance Scans (Epic 20 — IComplianceScannerProvider)
+  scans: {
+    all: ["scans"] as const,
+    status: (scanId: string) => [...queryKeys.scans.all, "status", scanId] as const,
+    report: (scanId: string) => [...queryKeys.scans.all, "report", scanId] as const,
+    history: (artifactId: string) => [...queryKeys.scans.all, "history", artifactId] as const,
+  },
+
+  // CDC (Epic 20 — ICDCProvider)
+  cdc: {
+    all: ["cdc"] as const,
+    history: (entityId: string) => [...queryKeys.cdc.all, "history", entityId] as const,
+    recent: (entityType: string) => [...queryKeys.cdc.all, "recent", entityType] as const,
+    stats: (range?: Record<string, unknown>) => [...queryKeys.cdc.all, "stats", range] as const,
+  },
+
+  // DNS (Epic 20 — IDNSProvider)
+  dns: {
+    all: ["dns"] as const,
+    records: () => [...queryKeys.dns.all, "records"] as const,
+    propagation: (name: string) => [...queryKeys.dns.all, "propagation", name] as const,
+  },
 };

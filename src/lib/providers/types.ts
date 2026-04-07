@@ -170,6 +170,66 @@ export interface IStorageProvider {
 }
 
 // =============================================================================
+// Provider Interfaces (Epic 20 — re-exported from dedicated type files)
+// =============================================================================
+
+import type { IArtifactProvider } from "./artifact-provider.types";
+import type { ICRMProvider } from "./crm-provider.types";
+import type { IComplianceScannerProvider } from "./scanner-provider.types";
+import type { ICDCProvider } from "./cdc-provider.types";
+import type { IDNSProvider } from "./dns-provider.types";
+
+export type {
+  ArtifactUploadInput,
+  ArtifactMetadata,
+  ArtifactVersion,
+  SecureLinkOptions,
+  SecureLinkResult,
+  WebhookConfig,
+  ArtifactProviderConfig,
+  IArtifactProvider,
+} from "./artifact-provider.types";
+
+export type {
+  CRMCustomer,
+  CRMTicket,
+  CRMTicketInput,
+  CRMComment,
+  CRMSyncResult,
+  CRMProviderConfig,
+  ICRMProvider,
+} from "./crm-provider.types";
+
+export type {
+  ScanRequest,
+  ScanStatusValue,
+  ScanStatus,
+  ScanVulnerability,
+  ScanReport,
+  ComplianceScore,
+  ScannerProviderConfig,
+  IComplianceScannerProvider,
+} from "./scanner-provider.types";
+
+export type {
+  CDCAction,
+  CDCEvent,
+  CDCSubscription,
+  CDCChangeStats,
+  CDCProviderConfig,
+  ICDCProvider,
+} from "./cdc-provider.types";
+
+export type {
+  DNSRecordType,
+  DNSRecord,
+  DNSProviderConfig,
+  CertValidationResult,
+  PropagationStatus,
+  IDNSProvider,
+} from "./dns-provider.types";
+
+// =============================================================================
 // Platform Config
 // =============================================================================
 
@@ -179,4 +239,9 @@ export interface PlatformConfig {
   api: IApiProvider;
   storage: IStorageProvider;
   AuthProvider: ComponentType<{ children: ReactNode }>;
+  artifact?: IArtifactProvider;
+  crm?: ICRMProvider;
+  complianceScanner?: IComplianceScannerProvider;
+  cdc?: ICDCProvider;
+  dns?: IDNSProvider;
 }
