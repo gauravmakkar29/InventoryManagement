@@ -8,15 +8,14 @@ import type { Incident, IncidentSeverity, IncidentCategory } from "@/lib/inciden
 // ---------------------------------------------------------------------------
 // Create Incident Dialog (Story 14.1 AC1-AC2)
 // ---------------------------------------------------------------------------
-export function CreateIncidentDialog({
-  open,
-  onClose,
-  onCreate,
-}: {
+
+interface CreateIncidentDialogProps {
   open: boolean;
   onClose: () => void;
   onCreate: (incident: Incident) => void;
-}) {
+}
+
+export function CreateIncidentDialog({ open, onClose, onCreate }: CreateIncidentDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [severity, setSeverity] = useState<IncidentSeverity>("Medium");

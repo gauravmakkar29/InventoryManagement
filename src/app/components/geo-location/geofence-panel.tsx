@@ -7,6 +7,14 @@ import type { Geofence } from "./geo-location-types";
 // GeofencePanel (Story 10.4)
 // ---------------------------------------------------------------------------
 
+interface GeofencePanelProps {
+  geofences: Geofence[];
+  showGeofences: boolean;
+  onToggleGeofences: () => void;
+  onSelectGeofence: (geofence: Geofence) => void;
+  onCreateGeofence: () => void;
+}
+
 /** Story 10.4: Geofence panel — collapsible sidebar listing all geofences */
 export function GeofencePanel({
   geofences,
@@ -14,13 +22,7 @@ export function GeofencePanel({
   onToggleGeofences,
   onSelectGeofence,
   onCreateGeofence,
-}: {
-  geofences: Geofence[];
-  showGeofences: boolean;
-  onToggleGeofences: () => void;
-  onSelectGeofence: (geofence: Geofence) => void;
-  onCreateGeofence: () => void;
-}) {
+}: GeofencePanelProps) {
   const [expanded, setExpanded] = useState(true);
 
   return (

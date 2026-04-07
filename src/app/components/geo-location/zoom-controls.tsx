@@ -4,15 +4,13 @@ import { ZoomIn, ZoomOut, Navigation } from "lucide-react";
 // ZoomControls
 // ---------------------------------------------------------------------------
 
-export function ZoomControls({
-  onZoomIn,
-  onZoomOut,
-  onResetView,
-}: {
+interface ZoomControlsProps {
   onZoomIn: () => void;
   onZoomOut: () => void;
   onResetView: () => void;
-}) {
+}
+
+export function ZoomControls({ onZoomIn, onZoomOut, onResetView }: ZoomControlsProps) {
   return (
     <div className="absolute top-3 right-3 z-20 flex flex-col gap-1">
       <button

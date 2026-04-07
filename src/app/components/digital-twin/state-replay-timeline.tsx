@@ -2,17 +2,19 @@ import { cn } from "../../../lib/utils";
 import type { TwinStateSnapshot } from "./digital-twin-types";
 
 // Story 15.2 — State Replay Timeline
+interface StateReplayTimelineProps {
+  snapshots: TwinStateSnapshot[];
+  selectedIds: string[];
+  activeId: string | null;
+  onSelect: (id: string) => void;
+}
+
 export function StateReplayTimeline({
   snapshots,
   selectedIds,
   activeId,
   onSelect,
-}: {
-  snapshots: TwinStateSnapshot[];
-  selectedIds: string[];
-  activeId: string | null;
-  onSelect: (id: string) => void;
-}) {
+}: StateReplayTimelineProps) {
   return (
     <div className="relative px-4 py-3">
       {/* Timeline bar */}

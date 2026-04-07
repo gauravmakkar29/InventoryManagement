@@ -6,6 +6,15 @@ import { FILTER_OPTIONS } from "./geo-location-types";
 // StatusFilterPills (Story 9.3)
 // ---------------------------------------------------------------------------
 
+interface StatusFilterPillsProps {
+  statusFilter: GeoStatusFilter;
+  statusCounts: Record<string, number>;
+  mappableCount: number;
+  totalCount: number;
+  clusterCount: number;
+  onFilterChange: (filter: GeoStatusFilter) => void;
+}
+
 export function StatusFilterPills({
   statusFilter,
   statusCounts,
@@ -13,14 +22,7 @@ export function StatusFilterPills({
   totalCount,
   clusterCount,
   onFilterChange,
-}: {
-  statusFilter: GeoStatusFilter;
-  statusCounts: Record<string, number>;
-  mappableCount: number;
-  totalCount: number;
-  clusterCount: number;
-  onFilterChange: (filter: GeoStatusFilter) => void;
-}) {
+}: StatusFilterPillsProps) {
   return (
     <div className="flex flex-wrap items-center gap-2">
       {FILTER_OPTIONS.map((opt) => {

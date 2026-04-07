@@ -7,16 +7,14 @@ import type { GeoDevice } from "./geo-location-types";
 // ClusterMarker (Story 10.2)
 // ---------------------------------------------------------------------------
 
-/** Story 10.2: Cluster marker showing grouped device count */
-export function ClusterMarker({
-  cluster,
-  zoom,
-  onClick,
-}: {
+interface ClusterMarkerProps {
   cluster: DeviceCluster;
   zoom: number;
   onClick: (cluster: DeviceCluster, event: React.MouseEvent) => void;
-}) {
+}
+
+/** Story 10.2: Cluster marker showing grouped device count */
+export function ClusterMarker({ cluster, zoom, onClick }: ClusterMarkerProps) {
   const size = Math.min(16 + cluster.count * 2, 36) / Math.sqrt(zoom);
   const fontSize = Math.max(8, 11 / Math.sqrt(zoom));
 
@@ -59,15 +57,13 @@ export function ClusterMarker({
 // GeofenceOverlays (Story 10.4)
 // ---------------------------------------------------------------------------
 
-export function GeofenceOverlays({
-  geofences,
-  zoom,
-  geofenceCircleRadius,
-}: {
+interface GeofenceOverlaysProps {
   geofences: Geofence[];
   zoom: number;
   geofenceCircleRadius: (radiusKm: number) => number;
-}) {
+}
+
+export function GeofenceOverlays({ geofences, zoom, geofenceCircleRadius }: GeofenceOverlaysProps) {
   return (
     <>
       {geofences.map((gf) => (
@@ -127,15 +123,13 @@ export function TrailDots({ trailPoints, zoom }: { trailPoints: TrailPoint[]; zo
 // SingleDeviceMarker (Story 10.2)
 // ---------------------------------------------------------------------------
 
-export function SingleDeviceMarkers({
-  devices,
-  zoom,
-  onMarkerClick,
-}: {
+interface SingleDeviceMarkersProps {
   devices: ResolvedDevice[];
   zoom: number;
   onMarkerClick: (device: GeoDevice, event: React.MouseEvent) => void;
-}) {
+}
+
+export function SingleDeviceMarkers({ devices, zoom, onMarkerClick }: SingleDeviceMarkersProps) {
   return (
     <>
       {devices.map((device) => (

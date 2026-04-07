@@ -3,15 +3,13 @@ import { cn } from "../../../lib/utils";
 import type { TwinStateSnapshot } from "./digital-twin-types";
 
 // Story 15.2 — State Comparison View
-export function StateComparisonView({
-  left,
-  right,
-  onClose,
-}: {
+interface StateComparisonViewProps {
   left: TwinStateSnapshot;
   right: TwinStateSnapshot;
   onClose: () => void;
-}) {
+}
+
+export function StateComparisonView({ left, right, onClose }: StateComparisonViewProps) {
   const fields: { label: string; getLeft: () => string; getRight: () => string }[] = [
     {
       label: "Firmware",
