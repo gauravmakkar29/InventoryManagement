@@ -13,6 +13,15 @@ import { IncidentTimeline } from "./incident-timeline";
 import { PlaybookExecutor } from "./playbook-executor";
 import { NetworkTopologyGraph, LateralMovementPanel } from "./network-topology-graph";
 
+interface IncidentDetailPanelProps {
+  incident: Incident;
+  onClose: () => void;
+  onStatusChange: (incidentId: string, newStatus: IncidentStatus, note: string) => void;
+  onIsolate: (device: AffectedDevice) => void;
+  onRelease: (device: AffectedDevice) => void;
+  onStepComplete: (incidentId: string, stepNumber: number) => void;
+}
+
 export function IncidentDetailPanel({
   incident,
   onClose,
@@ -20,14 +29,7 @@ export function IncidentDetailPanel({
   onIsolate,
   onRelease,
   onStepComplete,
-}: {
-  incident: Incident;
-  onClose: () => void;
-  onStatusChange: (incidentId: string, newStatus: IncidentStatus, note: string) => void;
-  onIsolate: (device: AffectedDevice) => void;
-  onRelease: (device: AffectedDevice) => void;
-  onStepComplete: (incidentId: string, stepNumber: number) => void;
-}) {
+}: IncidentDetailPanelProps) {
   const [activeSection, setActiveSection] = useState<
     "details" | "devices" | "topology" | "playbook" | "timeline"
   >("details");

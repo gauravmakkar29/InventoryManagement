@@ -6,16 +6,14 @@ import type { GeoDevice, TrailPoint } from "./geo-location-types";
 // TrailTimeline (Story 10.5)
 // ---------------------------------------------------------------------------
 
-/** Story 10.5: Device position history trail timeline */
-export function TrailTimeline({
-  device,
-  trail,
-  onHideTrail,
-}: {
+interface TrailTimelineProps {
   device: GeoDevice;
   trail: TrailPoint[];
   onHideTrail: () => void;
-}) {
+}
+
+/** Story 10.5: Device position history trail timeline */
+export function TrailTimeline({ device, trail, onHideTrail }: TrailTimelineProps) {
   return (
     <div className="card-elevated overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">

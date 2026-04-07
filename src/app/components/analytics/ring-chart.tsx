@@ -1,14 +1,12 @@
 import type { RingSegment } from "@/lib/mock-data/analytics-data";
 
-export function RingChart({
-  segments,
-  size = 160,
-  strokeWidth = 20,
-}: {
+interface RingChartProps {
   segments: RingSegment[];
   size?: number;
   strokeWidth?: number;
-}) {
+}
+
+export function RingChart({ segments, size = 160, strokeWidth = 20 }: RingChartProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const total = segments.reduce((sum, seg) => sum + seg.value, 0);

@@ -13,15 +13,17 @@ import type {
 } from "@/lib/incident-types";
 import { SeverityBadge, StatusBadge, CategoryBadge } from "./incident-badges";
 
+interface IncidentListTabProps {
+  incidents: Incident[];
+  onSelectIncident: (incident: Incident) => void;
+  onCreateIncident: () => void;
+}
+
 export function IncidentListTab({
   incidents,
   onSelectIncident,
   onCreateIncident,
-}: {
-  incidents: Incident[];
-  onSelectIncident: (incident: Incident) => void;
-  onCreateIncident: () => void;
-}) {
+}: IncidentListTabProps) {
   const [statusFilter, setStatusFilter] = useState<IncidentStatus | "All">("All");
   const [severityFilter, setSeverityFilter] = useState<IncidentSeverity | "All">("All");
   const [categoryFilter, setCategoryFilter] = useState<IncidentCategory | "All">("All");

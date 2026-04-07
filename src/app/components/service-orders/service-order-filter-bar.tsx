@@ -20,6 +20,19 @@ const SERVICE_ORDER_EXPORT_COLUMNS: ExportColumn<ServiceOrder>[] = [
 
 /* ─── Filter Bar ──────────────────────────────────────────────────── */
 
+interface FilterBarProps {
+  statusFilter: string;
+  priorityFilter: string;
+  searchQuery: string;
+  onStatusChange: (v: string) => void;
+  onPriorityChange: (v: string) => void;
+  onSearchChange: (v: string) => void;
+  onClearAll: () => void;
+  filteredOrders: ServiceOrder[];
+  filteredCount: number;
+  totalCount: number;
+}
+
 export function FilterBar({
   statusFilter,
   priorityFilter,
@@ -31,18 +44,7 @@ export function FilterBar({
   filteredOrders,
   filteredCount,
   totalCount,
-}: {
-  statusFilter: string;
-  priorityFilter: string;
-  searchQuery: string;
-  onStatusChange: (v: string) => void;
-  onPriorityChange: (v: string) => void;
-  onSearchChange: (v: string) => void;
-  onClearAll: () => void;
-  filteredOrders: ServiceOrder[];
-  filteredCount: number;
-  totalCount: number;
-}) {
+}: FilterBarProps) {
   const hasActiveFilters = statusFilter !== "all" || priorityFilter !== "all" || searchQuery !== "";
 
   const selectClasses =

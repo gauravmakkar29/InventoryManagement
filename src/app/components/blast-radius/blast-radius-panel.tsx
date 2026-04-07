@@ -116,17 +116,19 @@ function getStatusColor(status: DeviceStatus): string {
 // ---------------------------------------------------------------------------
 // BlastRadiusSummary
 // ---------------------------------------------------------------------------
+interface BlastRadiusSummaryProps {
+  affectedCount: number;
+  estimatedDowntime: number;
+  riskLevel: RiskLevel;
+  radiusKm: number;
+}
+
 function BlastRadiusSummary({
   affectedCount,
   estimatedDowntime,
   riskLevel,
   radiusKm,
-}: {
-  affectedCount: number;
-  estimatedDowntime: number;
-  riskLevel: RiskLevel;
-  radiusKm: number;
-}) {
+}: BlastRadiusSummaryProps) {
   return (
     <div className="rounded-xl border border-border/60 bg-muted p-4">
       <div className="flex items-center justify-between mb-3">
@@ -218,15 +220,13 @@ function BlastRadiusDeviceList({ devices }: { devices: BlastRadiusDevice[] }) {
 // ---------------------------------------------------------------------------
 // BlastRadiusOverlay (SVG circle for map integration)
 // ---------------------------------------------------------------------------
-export function BlastRadiusOverlay({
-  centerX,
-  centerY,
-  radius,
-}: {
+interface BlastRadiusOverlayProps {
   centerX: number;
   centerY: number;
   radius: number;
-}) {
+}
+
+export function BlastRadiusOverlay({ centerX, centerY, radius }: BlastRadiusOverlayProps) {
   return (
     <g>
       {/* Outer fill */}

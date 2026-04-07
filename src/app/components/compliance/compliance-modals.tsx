@@ -33,6 +33,15 @@ export function ModalOverlay({
 // Confirm Dialog
 // =============================================================================
 
+interface ConfirmDialogProps {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  confirmClass: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
 export function ConfirmDialog({
   title,
   message,
@@ -40,14 +49,7 @@ export function ConfirmDialog({
   confirmClass,
   onConfirm,
   onCancel,
-}: {
-  title: string;
-  message: string;
-  confirmLabel: string;
-  confirmClass: string;
-  onConfirm: () => void;
-  onCancel: () => void;
-}) {
+}: ConfirmDialogProps) {
   return (
     <ModalOverlay onClose={onCancel}>
       <div className="w-full max-w-sm rounded-lg bg-card shadow-xl border border-border">

@@ -54,6 +54,15 @@ export function StatusBadge({ status }: { status: string }) {
 // DeviceTooltip
 // ---------------------------------------------------------------------------
 
+interface DeviceTooltipProps {
+  device: GeoDevice;
+  position: { x: number; y: number };
+  onClose: () => void;
+  onShowTrail: (device: GeoDevice) => void;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  trailActive: boolean;
+}
+
 /** Tooltip card shown when a marker is clicked */
 export function DeviceTooltip({
   device,
@@ -62,14 +71,7 @@ export function DeviceTooltip({
   onShowTrail,
   containerRef,
   trailActive,
-}: {
-  device: GeoDevice;
-  position: { x: number; y: number };
-  onClose: () => void;
-  onShowTrail: (device: GeoDevice) => void;
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  trailActive: boolean;
-}) {
+}: DeviceTooltipProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [adjustedPos, setAdjustedPos] = useState(position);
 
