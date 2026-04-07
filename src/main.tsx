@@ -22,6 +22,11 @@ createRoot(document.getElementById("root")!).render(
             api={platform.api}
             storage={platform.storage}
             AuthProvider={platform.AuthProvider}
+            artifact={platform.artifact}
+            crm={platform.crm}
+            complianceScanner={platform.complianceScanner}
+            cdc={platform.cdc}
+            dns={platform.dns}
           >
             <App />
             <Toaster

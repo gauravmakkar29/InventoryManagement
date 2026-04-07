@@ -2,12 +2,21 @@ import type { PlatformConfig, PlatformId } from "./types";
 import { createMockApiProvider } from "./mock/mock-api-provider";
 import { createMockStorageProvider } from "./mock/mock-storage-provider";
 import { MockAuthProvider } from "./mock/mock-auth-provider";
+import { createMockArtifactProvider } from "./mock/mock-artifact-provider";
+import { createMockCRMProvider } from "./mock/mock-crm-provider";
+import { createMockScannerProvider } from "./mock/mock-scanner-provider";
+import { createMockCDCProvider } from "./mock/mock-cdc-provider";
+import { createMockDNSProvider } from "./mock/mock-dns-provider";
 import { createAuthProvider } from "./auth-provider";
 import { createCdkAuthAdapter } from "./aws-cdk/cdk-auth-adapter";
 import { createCdkApiProvider } from "./aws-cdk/cdk-api-provider";
 import { createAmplifyAuthAdapter } from "./aws-amplify/amplify-auth-adapter";
 import { createAmplifyApiProvider } from "./aws-amplify/amplify-api-provider";
 import { createAmplifyStorageProvider } from "./aws-amplify/amplify-storage-provider";
+// Concrete provider adapters — uncomment when wiring non-mock platforms:
+// import { createJFrogArtifactProvider } from "./jfrog/jfrog-artifact-provider";
+// import { createS3ArtifactProvider } from "./aws-amplify/amplify-artifact-provider";
+// import { createServiceNowCRMProvider } from "./servicenow/servicenow-crm-provider";
 import { createTerraformAuthAdapter } from "./aws-terraform/terraform-auth-adapter";
 import { createTerraformApiProvider } from "./aws-terraform/terraform-api-provider";
 import { createTerraformStorageProvider } from "./aws-terraform/terraform-storage-provider";
@@ -93,6 +102,12 @@ export function createPlatformConfig(): PlatformConfig {
         api: createAmplifyApiProvider(),
         storage: createAmplifyStorageProvider(),
         AuthProvider: createAuthProvider(createAmplifyAuthAdapter()),
+        // Artifact: wire S3 adapter when VITE_ARTIFACT_ENDPOINT is configured:
+        // artifact: createS3ArtifactProvider({ lambdaEndpoint: import.meta.env.VITE_ARTIFACT_ENDPOINT }),
+        // CRM: wire ServiceNow adapter when VITE_CRM_ENDPOINT is configured:
+        // crm: createServiceNowCRMProvider({ lambdaEndpoint: import.meta.env.VITE_CRM_ENDPOINT }),
+        // JFrog alternative (Sungrow PoC):
+        // artifact: createJFrogArtifactProvider({ lambdaEndpoint: import.meta.env.VITE_ARTIFACT_ENDPOINT }),
       };
     case "aws-cdk":
       return {
@@ -114,6 +129,11 @@ export function createPlatformConfig(): PlatformConfig {
         api: createMockApiProvider(),
         storage: createMockStorageProvider(),
         AuthProvider: MockAuthProvider,
+        artifact: createMockArtifactProvider(),
+        crm: createMockCRMProvider(),
+        complianceScanner: createMockScannerProvider(),
+        cdc: createMockCDCProvider(),
+        dns: createMockDNSProvider({ provider: "mock", domain: "localhost" }),
       };
   }
 }
