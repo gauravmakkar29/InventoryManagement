@@ -1,10 +1,29 @@
 # IMS Gen 2 -- Enterprise React Template
 
-> **Production-ready, cloud-agnostic enterprise application template** with pluggable providers, NIST 800-53 security controls, and infrastructure-as-code. Fork it, set 3 env vars, deploy to any cloud.
+> **Production-ready, cloud-agnostic enterprise application template** with pluggable providers, NIST 800-53 security controls, and multi-IaC infrastructure. Fork it, set 3 env vars, deploy to any cloud.
 
-`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Multi-IaC (Terraform + CDK + Amplify)`
+`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Multi-IaC`
 
 ![Build](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-85%25+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Node](https://img.shields.io/badge/node-20+-purple) ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue) ![React](https://img.shields.io/badge/React-18-61dafb)
+
+---
+
+## Application Preview
+
+|                    Dashboard                    |                    Analytics                    |
+| :---------------------------------------------: | :---------------------------------------------: |
+| ![Dashboard](Docs/screenshots/02-dashboard.png) | ![Analytics](Docs/screenshots/05-analytics.png) |
+
+|                    Inventory                    |                    Deployment                     |
+| :---------------------------------------------: | :-----------------------------------------------: |
+| ![Inventory](Docs/screenshots/03-inventory.png) | ![Deployment](Docs/screenshots/04-deployment.png) |
+
+<details>
+<summary>Login Page</summary>
+
+![Login](Docs/screenshots/01-login.png)
+
+</details>
 
 ---
 
@@ -35,7 +54,7 @@ cd InventoryManagement && npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173). Login with any mock credential below.
+Open [http://localhost:5173](http://localhost:5173). Login with any mock credential:
 
 | Email                 | Password           | Role          |
 | --------------------- | ------------------ | ------------- |
@@ -47,48 +66,80 @@ Open [http://localhost:5173](http://localhost:5173). Login with any mock credent
 
 ---
 
-## Live Preview (Mock Data)
+## System Architecture
 
-Once running, every route below is fully functional with realistic sample data -- no backend required.
+```mermaid
+graph TB
+    subgraph Client["Browser (React SPA)"]
+        UI["12 Feature Modules"]
+        DS["Design System<br/>16 UI Primitives"]
+        Hooks["React Hooks<br/>useAuth / useApi / useArtifact"]
+    end
 
-| Route              | Module         | What You See                                           |
-| ------------------ | -------------- | ------------------------------------------------------ |
-| `/dashboard`       | Dashboard      | Fleet KPIs, health gauge, activity feed, quick actions |
-| `/inventory`       | Inventory      | Device table with search, map view, bulk operations    |
-| `/deployment`      | Deployment     | Firmware lifecycle, approval workflow, version history |
-| `/compliance`      | Compliance     | Certification tracking, NIST control mapping           |
-| `/sbom`            | SBOM           | Software bill of materials for tracked devices         |
-| `/account-service` | Service Orders | Maintenance scheduling, priority and status workflow   |
-| `/analytics`       | Analytics      | Time-series charts, audit logs, CSV/JSON export        |
-| `/telemetry`       | Telemetry      | Heatmaps, blast radius simulation, risk scoring        |
-| `/incidents`       | Incidents      | Response playbooks, network topology, quarantine       |
-| `/digital-twin`    | Digital Twin   | State replay, config drift detection, health trends    |
-| `/customers`       | Customers      | Customer/site management, deployment tracking          |
-| `/user-management` | Users          | Account creation, role assignment, session management  |
+    subgraph Provider["Provider Registry (platform.config.ts)"]
+        direction LR
+        Auth["IAuthAdapter"]
+        API["IApiProvider"]
+        Artifact["IArtifactProvider"]
+        CRM["ICRMProvider"]
+        Scanner["IComplianceScanner"]
+        RT["Realtime Adapter"]
+    end
+
+    subgraph Adapters["Cloud Adapters (swappable via VITE_PLATFORM)"]
+        Mock["Mock<br/>(dev/demo)"]
+        Amplify["AWS Amplify<br/>Gen 2"]
+        TF["AWS Terraform<br/>(16 modules)"]
+        CDK["AWS CDK"]
+        JFrog["JFrog<br/>Artifactory"]
+        SN["ServiceNow<br/>CRM"]
+    end
+
+    subgraph AWS["AWS Services"]
+        Cognito["Cognito"]
+        AppSync["AppSync<br/>GraphQL"]
+        DDB["DynamoDB"]
+        S3["S3"]
+        CF["CloudFront"]
+        Lambda["Lambda"]
+        OS["OpenSearch"]
+    end
+
+    UI --> Hooks
+    DS --> UI
+    Hooks --> Provider
+    Provider --> Adapters
+    Amplify --> AWS
+    TF --> AWS
+    CDK --> AWS
+
+    style Client fill:#1e293b,stroke:#3b82f6,color:#fff
+    style Provider fill:#0f172a,stroke:#2563eb,color:#fff
+    style Adapters fill:#1e3a5f,stroke:#60a5fa,color:#fff
+    style AWS fill:#232f3e,stroke:#ff9900,color:#fff
+```
 
 ---
 
-## What's Pluggable (Template Architecture)
+## Provider Architecture (Pluggable)
 
-The app never imports a cloud SDK directly. Every external dependency flows through a **provider interface**. Swap implementations without touching a single component.
+The app **never imports a cloud SDK directly**. Every external dependency flows through a provider interface. Swap implementations without touching a single component.
 
+```mermaid
+flowchart LR
+    ENV["VITE_PLATFORM=aws-amplify"] --> Config["platform.config.ts"]
+    Config --> |"creates"| AuthA["Amplify Auth Adapter"]
+    Config --> |"creates"| ApiA["Amplify API Provider"]
+    Config --> |"creates"| ArtA["S3 Artifact Provider"]
+    Config --> |"injects"| Registry["ProviderRegistry"]
+    Registry --> |"useAuth()"| Components["React Components"]
+    Registry --> |"useApiProvider()"| Components
+    Registry --> |"useArtifactProvider()"| Components
+
+    style ENV fill:#f59e0b,stroke:#b45309,color:#000
+    style Config fill:#0f172a,stroke:#2563eb,color:#fff
+    style Registry fill:#1e293b,stroke:#3b82f6,color:#fff
 ```
-  React Components / Hooks
-          |
-    useApiProvider()  useAuth()  useArtifactProvider()  useCRMProvider()
-          |
-   ProviderRegistry  (platform.config.ts)
-          |
-  +-------+-------+-------+-------+-------+-------+-------+-------+
-  |       |       |       |       |       |       |       |       |
-  Auth    API   Storage Artifact  CRM   Scanner   CDC    DNS   Realtime
-  |       |       |       |       |       |       |       |       |
-  Mock   Mock   Local   Mock    Mock    Mock    Mock   Mock    Mock
-  Cognito Amplify  --    S3     SvcNow  Ignite   --    Azure   WebSocket
-  AzureAD Terraform --   JFrog    --      --     --    Route53  SSE
-```
-
-App code never imports a cloud SDK. Change `VITE_PLATFORM` and everything reconnects.
 
 ### 8 Provider Interfaces
 
@@ -105,29 +156,146 @@ App code never imports a cloud SDK. Change `VITE_PLATFORM` and everything reconn
 
 Plus **3 real-time adapters**: WebSocket (auto-reconnect), SSE, and Mock.
 
-### How to Add Your Own Provider
+---
 
-```bash
-# 1. Create your adapter directory
-mkdir src/lib/providers/your-platform/
+## Security (NIST 800-53 Built-In)
 
-# 2. Implement the interfaces you need (minimum: Auth + API)
-#    Reference: src/lib/providers/mock/ for patterns
+Not bolted on -- **baked in from day one**. 37 controls across 6 NIST families.
 
-# 3. Register in platform.config.ts
-#    Add a case for your platform ID
+```mermaid
+flowchart TB
+    subgraph Layer1["Layer 1: Route Guards"]
+        PL["ProtectedLayout<br/>canAccessPage(role, page)"]
+    end
+    subgraph Layer2["Layer 2: Component Guards"]
+        RR["RequireRole<br/>wraps buttons/actions"]
+    end
+    subgraph Layer3["Layer 3: Mutation Guards"]
+        MH["Mutation Handlers<br/>canPerformAction(role, action)"]
+    end
+    subgraph Layer4["Layer 4: Infrastructure"]
+        CSP["CSP Meta Tag"]
+        CSRF["CSRF Interceptor"]
+        Zod["Zod Validation"]
+        Audit["Audit Trail (AU-12)"]
+    end
 
-# 4. Set the env var
-VITE_PLATFORM=your-platform npm run dev
+    User["User Request"] --> Layer1
+    Layer1 -->|"authorized"| Layer2
+    Layer2 -->|"permitted"| Layer3
+    Layer3 -->|"validated"| Layer4
+
+    style Layer1 fill:#1e40af,stroke:#3b82f6,color:#fff
+    style Layer2 fill:#1e3a8a,stroke:#60a5fa,color:#fff
+    style Layer3 fill:#172554,stroke:#93c5fd,color:#fff
+    style Layer4 fill:#0f172a,stroke:#bfdbfe,color:#fff
 ```
 
-That's it. Every component, hook, and page works with your new backend automatically.
+| Family                     | Controls                                                | What It Covers                                            |
+| -------------------------- | ------------------------------------------------------- | --------------------------------------------------------- |
+| **Access Control (AC)**    | AC-2, AC-3, AC-5, AC-6, AC-7, AC-8, AC-11, AC-12, AC-17 | RBAC, separation of duties, session timeout, login banner |
+| **Audit (AU)**             | AU-2, AU-3, AU-4, AU-5, AU-6, AU-8, AU-12               | Audit trail, CDC capture, tamper-evident logs             |
+| **Identification (IA)**    | IA-2, IA-2(1), IA-4, IA-5, IA-8                         | MFA (TOTP), password policy, credential management        |
+| **Incident Response (IR)** | IR-4, IR-5, IR-6                                        | Playbooks, quarantine, escalation workflows               |
+| **Integrity (SI)**         | SI-3, SI-10                                             | XSS prevention (CSP + DOMPurify), Zod input validation    |
+| **Config Management (CM)** | CM-3, CM-8                                              | Change tracking, asset inventory                          |
 
 ---
 
-## What's Included (12 Feature Modules)
+## Infrastructure as Code (Multi-IaC)
 
-Each module is a complete, production-styled feature -- not a placeholder.
+```mermaid
+graph LR
+    subgraph IaC["Choose Your IaC"]
+        TF["Terraform<br/>16 modules"]
+        CDK["AWS CDK<br/>TypeScript"]
+        AMP["Amplify Gen 2<br/>Zero-config"]
+    end
+
+    subgraph Envs["4 Environments"]
+        Dev["Dev"]
+        QA["QA"]
+        PreProd["Pre-Prod"]
+        Prod["Prod"]
+    end
+
+    subgraph Services["AWS Services"]
+        DDB["DynamoDB"]
+        Cog["Cognito"]
+        AS["AppSync"]
+        S3["S3"]
+        CF["CloudFront + WAF"]
+        OS["OpenSearch"]
+    end
+
+    IaC --> Envs
+    Envs --> Services
+
+    style IaC fill:#0f172a,stroke:#f59e0b,color:#fff
+    style Envs fill:#1e293b,stroke:#3b82f6,color:#fff
+    style Services fill:#232f3e,stroke:#ff9900,color:#fff
+```
+
+| IaC Option            | Location                         | Status                       | Best For                                |
+| --------------------- | -------------------------------- | ---------------------------- | --------------------------------------- |
+| **Terraform**         | `infra/reference/aws-terraform/` | 16 modules, production-ready | Teams with existing Terraform workflows |
+| **AWS CDK**           | `infra/reference/aws-cdk/`       | Reference skeleton           | TypeScript-native infrastructure teams  |
+| **AWS Amplify Gen 2** | Built into `aws-amplify` adapter | Integrated                   | Greenfield projects wanting zero-config |
+
+<details>
+<summary>Terraform Modules (16)</summary>
+
+| Module             | AWS Service                                         |
+| ------------------ | --------------------------------------------------- |
+| `dynamodb`         | NoSQL tables with streams + PITR                    |
+| `cognito`          | User pool + auth groups                             |
+| `appsync`          | GraphQL API + resolvers                             |
+| `lambda-audit`     | CDC event processor                                 |
+| `s3-firmware`      | Artifact bucket (versioned, encrypted, Object Lock) |
+| `s3-frontend`      | Static hosting                                      |
+| `cloudfront`       | CDN + WAF integration                               |
+| `waf`              | Web Application Firewall rules                      |
+| `opensearch`       | Full-text + geo search                              |
+| `location-service` | Maps, geocoding, geofencing                         |
+| `iam`              | Roles + cross-account policies                      |
+| `dns`              | Route 53 zones                                      |
+| `monitoring`       | CloudWatch + X-Ray                                  |
+| `alerting`         | Alarms + SNS notifications                          |
+| `cloudtrail`       | API audit logging                                   |
+
+</details>
+
+---
+
+## How to Use as a Template
+
+```mermaid
+flowchart LR
+    A["1. Fork"] --> B["2. Set VITE_PLATFORM"]
+    B --> C["3. Replace domain types"]
+    C --> D["4. Implement adapters"]
+    D --> E["5. Deploy IaC"]
+    E --> F["6. Ship"]
+
+    style A fill:#f59e0b,stroke:#b45309,color:#000
+    style F fill:#10b981,stroke:#059669,color:#000
+```
+
+**Step 1:** Fork & clone, `cp .env.example .env`
+
+**Step 2:** Set `VITE_PLATFORM` (`mock` | `aws-amplify` | `aws-terraform` | `aws-cdk`)
+
+**Step 3:** Edit `src/lib/types.ts` -- replace Device/Firmware with your domain entities
+
+**Step 4:** Implement `IApiProvider` + `IAuthAdapter` in `src/lib/providers/your-platform/`
+
+**Step 5:** Deploy infra: `terraform apply`, `cdk deploy`, or Amplify auto-provisions
+
+**Step 6:** CI/CD pipelines at `.github/workflows/` are ready to use
+
+---
+
+## Feature Modules (12)
 
 | Module              | Key Features                                                       |
 | ------------------- | ------------------------------------------------------------------ |
@@ -148,178 +316,28 @@ Each module is a complete, production-styled feature -- not a placeholder.
 
 ## Design System
 
-Built on **shadcn/ui (Radix)** with semantic design tokens. Dark/light mode. WCAG 2.1 AA compliant.
+Built on **shadcn/ui (Radix)** with semantic design tokens. Dark/light mode. WCAG 2.1 AA.
 
-16 shared UI primitives power every feature module:
+16 shared primitives: `dialog-base`, `data-table`, `form-field`, `status-badge`, `confirm-dialog`, `loading-skeleton`, `empty-state`, `stat-card`, `toast`, `dropdown-menu`, `tabs`, `tooltip`, `sidebar-nav`, `command-palette`, `search-input`, `page-header`
 
-| Primitive          | Purpose                                             |
-| ------------------ | --------------------------------------------------- |
-| `dialog-base`      | Consistent modal shell with focus trapping          |
-| `data-table`       | Sortable, filterable tables with pagination         |
-| `form-field`       | Label + input + error with Zod validation wiring    |
-| `status-badge`     | Semantic status indicators (active, warning, error) |
-| `page-header`      | Page title, breadcrumbs, and action buttons         |
-| `search-input`     | Debounced search with clear and keyboard shortcuts  |
-| `confirm-dialog`   | Destructive action confirmation with double-check   |
-| `loading-skeleton` | Content-shaped placeholders during data fetches     |
-| `empty-state`      | Contextual zero-data illustrations and CTAs         |
-| `stat-card`        | KPI display with trend indicator and sparkline      |
-| `toast`            | Non-blocking notifications with auto-dismiss        |
-| `dropdown-menu`    | Accessible context menus and action menus           |
-| `tabs`             | Accessible tab navigation with lazy panel loading   |
-| `tooltip`          | Accessible hover hints with keyboard support        |
-| `sidebar-nav`      | Collapsible navigation with role-based filtering    |
-| `command-palette`  | Keyboard-driven search and navigation               |
-
-All primitives are located in `src/components/` and follow the pattern: Radix primitive, Tailwind styling via `class-variance-authority`, semantic tokens for theming.
-
----
-
-## Security (NIST 800-53 Built-In)
-
-Not bolted on -- **baked in from day one**. 37 controls across 6 NIST families.
-
-| Family                     | Controls                                                | What It Covers                                            |
-| -------------------------- | ------------------------------------------------------- | --------------------------------------------------------- |
-| **Access Control (AC)**    | AC-2, AC-3, AC-5, AC-6, AC-7, AC-8, AC-11, AC-12, AC-17 | RBAC, separation of duties, session timeout, login banner |
-| **Audit (AU)**             | AU-2, AU-3, AU-4, AU-5, AU-6, AU-8, AU-12               | Audit trail, CDC capture, tamper-evident logs             |
-| **Identification (IA)**    | IA-2, IA-2(1), IA-4, IA-5, IA-8                         | MFA (TOTP), password policy, credential management        |
-| **Incident Response (IR)** | IR-4, IR-5, IR-6                                        | Playbooks, quarantine, escalation workflows               |
-| **Integrity (SI)**         | SI-3, SI-10                                             | XSS prevention (CSP + DOMPurify), Zod input validation    |
-| **Config Management (CM)** | CM-3, CM-8                                              | Change tracking, asset inventory                          |
-
-### RBAC (Single-File Configuration)
-
-```typescript
-// src/lib/rbac.ts — add roles, pages, or actions in one place
-const PERMISSIONS: Record<Role, RolePermissions> = {
-  Admin: { pages: [...all], actions: ["create", "edit", "delete", "approve"] },
-  Manager: { pages: [...most], actions: ["create", "edit", "approve"] },
-  Technician: { pages: ["dashboard", "inventory", "account-service"], actions: ["create", "edit"] },
-  Viewer: { pages: [...readonly], actions: [] },
-  CustomerAdmin: { pages: [...limited], actions: ["create", "edit"], filterByCustomer: true },
-};
-```
-
-Enforced at 3 levels: sidebar filtering, route guards (`ProtectedLayout`), and mutation handlers.
-
----
-
-## Infrastructure as Code (Multi-IaC)
-
-Three IaC approaches are provided as **reference implementations** -- pick the one that matches your team's workflow.
-
-| IaC Option            | Location                         | Status                       | Best For                                |
-| --------------------- | -------------------------------- | ---------------------------- | --------------------------------------- |
-| **Terraform**         | `infra/reference/aws-terraform/` | 16 modules, production-ready | Teams with existing Terraform workflows |
-| **AWS CDK**           | `infra/reference/aws-cdk/`       | Reference skeleton           | TypeScript-native infrastructure teams  |
-| **AWS Amplify Gen 2** | Built into `aws-amplify` adapter | Integrated                   | Greenfield projects wanting zero-config |
-
-### Terraform Modules (16)
-
-| Module             | AWS Service                                         |
-| ------------------ | --------------------------------------------------- |
-| `dynamodb`         | NoSQL tables with streams + PITR                    |
-| `cognito`          | User pool + auth groups                             |
-| `appsync`          | GraphQL API + resolvers                             |
-| `lambda-audit`     | CDC event processor                                 |
-| `s3-firmware`      | Artifact bucket (versioned, encrypted, Object Lock) |
-| `s3-frontend`      | Static hosting                                      |
-| `cloudfront`       | CDN + WAF integration                               |
-| `waf`              | Web Application Firewall rules                      |
-| `opensearch`       | Full-text + geo search                              |
-| `location-service` | Maps, geocoding, geofencing                         |
-| `iam`              | Roles + cross-account policies                      |
-| `dns`              | Route 53 zones                                      |
-| `monitoring`       | CloudWatch + X-Ray                                  |
-| `alerting`         | Alarms + SNS notifications                          |
-| `cloudtrail`       | API audit logging                                   |
-
-**Environment configs:** `dev.tfvars`, `staging.tfvars`, `prod.tfvars`
-
----
-
-## How to Use as a Template
-
-### Step 1: Fork & Configure
-
-```bash
-git clone https://github.com/gauravmakkar29/InventoryManagement.git my-app
-cd my-app
-cp .env.example .env
-```
-
-### Step 2: Choose Your Platform
-
-| `VITE_PLATFORM`  | Backend                 | When to Use                  |
-| ---------------- | ----------------------- | ---------------------------- |
-| `mock` (default) | In-memory mock data     | Development, demos, testing  |
-| `aws-amplify`    | Amplify Gen 2 + AppSync | Greenfield AWS projects      |
-| `aws-terraform`  | Terraform-managed AWS   | Existing Terraform workflows |
-| `aws-cdk`        | CDK constructs          | CDK-based teams              |
-
-### Step 3: Customize Domain Types
-
-Edit `src/lib/types.ts` to match your domain. The existing types (Device, Firmware, ServiceOrder, etc.) are examples -- replace with your own entities.
-
-### Step 4: Implement Your API Adapter
-
-Create `src/lib/providers/your-platform/your-api-provider.ts` implementing `IApiProvider`. Start by copying `mock-api-provider.ts` and replacing mock data with real API calls.
-
-### Step 5: Deploy Infrastructure (pick one)
-
-**Option A: Terraform**
-
-```bash
-cd infra/reference/aws-terraform
-terraform init && terraform apply -var-file=environments/dev.tfvars
-```
-
-**Option B: AWS CDK**
-
-```bash
-cd infra/reference/aws-cdk
-npx cdk deploy --all
-```
-
-**Option C: Amplify Gen 2** -- infrastructure is managed automatically by the Amplify adapter. No separate deploy step needed.
-
-### Step 6: Configure CI/CD
-
-The GitHub Actions workflows at `.github/workflows/` are ready to use:
-
-- `ci.yml` -- Lint, build, test on every PR
-- `deploy.yml` -- IaC deploy + S3 sync on merge to main
-- `e2e-nightly.yml` -- Scheduled regression tests
+All located in `src/components/` -- Radix primitive + Tailwind + `class-variance-authority` + semantic tokens.
 
 ---
 
 ## Testing
 
-### Unit Tests (530+ tests)
-
-```bash
-npm test                   # Single run
-npm run test:coverage      # With coverage report
-```
-
-Stack: Vitest + React Testing Library + vitest-axe (accessibility)
-
-### E2E Tests
-
-```bash
-npm run test:e2e           # Full regression (Java/Maven/TestNG/Playwright)
-npm run test:e2e:smoke     # Smoke suite
-npm run test:e2e:headed    # Headed browser for debugging
-```
-
-Located at `e2e/ims-e2e/` with Page Object Model, test listeners, and HTML reporting.
+| Type           | Stack                         | Command                  |
+| -------------- | ----------------------------- | ------------------------ |
+| Unit (530+)    | Vitest + RTL + vitest-axe     | `npm test`               |
+| Coverage       | Istanbul                      | `npm run test:coverage`  |
+| E2E Regression | Java 17 + Playwright + TestNG | `npm run test:e2e`       |
+| E2E Smoke      | Same                          | `npm run test:e2e:smoke` |
 
 ---
 
 ## AI-Powered Development
 
-This project uses **Claude Code** (Anthropic CLI) for AI-native software development lifecycle management. The entire SDLC -- from story creation through code review -- is orchestrated through conversational AI using the **SPEC Method** framework.
+This project uses **Claude Code** (Anthropic CLI) for AI-native SDLC using the **SPEC Method** framework.
 
 | Capability     | How It Works                                                             |
 | -------------- | ------------------------------------------------------------------------ |
@@ -329,7 +347,7 @@ This project uses **Claude Code** (Anthropic CLI) for AI-native software develop
 | PR management  | Branch creation, commit formatting, and PR submission with traceability  |
 | Backlog audit  | Gap analysis across 18 epics with prioritized recommendations            |
 
-SPEC Method workflows and rulebooks are located in `SPEC/workflows/` and `SPEC/rulebooks/`. Hooks in `.claude/settings.json` enforce NIST security checks and architecture guardrails automatically during development.
+Workflows: `SPEC/workflows/` -- Rulebooks: `SPEC/rulebooks/` -- Hooks: `.claude/settings.json`
 
 ---
 
@@ -342,16 +360,12 @@ SPEC Method workflows and rulebooks are located in `SPEC/workflows/` and `SPEC/r
 | Language   | TypeScript (strict)               | 5.7     |
 | Styling    | TailwindCSS 4 + shadcn/ui (Radix) | 4.1     |
 | State      | Zustand + TanStack React Query    | 5.x     |
-| Forms      | react-hook-form + Zod validation  | 7.x     |
-| Routing    | React Router                      | 7.x     |
+| Forms      | react-hook-form + Zod             | 7.x     |
 | Charts     | Recharts                          | 2.15    |
 | Maps       | react-simple-maps                 | 3.x     |
-| Animation  | Motion (Framer Motion)            | 12.x    |
 | i18n       | react-i18next (2 locales)         | --      |
 | Unit Tests | Vitest + RTL                      | 3.2     |
 | E2E Tests  | Java 17 + Playwright              | --      |
-| Linting    | ESLint 9 + Prettier + commitlint  | --      |
-| Git Hooks  | Husky + lint-staged               | --      |
 | IaC        | Terraform + CDK + Amplify         | --      |
 | CI/CD      | GitHub Actions (3 workflows)      | --      |
 
@@ -361,45 +375,26 @@ SPEC Method workflows and rulebooks are located in `SPEC/workflows/` and `SPEC/r
 
 ```
 src/
-  app/components/             # 12 feature modules (page components + layouts)
-  lib/
-    providers/                # Provider abstraction layer
-      mock/                   #   Mock adapters (dev/demo)
-      aws-amplify/            #   Amplify + AppSync + S3
-      aws-cdk/                #   CDK-based adapters
-      aws-terraform/          #   Terraform-managed AWS
-      cognito/                #   Direct Cognito integration
-      jfrog/                  #   JFrog Artifactory
-      servicenow/             #   ServiceNow CRM
-      realtime/               #   WebSocket + SSE adapters
-      types.ts                #   All provider interfaces
-      platform.config.ts      #   Environment-based adapter wiring
-    types.ts                  # Domain types (Device, Firmware, Customer, etc.)
-    rbac.ts                   # Role-based access control (single file)
-    query-keys.ts             # TanStack Query key factory
-    schemas/                  # Zod validation schemas
-  components/                 # 16 shared UI primitives (design system)
-  locales/                    # i18n translations (en-US, es-ES)
+  app/components/             # 12 feature modules
+  lib/providers/              # Provider abstraction layer
+    mock/                     #   Mock adapters (dev/demo)
+    aws-amplify/              #   Amplify + AppSync + S3
+    aws-cdk/                  #   CDK-based adapters
+    aws-terraform/            #   Terraform-managed AWS
+    jfrog/                    #   JFrog Artifactory
+    servicenow/               #   ServiceNow CRM
+    realtime/                 #   WebSocket + SSE
+  components/                 # 16 shared UI primitives
+  locales/                    # i18n (en-US, es-ES)
   __tests__/                  # 530+ unit tests
 e2e/ims-e2e/                  # E2E framework (Java/Maven/Playwright)
 infra/reference/
-  aws-terraform/              # 16 Terraform modules + env configs (production-ready)
-  aws-cdk/                    # CDK reference skeleton (TypeScript constructs)
+  aws-terraform/              # 16 Terraform modules (production-ready)
+  aws-cdk/                    # CDK reference skeleton
 Docs/                         # Architecture decisions, epic specs
 .github/workflows/            # CI/CD pipelines
 SPEC/                         # SPEC Method rulebooks + workflows
 ```
-
----
-
-## Development Workflow
-
-1. Every feature starts with a **GitHub Issue** (story or bug template)
-2. **Branch:** `feature/IMS-{issue#}-short-desc` or `fix/IMS-{issue#}-short-desc`
-3. **Commits:** `feat(scope): description #{issue}` (enforced by commitlint)
-4. **PR:** Title `[Story N.M] Description`, body `Closes #{issue}`
-5. **CI gate:** Build + lint + unit tests + E2E + compliance must pass
-6. **Pre-commit:** ESLint + Prettier + file-length check via Husky
 
 ---
 
@@ -411,6 +406,7 @@ SPEC/                         # SPEC Method rulebooks + workflows
 | Master Project Brief   | `Docs/IMS-Gen2-Detailed-Project-Brief-For-Terraform.md` |
 | App Modules Overview   | `Docs/app-modules-overview.md`                          |
 | NIST Control Mapping   | `Docs/nist-800-53-control-mapping.md`                   |
+| GitHub Projects Guide  | `Docs/github-projects-guide.md`                         |
 | Architecture Decisions | `Docs/decisions/`                                       |
 | Integration Contract   | `Docs/integration-contract.md`                          |
 | Epic Stories + Specs   | `Docs/epics/epic-{1-18}/`                               |
