@@ -59,6 +59,21 @@ const SecureDownloadPage = lazy(() =>
     default: m.SecureDownloadPage,
   })),
 );
+const FirmwareDetailPage = lazy(() =>
+  import("./app/components/firmware/firmware-detail-page").then((m) => ({
+    default: m.FirmwareDetailPage,
+  })),
+);
+const CustomerListPage = lazy(() =>
+  import("./app/components/customers/customer-list-page").then((m) => ({
+    default: m.CustomerListPage,
+  })),
+);
+const CustomerDetailPage = lazy(() =>
+  import("./app/components/customers/customer-detail-page").then((m) => ({
+    default: m.CustomerDetailPage,
+  })),
+);
 
 // ---------------------------------------------------------------------------
 // Story 21.3: Route wrapper with per-route error boundary
@@ -118,6 +133,30 @@ export default function App() {
               element={
                 <RouteElement name="deployment">
                   <Deployment />
+                </RouteElement>
+              }
+            />
+            <Route
+              path="/deployment/firmware/:firmwareId"
+              element={
+                <RouteElement name="firmware-detail">
+                  <FirmwareDetailPage />
+                </RouteElement>
+              }
+            />
+            <Route
+              path="/customers"
+              element={
+                <RouteElement name="customers">
+                  <CustomerListPage />
+                </RouteElement>
+              }
+            />
+            <Route
+              path="/customers/:customerId"
+              element={
+                <RouteElement name="customer-detail">
+                  <CustomerDetailPage />
                 </RouteElement>
               }
             />

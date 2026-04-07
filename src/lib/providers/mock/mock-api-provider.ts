@@ -4,6 +4,7 @@ import type {
   SearchResult,
   Device,
   Firmware,
+  FirmwareFamily,
   ServiceOrder,
   Compliance,
   Vulnerability,
@@ -16,7 +17,16 @@ import type {
   BlastRadiusResult,
   TelemetryPipelineStatus,
   FailureType,
+  FirmwareVersion,
+  Site,
+  SiteDeployment,
 } from "@/lib/types";
+import { MOCK_FIRMWARE_VERSIONS } from "@/lib/mock-data/firmware-version-data";
+import {
+  MOCK_CUSTOMERS,
+  MOCK_SITES,
+  MOCK_SITE_DEPLOYMENTS,
+} from "@/lib/mock-data/customer-site-data";
 import type {
   GlobalSearchResponse,
   DeviceSearchFilters,
@@ -296,6 +306,87 @@ export function createMockApiProvider(): IApiProvider {
 
     async triggerReindex(): Promise<boolean> {
       return true;
+    },
+
+    // =========================================================================
+    // Story #388: Firmware Version History
+    // =========================================================================
+
+    async getFirmwareFamily(_familyId: string): Promise<FirmwareFamily | null> {
+      return null; // Families are managed in firmware-families.tsx component state
+    },
+
+    async listFirmwareVersions(
+      familyId: string,
+      _page?: number,
+      _pageSize?: number,
+    ): Promise<PaginatedResponse<FirmwareVersion>> {
+      const versions = MOCK_FIRMWARE_VERSIONS[familyId] ?? [];
+      return {
+        items: versions,
+        total: versions.length,
+        page: 1,
+        pageSize: 25,
+        hasMore: false,
+      };
+    },
+
+    async getFirmwareVersion(familyId: string, versionId: string): Promise<FirmwareVersion | null> {
+      const versions = MOCK_FIRMWARE_VERSIONS[familyId] ?? [];
+      return versions.find((v) => v.id === versionId) ?? null;
+    },
+
+    // =========================================================================
+    // Story #389: Customer & Site Management
+    // =========================================================================
+
+    async listCustomers(
+      _page?: number,
+      _pageSize?: number,
+      search?: string,
+    ): Promise<PaginatedResponse<Customer>> {
+      let items = MOCK_CUSTOMERS;
+      if (search) {
+        const q = search.toLowerCase();
+        items = items.filter(
+          (c) =>
+            c.name.toLowerCase().includes(q) ||
+            c.code.toLowerCase().includes(q) ||
+            c.contactEmail.toLowerCase().includes(q),
+        );
+      }
+      return { items, total: items.length, page: 1, pageSize: 25, hasMore: false };
+    },
+
+    async listSites(
+      customerId: string,
+      _page?: number,
+      _pageSize?: number,
+    ): Promise<PaginatedResponse<Site>> {
+      const items = MOCK_SITES.filter((s) => s.customerId === customerId);
+      return { items, total: items.length, page: 1, pageSize: 25, hasMore: false };
+    },
+
+    async getSite(siteId: string): Promise<Site | null> {
+      return MOCK_SITES.find((s) => s.id === siteId) ?? null;
+    },
+
+    async listSiteDeployments(
+      siteId: string,
+      _page?: number,
+      _pageSize?: number,
+    ): Promise<PaginatedResponse<SiteDeployment>> {
+      const items = MOCK_SITE_DEPLOYMENTS.filter((d) => d.siteId === siteId);
+      return { items, total: items.length, page: 1, pageSize: 25, hasMore: false };
+    },
+
+    async listSitesByFirmwareVersion(
+      firmwareVersionId: string,
+      _page?: number,
+      _pageSize?: number,
+    ): Promise<PaginatedResponse<Site>> {
+      const items = MOCK_SITES.filter((s) => s.currentFirmwareVersionId === firmwareVersionId);
+      return { items, total: items.length, page: 1, pageSize: 25, hasMore: false };
     },
   };
 }

@@ -42,7 +42,8 @@
     "incidents": "Incidentes",
     "digitalTwin": "Gemelo Digital",
     "executiveSummary": "Resumen Ejecutivo",
-    "userManagement": "Gesti\u00f3n de Usuarios"
+    "userManagement": "Gesti\u00f3n de Usuarios",
+    "customers": "Clientes"
   },
   "auth": {
     "signIn": "Iniciar Sesi\u00f3n",

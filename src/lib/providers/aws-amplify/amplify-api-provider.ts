@@ -371,5 +371,31 @@ export function createAmplifyApiProvider(): IApiProvider {
     async triggerReindex(): Promise<boolean> {
       return notImplemented("triggerReindex");
     },
+
+    // Story #388/#389 stubs
+    async getFirmwareFamily() {
+      return notImplemented("getFirmwareFamily");
+    },
+    async listFirmwareVersions() {
+      return notImplemented("listFirmwareVersions");
+    },
+    async getFirmwareVersion() {
+      return notImplemented("getFirmwareVersion");
+    },
+    async listCustomers() {
+      return notImplemented("listCustomers");
+    },
+    async listSites() {
+      return notImplemented("listSites");
+    },
+    async getSite() {
+      return notImplemented("getSite");
+    },
+    async listSiteDeployments() {
+      return notImplemented("listSiteDeployments");
+    },
+    async listSitesByFirmwareVersion() {
+      return notImplemented("listSitesByFirmwareVersion");
+    },
   };
 }

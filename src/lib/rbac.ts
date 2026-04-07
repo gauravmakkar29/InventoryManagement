@@ -30,6 +30,7 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "digital-twin",
       "executive-summary",
       "user-management",
+      "customers",
     ],
     actions: ["create", "edit", "delete", "approve"],
     filterByCustomer: false,
@@ -47,6 +48,7 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "incidents",
       "digital-twin",
       "executive-summary",
+      "customers", // AC-3: Customer management access
     ],
     actions: ["create", "edit", "approve"],
     filterByCustomer: false,
@@ -68,6 +70,7 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "telemetry",
       "incidents",
       "digital-twin",
+      "customers", // AC-3: Read-only customer view access
     ],
     actions: [],
     filterByCustomer: false,

@@ -446,3 +446,15 @@ export interface DownloadAuditEntry {
   reason?: string;
   sha256?: string;
 }
+
+// Story #388 — Firmware Version History
+export type {
+  FirmwareVersionEventType,
+  FirmwareVersionEvent,
+  TimelineEventColor,
+  FirmwareVersion,
+} from "./types/firmware-version";
+export { EVENT_COLOR_MAP } from "./types/firmware-version";
+
+// Story #389 — Customer & Site Entity Model
+export type { Site, SiteDeployment } from "./types/customer-site";
