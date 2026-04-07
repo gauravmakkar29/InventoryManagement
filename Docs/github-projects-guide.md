@@ -1262,6 +1262,32 @@ This shows a bar for each sprint, with the height representing completed story p
 
 This section walks through a complete sprint workflow using GitHub Projects, from planning through retrospective.
 
+### Sprint Lifecycle Overview
+
+```mermaid
+flowchart LR
+    BG["Backlog<br/>Grooming"] --> SP["Sprint<br/>Planning"]
+    SP --> DEV["Development<br/>(2 weeks)"]
+    DEV --> REV["Sprint<br/>Review"]
+    REV --> RETRO["Retrospective"]
+    RETRO --> BG
+
+    subgraph Daily["Daily Loop"]
+        direction TB
+        SU["Standup"] --> CODE["Code"]
+        CODE --> PR["PR + Review"]
+        PR --> QA["QA"]
+    end
+
+    DEV --> Daily
+
+    style BG fill:#6366f1,stroke:#4f46e5,color:#fff
+    style SP fill:#3b82f6,stroke:#2563eb,color:#fff
+    style DEV fill:#f59e0b,stroke:#d97706,color:#fff
+    style REV fill:#10b981,stroke:#059669,color:#fff
+    style RETRO fill:#8b5cf6,stroke:#7c3aed,color:#fff
+```
+
 ### Prerequisites
 
 Before your first sprint, ensure you have:
@@ -1756,10 +1782,23 @@ The project uses the label system described in Section 3, with all 18 epic label
 
 ### Status Workflow
 
-```
-Backlog → Sprint Ready → In Development → In Review → In QA → Done
-                                                               ↑
-                                               Blocked --------┘
+```mermaid
+flowchart LR
+    BL["Backlog"] --> SR["Sprint<br/>Ready"]
+    SR --> ID["In<br/>Development"]
+    ID --> IR["In<br/>Review"]
+    IR --> IQ["In QA"]
+    IQ --> DONE["Done"]
+    ID -.->|"impediment"| BK["Blocked"]
+    BK -.->|"unblocked"| ID
+
+    style BL fill:#6b7280,stroke:#4b5563,color:#fff
+    style SR fill:#3b82f6,stroke:#2563eb,color:#fff
+    style ID fill:#f59e0b,stroke:#d97706,color:#fff
+    style IR fill:#f97316,stroke:#ea580c,color:#fff
+    style IQ fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style DONE fill:#10b981,stroke:#059669,color:#fff
+    style BK fill:#ef4444,stroke:#dc2626,color:#fff
 ```
 
 - **Backlog:** Issue created but not yet planned for a sprint.
@@ -1867,6 +1906,26 @@ Claude Code connects to GitHub via MCP (Model Context Protocol) servers, enablin
 ---
 
 ## 15. Releases
+
+### Release Process Flow
+
+```mermaid
+flowchart LR
+    F["Feature<br/>Branches"] -->|"merge"| DEV["dev"]
+    DEV -->|"QA sign-off"| REL["release/v1.0"]
+    REL -->|"PR #1"| QA["QA Env"]
+    QA -->|"PR #2"| PP["Pre-Prod"]
+    PP -->|"PR #3"| PROD["Production"]
+    PROD -->|"tag + publish"| GHR["GitHub<br/>Release"]
+
+    style F fill:#6366f1,stroke:#4f46e5,color:#fff
+    style DEV fill:#f59e0b,stroke:#d97706,color:#fff
+    style REL fill:#3b82f6,stroke:#2563eb,color:#fff
+    style QA fill:#8b5cf6,stroke:#7c3aed,color:#fff
+    style PP fill:#ec4899,stroke:#db2777,color:#fff
+    style PROD fill:#10b981,stroke:#059669,color:#fff
+    style GHR fill:#0f172a,stroke:#e2e8f0,color:#fff
+```
 
 ### What Are GitHub Releases?
 
