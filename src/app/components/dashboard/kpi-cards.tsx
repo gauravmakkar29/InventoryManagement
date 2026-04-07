@@ -88,8 +88,8 @@ const METRIC_CARDS = [
     trendLabel: "vs last week",
     spark: [820, 870, 910, 980, 1050, 1180, 1247],
     icon: Server,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
+    iconBg: "bg-info-bg",
+    iconColor: "text-info-text",
     sparkColor: "#3b82f6",
   },
   {
@@ -112,8 +112,8 @@ const METRIC_CARDS = [
     trendLabel: "vs yesterday",
     spark: [12, 11, 9, 10, 8, 9, 7],
     icon: ShieldCheck,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-600",
+    iconBg: "bg-warning-bg",
+    iconColor: "text-warning-text",
     sparkColor: "#f59e0b",
   },
   {
@@ -124,8 +124,8 @@ const METRIC_CARDS = [
     trendLabel: "vs last month",
     spark: [91.2, 92.0, 92.8, 93.1, 93.5, 93.9, 94.2],
     icon: HeartPulse,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
+    iconBg: "bg-success-bg",
+    iconColor: "text-success-text",
     sparkColor: "#10b981",
   },
 ];
@@ -177,14 +177,14 @@ export function KpiCards({ state, onRetry }: { state: FetchState; onRetry: () =>
               <Sparkline data={card.spark} color={card.sparkColor} />
               <div className="flex items-center gap-1">
                 {card.trendUp ? (
-                  <TrendingUp className="h-3 w-3 text-emerald-500" aria-hidden="true" />
+                  <TrendingUp className="h-3 w-3 text-success" aria-hidden="true" />
                 ) : (
-                  <TrendingDown className="h-3 w-3 text-red-500" aria-hidden="true" />
+                  <TrendingDown className="h-3 w-3 text-danger" aria-hidden="true" />
                 )}
                 <span
                   className={cn(
                     "text-[13px] font-medium",
-                    card.trendUp ? "text-emerald-600" : "text-red-600",
+                    card.trendUp ? "text-success-text" : "text-danger-text",
                   )}
                 >
                   {card.trend}

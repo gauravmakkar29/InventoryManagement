@@ -185,9 +185,9 @@ export function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                     className={cn(
                       "min-h-[70px] bg-card p-1.5 text-left transition-colors",
                       !cell.inMonth && "bg-muted opacity-40",
-                      cell.inMonth && dayOrders.length > 0 && "cursor-pointer hover:bg-orange-50",
+                      cell.inMonth && dayOrders.length > 0 && "cursor-pointer hover:bg-high-bg",
                       isTodayCell && "ring-2 ring-inset ring-ring",
-                      isSelected && "bg-orange-50",
+                      isSelected && "bg-high-bg",
                     )}
                   >
                     <span
@@ -207,9 +207,9 @@ export function CalendarView({ orders }: { orders: ServiceOrder[] }) {
                             key={o.id}
                             className={cn(
                               "h-2 w-2 rounded-full",
-                              o.priority === "High" && "bg-red-500",
-                              o.priority === "Medium" && "bg-amber-500",
-                              o.priority === "Low" && "bg-green-500",
+                              o.priority === "High" && "bg-danger",
+                              o.priority === "Medium" && "bg-warning",
+                              o.priority === "Low" && "bg-success",
                             )}
                             title={`${o.id}: ${o.title}`}
                           />

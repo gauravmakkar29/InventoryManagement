@@ -15,9 +15,9 @@ const DRAG_TYPE = "SERVICE_ORDER";
 /* ─── Constants ───────────────────────────────────────────────────── */
 
 export const PRIORITY_BG: Record<Priority, string> = {
-  High: "bg-red-600 text-white",
-  Medium: "bg-amber-500 text-white",
-  Low: "bg-green-600 text-white",
+  High: "bg-danger text-white",
+  Medium: "bg-warning text-white",
+  Low: "bg-success text-white",
 };
 
 export const COLUMN_ORDER: Status[] = ["Scheduled", "InProgress", "Completed"];
@@ -137,7 +137,7 @@ const KanbanCard = memo(function KanbanCard({
           {order.status === "Scheduled" && (
             <button
               onClick={() => onMove(order.id, "InProgress")}
-              className="flex items-center gap-0.5 rounded bg-blue-600 px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-0.5 rounded bg-info px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-info-text transition-colors"
               title="Move to In Progress"
             >
               <ArrowRight className="h-2.5 w-2.5" />
@@ -147,7 +147,7 @@ const KanbanCard = memo(function KanbanCard({
           {order.status === "InProgress" && (
             <button
               onClick={() => onMove(order.id, "Completed")}
-              className="flex items-center gap-0.5 rounded bg-green-600 px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-green-700 transition-colors"
+              className="flex items-center gap-0.5 rounded bg-success px-1.5 py-0.5 text-[12px] font-medium text-white hover:bg-success-text transition-colors"
               title="Mark as Completed"
             >
               <CheckCircle className="h-2.5 w-2.5" />

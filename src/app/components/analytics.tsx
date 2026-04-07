@@ -97,14 +97,14 @@ export function Analytics() {
               </div>
               <div className="mt-2 flex items-center gap-1 pl-12">
                 {kpi.trendUp ? (
-                  <TrendingUp className="h-3 w-3 text-emerald-500" />
+                  <TrendingUp className="h-3 w-3 text-success" />
                 ) : (
-                  <TrendingDown className="h-3 w-3 text-red-500" />
+                  <TrendingDown className="h-3 w-3 text-danger" />
                 )}
                 <span
                   className={cn(
                     "text-[13px] font-medium",
-                    kpi.trendUp ? "text-emerald-600" : "text-red-600",
+                    kpi.trendUp ? "text-success-text" : "text-danger-text",
                   )}
                 >
                   {kpi.trend}

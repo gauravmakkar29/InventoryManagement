@@ -30,9 +30,9 @@ export function GeofencePanel({
         className="flex w-full items-center justify-between px-4 py-3 text-left cursor-pointer hover:bg-muted transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Shield className="h-4 w-4 text-blue-600" />
+          <Shield className="h-4 w-4 text-info" />
           <span className="text-[14px] font-semibold text-foreground">Geofence Zones</span>
-          <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[12px] font-medium text-blue-700">
+          <span className="rounded-full bg-info-bg px-2 py-0.5 text-[12px] font-medium text-info-text">
             {geofences.length}
           </span>
         </div>
@@ -50,7 +50,7 @@ export function GeofencePanel({
               onClick={onToggleGeofences}
               className={cn(
                 "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[13px] font-medium cursor-pointer transition-colors",
-                showGeofences ? "bg-blue-100 text-blue-700" : "bg-muted text-muted-foreground",
+                showGeofences ? "bg-info-bg text-info-text" : "bg-muted text-muted-foreground",
               )}
             >
               {showGeofences ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
@@ -58,7 +58,7 @@ export function GeofencePanel({
             </button>
             <button
               onClick={onCreateGeofence}
-              className="flex items-center gap-1 rounded-md bg-blue-600 px-2.5 py-1 text-[13px] font-medium text-white hover:bg-blue-700 cursor-pointer transition-colors"
+              className="flex items-center gap-1 rounded-md bg-info px-2.5 py-1 text-[13px] font-medium text-white hover:bg-info-text cursor-pointer transition-colors"
             >
               <Plus className="h-3 w-3" />
               Create

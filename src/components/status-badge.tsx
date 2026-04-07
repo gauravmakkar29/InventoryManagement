@@ -6,55 +6,55 @@ import { cn } from "@/lib/utils";
 
 /** Severity levels (vulnerability, incident, alert) */
 const SEVERITY_STYLES: Record<string, string> = {
-  Critical: "bg-red-100 text-red-700 border-red-200",
-  High: "bg-orange-100 text-orange-700 border-orange-200",
-  Medium: "bg-amber-100 text-amber-700 border-amber-200",
-  Low: "bg-blue-100 text-blue-700 border-blue-200",
-  Info: "bg-slate-100 text-slate-600 border-slate-200",
+  Critical: "bg-danger-bg text-danger-text border-danger-border",
+  High: "bg-high-bg text-high-text border-high-bg",
+  Medium: "bg-warning-bg text-warning-text border-warning-bg",
+  Low: "bg-info-bg text-info-text border-info-bg",
+  Info: "bg-muted text-muted-foreground border-border",
 };
 
 /** Status values (device, service order, firmware, incident) */
 const STATUS_STYLES: Record<string, string> = {
-  Online: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  Offline: "bg-red-50 text-red-700 border-red-200",
-  Active: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  Online: "bg-success-bg text-success-text border-success-bg",
+  Offline: "bg-danger-bg text-danger-text border-danger-border",
+  Active: "bg-success-bg text-success-text border-success-bg",
   Inactive: "bg-muted text-muted-foreground border-border",
-  Pending: "bg-amber-100 text-amber-700 border-amber-200",
-  Approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  Rejected: "bg-red-50 text-red-700 border-red-200",
+  Pending: "bg-warning-bg text-warning-text border-warning-bg",
+  Approved: "bg-success-bg text-success-text border-success-bg",
+  Rejected: "bg-danger-bg text-danger-text border-danger-border",
   Deprecated: "bg-muted text-muted-foreground border-border",
-  Scheduled: "bg-blue-100 text-blue-700 border-blue-200",
-  "In Progress": "bg-amber-100 text-amber-700 border-amber-200",
-  Completed: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  Scheduled: "bg-info-bg text-info-text border-info-bg",
+  "In Progress": "bg-warning-bg text-warning-text border-warning-bg",
+  Completed: "bg-success-bg text-success-text border-success-bg",
   Cancelled: "bg-muted text-muted-foreground border-border",
-  Open: "bg-red-50 text-red-700 border-red-200",
-  Investigating: "bg-orange-50 text-orange-700 border-orange-200",
-  Contained: "bg-amber-50 text-amber-700 border-amber-200",
-  Resolved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  Open: "bg-danger-bg text-danger-text border-danger-border",
+  Investigating: "bg-high-bg text-high-text border-high-bg",
+  Contained: "bg-warning-bg text-warning-text border-warning-bg",
+  Resolved: "bg-success-bg text-success-text border-success-bg",
   Closed: "bg-muted text-muted-foreground border-border",
-  Consumed: "bg-emerald-100 text-emerald-700 border-emerald-200",
+  Consumed: "bg-success-bg text-success-text border-success-bg",
   Expired: "bg-muted text-muted-foreground border-border",
-  Revoked: "bg-red-50 text-red-700 border-red-200",
+  Revoked: "bg-danger-bg text-danger-text border-danger-border",
 };
 
 /** Category values (incident, compliance, device type) */
 const CATEGORY_STYLES: Record<string, string> = {
-  Security: "bg-red-50 text-red-600",
-  Hardware: "bg-blue-50 text-blue-600",
+  Security: "bg-danger-bg text-danger-text",
+  Hardware: "bg-info-bg text-info-text",
   Network: "bg-purple-50 text-purple-600",
-  Firmware: "bg-orange-50 text-orange-600",
-  Environmental: "bg-green-50 text-green-600",
+  Firmware: "bg-high-bg text-high-text",
+  Environmental: "bg-success-bg text-success-text",
   Software: "bg-indigo-50 text-indigo-600",
   Compliance: "bg-cyan-50 text-cyan-600",
 };
 
 /** Action values (audit log) */
 const ACTION_STYLES: Record<string, string> = {
-  CREATE: "bg-emerald-50 text-emerald-700",
-  UPDATE: "bg-blue-50 text-blue-700",
-  DELETE: "bg-red-50 text-red-700",
-  APPROVE: "bg-emerald-50 text-emerald-700",
-  REJECT: "bg-red-50 text-red-700",
+  CREATE: "bg-success-bg text-success-text",
+  UPDATE: "bg-info-bg text-info-text",
+  DELETE: "bg-danger-bg text-danger-text",
+  APPROVE: "bg-success-bg text-success-text",
+  REJECT: "bg-danger-bg text-danger-text",
   LOGIN: "bg-indigo-50 text-indigo-700",
   LOGOUT: "bg-muted text-muted-foreground",
 };
@@ -106,16 +106,14 @@ export function StatusBadge({ variant, value, dot = false, className }: StatusBa
         <span
           className={cn(
             "h-1.5 w-1.5 shrink-0 rounded-full",
-            colorClass.includes("text-red") && "bg-red-500",
-            colorClass.includes("text-orange") && "bg-orange-500",
-            colorClass.includes("text-amber") && "bg-amber-500",
-            colorClass.includes("text-emerald") && "bg-emerald-500",
-            colorClass.includes("text-green") && "bg-green-500",
-            colorClass.includes("text-blue") && "bg-blue-500",
+            colorClass.includes("text-danger") && "bg-danger",
+            colorClass.includes("text-high") && "bg-high",
+            colorClass.includes("text-warning") && "bg-warning",
+            colorClass.includes("text-success") && "bg-success",
+            colorClass.includes("text-info") && "bg-info",
             colorClass.includes("text-purple") && "bg-purple-500",
             colorClass.includes("text-indigo") && "bg-indigo-500",
             colorClass.includes("text-cyan") && "bg-cyan-500",
-            colorClass.includes("text-slate") && "bg-slate-400",
             colorClass.includes("text-muted") && "bg-muted-foreground",
           )}
         />

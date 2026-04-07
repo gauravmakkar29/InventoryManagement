@@ -26,40 +26,45 @@ const RESULT_CONFIG: Record<DownloadAttemptResult, ResultConfig> = {
   SUCCESS: {
     label: "Downloaded",
     icon: CheckCircle,
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-50",
+    color: "text-success-text",
+    bgColor: "bg-success-bg",
   },
   TOKEN_NOT_FOUND: {
     label: "Invalid Token",
     icon: XCircle,
-    color: "text-red-600",
-    bgColor: "bg-red-50",
+    color: "text-danger-text",
+    bgColor: "bg-danger-bg",
   },
   TOKEN_EXPIRED: { label: "Expired", icon: Clock, color: "text-gray-500", bgColor: "bg-gray-50" },
   TOKEN_CONSUMED: {
     label: "Already Used",
     icon: XCircle,
-    color: "text-amber-600",
-    bgColor: "bg-amber-50",
+    color: "text-warning-text",
+    bgColor: "bg-warning-bg",
   },
-  USER_MISMATCH: { label: "Wrong User", icon: Shield, color: "text-red-600", bgColor: "bg-red-50" },
+  USER_MISMATCH: {
+    label: "Wrong User",
+    icon: Shield,
+    color: "text-danger-text",
+    bgColor: "bg-danger-bg",
+  },
   FIRMWARE_RECALLED: {
     label: "Recalled",
     icon: AlertTriangle,
-    color: "text-red-600",
-    bgColor: "bg-red-50",
+    color: "text-danger-text",
+    bgColor: "bg-danger-bg",
   },
   MFA_MISSING: {
     label: "MFA Required",
     icon: Shield,
-    color: "text-amber-600",
-    bgColor: "bg-amber-50",
+    color: "text-warning-text",
+    bgColor: "bg-warning-bg",
   },
   RATE_LIMITED: {
     label: "Rate Limited",
     icon: AlertTriangle,
-    color: "text-orange-600",
-    bgColor: "bg-orange-50",
+    color: "text-high-text",
+    bgColor: "bg-high-bg",
   },
 };
 
@@ -223,7 +228,7 @@ export function DownloadHistoryPanel({ firmwareId, className }: DownloadHistoryP
                 key={entry.id}
                 className={cn(
                   "rounded-lg border px-4 py-3",
-                  isSuccess ? "border-emerald-200 bg-emerald-50/30" : "border-border bg-card",
+                  isSuccess ? "border-success-bg bg-success-bg/30" : "border-border bg-card",
                 )}
               >
                 <div className="flex items-start justify-between gap-3">

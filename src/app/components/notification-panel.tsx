@@ -74,10 +74,10 @@ const SEVERITY_CONFIG: Record<
   NotificationSeverity,
   { icon: typeof AlertTriangle; iconColor: string; bgColor: string }
 > = {
-  critical: { icon: AlertCircle, iconColor: "text-red-500", bgColor: "bg-red-50" },
-  warning: { icon: AlertTriangle, iconColor: "text-amber-500", bgColor: "bg-amber-50" },
-  info: { icon: Info, iconColor: "text-blue-500", bgColor: "bg-blue-50" },
-  success: { icon: CheckCircle, iconColor: "text-emerald-500", bgColor: "bg-emerald-50" },
+  critical: { icon: AlertCircle, iconColor: "text-danger", bgColor: "bg-danger-bg" },
+  warning: { icon: AlertTriangle, iconColor: "text-warning", bgColor: "bg-warning-bg" },
+  info: { icon: Info, iconColor: "text-info", bgColor: "bg-info-bg" },
+  success: { icon: CheckCircle, iconColor: "text-success", bgColor: "bg-success-bg" },
 };
 
 /** Default seed notifications shown when the store is empty (before real-time kicks in). */
@@ -220,7 +220,7 @@ export function NotificationPanel({ open, onClose }: NotificationPanelProps) {
           <div className="flex items-center gap-2">
             <h2 className="text-[16px] font-semibold text-foreground">Notifications</h2>
             {unreadCount > 0 && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[12px] font-bold text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1.5 text-[12px] font-bold text-white">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}

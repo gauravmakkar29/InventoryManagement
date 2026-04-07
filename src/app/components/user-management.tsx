@@ -111,8 +111,8 @@ const INITIAL_USERS: ManagedUser[] = [
 // ---------------------------------------------------------------------------
 
 const STATUS_CONFIG: Record<UserStatus, { dot: string; bg: string; text: string }> = {
-  Active: { dot: "bg-emerald-500", bg: "bg-emerald-50", text: "text-emerald-700" },
-  Invited: { dot: "bg-amber-500", bg: "bg-amber-50", text: "text-amber-700" },
+  Active: { dot: "bg-success", bg: "bg-success-bg", text: "text-success-text" },
+  Invited: { dot: "bg-warning", bg: "bg-warning-bg", text: "text-warning-text" },
   Disabled: { dot: "bg-gray-400", bg: "bg-muted", text: "text-muted-foreground" },
 };
 
@@ -292,7 +292,7 @@ export function UserManagement() {
             aria-label="Search users"
             className={cn(
               "h-10 w-full rounded-lg border border-border bg-card pl-9 pr-3 text-[15px] text-foreground placeholder:text-muted-foreground",
-              "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
+              "focus:border-info focus:outline-none focus:ring-1 focus:ring-info",
             )}
           />
         </div>
@@ -303,7 +303,7 @@ export function UserManagement() {
           onChange={(e) => setRoleFilter(e.target.value)}
           className={cn(
             "h-10 rounded-lg border border-border bg-card px-3 pr-8 text-[15px] text-foreground/80",
-            "focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]",
+            "focus:border-info focus:outline-none focus:ring-1 focus:ring-info",
           )}
         >
           {ROLE_OPTIONS.map((opt) => (
@@ -391,7 +391,7 @@ export function UserManagement() {
                       className={cn(
                         "h-[52px] border-b border-border/30",
                         i % 2 === 1 && "bg-muted/30",
-                        "hover:bg-blue-50/30",
+                        "hover:bg-info-bg/30",
                       )}
                     >
                       {/* Name */}
@@ -400,7 +400,7 @@ export function UserManagement() {
                           <div
                             className={cn(
                               "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[13px] font-semibold text-white",
-                              user.status === "Disabled" ? "bg-muted-foreground" : "bg-[#0f172a]",
+                              user.status === "Disabled" ? "bg-muted-foreground" : "bg-primary",
                             )}
                           >
                             {getUserInitials(user.name)}
@@ -426,11 +426,11 @@ export function UserManagement() {
                         <span
                           className={cn(
                             "inline-flex rounded-md px-2 py-0.5 text-[14px] font-medium",
-                            user.role === "Admin" && "bg-blue-50 text-[#2563eb]",
+                            user.role === "Admin" && "bg-info-bg text-info",
                             user.role === "Manager" && "bg-purple-50 text-purple-700",
-                            user.role === "Technician" && "bg-orange-50 text-accent-text",
+                            user.role === "Technician" && "bg-high-bg text-accent-text",
                             user.role === "Viewer" && "bg-muted text-muted-foreground",
-                            user.role === "CustomerAdmin" && "bg-emerald-50 text-emerald-700",
+                            user.role === "CustomerAdmin" && "bg-success-bg text-success-text",
                           )}
                         >
                           {user.role}
@@ -468,7 +468,7 @@ export function UserManagement() {
                               className={cn(
                                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-muted-foreground",
                                 "hover:bg-muted hover:text-muted-foreground",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info",
                               )}
                               aria-label={`Edit ${user.name}`}
                               title="Edit user"
@@ -480,9 +480,9 @@ export function UserManagement() {
                               className={cn(
                                 "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg",
                                 user.status === "Disabled"
-                                  ? "text-emerald-500 hover:bg-emerald-50 hover:text-emerald-600"
-                                  : "text-muted-foreground hover:bg-red-50 hover:text-red-500",
-                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]",
+                                  ? "text-success hover:bg-success-bg hover:text-success-text"
+                                  : "text-muted-foreground hover:bg-danger-bg hover:text-danger",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info",
                               )}
                               aria-label={
                                 user.status === "Disabled"

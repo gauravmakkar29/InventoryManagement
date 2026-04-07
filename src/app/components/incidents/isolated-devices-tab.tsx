@@ -75,12 +75,12 @@ export function IsolatedDevicesTab({
             <tr key={dev.id} className={cn("h-[48px]", i % 2 === 1 && "bg-muted/50")}>
               <td className="px-4">
                 <div className="flex items-center gap-2">
-                  <span className="flex h-2 w-2 rounded-full bg-red-500" />
+                  <span className="flex h-2 w-2 rounded-full bg-danger" />
                   <span className="text-[14px] font-medium text-foreground">{dev.name}</span>
                 </div>
               </td>
               <td className="px-4">
-                <span className="text-[14px] text-blue-600 font-medium">{dev.incidentId}</span>
+                <span className="text-[14px] text-info-text font-medium">{dev.incidentId}</span>
                 <p className="text-[13px] text-muted-foreground truncate max-w-[200px]">
                   {dev.incidentTitle}
                 </p>
@@ -89,7 +89,7 @@ export function IsolatedDevicesTab({
                 {dev.isolatedAt ? formatDateTime(dev.isolatedAt) : "N/A"}
               </td>
               <td className="px-4">
-                <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-[12px] font-medium text-amber-700">
+                <span className="inline-flex rounded-full bg-warning-bg px-2 py-0.5 text-[12px] font-medium text-warning-text">
                   {dev.isolationPolicy ?? "N/A"}
                 </span>
               </td>
@@ -97,7 +97,7 @@ export function IsolatedDevicesTab({
               <td className="px-4 text-right">
                 <button
                   onClick={() => onRelease(dev)}
-                  className="rounded-lg bg-emerald-50 px-3 py-1.5 text-[13px] font-medium text-emerald-700 hover:bg-emerald-100 cursor-pointer"
+                  className="rounded-lg bg-success-bg px-3 py-1.5 text-[13px] font-medium text-success-text hover:bg-success-bg cursor-pointer"
                 >
                   <Unlock className="mr-1 inline h-3 w-3" /> Release
                 </button>
@@ -107,8 +107,8 @@ export function IsolatedDevicesTab({
           {isolatedDevices.length === 0 && (
             <tr>
               <td colSpan={6} className="py-12 text-center">
-                <Shield className="mx-auto h-8 w-8 text-emerald-300 mb-2" />
-                <p className="text-[15px] font-medium text-emerald-700">No isolated devices</p>
+                <Shield className="mx-auto h-8 w-8 text-success-text mb-2" />
+                <p className="text-[15px] font-medium text-success-text">No isolated devices</p>
                 <p className="text-[14px] text-muted-foreground">
                   All devices are operating normally
                 </p>

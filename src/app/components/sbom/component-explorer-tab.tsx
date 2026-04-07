@@ -91,14 +91,14 @@ export function ComponentExplorerTab({
       </div>
 
       {sbomFilter && (
-        <div className="mb-3 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-[14px] text-blue-700">
+        <div className="mb-3 flex items-center gap-2 rounded-lg bg-info-bg px-3 py-2 text-[14px] text-info-text">
           <Filter className="h-3.5 w-3.5" />
           Filtered to SBOM: {sbomFilter}
           <button
             onClick={() => {
               /* Parent would clear this */
             }}
-            className="ml-auto text-blue-500 hover:text-blue-700 cursor-pointer"
+            className="ml-auto text-info hover:text-info-text cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -273,7 +273,7 @@ const ComponentRow = memo(function ComponentRow({
                           href={`https://nvd.nist.gov/vuln/detail/${v.cveId}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[14px] font-medium text-blue-600 hover:underline"
+                          className="text-[14px] font-medium text-info-text hover:underline"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {v.cveId}
@@ -296,7 +296,7 @@ const ComponentRow = memo(function ComponentRow({
                 </div>
               )}
               {compVulns.length === 0 && (
-                <div className="flex items-center gap-2 text-[14px] text-green-600">
+                <div className="flex items-center gap-2 text-[14px] text-success-text">
                   <ShieldCheck className="h-4 w-4" />
                   No known vulnerabilities
                 </div>

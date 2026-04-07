@@ -36,11 +36,11 @@ type TokenStatus = DownloadToken["status"];
 const TOKEN_STATUS_STYLES: Record<TokenStatus, { label: string; classes: string }> = {
   active: {
     label: "Active",
-    classes: "bg-blue-100 text-blue-700 border border-blue-200",
+    classes: "bg-info-bg text-info-text border border-info-bg",
   },
   consumed: {
     label: "Consumed",
-    classes: "bg-emerald-100 text-emerald-700 border border-emerald-200",
+    classes: "bg-success-bg text-success-text border border-success-bg",
   },
   expired: {
     label: "Expired",
@@ -48,7 +48,7 @@ const TOKEN_STATUS_STYLES: Record<TokenStatus, { label: string; classes: string 
   },
   revoked: {
     label: "Revoked",
-    classes: "bg-red-50 text-red-700 border border-red-200",
+    classes: "bg-danger-bg text-danger-text border border-danger-border",
   },
 };
 
@@ -100,7 +100,7 @@ function CopyButton({ tokenGuid }: { tokenGuid: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950 transition-colors cursor-pointer"
+      className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-info-text hover:bg-info-bg dark:hover:bg-info-bg transition-colors cursor-pointer"
       aria-label="Copy download URL"
     >
       {copied ? (
@@ -217,7 +217,7 @@ export function DownloadLinksTab() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => handleRevoke(row.id)}
-                      className="rounded px-2 py-1 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 transition-colors cursor-pointer"
+                      className="rounded px-2 py-1 text-xs font-semibold text-danger-text bg-danger-bg hover:bg-danger-bg transition-colors cursor-pointer"
                     >
                       Confirm
                     </button>
@@ -231,7 +231,7 @@ export function DownloadLinksTab() {
                 ) : (
                   <button
                     onClick={() => setRevokeConfirmId(row.id)}
-                    className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950 transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1 rounded px-2 py-1 text-xs font-medium text-danger-text hover:bg-danger-bg dark:hover:bg-danger-bg transition-colors cursor-pointer"
                     aria-label={`Revoke download link for ${row.userEmail}`}
                   >
                     <Ban className="h-3.5 w-3.5" />
@@ -265,7 +265,7 @@ export function DownloadLinksTab() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <LinkIcon className="h-5 w-5 text-blue-600" />
+          <LinkIcon className="h-5 w-5 text-info" />
           <h2 className="text-[15px] font-semibold text-foreground">Download Links</h2>
           <span className="rounded-full bg-muted px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
             {filteredTokens.length}
@@ -281,7 +281,7 @@ export function DownloadLinksTab() {
           </button>
           <button
             onClick={() => setGenerateModalOpen(true)}
-            className="flex items-center gap-1.5 rounded bg-blue-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-blue-700 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 rounded bg-info px-3 py-1.5 text-sm font-semibold text-white hover:bg-info-text transition-colors cursor-pointer"
           >
             <Link2 className="h-3.5 w-3.5" />
             Generate Link

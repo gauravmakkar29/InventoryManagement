@@ -20,7 +20,7 @@ export function TrailTimeline({
     <div className="card-elevated overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border/60">
         <div className="flex items-center gap-2">
-          <Navigation className="h-4 w-4 text-blue-600" />
+          <Navigation className="h-4 w-4 text-info" />
           <span className="text-[14px] font-semibold text-foreground">
             Position Trail — {device.name}
           </span>
@@ -38,7 +38,7 @@ export function TrailTimeline({
       <div className="max-h-[180px] overflow-y-auto px-4 py-2">
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[5px] top-2 bottom-2 w-[2px] bg-blue-200" />
+          <div className="absolute left-[5px] top-2 bottom-2 w-[2px] bg-info-bg" />
           {trail
             .slice(-10)
             .reverse()
@@ -50,7 +50,7 @@ export function TrailTimeline({
                   <div
                     className={cn(
                       "relative z-10 mt-0.5 shrink-0 rounded-full",
-                      isLatest ? "h-3 w-3 bg-blue-600" : "h-2.5 w-2.5 bg-blue-300",
+                      isLatest ? "h-3 w-3 bg-info" : "h-2.5 w-2.5 bg-info",
                     )}
                   />
                   <div className="flex-1 min-w-0">
@@ -59,7 +59,7 @@ export function TrailTimeline({
                         {point.lat.toFixed(4)}, {point.lng.toFixed(4)}
                       </span>
                       {isLatest && (
-                        <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[12px] font-medium text-blue-700">
+                        <span className="rounded-full bg-info-bg px-1.5 py-0.5 text-[12px] font-medium text-info-text">
                           Current
                         </span>
                       )}

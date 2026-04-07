@@ -126,9 +126,9 @@ export function AdvancedDeviceSearch({
     <div className="space-y-3">
       {/* Fallback warning */}
       {isUsingFallback && (
-        <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 dark:border-amber-800 dark:bg-amber-950">
-          <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
-          <span className="text-[14px] text-amber-700 dark:text-amber-300">
+        <div className="flex items-center gap-2 rounded-lg border border-warning-bg bg-warning-bg px-3 py-2">
+          <AlertCircle className="h-4 w-4 text-warning-text shrink-0" />
+          <span className="text-[14px] text-warning-text">
             Full-text search temporarily unavailable. Using basic search.
           </span>
         </div>

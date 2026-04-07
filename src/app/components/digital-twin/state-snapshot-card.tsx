@@ -15,9 +15,9 @@ export function StateSnapshotCard({ snapshot }: { snapshot: TwinStateSnapshot })
           className={cn(
             "rounded-full px-2 py-0.5 text-[12px] font-medium",
             snapshot.triggeredBy === "event"
-              ? "bg-orange-50 text-accent-text"
+              ? "bg-high-bg text-accent-text"
               : snapshot.triggeredBy === "manual"
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-info-bg text-info-text"
                 : "bg-muted text-muted-foreground",
           )}
         >

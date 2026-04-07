@@ -162,7 +162,7 @@ export function SecureDownloadPage() {
   if (authLoading) {
     return (
       <PageShell>
-        <StatusCard icon={Loader2} iconClass="animate-spin text-blue-600">
+        <StatusCard icon={Loader2} iconClass="animate-spin text-info">
           <p className="text-sm text-muted-foreground">Verifying authentication...</p>
         </StatusCard>
       </PageShell>
@@ -175,14 +175,14 @@ export function SecureDownloadPage() {
   return (
     <PageShell>
       {tokenState.kind === "loading" && (
-        <StatusCard icon={Loader2} iconClass="animate-spin text-blue-600">
+        <StatusCard icon={Loader2} iconClass="animate-spin text-info">
           <h2 className="text-lg font-semibold text-foreground">Validating Token</h2>
           <p className="text-sm text-muted-foreground">Verifying download authorization...</p>
         </StatusCard>
       )}
 
       {tokenState.kind === "invalid" && (
-        <StatusCard icon={XCircle} iconClass="text-red-500">
+        <StatusCard icon={XCircle} iconClass="text-danger-text">
           <h2 className="text-lg font-semibold text-foreground">Invalid Token</h2>
           <p className="text-sm text-muted-foreground">
             This download link is not valid. It may have been deleted or the URL is malformed.
@@ -191,7 +191,7 @@ export function SecureDownloadPage() {
       )}
 
       {tokenState.kind === "expired" && (
-        <StatusCard icon={Clock} iconClass="text-amber-500">
+        <StatusCard icon={Clock} iconClass="text-warning">
           <h2 className="text-lg font-semibold text-foreground">Link Expired</h2>
           <p className="text-sm text-muted-foreground">
             This download link expired on{" "}
@@ -219,7 +219,7 @@ export function SecureDownloadPage() {
       )}
 
       {tokenState.kind === "wrong-user" && (
-        <StatusCard icon={Lock} iconClass="text-red-500">
+        <StatusCard icon={Lock} iconClass="text-danger-text">
           <h2 className="text-lg font-semibold text-foreground">Access Denied</h2>
           <p className="text-sm text-muted-foreground">
             This download link was issued to a different user. You are not authorized to access this
@@ -229,7 +229,7 @@ export function SecureDownloadPage() {
       )}
 
       {tokenState.kind === "recalled" && (
-        <StatusCard icon={AlertTriangle} iconClass="text-red-500">
+        <StatusCard icon={AlertTriangle} iconClass="text-danger-text">
           <h2 className="text-lg font-semibold text-foreground">Link Revoked</h2>
           <p className="text-sm text-muted-foreground">
             This download link has been revoked by an administrator. Contact your manager for
@@ -239,7 +239,7 @@ export function SecureDownloadPage() {
       )}
 
       {tokenState.kind === "mfa-required" && (
-        <StatusCard icon={Shield} iconClass="text-amber-500">
+        <StatusCard icon={Shield} iconClass="text-warning">
           <h2 className="text-lg font-semibold text-foreground">
             Multi-Factor Authentication Required
           </h2>
@@ -249,7 +249,7 @@ export function SecureDownloadPage() {
           </p>
           <button
             onClick={() => navigate("/account-service")}
-            className="mt-3 rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+            className="mt-3 rounded bg-info px-4 py-2 text-sm font-semibold text-white hover:bg-info-text transition-colors"
           >
             Go to Account Settings
           </button>
@@ -260,7 +260,7 @@ export function SecureDownloadPage() {
         <div className="w-full max-w-lg space-y-4">
           {/* Header */}
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-blue-600" />
+            <Shield className="h-5 w-5 text-info" />
             <h2 className="text-lg font-semibold text-foreground">Secure Firmware Download</h2>
           </div>
 
@@ -305,7 +305,7 @@ export function SecureDownloadPage() {
           {!downloadComplete && downloadProgress === null && (
             <button
               onClick={handleDownload}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition-colors"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-info px-4 py-3 text-sm font-semibold text-white hover:bg-info-text transition-colors"
             >
               <Download className="h-4 w-4" />
               Download Firmware
@@ -320,7 +320,7 @@ export function SecureDownloadPage() {
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
                 <div
-                  className="h-full rounded-full bg-blue-600 transition-all duration-200"
+                  className="h-full rounded-full bg-info transition-all duration-200"
                   style={{ width: `${downloadProgress}%` }}
                 />
               </div>
@@ -328,18 +328,18 @@ export function SecureDownloadPage() {
           )}
 
           {downloadComplete && (
-            <div className="rounded-lg border border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/30 p-4 space-y-3">
+            <div className="rounded-lg border border-success-bg dark:border-success-bg bg-success-bg dark:bg-success-bg p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
-                <h3 className="text-sm font-semibold text-green-800 dark:text-green-300">
+                <CheckCircle2 className="h-5 w-5 text-success-text" />
+                <h3 className="text-sm font-semibold text-success-text dark:text-success-text">
                   Download Complete
                 </h3>
               </div>
-              <p className="text-xs text-green-700 dark:text-green-400">
+              <p className="text-xs text-success-text dark:text-success-text">
                 Verify the downloaded file integrity by comparing its SHA-256 checksum with the
                 value shown above. Use{" "}
-                <code className="rounded bg-green-100 dark:bg-green-900 px-1">sha256sum</code> or{" "}
-                <code className="rounded bg-green-100 dark:bg-green-900 px-1">
+                <code className="rounded bg-success-bg dark:bg-success-bg px-1">sha256sum</code> or{" "}
+                <code className="rounded bg-success-bg dark:bg-success-bg px-1">
                   certutil -hashfile
                 </code>{" "}
                 to compute the checksum of the downloaded file.

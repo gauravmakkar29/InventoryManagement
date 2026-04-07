@@ -44,30 +44,30 @@ const STATE_CONFIG: Record<FirmwareLifecycleState, StateConfig> = {
   },
   [FirmwareLifecycleState.Staged]: {
     label: "Staged",
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-    borderColor: "border-blue-200",
+    color: "text-info-text",
+    bgColor: "bg-info-bg",
+    borderColor: "border-info-bg",
     icon: PackageCheck,
   },
   [FirmwareLifecycleState.Active]: {
     label: "Active",
-    color: "text-emerald-600",
-    bgColor: "bg-emerald-100",
-    borderColor: "border-emerald-200",
+    color: "text-success-text",
+    bgColor: "bg-success-bg",
+    borderColor: "border-success-bg",
     icon: Zap,
   },
   [FirmwareLifecycleState.Deprecated]: {
     label: "Deprecated",
-    color: "text-amber-600",
-    bgColor: "bg-amber-100",
-    borderColor: "border-amber-200",
+    color: "text-warning-text",
+    bgColor: "bg-warning-bg",
+    borderColor: "border-warning-bg",
     icon: Archive,
   },
   [FirmwareLifecycleState.Recalled]: {
     label: "Recalled",
-    color: "text-red-600",
-    bgColor: "bg-red-100",
-    borderColor: "border-red-200",
+    color: "text-danger-text",
+    bgColor: "bg-danger-bg",
+    borderColor: "border-danger-border",
     icon: AlertOctagon,
   },
 };
@@ -232,8 +232,8 @@ export function FirmwareStateDiagram({ currentState }: { currentState: FirmwareL
       {/* Recalled indicator */}
       {isRecalled && (
         <div className="flex items-center gap-2">
-          <AlertOctagon className="h-4 w-4 text-red-500" />
-          <span className="text-[13px] font-semibold text-red-600">
+          <AlertOctagon className="h-4 w-4 text-danger-text" />
+          <span className="text-[13px] font-semibold text-danger-text">
             RECALLED — all downloads permanently blocked
           </span>
         </div>
@@ -342,7 +342,7 @@ export function FirmwareTransitionPanel({
               className={cn(
                 "rounded-lg px-3 py-1.5 text-[14px] font-medium text-white cursor-pointer",
                 confirmingTransition.destructive
-                  ? "bg-red-600 hover:bg-red-700"
+                  ? "bg-danger hover:bg-danger"
                   : "bg-accent hover:bg-accent-hover",
               )}
             >
@@ -372,7 +372,7 @@ export function FirmwareTransitionPanel({
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[14px] font-medium transition-colors cursor-pointer",
                   transition.destructive
-                    ? "border border-red-200 text-red-600 hover:bg-red-50"
+                    ? "border border-danger-border text-danger-text hover:bg-danger-bg"
                     : "border border-border text-foreground hover:bg-muted",
                   !check.allowed && "opacity-50 cursor-not-allowed",
                 )}

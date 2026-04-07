@@ -153,9 +153,9 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
   ];
 
   const getBorderColor = (score: number): string => {
-    if (score < 50) return "border-red-400";
-    if (score <= 70) return "border-amber-400";
-    return "border-emerald-400";
+    if (score < 50) return "border-danger";
+    if (score <= 70) return "border-warning";
+    return "border-success";
   };
 
   return (
@@ -171,7 +171,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
           )}
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-50">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-high-bg">
               <Thermometer className="h-[18px] w-[18px] text-accent-text" />
             </div>
             <div className="min-w-0 flex-1">
@@ -185,7 +185,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
             <span
               className={cn(
                 "text-[13px] font-medium",
-                isImproving ? "text-emerald-600" : "text-red-600",
+                isImproving ? "text-success-text" : "text-danger-text",
               )}
             >
               {isImproving ? "+" : ""}
@@ -199,8 +199,8 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
         {/* Avg Temperature */}
         <div className="card-elevated px-4 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-50">
-              <Thermometer className="h-[18px] w-[18px] text-red-500" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-danger-bg">
+              <Thermometer className="h-[18px] w-[18px] text-danger-text" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[14px] text-muted-foreground truncate">Avg Temperature</p>
@@ -210,7 +210,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
             </div>
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
-            <span className="text-[13px] font-medium text-red-600">+1.2&deg;</span>
+            <span className="text-[13px] font-medium text-danger-text">+1.2&deg;</span>
             <span className="text-[12px] text-muted-foreground">vs last 24h</span>
           </div>
         </div>
@@ -218,8 +218,8 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
         {/* Avg CPU */}
         <div className="card-elevated px-4 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50">
-              <Cpu className="h-[18px] w-[18px] text-blue-500" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-info-bg">
+              <Cpu className="h-[18px] w-[18px] text-info" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[14px] text-muted-foreground truncate">Avg CPU Load</p>
@@ -229,7 +229,7 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
             </div>
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
-            <span className="text-[13px] font-medium text-emerald-600">-2.3%</span>
+            <span className="text-[13px] font-medium text-success-text">-2.3%</span>
             <span className="text-[12px] text-muted-foreground">vs last 24h</span>
           </div>
         </div>
@@ -237,16 +237,16 @@ function OverviewTab({ onNavigateHeatmap }: { onNavigateHeatmap: () => void }) {
         {/* Critical Devices */}
         <div className="card-elevated px-4 py-3.5">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50">
-              <AlertTriangle className="h-[18px] w-[18px] text-amber-500" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warning-bg">
+              <AlertTriangle className="h-[18px] w-[18px] text-warning" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[14px] text-muted-foreground truncate">Critical Devices</p>
-              <p className="text-[22px] font-bold leading-snug text-red-600 tabular-nums">12</p>
+              <p className="text-[22px] font-bold leading-snug text-danger-text tabular-nums">12</p>
             </div>
           </div>
           <div className="mt-2.5 flex items-center gap-2 pl-12">
-            <span className="text-[13px] font-medium text-emerald-600">-3</span>
+            <span className="text-[13px] font-medium text-success-text">-3</span>
             <span className="text-[12px] text-muted-foreground">vs yesterday</span>
           </div>
         </div>

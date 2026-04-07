@@ -87,15 +87,15 @@ export function FirmwareSimulationDialog({
   }, [result]);
 
   const compatBadge = (status: FirmwareSimulationResult["compatibilityStatus"]) => {
-    if (status === "Compatible") return "bg-emerald-50 text-emerald-700";
-    if (status === "CompatibleWithWarnings") return "bg-amber-50 text-amber-700";
-    return "bg-red-50 text-red-700";
+    if (status === "Compatible") return "bg-success-bg text-success-text";
+    if (status === "CompatibleWithWarnings") return "bg-warning-bg text-warning-text";
+    return "bg-danger-bg text-danger-text";
   };
 
   const riskBadge = (risk: string) => {
-    if (risk === "Low") return "bg-emerald-50 text-emerald-700";
-    if (risk === "Medium") return "bg-amber-50 text-amber-700";
-    return "bg-red-50 text-red-700";
+    if (risk === "Low") return "bg-success-bg text-success-text";
+    if (risk === "Medium") return "bg-warning-bg text-warning-text";
+    return "bg-danger-bg text-danger-text";
   };
 
   return (
@@ -164,7 +164,7 @@ export function FirmwareSimulationDialog({
                 ))}
               </select>
               {compatibleFirmwares.length === 0 && (
-                <p className="mt-1.5 text-[13px] text-amber-600">
+                <p className="mt-1.5 text-[13px] text-warning-text">
                   No compatible firmware versions available for this model.
                 </p>
               )}
@@ -247,8 +247,8 @@ export function FirmwareSimulationDialog({
                           <span
                             className={
                               sim.predictedHealthScoreChange >= 0
-                                ? "text-emerald-600"
-                                : "text-red-600"
+                                ? "text-success-text"
+                                : "text-danger-text"
                             }
                           >
                             {sim.predictedHealthScoreChange >= 0 ? "+" : ""}
@@ -290,14 +290,16 @@ export function FirmwareSimulationDialog({
                 <p className="text-[13px] text-muted-foreground mb-1">Health Score Change</p>
                 <div className="flex items-center gap-2">
                   {result.predictedHealthScoreChange >= 0 ? (
-                    <ArrowUp className="h-6 w-6 text-emerald-500" />
+                    <ArrowUp className="h-6 w-6 text-success" />
                   ) : (
-                    <ArrowDown className="h-6 w-6 text-red-500" />
+                    <ArrowDown className="h-6 w-6 text-danger-text" />
                   )}
                   <span
                     className={cn(
                       "text-[32px] font-bold tabular-nums",
-                      result.predictedHealthScoreChange >= 0 ? "text-emerald-600" : "text-red-600",
+                      result.predictedHealthScoreChange >= 0
+                        ? "text-success-text"
+                        : "text-danger-text",
                     )}
                   >
                     {result.predictedHealthScoreChange >= 0 ? "+" : ""}
@@ -319,11 +321,11 @@ export function FirmwareSimulationDialog({
                 <span
                   className={cn(
                     "text-[14px] font-bold",
-                    riskBadge(result.rollbackRisk).includes("emerald")
-                      ? "text-emerald-700"
-                      : riskBadge(result.rollbackRisk).includes("amber")
-                        ? "text-amber-700"
-                        : "text-red-700",
+                    riskBadge(result.rollbackRisk).includes("success")
+                      ? "text-success-text"
+                      : riskBadge(result.rollbackRisk).includes("warning")
+                        ? "text-warning-text"
+                        : "text-danger-text",
                   )}
                 >
                   {result.rollbackRisk}
@@ -340,12 +342,12 @@ export function FirmwareSimulationDialog({
 
             {/* Warnings */}
             {result.warnings.length > 0 && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 space-y-1.5">
-                <p className="text-[13px] font-semibold text-amber-800 flex items-center gap-1">
+              <div className="rounded-lg border border-warning-bg bg-warning-bg p-3 space-y-1.5">
+                <p className="text-[13px] font-semibold text-warning-text flex items-center gap-1">
                   <AlertTriangle className="h-3.5 w-3.5" /> Warnings
                 </p>
                 {result.warnings.map((w, i) => (
-                  <p key={i} className="text-[14px] text-amber-700 pl-5">
+                  <p key={i} className="text-[14px] text-warning-text pl-5">
                     {w}
                   </p>
                 ))}
@@ -354,8 +356,8 @@ export function FirmwareSimulationDialog({
 
             {/* Vulnerabilities */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-                <p className="text-[13px] font-semibold text-emerald-800 mb-2 flex items-center gap-1">
+              <div className="rounded-lg border border-success-bg bg-success-bg p-3">
+                <p className="text-[13px] font-semibold text-success-text mb-2 flex items-center gap-1">
                   <CheckCircle className="h-3.5 w-3.5" /> Resolved (
                   {result.resolvedVulnerabilities.length})
                 </p>
@@ -364,14 +366,14 @@ export function FirmwareSimulationDialog({
                     key={v.cveId}
                     className="flex items-center justify-between text-[13px] py-0.5"
                   >
-                    <span className="font-mono text-emerald-700">{v.cveId}</span>
+                    <span className="font-mono text-success-text">{v.cveId}</span>
                     <span
                       className={cn(
                         "rounded-full px-1.5 py-0.5 text-[12px] font-semibold",
                         v.severity === "Critical"
-                          ? "bg-red-100 text-red-700"
+                          ? "bg-danger-bg text-danger-text"
                           : v.severity === "High"
-                            ? "bg-orange-100 text-orange-700"
+                            ? "bg-high-bg text-high-text"
                             : "bg-yellow-100 text-yellow-700",
                       )}
                     >
@@ -380,11 +382,11 @@ export function FirmwareSimulationDialog({
                   </div>
                 ))}
                 {result.resolvedVulnerabilities.length === 0 && (
-                  <p className="text-[13px] text-emerald-600">None</p>
+                  <p className="text-[13px] text-success-text">None</p>
                 )}
               </div>
-              <div className="rounded-lg border border-red-200 bg-red-50 p-3">
-                <p className="text-[13px] font-semibold text-red-800 mb-2 flex items-center gap-1">
+              <div className="rounded-lg border border-danger-border bg-danger-bg p-3">
+                <p className="text-[13px] font-semibold text-danger-text mb-2 flex items-center gap-1">
                   <AlertTriangle className="h-3.5 w-3.5" /> Introduced (
                   {result.newVulnerabilities.length})
                 </p>
@@ -393,14 +395,14 @@ export function FirmwareSimulationDialog({
                     key={v.cveId}
                     className="flex items-center justify-between text-[13px] py-0.5"
                   >
-                    <span className="font-mono text-red-700">{v.cveId}</span>
+                    <span className="font-mono text-danger-text">{v.cveId}</span>
                     <span
                       className={cn(
                         "rounded-full px-1.5 py-0.5 text-[12px] font-semibold",
                         v.severity === "Critical"
-                          ? "bg-red-100 text-red-700"
+                          ? "bg-danger-bg text-danger-text"
                           : v.severity === "High"
-                            ? "bg-orange-100 text-orange-700"
+                            ? "bg-high-bg text-high-text"
                             : "bg-yellow-100 text-yellow-700",
                       )}
                     >
@@ -409,7 +411,7 @@ export function FirmwareSimulationDialog({
                   </div>
                 ))}
                 {result.newVulnerabilities.length === 0 && (
-                  <p className="text-[13px] text-red-600">None</p>
+                  <p className="text-[13px] text-danger-text">None</p>
                 )}
               </div>
             </div>

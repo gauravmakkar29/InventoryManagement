@@ -91,7 +91,7 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
   if (!open || !user) return null;
 
   const inputClass =
-    "h-10 w-full border border-border bg-card px-3 text-[15px] text-foreground rounded-lg focus:border-[#2563eb] focus:outline-none focus:ring-1 focus:ring-[#2563eb]";
+    "h-10 w-full border border-border bg-card px-3 text-[15px] text-foreground rounded-lg focus:border-info focus:outline-none focus:ring-1 focus:ring-info";
 
   const labelClass = "block text-[14px] font-medium text-foreground/80 mb-1";
 
@@ -187,9 +187,9 @@ export function EditUserModal({ open, user, onClose, onSave }: EditUserModalProp
               <button
                 type="submit"
                 className={cn(
-                  "h-10 cursor-pointer rounded-lg bg-[#2563eb] px-5 text-[15px] font-medium text-white",
-                  "hover:bg-[#1d4ed8]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb] focus-visible:ring-offset-2",
+                  "h-10 cursor-pointer rounded-lg bg-info px-5 text-[15px] font-medium text-white",
+                  "hover:bg-info-text",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-info focus-visible:ring-offset-2",
                 )}
               >
                 Save Changes

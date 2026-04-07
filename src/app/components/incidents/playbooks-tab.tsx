@@ -47,9 +47,9 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                 className={cn(
                   "inline-flex rounded-full px-2 py-0.5 text-[12px] font-semibold",
                   pb.status === "Active"
-                    ? "bg-emerald-50 text-emerald-700"
+                    ? "bg-success-bg text-success-text"
                     : pb.status === "Draft"
-                      ? "bg-amber-50 text-amber-700"
+                      ? "bg-warning-bg text-warning-text"
                       : "bg-muted text-muted-foreground",
                 )}
               >
@@ -84,7 +84,7 @@ export function PlaybooksTab({ playbooks }: { playbooks: Playbook[] }) {
                     </span>
                     <span className="truncate">{step.title}</span>
                     {step.actionType === "automated" && (
-                      <span className="inline-flex items-center gap-0.5 rounded bg-blue-50 px-1 py-0.5 text-[11px] font-semibold text-blue-600">
+                      <span className="inline-flex items-center gap-0.5 rounded bg-info-bg px-1 py-0.5 text-[11px] font-semibold text-info-text">
                         <Zap className="h-2 w-2" /> AUTO
                       </span>
                     )}

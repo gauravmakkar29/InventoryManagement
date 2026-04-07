@@ -54,7 +54,7 @@ export function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
             <p className="text-[22px] font-bold leading-snug text-foreground tabular-nums">
               {avgScore}
             </p>
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-orange-50 px-1.5 py-0.5 text-[12px] font-semibold text-accent-text">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-high-bg px-1.5 py-0.5 text-[12px] font-semibold text-accent-text">
               Twin
             </span>
           </div>
@@ -186,13 +186,13 @@ export function FleetHealthSummary({ twins }: { twins: DigitalTwin[] }) {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[14px] text-muted-foreground">In Sync</span>
-            <span className="text-[15px] font-bold tabular-nums text-emerald-600">
+            <span className="text-[15px] font-bold tabular-nums text-success-text">
               {twins.filter((t) => t.configDriftStatus === "InSync").length}
             </span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-[14px] text-muted-foreground">Drifted</span>
-            <span className="text-[15px] font-bold tabular-nums text-amber-600">{drifted}</span>
+            <span className="text-[15px] font-bold tabular-nums text-warning-text">{drifted}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-[14px] text-muted-foreground">Unknown</span>

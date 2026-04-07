@@ -120,7 +120,7 @@ export function LocationSearchBar({
           }}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           placeholder="Search location..."
-          className="w-full rounded-md border border-border bg-card/95 py-1.5 pl-8 pr-8 text-[14px] text-foreground shadow-sm backdrop-blur-sm placeholder:text-muted-foreground focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="w-full rounded-md border border-border bg-card/95 py-1.5 pl-8 pr-8 text-[14px] text-foreground shadow-sm backdrop-blur-sm placeholder:text-muted-foreground focus:border-info focus:outline-none focus:ring-1 focus:ring-info"
           aria-label="Search location"
         />
         {query && (
@@ -143,7 +143,7 @@ export function LocationSearchBar({
               <button
                 key={s.label}
                 onMouseDown={() => handleSelect(s)}
-                className="flex w-full items-center gap-2 px-3 py-2 text-left text-[14px] text-foreground/80 hover:bg-blue-50 cursor-pointer"
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-[14px] text-foreground/80 hover:bg-info-bg cursor-pointer"
               >
                 <MapPin className="h-3 w-3 shrink-0 text-muted-foreground" />
                 <span>{s.label}</span>

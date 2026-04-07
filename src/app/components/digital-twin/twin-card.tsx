@@ -33,8 +33,8 @@ export function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => 
                 className={cn(
                   "shrink-0 rounded-full px-1.5 py-0.5 text-[12px] font-bold tabular-nums",
                   twin.healthDelta > 0
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "bg-red-50 text-red-700",
+                    ? "bg-success-bg text-success-text"
+                    : "bg-danger-bg text-danger-text",
                 )}
               >
                 {twin.healthDelta > 0 ? "+" : ""}
@@ -63,9 +63,9 @@ export function TwinCard({ twin, onClick }: { twin: DigitalTwin; onClick: () => 
             className={cn(
               "rounded-full px-2 py-0.5 text-[12px] font-semibold",
               twin.configDriftStatus === "InSync"
-                ? "bg-emerald-50 text-emerald-700"
+                ? "bg-success-bg text-success-text"
                 : twin.configDriftStatus === "Drifted"
-                  ? "bg-amber-50 text-amber-700"
+                  ? "bg-warning-bg text-warning-text"
                   : "bg-muted text-muted-foreground",
             )}
           >

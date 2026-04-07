@@ -67,20 +67,20 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3">
               {allCompliant ? (
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
-                  <ShieldCheck className="h-5 w-5 text-green-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-success-bg">
+                  <ShieldCheck className="h-5 w-5 text-success-text" />
                 </div>
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50">
-                  <ShieldAlert className="h-5 w-5 text-red-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-danger-bg">
+                  <ShieldAlert className="h-5 w-5 text-danger-text" />
                 </div>
               )}
               <div>
                 <h3 className="text-[15px] font-semibold text-foreground">License Policy Status</h3>
                 {allCompliant ? (
-                  <p className="text-[14px] text-green-600 font-medium">All Compliant</p>
+                  <p className="text-[14px] text-success-text font-medium">All Compliant</p>
                 ) : (
-                  <p className="text-[14px] text-red-600 font-medium">
+                  <p className="text-[14px] text-danger-text font-medium">
                     {stats.restricted} non-compliant{" "}
                     {stats.restricted === 1 ? "component" : "components"} detected
                   </p>
@@ -89,11 +89,11 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
             </div>
             <div className="flex items-center gap-6 border-l border-border pl-6">
               <div className="text-center">
-                <div className="text-[20px] font-bold text-green-600">{stats.approved}</div>
+                <div className="text-[20px] font-bold text-success-text">{stats.approved}</div>
                 <div className="text-[13px] text-muted-foreground">Approved</div>
               </div>
               <div className="text-center">
-                <div className="text-[20px] font-bold text-red-600">{stats.restricted}</div>
+                <div className="text-[20px] font-bold text-danger-text">{stats.restricted}</div>
                 <div className="text-[13px] text-muted-foreground">Restricted</div>
               </div>
               <div className="text-center">
@@ -225,7 +225,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                 {nonCompliant.map((comp) => (
                   <tr
                     key={comp.id}
-                    className="border-b border-border/60 border-l-4 border-l-red-400"
+                    className="border-b border-border/60 border-l-4 border-l-danger"
                   >
                     <td className="px-4 py-3 text-[14px] font-medium text-foreground">
                       {comp.name}
@@ -234,12 +234,12 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
                       {comp.version}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-md bg-red-50 px-2 py-0.5 text-[13px] font-medium text-red-700">
+                      <span className="rounded-md bg-danger-bg px-2 py-0.5 text-[13px] font-medium text-danger-text">
                         {comp.license}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-[14px] text-muted-foreground">{comp.sbomId}</td>
-                    <td className="px-4 py-3 text-[14px] text-amber-700">
+                    <td className="px-4 py-3 text-[14px] text-warning-text">
                       {comp.license.startsWith("GPL") || comp.license.startsWith("AGPL")
                         ? "Replace with permissive-licensed alternative or obtain commercial license"
                         : "Review license terms and obtain legal approval"}
@@ -254,7 +254,7 @@ export function LicenseComplianceTab({ components }: { components: SBOMComponent
 
       {nonCompliant.length === 0 && (
         <div className="card-elevated flex items-center justify-center py-8">
-          <div className="flex items-center gap-2 text-green-600">
+          <div className="flex items-center gap-2 text-success-text">
             <ShieldCheck className="h-5 w-5" />
             <span className="text-[15px] font-medium">No non-compliant components detected</span>
           </div>

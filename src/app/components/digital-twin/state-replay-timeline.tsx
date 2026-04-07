@@ -37,7 +37,7 @@ export function StateReplayTimeline({
                   isActive
                     ? "h-4 w-4 border-accent-text bg-accent"
                     : isSelected
-                      ? "h-3.5 w-3.5 border-accent-text bg-orange-100"
+                      ? "h-3.5 w-3.5 border-accent-text bg-high-bg"
                       : "h-3 w-3 border-border bg-card group-hover:border-accent-text",
                 )}
               />

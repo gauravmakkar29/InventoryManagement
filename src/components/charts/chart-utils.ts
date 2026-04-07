@@ -43,13 +43,28 @@ export function describeArc(
 // Color constants — aligned with IMS design tokens
 // ---------------------------------------------------------------------------
 
+/**
+ * Semantic chart palette — aligned with IMS design tokens.
+ * These hex values match the CSS custom properties in index.css
+ * and are used for SVG fills / inline styles where CSS vars aren't practical.
+ */
+export const SEMANTIC_COLORS = {
+  success: "#10b981",
+  warning: "#f59e0b",
+  danger: "#ef4444",
+  high: "#f97316",
+  info: "#3b82f6",
+  muted: "#6b7280",
+  mutedLight: "#e5e7eb",
+} as const;
+
 /** Threshold-based status colors (no gradients per design principles). */
 export const STATUS_COLORS = {
-  good: "#10b981",
-  warning: "#f59e0b",
-  critical: "#ef4444",
-  accent: "#2563eb",
-  muted: "#e5e7eb",
+  good: SEMANTIC_COLORS.success,
+  warning: SEMANTIC_COLORS.warning,
+  critical: SEMANTIC_COLORS.danger,
+  accent: SEMANTIC_COLORS.info,
+  muted: SEMANTIC_COLORS.mutedLight,
 } as const;
 
 /** Pick a status color from a numeric value + thresholds. */

@@ -2,11 +2,7 @@
  * IMS Gen 2 — Epic 14: Badge components for incidents
  */
 import { cn } from "@/lib/utils";
-import type {
-  IncidentSeverity,
-  IncidentStatus,
-  IncidentCategory,
-} from "@/lib/incident-types";
+import type { IncidentSeverity, IncidentStatus, IncidentCategory } from "@/lib/incident-types";
 import { SEVERITY_COLORS, STATUS_COLORS } from "@/lib/incident-types";
 
 // ---------------------------------------------------------------------------
@@ -14,10 +10,10 @@ import { SEVERITY_COLORS, STATUS_COLORS } from "@/lib/incident-types";
 // ---------------------------------------------------------------------------
 export function SeverityBadge({ severity }: { severity: IncidentSeverity }) {
   const styles: Record<IncidentSeverity, string> = {
-    Critical: "bg-red-100 text-red-700 border-red-200",
-    High: "bg-orange-100 text-orange-700 border-orange-200",
-    Medium: "bg-amber-100 text-amber-700 border-amber-200",
-    Low: "bg-blue-100 text-blue-700 border-blue-200",
+    Critical: "bg-danger-bg text-danger-text border-danger-border",
+    High: "bg-high-bg text-high-text border-high-bg",
+    Medium: "bg-warning-bg text-warning-text border-warning-bg",
+    Low: "bg-info-bg text-info-text border-info-bg",
   };
   return (
     <span
@@ -40,10 +36,10 @@ export function SeverityBadge({ severity }: { severity: IncidentSeverity }) {
 // ---------------------------------------------------------------------------
 export function StatusBadge({ status }: { status: IncidentStatus }) {
   const styles: Record<IncidentStatus, string> = {
-    Open: "bg-red-50 text-red-700 border-red-200",
-    Investigating: "bg-orange-50 text-orange-700 border-orange-200",
-    Contained: "bg-amber-50 text-amber-700 border-amber-200",
-    Resolved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    Open: "bg-danger-bg text-danger-text border-danger-border",
+    Investigating: "bg-high-bg text-high-text border-high-bg",
+    Contained: "bg-warning-bg text-warning-text border-warning-bg",
+    Resolved: "bg-success-bg text-success-text border-success-bg",
     Closed: "bg-muted text-muted-foreground border-border",
   };
   return (
@@ -67,11 +63,11 @@ export function StatusBadge({ status }: { status: IncidentStatus }) {
 // ---------------------------------------------------------------------------
 export function CategoryBadge({ category }: { category: IncidentCategory }) {
   const styles: Record<IncidentCategory, string> = {
-    Security: "bg-red-50 text-red-600",
-    Hardware: "bg-blue-50 text-blue-600",
+    Security: "bg-danger-bg text-danger-text",
+    Hardware: "bg-info-bg text-info-text",
     Network: "bg-purple-50 text-purple-600",
-    Firmware: "bg-orange-50 text-orange-600",
-    Environmental: "bg-green-50 text-green-600",
+    Firmware: "bg-high-bg text-high-text",
+    Environmental: "bg-success-bg text-success-text",
   };
   return (
     <span

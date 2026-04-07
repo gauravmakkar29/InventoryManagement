@@ -120,7 +120,7 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
                 aria-label="Copy secret key"
               >
                 {copied ? (
-                  <Check className="h-4 w-4 text-emerald-500" aria-hidden="true" />
+                  <Check className="h-4 w-4 text-success" aria-hidden="true" />
                 ) : (
                   <Copy className="h-4 w-4" aria-hidden="true" />
                 )}
@@ -161,11 +161,11 @@ export function MfaSetup({ onClose }: MfaSetupProps) {
 
         {error && (
           <div
-            className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2"
+            className="mb-4 flex items-start gap-2 rounded-lg border border-danger-border bg-danger-bg px-3 py-2"
             role="alert"
           >
-            <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" aria-hidden="true" />
-            <p className="text-[14px] text-red-700">{error}</p>
+            <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-danger" aria-hidden="true" />
+            <p className="text-[14px] text-danger-text">{error}</p>
           </div>
         )}
 

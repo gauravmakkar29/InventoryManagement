@@ -21,25 +21,25 @@ export const STATUS_CONFIG: Record<
   ComplianceStatus,
   { bg: string; text: string; icon: typeof Shield }
 > = {
-  Approved: { bg: "bg-emerald-50", text: "text-emerald-700", icon: ShieldCheck },
-  Pending: { bg: "bg-amber-50", text: "text-amber-700", icon: Clock },
-  "In Review": { bg: "bg-blue-50", text: "text-blue-700", icon: Shield },
+  Approved: { bg: "bg-success-bg", text: "text-success-text", icon: ShieldCheck },
+  Pending: { bg: "bg-warning-bg", text: "text-warning-text", icon: Clock },
+  "In Review": { bg: "bg-info-bg", text: "text-info-text", icon: Shield },
   Deprecated: { bg: "bg-muted", text: "text-muted-foreground", icon: Archive },
-  "Non-Compliant": { bg: "bg-red-50", text: "text-red-700", icon: ShieldX },
+  "Non-Compliant": { bg: "bg-danger-bg", text: "text-danger-text", icon: ShieldX },
 };
 
 export const SEVERITY_CONFIG: Record<VulnSeverity, { bg: string; text: string; border: string }> = {
-  Critical: { bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
-  High: { bg: "bg-orange-50", text: "text-orange-700", border: "border-orange-200" },
-  Medium: { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
-  Low: { bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
+  Critical: { bg: "bg-danger-bg", text: "text-danger-text", border: "border-danger-border" },
+  High: { bg: "bg-high-bg", text: "text-high-text", border: "border-high-bg" },
+  Medium: { bg: "bg-warning-bg", text: "text-warning-text", border: "border-warning-bg" },
+  Low: { bg: "bg-info-bg", text: "text-info-text", border: "border-info-bg" },
   Info: { bg: "bg-muted", text: "text-muted-foreground", border: "border-border" },
 };
 
 export const REMEDIATION_STYLES: Record<RemediationStatus, string> = {
-  Open: "bg-red-50 text-red-700",
-  "In Progress": "bg-amber-50 text-amber-700",
-  Resolved: "bg-emerald-50 text-emerald-700",
+  Open: "bg-danger-bg text-danger-text",
+  "In Progress": "bg-warning-bg text-warning-text",
+  Resolved: "bg-success-bg text-success-text",
 };
 
 // =============================================================================

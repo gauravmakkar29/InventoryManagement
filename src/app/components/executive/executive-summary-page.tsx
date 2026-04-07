@@ -20,15 +20,15 @@ const FLEET_KPIS = [
     label: "Total Devices",
     value: "1,247",
     icon: Server,
-    color: "text-blue-600",
-    bg: "bg-blue-50",
+    color: "text-info-text",
+    bg: "bg-info-bg",
   },
   {
     label: "Health Score",
     value: "94.2%",
     icon: HeartPulse,
     color: "text-success",
-    bg: "bg-emerald-50",
+    bg: "bg-success-bg",
   },
   {
     label: "Uptime (30d)",
@@ -42,7 +42,7 @@ const FLEET_KPIS = [
     value: "3",
     icon: AlertTriangle,
     color: "text-warning",
-    bg: "bg-amber-50",
+    bg: "bg-warning-bg",
   },
 ];
 

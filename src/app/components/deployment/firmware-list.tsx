@@ -110,11 +110,11 @@ function FirmwareCard({
   const statusBadge = (() => {
     switch (fw.status) {
       case "Active":
-        return "bg-emerald-500/10 text-emerald-600";
+        return "bg-success/10 text-success-text";
       case "Deprecated":
         return "bg-muted text-muted-foreground";
       case "Pending":
-        return "bg-amber-500/10 text-amber-600";
+        return "bg-warning/10 text-warning-text";
     }
   })();
 
@@ -187,7 +187,7 @@ function FirmwareCard({
           {canAdvanceToTesting && (
             <button
               onClick={() => advanceStage(fw.id)}
-              className="flex items-center gap-1 rounded-sm bg-blue-600 px-2 py-1 text-[12px] font-medium text-white hover:bg-blue-700 transition-colors duration-150"
+              className="flex items-center gap-1 rounded-sm bg-info px-2 py-1 text-[12px] font-medium text-white hover:bg-info-text transition-colors duration-150"
             >
               <Shield className="h-2.5 w-2.5" />
               Advance to Testing
@@ -196,20 +196,20 @@ function FirmwareCard({
           {canApprove && (
             <button
               onClick={() => advanceStage(fw.id)}
-              className="flex items-center gap-1 rounded-sm bg-emerald-600 px-2 py-1 text-[12px] font-medium text-white hover:bg-emerald-700 transition-colors duration-150"
+              className="flex items-center gap-1 rounded-sm bg-success px-2 py-1 text-[12px] font-medium text-white hover:bg-success-text transition-colors duration-150"
             >
               <ShieldCheck className="h-2.5 w-2.5" />
               Approve
             </button>
           )}
           {showSoDWarningUploaded && (
-            <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[12px] font-medium text-amber-600">
+            <span className="flex items-center gap-1 rounded-sm bg-warning/10 px-2 py-1 text-[12px] font-medium text-warning-text">
               <AlertTriangle className="h-2.5 w-2.5" />
               Requires different tester
             </span>
           )}
           {showSoDWarningTesting && (
-            <span className="flex items-center gap-1 rounded-sm bg-amber-500/10 px-2 py-1 text-[12px] font-medium text-amber-600">
+            <span className="flex items-center gap-1 rounded-sm bg-warning/10 px-2 py-1 text-[12px] font-medium text-warning-text">
               <AlertTriangle className="h-2.5 w-2.5" />
               Requires different approver
             </span>
@@ -217,7 +217,7 @@ function FirmwareCard({
           {canDeprecate && (
             <button
               onClick={() => deprecateFirmware(fw.id)}
-              className="flex items-center gap-1 rounded-sm border border-red-200 px-2 py-1 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors duration-150"
+              className="flex items-center gap-1 rounded-sm border border-danger-border px-2 py-1 text-[12px] font-medium text-danger-text hover:bg-danger-bg transition-colors duration-150"
             >
               <Ban className="h-2.5 w-2.5" />
               Deprecate
@@ -226,7 +226,7 @@ function FirmwareCard({
           {canActivate && (
             <button
               onClick={() => activateFirmware(fw.id)}
-              className="flex items-center gap-1 rounded-sm border border-emerald-200 px-2 py-1 text-[12px] font-medium text-emerald-600 hover:bg-emerald-50 transition-colors duration-150"
+              className="flex items-center gap-1 rounded-sm border border-success-bg px-2 py-1 text-[12px] font-medium text-success-text hover:bg-success-bg transition-colors duration-150"
             >
               <RotateCcw className="h-2.5 w-2.5" />
               Activate

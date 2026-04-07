@@ -41,8 +41,8 @@ const METRICS: MetricConfig[] = [
     label: "Temperature",
     unit: "\u00B0C",
     icon: Thermometer,
-    iconBg: "bg-red-50",
-    iconColor: "text-red-500",
+    iconBg: "bg-danger-bg",
+    iconColor: "text-danger-text",
     warningThreshold: 70,
     criticalThreshold: 85,
     color: "#ef4444",
@@ -52,8 +52,8 @@ const METRICS: MetricConfig[] = [
     label: "CPU Load",
     unit: "%",
     icon: Cpu,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-500",
+    iconBg: "bg-info-bg",
+    iconColor: "text-info",
     warningThreshold: 80,
     criticalThreshold: 95,
     color: "#3b82f6",
@@ -74,8 +74,8 @@ const METRICS: MetricConfig[] = [
     label: "Error Rate",
     unit: "/min",
     icon: AlertTriangle,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-500",
+    iconBg: "bg-warning-bg",
+    iconColor: "text-warning",
     warningThreshold: 5,
     criticalThreshold: 10,
     color: "#f59e0b",
@@ -85,8 +85,8 @@ const METRICS: MetricConfig[] = [
     label: "Power",
     unit: "W",
     icon: Zap,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-500",
+    iconBg: "bg-success-bg",
+    iconColor: "text-success",
     warningThreshold: 4500,
     criticalThreshold: 5000,
     color: "#10b981",
@@ -422,7 +422,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                 "card-elevated px-3 py-3 text-left cursor-pointer relative",
                 isActive && "ring-2",
                 isActive && `ring-[${metric.color}]`,
-                status === "critical" && "border-red-300",
+                status === "critical" && "border-danger-border",
               )}
               style={
                 isActive
@@ -432,7 +432,7 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
             >
               {/* Critical badge */}
               {status === "critical" && (
-                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500">
+                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-danger">
                   <AlertTriangle className="h-2.5 w-2.5 text-white" />
                 </span>
               )}
@@ -455,9 +455,9 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                     className={cn(
                       "text-[18px] font-bold tabular-nums leading-snug",
                       status === "critical"
-                        ? "text-red-600"
+                        ? "text-danger-text"
                         : status === "warning"
-                          ? "text-amber-600"
+                          ? "text-warning-text"
                           : "text-foreground",
                     )}
                   >
@@ -469,9 +469,9 @@ export function DeviceTelemetryChart({ deviceId, deviceName }: DeviceTelemetryCh
                   <MetricSparkline data={recentValues} color={metric.color} />
                   <div className="flex items-center gap-0.5">
                     {trend === "up" ? (
-                      <TrendingUp className="h-2.5 w-2.5 text-red-400" />
+                      <TrendingUp className="h-2.5 w-2.5 text-danger-text" />
                     ) : trend === "down" ? (
-                      <TrendingDown className="h-2.5 w-2.5 text-emerald-400" />
+                      <TrendingDown className="h-2.5 w-2.5 text-success" />
                     ) : (
                       <Minus className="h-2.5 w-2.5 text-muted-foreground" />
                     )}

@@ -256,7 +256,7 @@ export function NetworkTopologyGraph({
                   <text
                     x={pos.x + r + 18}
                     y={pos.y + 30}
-                    className="text-[12px] fill-blue-500 font-medium"
+                    className="text-[12px] fill-info font-medium"
                   >
                     Click to show lateral paths
                   </text>
@@ -305,7 +305,7 @@ export function LateralMovementPanel({
     <div className="fixed right-0 top-0 z-40 flex h-full w-[360px] flex-col border-l border-border bg-card shadow-xl">
       <div className="flex items-center justify-between border-b border-border px-5 py-4">
         <div className="flex items-center gap-2">
-          <Network className="h-4 w-4 text-red-500" />
+          <Network className="h-4 w-4 text-danger-text" />
           <h3 className="text-base font-semibold text-foreground">Lateral Movement Risk</h3>
         </div>
         <button
@@ -333,9 +333,9 @@ export function LateralMovementPanel({
                   className={cn(
                     "text-[14px] font-bold tabular-nums",
                     dev.probability >= 70
-                      ? "text-red-600"
+                      ? "text-danger-text"
                       : dev.probability >= 40
-                        ? "text-amber-600"
+                        ? "text-warning-text"
                         : "text-muted-foreground",
                   )}
                 >

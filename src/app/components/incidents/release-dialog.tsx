@@ -80,7 +80,7 @@ export function ReleaseDialog({
               setReason("");
             }}
             disabled={!reason.trim()}
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-[14px] font-medium text-white hover:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="rounded-lg bg-success px-4 py-2 text-[14px] font-medium text-white hover:bg-success-text disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             <Unlock className="mr-1.5 inline h-3.5 w-3.5" />
             Release Device

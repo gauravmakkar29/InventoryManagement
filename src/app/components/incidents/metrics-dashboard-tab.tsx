@@ -20,23 +20,23 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
               </p>
             </div>
             {metrics.hasCritical && (
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50">
-                <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-danger-bg">
+                <ShieldAlert className="h-5 w-5 text-danger-text animate-pulse" />
               </div>
             )}
             {!metrics.hasCritical && metrics.openIncidents === 0 && (
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-success-bg">
+                <CheckCircle2 className="h-5 w-5 text-success" />
               </div>
             )}
           </div>
           {metrics.openIncidents === 0 && (
-            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[13px] font-semibold text-emerald-700">
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-success-bg px-2 py-0.5 text-[13px] font-semibold text-success-text">
               <CheckCircle2 className="h-3 w-3" /> All Clear
             </span>
           )}
           {metrics.hasCritical && (
-            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[13px] font-semibold text-red-700">
+            <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-danger-bg px-2 py-0.5 text-[13px] font-semibold text-danger-text">
               Critical incident active
             </span>
           )}
@@ -77,15 +77,13 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             <span
               className={cn(
                 "text-[14px] font-medium",
-                metrics.mttcTrend < 0 ? "text-emerald-600" : "text-red-600",
+                metrics.mttcTrend < 0 ? "text-success-text" : "text-danger-text",
               )}
             >
               {metrics.mttcTrend < 0 ? `${metrics.mttcTrend}%` : `+${metrics.mttcTrend}%`}
             </span>
             <span className="text-[13px] text-muted-foreground">vs last period</span>
-            {metrics.mttcTrend < 0 && (
-              <span className="text-[12px] text-emerald-500">(improving)</span>
-            )}
+            {metrics.mttcTrend < 0 && <span className="text-[12px] text-success">(improving)</span>}
           </div>
         </div>
         <div className="card-elevated px-5 py-4">
@@ -100,15 +98,13 @@ export function MetricsDashboardTab({ metrics }: { metrics: IncidentMetrics }) {
             <span
               className={cn(
                 "text-[14px] font-medium",
-                metrics.mttrTrend < 0 ? "text-emerald-600" : "text-red-600",
+                metrics.mttrTrend < 0 ? "text-success-text" : "text-danger-text",
               )}
             >
               {metrics.mttrTrend < 0 ? `${metrics.mttrTrend}%` : `+${metrics.mttrTrend}%`}
             </span>
             <span className="text-[13px] text-muted-foreground">vs last period</span>
-            {metrics.mttrTrend < 0 && (
-              <span className="text-[12px] text-emerald-500">(improving)</span>
-            )}
+            {metrics.mttrTrend < 0 && <span className="text-[12px] text-success">(improving)</span>}
           </div>
         </div>
       </div>

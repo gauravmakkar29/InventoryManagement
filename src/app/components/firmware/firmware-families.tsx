@@ -242,7 +242,7 @@ function FirmwareFamilyCard({
           <span>{family.versionCount} versions</span>
           <span className="font-mono">{family.targetModels.join(", ")}</span>
           {family.latestActiveVersion && (
-            <span className="rounded bg-emerald-100 px-2 py-0.5 text-[12px] font-medium text-emerald-700">
+            <span className="rounded bg-success-bg px-2 py-0.5 text-[12px] font-medium text-success-text">
               v{family.latestActiveVersion}
             </span>
           )}
@@ -354,7 +354,7 @@ function CreateFirmwareFamilyModal({
             htmlFor="family-name"
             className="block text-[13px] font-semibold text-foreground mb-1"
           >
-            Family Name <span className="text-red-500">*</span>
+            Family Name <span className="text-danger-text">*</span>
           </label>
           <input
             id="family-name"
@@ -389,7 +389,7 @@ function CreateFirmwareFamilyModal({
         {/* Target models */}
         <div>
           <p className="text-[13px] font-semibold text-foreground mb-2">
-            Target Device Models <span className="text-red-500">*</span>
+            Target Device Models <span className="text-danger-text">*</span>
           </p>
           <div className="flex flex-wrap gap-2">
             {AVAILABLE_MODELS.map((model) => {
@@ -411,7 +411,7 @@ function CreateFirmwareFamilyModal({
             })}
           </div>
           {selectedModels.length === 0 && (
-            <p className="mt-1 text-[13px] text-red-500">Select at least one model</p>
+            <p className="mt-1 text-[13px] text-danger-text">Select at least one model</p>
           )}
         </div>
       </div>

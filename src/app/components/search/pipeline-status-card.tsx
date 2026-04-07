@@ -26,18 +26,18 @@ const MOCK_STATUS: PipelineHealthStatus = {
 function StateIcon({ state }: { state: PipelineHealthStatus["state"] }) {
   switch (state) {
     case "Running":
-      return <CheckCircle2 className="h-4 w-4 text-emerald-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success" />;
     case "Error":
-      return <AlertCircle className="h-4 w-4 text-amber-500" />;
+      return <AlertCircle className="h-4 w-4 text-warning" />;
     case "Stopped":
-      return <XCircle className="h-4 w-4 text-red-500" />;
+      return <XCircle className="h-4 w-4 text-danger" />;
   }
 }
 
 function getCardBorderColor(status: PipelineHealthStatus): string {
-  if (status.state === "Stopped") return "border-l-red-500";
-  if (status.state === "Error" || status.currentLagSeconds > 300) return "border-l-amber-500";
-  return "border-l-emerald-500";
+  if (status.state === "Stopped") return "border-l-danger";
+  if (status.state === "Error" || status.currentLagSeconds > 300) return "border-l-warning";
+  return "border-l-success";
 }
 
 export function PipelineStatusCard() {
@@ -87,9 +87,9 @@ export function PipelineStatusCard() {
           <span
             className={cn(
               "text-[14px] font-medium",
-              status.state === "Running" && "text-emerald-600 dark:text-emerald-400",
-              status.state === "Error" && "text-amber-600 dark:text-amber-400",
-              status.state === "Stopped" && "text-red-600 dark:text-red-400",
+              status.state === "Running" && "text-success-text",
+              status.state === "Error" && "text-warning-text",
+              status.state === "Stopped" && "text-danger-text",
             )}
           >
             {status.state}
@@ -110,7 +110,7 @@ export function PipelineStatusCard() {
           <div
             className={cn(
               "text-[16px] font-semibold tabular-nums",
-              lagWarning ? "text-amber-600 dark:text-amber-400" : "text-foreground",
+              lagWarning ? "text-warning-text" : "text-foreground",
             )}
           >
             {status.currentLagSeconds}s
@@ -120,11 +120,9 @@ export function PipelineStatusCard() {
 
       {/* Lag warning */}
       {lagWarning && (
-        <div className="flex items-center gap-2 rounded-md bg-amber-50 dark:bg-amber-950 px-2.5 py-1.5 mb-3">
-          <AlertCircle className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
-          <span className="text-[13px] text-amber-700 dark:text-amber-300">
-            Pipeline lag exceeds 5 minutes
-          </span>
+        <div className="flex items-center gap-2 rounded-md bg-warning-bg px-2.5 py-1.5 mb-3">
+          <AlertCircle className="h-3.5 w-3.5 text-warning-text shrink-0" />
+          <span className="text-[13px] text-warning-text">Pipeline lag exceeds 5 minutes</span>
         </div>
       )}
 

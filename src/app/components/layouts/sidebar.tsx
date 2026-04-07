@@ -230,7 +230,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                         collapsed ? "h-[40px] justify-center px-0" : "h-[40px] px-3",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0",
                         isActive
-                          ? "bg-[#FFF7ED] font-semibold text-foreground dark:bg-[#431407] dark:text-[#fed7aa]"
+                          ? "bg-high-bg font-semibold text-foreground dark:text-high-text"
                           : "text-muted-foreground hover:bg-muted hover:text-foreground",
                       )}
                     >
