@@ -17,13 +17,18 @@ import {
   User,
   ShieldCheck,
   FileText,
+  Link2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useApiProvider } from "@/lib/providers/registry";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, canPerformAction } from "@/lib/rbac";
 import { queryKeys } from "@/lib/query-keys";
 import { FirmwareStateBadge } from "./firmware-lifecycle";
 import { VersionTimeline, type TimelineEvent } from "../shared/version-timeline";
 import { FirmwareDeployedSitesTab } from "./firmware-deployed-sites-tab";
+import { FirmwareActiveLinksTab } from "./firmware-active-links-tab";
+import { GenerateDownloadLinkModal } from "./generate-download-link-modal";
 import { EVENT_COLOR_MAP } from "@/lib/types/firmware-version";
 import type { FirmwareVersion } from "@/lib/types";
 
@@ -31,11 +36,12 @@ import type { FirmwareVersion } from "@/lib/types";
 // Types
 // ---------------------------------------------------------------------------
 
-type DetailTab = "details" | "deployed-sites";
+type DetailTab = "details" | "deployed-sites" | "active-links";
 
 const TABS: { id: DetailTab; label: string }[] = [
   { id: "details", label: "Version Details" },
   { id: "deployed-sites", label: "Deployed Sites" },
+  { id: "active-links", label: "Active Links" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -255,7 +261,11 @@ function MetadataItem({
 export function FirmwareDetailPage() {
   const { firmwareId } = useParams<{ firmwareId: string }>();
   const api = useApiProvider();
+  const { user } = useAuth();
+  const role = getPrimaryRole(user?.groups ?? []);
+  const canGenerate = canPerformAction(role, "create"); // AC-3: Admin/Manager only
   const [activeTab, setActiveTab] = useState<DetailTab>("details");
+  const [generateModalOpen, setGenerateModalOpen] = useState(false);
 
   // Fetch versions for this family
   const { data: versionsResponse, isLoading } = useQuery({
@@ -308,13 +318,31 @@ export function FirmwareDetailPage() {
           <h1 className="text-[20px] font-semibold text-foreground">Firmware Version History</h1>
         </div>
 
-        {versions.length > 0 && selectedVersion && (
-          <VersionDropdown
-            versions={versions}
-            selectedId={selectedVersion.id}
-            onSelect={setSelectedVersionId}
-          />
-        )}
+        <div className="flex items-center gap-3">
+          {versions.length > 0 && selectedVersion && (
+            <VersionDropdown
+              versions={versions}
+              selectedId={selectedVersion.id}
+              onSelect={setSelectedVersionId}
+            />
+          )}
+
+          {/* AC-3: Generate Download Link — Admin/Manager only (#391) */}
+          {canGenerate && selectedVersion && (
+            <button
+              type="button"
+              onClick={() => setGenerateModalOpen(true)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2",
+                "text-[14px] font-medium text-primary-foreground",
+                "hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring",
+              )}
+            >
+              <Link2 className="h-4 w-4" />
+              Generate Link
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Loading state */}
@@ -378,8 +406,23 @@ export function FirmwareDetailPage() {
           {activeTab === "deployed-sites" && (
             <FirmwareDeployedSitesTab firmwareVersionId={selectedVersion.id} />
           )}
+
+          {activeTab === "active-links" && (
+            <FirmwareActiveLinksTab
+              firmwareId={firmwareId ?? ""}
+              onGenerateClick={() => setGenerateModalOpen(true)}
+              canGenerate={canGenerate}
+            />
+          )}
         </>
       )}
+
+      {/* Generate Download Link Modal (#391 AC2/AC3) */}
+      <GenerateDownloadLinkModal
+        open={generateModalOpen}
+        onClose={() => setGenerateModalOpen(false)}
+        firmwareId={selectedVersion?.id}
+      />
     </div>
   );
 }
