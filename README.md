@@ -8,6 +8,28 @@
 
 ---
 
+## Table of Contents
+
+- [Application Preview](#application-preview)
+- [Why This Template?](#why-this-template)
+- [Quick Start](#quick-start)
+- [System Architecture](#system-architecture)
+- [Provider Architecture](#provider-architecture-pluggable)
+- [Security (NIST 800-53)](#security-nist-800-53-built-in)
+- [Infrastructure as Code](#infrastructure-as-code-multi-iac)
+- [How to Use as a Template](#how-to-use-as-a-template)
+- [Configuration](#configuration)
+- [Feature Modules](#feature-modules-12)
+- [Design System](#design-system)
+- [Testing](#testing)
+- [Operational Excellence](#operational-excellence)
+- [AI-Powered Development](#ai-powered-development)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Documentation](#documentation)
+
+---
+
 ## Application Preview
 
 |                    Dashboard                    |                    Analytics                    |
@@ -47,6 +69,18 @@ Most enterprise React starters give you a login page and a dashboard. This gives
 ---
 
 ## Quick Start
+
+### Prerequisites
+
+| Dependency | Version | Required For                   |
+| ---------- | ------- | ------------------------------ |
+| Node.js    | 20+     | Build and dev server           |
+| npm        | 10+     | Package management             |
+| Java       | 17+     | E2E tests only                 |
+| Maven      | 3.9+    | E2E tests only                 |
+| Terraform  | 1.5+    | Infrastructure deployment only |
+
+### Local Development
 
 ```bash
 git clone https://github.com/gauravmakkar29/InventoryManagement.git
@@ -295,6 +329,39 @@ flowchart LR
 
 ---
 
+## Configuration
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and configure as needed. The app runs with defaults (mock mode) out of the box.
+
+| Variable                    | Description                              | Default          | Required                   |
+| --------------------------- | ---------------------------------------- | ---------------- | -------------------------- |
+| `VITE_PLATFORM`             | Platform adapter selection               | `mock`           | Yes                        |
+| `VITE_APPSYNC_ENDPOINT`     | AWS AppSync GraphQL endpoint URL         | --               | Only for `aws-amplify`     |
+| `VITE_COGNITO_USER_POOL_ID` | Cognito User Pool ID                     | --               | Only for `aws-*` platforms |
+| `VITE_COGNITO_CLIENT_ID`    | Cognito App Client ID                    | --               | Only for `aws-*` platforms |
+| `VITE_AWS_REGION`           | AWS region for all services              | `ap-southeast-2` | Only for `aws-*` platforms |
+| `VITE_STORAGE_ENDPOINT`     | S3/artifact storage endpoint             | --               | No (falls back to mock)    |
+| `VITE_SEARCH_ENDPOINT`      | OpenSearch endpoint URL                  | --               | No (falls back to mock)    |
+| `VITE_REALTIME_ENDPOINT`    | WebSocket/SSE endpoint for notifications | --               | No (falls back to mock)    |
+| `VITE_SHOW_DEVTOOLS`        | Show React Query DevTools                | --               | No                         |
+
+### Available Scripts
+
+| Command                   | Description                              |
+| ------------------------- | ---------------------------------------- |
+| `npm run dev`             | Start dev server (localhost:5173)        |
+| `npm run build`           | TypeScript check + Vite production build |
+| `npm test`                | Run unit tests (Vitest)                  |
+| `npm run test:coverage`   | Unit tests with Istanbul coverage report |
+| `npm run lint`            | ESLint check                             |
+| `npm run test:e2e`        | Full E2E regression (Java/Maven/TestNG)  |
+| `npm run test:e2e:smoke`  | Smoke E2E suite                          |
+| `npm run test:e2e:headed` | E2E in headed browser mode               |
+
+---
+
 ## Feature Modules (12)
 
 | Module              | Key Features                                                       |
@@ -332,6 +399,42 @@ All located in `src/components/` -- Radix primitive + Tailwind + `class-variance
 | Coverage       | Istanbul                      | `npm run test:coverage`  |
 | E2E Regression | Java 17 + Playwright + TestNG | `npm run test:e2e`       |
 | E2E Smoke      | Same                          | `npm run test:e2e:smoke` |
+
+---
+
+## Operational Excellence
+
+### Logging
+
+Application logging follows a structured approach:
+
+| Layer              | Mechanism                             | Details                                                              |
+| ------------------ | ------------------------------------- | -------------------------------------------------------------------- |
+| **Client-side**    | `console.warn` / `console.error` only | `no-console` ESLint rule blocks `console.log` in production code     |
+| **Audit trail**    | CDC (Change Data Capture) provider    | Every mutation logged with actor, timestamp, and payload (AU-2/AU-3) |
+| **Infrastructure** | CloudTrail + CloudWatch               | API-level audit logging via Terraform `cloudtrail` module            |
+| **Error tracking** | `IErrorTrackingProvider`              | Pluggable provider for Sentry/Datadog integration                    |
+
+### Monitoring
+
+| Component       | Tool                    | Location                                            |
+| --------------- | ----------------------- | --------------------------------------------------- |
+| API latency     | CloudWatch Dashboards   | `infra/reference/aws-terraform/modules/monitoring/` |
+| Error rates     | CloudWatch Alarms + SNS | `infra/reference/aws-terraform/modules/alerting/`   |
+| Search health   | OpenSearch Dashboards   | `infra/reference/aws-terraform/modules/opensearch/` |
+| CDN performance | CloudFront metrics      | `infra/reference/aws-terraform/modules/cloudfront/` |
+| Uptime          | X-Ray tracing           | `infra/reference/aws-terraform/modules/monitoring/` |
+
+### Health Checks
+
+The dashboard displays real-time system status for 4 services (Deployment Pipeline, Compliance Engine, Asset Database, Analytics Service) with last-heartbeat timestamps. The OSIS Pipeline widget shows records synced, current lag, and a manual reindex trigger.
+
+### Error Handling
+
+- **API errors** classified by `ApiMutationError` with typed error codes and user-facing messages
+- **Route errors** caught by per-route `RouteErrorBoundary` with recovery actions
+- **Global errors** caught by top-level `ErrorBoundary` with crash report
+- **Network** offline detection via `useConnectivityMonitor` with degraded-mode banner
 
 ---
 
