@@ -27,74 +27,62 @@ With Claude as the builder, **coding speed is no longer the bottleneck**. What u
 
 ---
 
-## What AI Speeds Up vs What It Doesn't
+## How AI Assists Every Phase of the Build Cycle
 
-This is the most important section. AI makes coding 10x faster but does not eliminate the rest of the SDLC. Sizing must account for **all** delivery activities, not just code generation.
+In an AI-native SDLC, AI participates in **every phase** — not just coding. The build cycle is planned at the **release level**, not sprint-by-sprint. The question isn't "what AI can't do" but "how much human judgment each phase still requires."
 
-### The Full Delivery Breakdown
+### AI Role Across the Build Cycle
 
-```
-Story Delivery = Discussion + Design + AI Build + Review + QA + Infra + Release
-                 ─────────── human ───────────   ── AI ──  ────── human ──────
-```
+| Phase                     | How AI Assists                                                        | Human Judgment Needed                                             | Traditional Time | AI-Native Time |
+| ------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------- | ---------------- | -------------- |
+| **Requirements**          | Drafts stories from epics, generates ACs, identifies edge cases       | Stakeholder alignment, scope decisions, priority calls            | 2-3 days         | 4-8 hours      |
+| **Architecture**          | Explores options, generates ADRs, reviews patterns against codebase   | Final decision on trade-offs, commit to direction                 | 1-2 days         | 2-4 hours      |
+| **Implementation**        | Writes production code, unit tests, follows patterns automatically    | Intent validation — is this what we actually wanted?              | 2-4 weeks        | 2-3 days       |
+| **Code Review**           | Pre-reviews with `/review-full` (security, architecture, performance) | Final approval — human signs off on AI-reviewed + AI-written code | 1-2 hours/PR     | 30-60 min/PR   |
+| **Testing**               | Generates E2E scripts, runs test suites, triages failures             | Review test coverage, verify edge cases, exploratory testing      | 1-2 weeks        | 2-3 days       |
+| **Infrastructure**        | Writes Terraform/CDK, generates env configs                           | Apply/validate/rollback cycles are sequential (can't parallelize) | 1-2 weeks        | 3-5 days       |
+| **Security & Compliance** | Runs NIST audit (`/review-security`), flags violations                | Compliance sign-off, documentation for auditors                   | 1 week           | 1-2 days       |
+| **Bug Triage**            | Diagnoses root cause from error logs, suggests fix                    | Verify diagnosis, approve fix, re-test                            | 1-2 days/bug     | 2-4 hours/bug  |
+| **Release**               | Creates PR, generates changelog, manages branch promotion             | Smoke test in each environment, final go/no-go                    | 1-2 days         | 4-8 hours      |
+| **Documentation**         | Generates README, API docs, test reports, architecture diagrams       | Review for accuracy, ensure it tells the right story              | 1 week           | 1-2 days       |
 
-### Activity-by-Activity Reality
-
-| Activity                          | AI Impact                | Typical Time            | Why It Doesn't Shrink                                          |
-| --------------------------------- | ------------------------ | ----------------------- | -------------------------------------------------------------- |
-| **Requirements discussion**       | None                     | 30 min - 2 hours        | Stakeholders need alignment. AI can't attend meetings.         |
-| **Design/architecture decisions** | Helps explore options    | 1-4 hours               | Humans must decide trade-offs and commit to a direction.       |
-| **AI coding**                     | 10x faster               | 15-60 min               | This is what AI accelerates.                                   |
-| **Code review**                   | Minor (AI can pre-check) | 30 min - 2 hours per PR | Humans must verify correctness, security, and intent.          |
-| **Unit testing**                  | AI writes tests          | 15-30 min               | AI writes them, but humans verify coverage and edge cases.     |
-| **E2E testing**                   | AI generates scripts     | 1-2 hours               | Running, debugging flaky selectors, and manual walkthrough.    |
-| **Manual QA**                     | None                     | 30 min - 1 hour         | Someone must click through and verify the feature works.       |
-| **Infrastructure setup**          | AI writes IaC            | 2 hours - 1 week        | Terraform plan/apply/validate cycles are sequential and slow.  |
-| **Security review (NIST)**        | AI flags issues          | 1-2 hours               | Compliance sign-off requires human judgment.                   |
-| **Sprint ceremonies**             | None                     | 2-4 hours per sprint    | Planning, standup, review, retro — pure human time.            |
-| **Release process**               | None                     | 2-4 hours               | Tag, deploy to QA, test, promote to pre-prod, promote to prod. |
-| **Bug triage and fix**            | AI fixes fast            | 30 min - 2 hours        | Diagnosing the root cause is human; the fix is AI.             |
-
-### The Honest Math
+### Build Cycle Compression
 
 ```
-Traditional 5-point story:
-  Discussion:     1 hour
-  Design:         1 hour
-  Coding:         8 hours    ← AI reduces this to 30 min
-  Code review:    1 hour
-  Testing:        2 hours
-  Total:          13 hours → ~2 days
+Traditional Release Cycle (no AI):
+  Requirements:     2 weeks
+  Development:      4 weeks
+  Testing:          2 weeks
+  Infra + Release:  1 week
+  Total:            ~9 weeks
 
-AI-native 5-point story:
-  Discussion:     1 hour     (same)
-  Design:         1 hour     (same)
-  AI coding:      30 min     (10x faster)
-  Code review:    1 hour     (same — reviewing AI output still takes time)
-  Testing:        2 hours    (same — E2E + manual QA don't shrink)
-  Total:          5.5 hours → ~1 day
-
-Speedup: ~2x on total delivery, NOT 10x
+AI-Native Release Cycle:
+  Requirements:     2-3 days   (AI drafts, human refines)
+  Development:      3-5 days   (AI builds, human reviews)
+  Testing:          2-3 days   (AI generates + runs, human validates)
+  Infra + Release:  3-5 days   (AI writes IaC, sequential deploy cycles)
+  Total:            ~2-3 weeks
 ```
 
-AI gives a **2-3x speedup on total delivery** — significant, but not the 10x that coding-only metrics suggest. The rest of the SDLC is the bottleneck.
+**Result: 3-4x compression on the full build cycle.** AI participates in every phase — the compression comes from AI handling the heavy lifting while humans focus on judgment, decisions, and sign-offs.
 
 ### The NFR Check
 
-Before finalizing any size, check for Non-Functional Requirements that add human overhead:
+Before finalizing any release size, check for factors that extend the cycle:
 
-| NFR                                                           | If High → Impact                             |
-| ------------------------------------------------------------- | -------------------------------------------- |
-| **Performance** (load testing, benchmarks)                    | +1 size level — testing cycles are slow      |
-| **Security** (auth, PII, NIST controls)                       | +1 size level — compliance review is human   |
-| **Infra changes** (new Terraform/CDK resources)               | +1 size level — deploy cycles are sequential |
-| **Cross-team dependency** (waiting on design, API, decisions) | +1 size level — calendar time, not effort    |
+| Factor                                                                 | If Present → Impact                               |
+| ---------------------------------------------------------------------- | ------------------------------------------------- |
+| **New infrastructure** (first-time CDK/Terraform resources)            | +3-5 days — deploy/validate cycles are sequential |
+| **Security-sensitive** (auth, RBAC, PII, NIST controls)                | +1-2 days — compliance documentation and review   |
+| **External dependency** (waiting on design, API contract, third-party) | Calendar time — blocks regardless of AI speed     |
+| **Performance targets** (load testing, benchmarks required)            | +2-3 days — test cycles are slow and iterative    |
+| **Schema migration** (DB changes, data migration)                      | +2-3 days — rollback plan, data verification      |
 
 ---
 
-## AI-Native T-Shirt Sizing (Release Level)
+## Release / Build Cycle T-Shirt Sizing (Primary Unit)
 
-Use this to size **releases/milestones** — groups of epics that ship together.
+In AI-native development, **the release is the planning unit** — not the sprint. Teams plan what goes into a build, AI executes the implementation, humans validate and ship. Size the release, not individual stories.
 
 ### Size Definitions
 
@@ -391,28 +379,20 @@ Where:
 
 ---
 
-## Full SDLC Checklist Per Release
+## Build Cycle Checklist
 
-AI accelerates coding, but a release requires all of these activities. None can be skipped.
+Every release goes through these phases. AI assists in each, but the phases themselves cannot be skipped.
 
-| Phase               | Activities                                                          | AI Helps?                | Typical Time     |
-| ------------------- | ------------------------------------------------------------------- | ------------------------ | ---------------- |
-| **Discovery**       | Requirements discussion, stakeholder alignment, scope agreement     | No                       | 1-3 days         |
-| **Design**          | Architecture decisions, API contracts, UI wireframes, tech spec     | Partially                | 1-2 days         |
-| **Sprint Planning** | Story breakdown, pointing, assignment, capacity check               | Partially                | 2-4 hours        |
-| **Development**     | Coding, unit tests, component tests                                 | Yes (10x)                | 1-3 days         |
-| **Code Review**     | PR review, feedback cycles, rework                                  | No                       | 1-2 hours per PR |
-| **Integration**     | Wire to real APIs, environment config, secrets management           | Partially                | 1-2 days         |
-| **Infrastructure**  | Terraform/CDK plan, apply, validate, rollback testing               | Partially (writes IaC)   | 1-5 days         |
-| **QA - Automated**  | E2E test execution, flaky test fixes, report generation             | Partially (writes tests) | 1-2 days         |
-| **QA - Manual**     | Walkthrough every AC, exploratory testing, edge cases               | No                       | 1-2 days         |
-| **Security Review** | NIST compliance check, penetration testing, audit sign-off          | No                       | 1-2 days         |
-| **Bug Fix Cycle**   | Triage bugs from QA, fix, re-test, verify                           | Yes (fixes fast)         | 1-3 days         |
-| **Release**         | Tag, deploy to QA, promote to pre-prod, smoke test, promote to prod | No                       | 2-4 hours        |
-| **Sprint Review**   | Demo to stakeholders, collect feedback                              | No                       | 1-2 hours        |
-| **Retrospective**   | What went well, what to improve, action items                       | No                       | 1 hour           |
+| Phase             | What Happens                                      | AI Role                                  | Human Role                         | Typical Duration |
+| ----------------- | ------------------------------------------------- | ---------------------------------------- | ---------------------------------- | ---------------- |
+| **Scope & Plan**  | Define what goes in this release, T-shirt size it | Drafts story breakdown, estimates points | Decides scope, priority, cut-line  | 1-2 days         |
+| **Build**         | Implement all features, write tests               | Writes code + tests (primary builder)    | Reviews PRs, validates intent      | 2-5 days         |
+| **Integrate**     | Wire to real services, deploy to dev environment  | Writes adapters, IaC, config             | Validate connections, troubleshoot | 1-3 days         |
+| **QA Gate**       | Run E2E suite, exploratory testing, file bugs     | Generates test scripts, triages failures | Verifies reports, approves quality | 1-2 days         |
+| **Security Gate** | NIST compliance audit, vulnerability scan         | Runs `/review-security`, flags issues    | Signs off on compliance            | 1 day            |
+| **Release**       | Promote through environments, smoke test, tag     | Creates release notes, manages PRs       | Go/no-go decision per environment  | 4-8 hours        |
 
-**Total for a typical release:** 3-6 weeks, of which AI coding is 2-3 days.
+**Typical M-sized release: 2-3 weeks end-to-end.**
 
 ---
 
