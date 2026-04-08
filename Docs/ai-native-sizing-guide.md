@@ -1,8 +1,6 @@
 # AI-Native T-Shirt Sizing & Story Pointing Guide
 
-> **Purpose:** Estimation framework for AI-assisted development where Claude Code (with Opus-class models) is the primary builder. Replaces traditional human-velocity-based sizing with constraint-based sizing that reflects what actually determines delivery time in an AI-native workflow.
->
-> **Includes:** The **CRISP-D Sizing Model** — a formal 5-dimension evaluation framework for AI-era estimation.
+> **Purpose:** Estimation framework for AI-assisted development where Claude Code is the primary builder. AI accelerates coding, but discussion, infrastructure, QA, review, and release ceremonies still take real human time. This guide sizes based on **total delivery effort**, not just coding speed.
 >
 > **Context:** IMS Gen2 — 18 epics, 107 stories, React + Amplify Gen2/CDK + NIST 800-53 compliance.
 >
@@ -29,91 +27,68 @@ With Claude as the builder, **coding speed is no longer the bottleneck**. What u
 
 ---
 
-## The CRISP-D Evaluation Model
+## What AI Speeds Up vs What It Doesn't
 
-Before assigning a T-shirt size or story points, evaluate each feature/story across these five dimensions. This transforms sizing from a gut-feel exercise into a structured, repeatable assessment.
+This is the most important section. AI makes coding 10x faster but does not eliminate the rest of the SDLC. Sizing must account for **all** delivery activities, not just code generation.
 
-### The Core Principle
-
-> **Pre-AI:** Estimation = Time to write code.
->
-> **AI-Era:** Estimation = Context Depth + Verification Effort + Integration Risk.
-
-### Five Dimensions
-
-| Dimension                         | Focus                       | Low Risk                           | High Risk                                                 |
-| --------------------------------- | --------------------------- | ---------------------------------- | --------------------------------------------------------- |
-| **C -- Contextual Breadth**       | Scope of knowledge required | Single file/module, self-contained | Needs context from 3+ modules, repos, or external docs    |
-| **R -- Reviewability**            | Human validation effort     | Simple CRUD, easy to unit test     | Complex logic, state machines, hard to verify correctness |
-| **I -- Integration Depth**        | Systems involved            | UI-only or single API call         | UI + API + DB + external service (multiple handshakes)    |
-| **S -- Specialized Logic**        | Business/domain rules       | Standard patterns, well-documented | Niche logic, regulatory rules, AI prone to hallucinate    |
-| **D -- Data/Contract Complexity** | Schema & API consistency    | Stable schema, no migrations       | Schema changes, strict API contracts, versioning          |
-
-### How to Score
-
-Rate each dimension Low (0) / Medium (1) / High (2). Sum the scores:
-
-| CRISP-D Score | T-Shirt | AI Confidence                           | Human Effort                |
-| ------------- | ------- | --------------------------------------- | --------------------------- |
-| 0-2           | XS-S    | High (zero-shot or minor tweaks)        | Quick review, < 30 min      |
-| 3-5           | M       | Moderate (multi-prompt, needs guidance) | 1-2 hours testing + review  |
-| 6-8           | L       | Low (heavy guidance, iterative)         | Senior review required      |
-| 9-10          | XL      | Invalid -- decompose before starting    | Do not estimate, break down |
-
-### The NFR Multiplier
-
-After CRISP-D scoring, check for Non-Functional Requirements:
-
-| NFR           | Check                                       | If High       |
-| ------------- | ------------------------------------------- | ------------- |
-| Performance   | Response time targets, load testing needed? | +1 size level |
-| Security      | Auth, PII, payments, NIST controls?         | +1 size level |
-| Scalability   | Multi-tenant, high-volume data?             | +1 size level |
-| Observability | Custom monitoring, alerting rules?          | +1 size level |
-
-If **any NFR is High**, increase the T-shirt size by one level.
-
-### CRISP-D Scoring Example
+### The Full Delivery Breakdown
 
 ```
-Story 20.6: Firmware Version History & Timeline (8 points)
-
-C — Contextual Breadth:  HIGH (2) — needs firmware types, provider interfaces, mock data, route config
-R — Reviewability:       MEDIUM (1) — timeline component testable, but lifecycle states need manual verify
-I — Integration Depth:   MEDIUM (1) — new API methods + mock provider + UI page
-S — Specialized Logic:   LOW (0) — follows existing patterns (timeline, tabs, cards)
-D — Data/Contract:       MEDIUM (1) — new FirmwareVersion type + IApiProvider extension
-
-CRISP-D Score: 5 → T-Shirt: M
-NFR: Security (NIST AU-2 audit trail) → +1 → Final: L
-
-Actual delivery: 8 story points, ~2 days (built + reviewed + tested in one session)
+Story Delivery = Discussion + Design + AI Build + Review + QA + Infra + Release
+                 ─────────── human ───────────   ── AI ──  ────── human ──────
 ```
 
-### Story Quality Gate (Mandatory Before Sizing)
+### Activity-by-Activity Reality
 
-A story is valid for estimation only if:
+| Activity                          | AI Impact                | Typical Time            | Why It Doesn't Shrink                                          |
+| --------------------------------- | ------------------------ | ----------------------- | -------------------------------------------------------------- |
+| **Requirements discussion**       | None                     | 30 min - 2 hours        | Stakeholders need alignment. AI can't attend meetings.         |
+| **Design/architecture decisions** | Helps explore options    | 1-4 hours               | Humans must decide trade-offs and commit to a direction.       |
+| **AI coding**                     | 10x faster               | 15-60 min               | This is what AI accelerates.                                   |
+| **Code review**                   | Minor (AI can pre-check) | 30 min - 2 hours per PR | Humans must verify correctness, security, and intent.          |
+| **Unit testing**                  | AI writes tests          | 15-30 min               | AI writes them, but humans verify coverage and edge cases.     |
+| **E2E testing**                   | AI generates scripts     | 1-2 hours               | Running, debugging flaky selectors, and manual walkthrough.    |
+| **Manual QA**                     | None                     | 30 min - 1 hour         | Someone must click through and verify the feature works.       |
+| **Infrastructure setup**          | AI writes IaC            | 2 hours - 1 week        | Terraform plan/apply/validate cycles are sequential and slow.  |
+| **Security review (NIST)**        | AI flags issues          | 1-2 hours               | Compliance sign-off requires human judgment.                   |
+| **Sprint ceremonies**             | None                     | 2-4 hours per sprint    | Planning, standup, review, retro — pure human time.            |
+| **Release process**               | None                     | 2-4 hours               | Tag, deploy to QA, test, promote to pre-prod, promote to prod. |
+| **Bug triage and fix**            | AI fixes fast            | 30 min - 2 hours        | Diagnosing the root cause is human; the fix is AI.             |
 
-- It can be implemented independently (no circular dependencies)
-- It requires context from 3 or fewer modules
-- It has clear acceptance criteria with testable conditions
-- Edge cases and failure scenarios are identified
+### The Honest Math
 
-If any condition fails, mark as **XL and decompose** before estimating.
+```
+Traditional 5-point story:
+  Discussion:     1 hour
+  Design:         1 hour
+  Coding:         8 hours    ← AI reduces this to 30 min
+  Code review:    1 hour
+  Testing:        2 hours
+  Total:          13 hours → ~2 days
 
----
+AI-native 5-point story:
+  Discussion:     1 hour     (same)
+  Design:         1 hour     (same)
+  AI coding:      30 min     (10x faster)
+  Code review:    1 hour     (same — reviewing AI output still takes time)
+  Testing:        2 hours    (same — E2E + manual QA don't shrink)
+  Total:          5.5 hours → ~1 day
 
-## Feature-Level Quick Sizing
+Speedup: ~2x on total delivery, NOT 10x
+```
 
-For rapid feature sizing before breaking into stories:
+AI gives a **2-3x speedup on total delivery** — significant, but not the 10x that coding-only metrics suggest. The rest of the SDLC is the bottleneck.
 
-| Size   | Scope                                 | Business Logic             | Dependencies         | Example                      |
-| ------ | ------------------------------------- | -------------------------- | -------------------- | ---------------------------- |
-| **XS** | Single screen, simple change          | None                       | None                 | Add field to existing form   |
-| **S**  | 1-2 screens                           | Simple rules               | Minimal              | Basic CRUD feature           |
-| **M**  | Multiple screens                      | Moderate workflows         | Some cross-module    | User onboarding flow         |
-| **L**  | Cross-module feature                  | Complex workflows          | External integration | Firmware deployment pipeline |
-| **XL** | Large initiative, not clearly defined | Multiple features combined | Must decompose       | --                           |
+### The NFR Check
+
+Before finalizing any size, check for Non-Functional Requirements that add human overhead:
+
+| NFR                                                           | If High → Impact                             |
+| ------------------------------------------------------------- | -------------------------------------------- |
+| **Performance** (load testing, benchmarks)                    | +1 size level — testing cycles are slow      |
+| **Security** (auth, PII, NIST controls)                       | +1 size level — compliance review is human   |
+| **Infra changes** (new Terraform/CDK resources)               | +1 size level — deploy cycles are sequential |
+| **Cross-team dependency** (waiting on design, API, decisions) | +1 size level — calendar time, not effort    |
 
 ---
 
@@ -416,95 +391,66 @@ Where:
 
 ---
 
-## Prompt Templates for CRISP-D Sizing
+## Full SDLC Checklist Per Release
 
-### Phase 1: Feature Extraction (TPM / Architect)
+AI accelerates coding, but a release requires all of these activities. None can be skipped.
 
-```text
-Act as a Senior TPM and Architect. Review the requirements below.
+| Phase               | Activities                                                          | AI Helps?                | Typical Time     |
+| ------------------- | ------------------------------------------------------------------- | ------------------------ | ---------------- |
+| **Discovery**       | Requirements discussion, stakeholder alignment, scope agreement     | No                       | 1-3 days         |
+| **Design**          | Architecture decisions, API contracts, UI wireframes, tech spec     | Partially                | 1-2 days         |
+| **Sprint Planning** | Story breakdown, pointing, assignment, capacity check               | Partially                | 2-4 hours        |
+| **Development**     | Coding, unit tests, component tests                                 | Yes (10x)                | 1-3 days         |
+| **Code Review**     | PR review, feedback cycles, rework                                  | No                       | 1-2 hours per PR |
+| **Integration**     | Wire to real APIs, environment config, secrets management           | Partially                | 1-2 days         |
+| **Infrastructure**  | Terraform/CDK plan, apply, validate, rollback testing               | Partially (writes IaC)   | 1-5 days         |
+| **QA - Automated**  | E2E test execution, flaky test fixes, report generation             | Partially (writes tests) | 1-2 days         |
+| **QA - Manual**     | Walkthrough every AC, exploratory testing, edge cases               | No                       | 1-2 days         |
+| **Security Review** | NIST compliance check, penetration testing, audit sign-off          | No                       | 1-2 days         |
+| **Bug Fix Cycle**   | Triage bugs from QA, fix, re-test, verify                           | Yes (fixes fast)         | 1-3 days         |
+| **Release**         | Tag, deploy to QA, promote to pre-prod, smoke test, promote to prod | No                       | 2-4 hours        |
+| **Sprint Review**   | Demo to stakeholders, collect feedback                              | No                       | 1-2 hours        |
+| **Retrospective**   | What went well, what to improve, action items                       | No                       | 1 hour           |
 
-1. Extract Features and identify hidden dependencies
-2. Evaluate each feature using CRISP-D dimensions (C/R/I/S/D — score 0-2 each)
-3. Apply NFR multiplier (Performance, Security, Scalability, Observability)
-4. Identify gaps/ambiguities where AI might hallucinate or miss context
-5. Assign T-Shirt sizes with justification
-
-Output format:
-Feature | Description | CRISP-D Score | NFR Impact | Size | Risk | Justification
-```
-
-### Phase 2: Story Breakdown (Dev Lead)
-
-```text
-For Feature [X], break into User Stories. For each:
-
-1. Identify systems involved (UI / API / DB / External)
-2. Identify AI Failure Points (where Claude might get it wrong)
-3. Define Acceptance Criteria with edge cases
-4. Score using CRISP-D (C/R/I/S/D)
-5. Apply Story Quality Gate
-
-Assign:
-- Story Points (1, 2, 3, 5, 8, 13)
-- Risk Tag (Safe / Medium / High)
-- Parallelizable (Yes / No — based on shared dependencies)
-- CRISP-D Score breakdown
-
-If a story scores 9+ on CRISP-D, decompose it.
-```
-
-### Phase 3: Implementation (Developer + Claude)
-
-```text
-Implementing Story [ID] for [Stack].
-
-1. Generate clean, modular, production-ready code
-2. Follow existing project patterns (read CLAUDE.md first)
-3. Include: API endpoints, service layer, DTOs, error handling
-4. Write unit tests specifically for AI Failure Points and edge cases
-5. Do NOT introduce new architecture — reuse existing components
-
-Highlight:
-- Assumptions made
-- Areas requiring manual human validation
-- NIST controls touched (reference control IDs)
-```
+**Total for a typical release:** 3-6 weeks, of which AI coding is 2-3 days.
 
 ---
 
-## Pitfalls and Guardrails
-
-### The Context Trap
-
-Do not feed the AI the entire codebase. Keep stories XS-M sized so they fit within the AI's high-attention context window. Larger stories cause prompt-looping and inconsistent output.
+## Guardrails
 
 ### Reviewer Fatigue
 
 AI increases code output by 10x but human review speed improves only ~1.2x. Size tasks based on the reviewer's capacity, not the AI's speed. A sprint with 40 AI-generated stories but only 1 reviewer will bottleneck at review, not coding.
 
+**Rule of thumb:** 1 reviewer can handle 3-4 PRs per day with quality attention.
+
 ### The Speed Illusion
 
-Fast code generation does not mean a small task. If validation, integration testing, or compliance review takes hours, the story is not small — regardless of how fast Claude wrote the code.
+Fast code generation does not mean a small task. If discussion, testing, or compliance review takes hours, the story is not small — regardless of how fast Claude wrote the code.
+
+**Size based on total delivery time, not AI build time.**
 
 ### XL Means Stop
 
-Never start development on an XL story. It is the leading cause of spaghetti code and prompt-looping. Always decompose to L or smaller before writing a single line.
+Never start development on an XL story. It produces spaghetti code and prompt-looping. Always decompose to L or smaller before writing any code.
+
+### The Context Trap
+
+Keep stories XS-M sized so they fit within the AI's effective context window. Larger stories cause the AI to lose track of requirements and produce inconsistent output.
 
 ---
 
-## Post-Sprint Feedback Loop
+## Post-Sprint Calibration
 
-After each sprint, capture:
+After each sprint, capture these metrics to improve future estimates:
 
-| Metric                     | What to Track                              | Why                                  |
-| -------------------------- | ------------------------------------------ | ------------------------------------ |
-| Estimated vs Actual points | Story-by-story comparison                  | Calibrate future estimates           |
-| AI Accuracy                | High / Medium / Low per story              | Identify patterns where AI struggles |
-| Failure Type               | Logic / Integration / Edge case / Selector | Target specific improvement areas    |
-| Review Time                | Actual hours per PR                        | Measure review bottleneck            |
+| Metric                      | What to Track                              | Action                                               |
+| --------------------------- | ------------------------------------------ | ---------------------------------------------------- |
+| Estimated vs Actual points  | Story-by-story comparison                  | Adjust sizing factors if consistently off            |
+| AI Build Time vs Total Time | Ratio per story                            | If AI time is >20% of total, stories are too small   |
+| Review Bottleneck           | Hours waiting for review per PR            | Add reviewers if queue exceeds 1 day                 |
+| Bug Escape Rate             | Bugs found in QA vs prod                   | Improve test coverage or review rigor                |
+| Discussion Time             | Hours spent in meetings per story          | If >2 hours, requirements are unclear — fix upstream |
+| Infra Lead Time             | Days from IaC merge to working environment | Optimize pipeline or pre-provision                   |
 
-Use this data to:
-
-- Refine CRISP-D scoring calibration
-- Improve prompts for recurring failure patterns
-- Adjust team capacity planning (add reviewers if review is the bottleneck)
+**The goal:** Make future estimates more accurate by learning what actually consumed the time — was it discussion, review, QA, infra, or rework?
