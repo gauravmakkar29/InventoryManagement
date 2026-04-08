@@ -2,9 +2,11 @@
 
 > **Purpose:** Estimation framework for AI-assisted development where Claude Code (with Opus-class models) is the primary builder. Replaces traditional human-velocity-based sizing with constraint-based sizing that reflects what actually determines delivery time in an AI-native workflow.
 >
+> **Includes:** The **CRISP-D Sizing Model** — a formal 5-dimension evaluation framework for AI-era estimation.
+>
 > **Context:** IMS Gen2 — 18 epics, 107 stories, React + Amplify Gen2/CDK + NIST 800-53 compliance.
 >
-> **Last updated:** 2026-04-04
+> **Last updated:** 2026-04-08
 
 ---
 
@@ -24,6 +26,94 @@ With Claude as the builder, **coding speed is no longer the bottleneck**. What u
 - Context complexity (how much Claude needs to understand before it can build correctly)
 
 **The new sizing doesn't measure effort — it measures delivery friction.**
+
+---
+
+## The CRISP-D Evaluation Model
+
+Before assigning a T-shirt size or story points, evaluate each feature/story across these five dimensions. This transforms sizing from a gut-feel exercise into a structured, repeatable assessment.
+
+### The Core Principle
+
+> **Pre-AI:** Estimation = Time to write code.
+>
+> **AI-Era:** Estimation = Context Depth + Verification Effort + Integration Risk.
+
+### Five Dimensions
+
+| Dimension                         | Focus                       | Low Risk                           | High Risk                                                 |
+| --------------------------------- | --------------------------- | ---------------------------------- | --------------------------------------------------------- |
+| **C -- Contextual Breadth**       | Scope of knowledge required | Single file/module, self-contained | Needs context from 3+ modules, repos, or external docs    |
+| **R -- Reviewability**            | Human validation effort     | Simple CRUD, easy to unit test     | Complex logic, state machines, hard to verify correctness |
+| **I -- Integration Depth**        | Systems involved            | UI-only or single API call         | UI + API + DB + external service (multiple handshakes)    |
+| **S -- Specialized Logic**        | Business/domain rules       | Standard patterns, well-documented | Niche logic, regulatory rules, AI prone to hallucinate    |
+| **D -- Data/Contract Complexity** | Schema & API consistency    | Stable schema, no migrations       | Schema changes, strict API contracts, versioning          |
+
+### How to Score
+
+Rate each dimension Low (0) / Medium (1) / High (2). Sum the scores:
+
+| CRISP-D Score | T-Shirt | AI Confidence                           | Human Effort                |
+| ------------- | ------- | --------------------------------------- | --------------------------- |
+| 0-2           | XS-S    | High (zero-shot or minor tweaks)        | Quick review, < 30 min      |
+| 3-5           | M       | Moderate (multi-prompt, needs guidance) | 1-2 hours testing + review  |
+| 6-8           | L       | Low (heavy guidance, iterative)         | Senior review required      |
+| 9-10          | XL      | Invalid -- decompose before starting    | Do not estimate, break down |
+
+### The NFR Multiplier
+
+After CRISP-D scoring, check for Non-Functional Requirements:
+
+| NFR           | Check                                       | If High       |
+| ------------- | ------------------------------------------- | ------------- |
+| Performance   | Response time targets, load testing needed? | +1 size level |
+| Security      | Auth, PII, payments, NIST controls?         | +1 size level |
+| Scalability   | Multi-tenant, high-volume data?             | +1 size level |
+| Observability | Custom monitoring, alerting rules?          | +1 size level |
+
+If **any NFR is High**, increase the T-shirt size by one level.
+
+### CRISP-D Scoring Example
+
+```
+Story 20.6: Firmware Version History & Timeline (8 points)
+
+C — Contextual Breadth:  HIGH (2) — needs firmware types, provider interfaces, mock data, route config
+R — Reviewability:       MEDIUM (1) — timeline component testable, but lifecycle states need manual verify
+I — Integration Depth:   MEDIUM (1) — new API methods + mock provider + UI page
+S — Specialized Logic:   LOW (0) — follows existing patterns (timeline, tabs, cards)
+D — Data/Contract:       MEDIUM (1) — new FirmwareVersion type + IApiProvider extension
+
+CRISP-D Score: 5 → T-Shirt: M
+NFR: Security (NIST AU-2 audit trail) → +1 → Final: L
+
+Actual delivery: 8 story points, ~2 days (built + reviewed + tested in one session)
+```
+
+### Story Quality Gate (Mandatory Before Sizing)
+
+A story is valid for estimation only if:
+
+- It can be implemented independently (no circular dependencies)
+- It requires context from 3 or fewer modules
+- It has clear acceptance criteria with testable conditions
+- Edge cases and failure scenarios are identified
+
+If any condition fails, mark as **XL and decompose** before estimating.
+
+---
+
+## Feature-Level Quick Sizing
+
+For rapid feature sizing before breaking into stories:
+
+| Size   | Scope                                 | Business Logic             | Dependencies         | Example                      |
+| ------ | ------------------------------------- | -------------------------- | -------------------- | ---------------------------- |
+| **XS** | Single screen, simple change          | None                       | None                 | Add field to existing form   |
+| **S**  | 1-2 screens                           | Simple rules               | Minimal              | Basic CRUD feature           |
+| **M**  | Multiple screens                      | Moderate workflows         | Some cross-module    | User onboarding flow         |
+| **L**  | Cross-module feature                  | Complex workflows          | External integration | Firmware deployment pipeline |
+| **XL** | Large initiative, not clearly defined | Multiple features combined | Must decompose       | --                           |
 
 ---
 
@@ -323,3 +413,98 @@ Where:
 | Estimated Full Build (AI)        | ~80 hours of Claude time          |
 | Estimated Full Delivery          | 12-16 weeks (review-gated)        |
 | Team Size for Optimal Throughput | 1 developer + Claude + 1 reviewer |
+
+---
+
+## Prompt Templates for CRISP-D Sizing
+
+### Phase 1: Feature Extraction (TPM / Architect)
+
+```text
+Act as a Senior TPM and Architect. Review the requirements below.
+
+1. Extract Features and identify hidden dependencies
+2. Evaluate each feature using CRISP-D dimensions (C/R/I/S/D — score 0-2 each)
+3. Apply NFR multiplier (Performance, Security, Scalability, Observability)
+4. Identify gaps/ambiguities where AI might hallucinate or miss context
+5. Assign T-Shirt sizes with justification
+
+Output format:
+Feature | Description | CRISP-D Score | NFR Impact | Size | Risk | Justification
+```
+
+### Phase 2: Story Breakdown (Dev Lead)
+
+```text
+For Feature [X], break into User Stories. For each:
+
+1. Identify systems involved (UI / API / DB / External)
+2. Identify AI Failure Points (where Claude might get it wrong)
+3. Define Acceptance Criteria with edge cases
+4. Score using CRISP-D (C/R/I/S/D)
+5. Apply Story Quality Gate
+
+Assign:
+- Story Points (1, 2, 3, 5, 8, 13)
+- Risk Tag (Safe / Medium / High)
+- Parallelizable (Yes / No — based on shared dependencies)
+- CRISP-D Score breakdown
+
+If a story scores 9+ on CRISP-D, decompose it.
+```
+
+### Phase 3: Implementation (Developer + Claude)
+
+```text
+Implementing Story [ID] for [Stack].
+
+1. Generate clean, modular, production-ready code
+2. Follow existing project patterns (read CLAUDE.md first)
+3. Include: API endpoints, service layer, DTOs, error handling
+4. Write unit tests specifically for AI Failure Points and edge cases
+5. Do NOT introduce new architecture — reuse existing components
+
+Highlight:
+- Assumptions made
+- Areas requiring manual human validation
+- NIST controls touched (reference control IDs)
+```
+
+---
+
+## Pitfalls and Guardrails
+
+### The Context Trap
+
+Do not feed the AI the entire codebase. Keep stories XS-M sized so they fit within the AI's high-attention context window. Larger stories cause prompt-looping and inconsistent output.
+
+### Reviewer Fatigue
+
+AI increases code output by 10x but human review speed improves only ~1.2x. Size tasks based on the reviewer's capacity, not the AI's speed. A sprint with 40 AI-generated stories but only 1 reviewer will bottleneck at review, not coding.
+
+### The Speed Illusion
+
+Fast code generation does not mean a small task. If validation, integration testing, or compliance review takes hours, the story is not small — regardless of how fast Claude wrote the code.
+
+### XL Means Stop
+
+Never start development on an XL story. It is the leading cause of spaghetti code and prompt-looping. Always decompose to L or smaller before writing a single line.
+
+---
+
+## Post-Sprint Feedback Loop
+
+After each sprint, capture:
+
+| Metric                     | What to Track                              | Why                                  |
+| -------------------------- | ------------------------------------------ | ------------------------------------ |
+| Estimated vs Actual points | Story-by-story comparison                  | Calibrate future estimates           |
+| AI Accuracy                | High / Medium / Low per story              | Identify patterns where AI struggles |
+| Failure Type               | Logic / Integration / Edge case / Selector | Target specific improvement areas    |
+| Review Time                | Actual hours per PR                        | Measure review bottleneck            |
+
+Use this data to:
+
+- Refine CRISP-D scoring calibration
+- Improve prompts for recurring failure patterns
+- Adjust team capacity planning (add reviewers if review is the bottleneck)
