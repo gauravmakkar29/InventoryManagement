@@ -103,54 +103,47 @@ Open [http://localhost:5173](http://localhost:5173). Login with any mock credent
 ## System Architecture
 
 ```mermaid
-graph TB
-    subgraph Client["Browser (React SPA)"]
-        UI["12 Feature Modules"]
-        DS["Design System<br/>16 UI Primitives"]
-        Hooks["React Hooks<br/>useAuth / useApi / useArtifact"]
-    end
-
-    subgraph Provider["Provider Registry (platform.config.ts)"]
+flowchart TD
+    subgraph Layer1["  BROWSER  ·  React 18 + TypeScript  "]
         direction LR
-        Auth["IAuthAdapter"]
-        API["IApiProvider"]
-        Artifact["IArtifactProvider"]
-        CRM["ICRMProvider"]
-        Scanner["IComplianceScanner"]
-        RT["Realtime Adapter"]
+        M["12 Feature\nModules"]
+        DS["Design System\n16 Primitives"]
+        H["React Hooks\nuseAuth · useApi\nuseArtifact · useCRM"]
     end
 
-    subgraph Adapters["Cloud Adapters (swappable via VITE_PLATFORM)"]
-        Mock["Mock<br/>(dev/demo)"]
-        Amplify["AWS Amplify<br/>Gen 2"]
-        TF["AWS Terraform<br/>(16 modules)"]
-        CDK["AWS CDK"]
-        JFrog["JFrog<br/>Artifactory"]
-        SN["ServiceNow<br/>CRM"]
+    subgraph Layer2["  PROVIDER REGISTRY  ·  platform.config.ts  "]
+        direction LR
+        Auth["IAuth\nAdapter"]
+        Api["IApi\nProvider"]
+        Art["IArtifact\nProvider"]
+        More["ICRMProvider\nIScanner · ICDC\nIDNS · Realtime"]
     end
 
-    subgraph AWS["AWS Services"]
-        Cognito["Cognito"]
-        AppSync["AppSync<br/>GraphQL"]
-        DDB["DynamoDB"]
-        S3["S3"]
-        CF["CloudFront"]
-        Lambda["Lambda"]
+    subgraph Layer3["  CLOUD ADAPTERS  ·  swappable via VITE_PLATFORM  "]
+        direction LR
+        Mock["Mock\ndev · demo"]
+        Amp["AWS Amplify\nGen 2"]
+        TF["AWS Terraform\n16 modules"]
+        Ext["JFrog\nServiceNow\nIgnite"]
+    end
+
+    subgraph Layer4["  AWS SERVICES  "]
+        direction LR
+        Cog["Cognito"]
+        AS["AppSync\nGraphQL"]
+        DB["DynamoDB\n+ S3"]
+        CF["CloudFront\n+ WAF"]
         OS["OpenSearch"]
     end
 
-    UI --> Hooks
-    DS --> UI
-    Hooks --> Provider
-    Provider --> Adapters
-    Amplify --> AWS
-    TF --> AWS
-    CDK --> AWS
+    Layer1 ==> Layer2
+    Layer2 ==> Layer3
+    Layer3 ==> Layer4
 
-    style Client fill:#1e293b,stroke:#3b82f6,color:#fff
-    style Provider fill:#0f172a,stroke:#2563eb,color:#fff
-    style Adapters fill:#1e3a5f,stroke:#60a5fa,color:#fff
-    style AWS fill:#232f3e,stroke:#ff9900,color:#fff
+    style Layer1 fill:#1e40af,stroke:#3b82f6,color:#e0e7ff
+    style Layer2 fill:#6d28d9,stroke:#8b5cf6,color:#ede9fe
+    style Layer3 fill:#0f766e,stroke:#14b8a6,color:#ccfbf1
+    style Layer4 fill:#92400e,stroke:#f59e0b,color:#fef3c7
 ```
 
 ---
@@ -161,18 +154,23 @@ The app **never imports a cloud SDK directly**. Every external dependency flows 
 
 ```mermaid
 flowchart LR
-    ENV["VITE_PLATFORM=aws-amplify"] --> Config["platform.config.ts"]
-    Config --> |"creates"| AuthA["Amplify Auth Adapter"]
-    Config --> |"creates"| ApiA["Amplify API Provider"]
-    Config --> |"creates"| ArtA["S3 Artifact Provider"]
-    Config --> |"injects"| Registry["ProviderRegistry"]
-    Registry --> |"useAuth()"| Components["React Components"]
-    Registry --> |"useApiProvider()"| Components
-    Registry --> |"useArtifactProvider()"| Components
+    ENV["VITE_PLATFORM\n= aws-amplify"]
+    ENV --> Config["platform.config.ts"]
+
+    subgraph created["Adapters Created"]
+        AuthA["Auth Adapter"]
+        ApiA["API Provider"]
+        ArtA["Artifact Provider"]
+    end
+
+    Config --> created
+    created --> Registry["Provider\nRegistry"]
+    Registry --> App["React App\nuseAuth() / useApi()"]
 
     style ENV fill:#f59e0b,stroke:#b45309,color:#000
-    style Config fill:#0f172a,stroke:#2563eb,color:#fff
-    style Registry fill:#1e293b,stroke:#3b82f6,color:#fff
+    style created fill:#0d9488,stroke:#14b8a6,color:#fff
+    style Registry fill:#7c3aed,stroke:#8b5cf6,color:#fff
+    style App fill:#1e40af,stroke:#3b82f6,color:#fff
 ```
 
 ### 8 Provider Interfaces
@@ -197,32 +195,17 @@ Plus **3 real-time adapters**: WebSocket (auto-reconnect), SSE, and Mock.
 Not bolted on -- **baked in from day one**. 37 controls across 6 NIST families.
 
 ```mermaid
-flowchart TB
-    subgraph Layer1["Layer 1: Route Guards"]
-        PL["ProtectedLayout<br/>canAccessPage(role, page)"]
-    end
-    subgraph Layer2["Layer 2: Component Guards"]
-        RR["RequireRole<br/>wraps buttons/actions"]
-    end
-    subgraph Layer3["Layer 3: Mutation Guards"]
-        MH["Mutation Handlers<br/>canPerformAction(role, action)"]
-    end
-    subgraph Layer4["Layer 4: Infrastructure"]
-        CSP["CSP Meta Tag"]
-        CSRF["CSRF Interceptor"]
-        Zod["Zod Validation"]
-        Audit["Audit Trail (AU-12)"]
-    end
+flowchart LR
+    A["User\nRequest"] --> B["Route Guard\ncanAccessPage()"]
+    B -->|pass| C["Component Guard\nRequireRole"]
+    C -->|pass| D["Mutation Guard\ncanPerformAction()"]
+    D -->|pass| E["Infra Layer\nCSP + CSRF + Zod + Audit"]
 
-    User["User Request"] --> Layer1
-    Layer1 -->|"authorized"| Layer2
-    Layer2 -->|"permitted"| Layer3
-    Layer3 -->|"validated"| Layer4
-
-    style Layer1 fill:#1e40af,stroke:#3b82f6,color:#fff
-    style Layer2 fill:#1e3a8a,stroke:#60a5fa,color:#fff
-    style Layer3 fill:#172554,stroke:#93c5fd,color:#fff
-    style Layer4 fill:#0f172a,stroke:#bfdbfe,color:#fff
+    style A fill:#6b7280,stroke:#9ca3af,color:#fff
+    style B fill:#dc2626,stroke:#ef4444,color:#fff
+    style C fill:#ea580c,stroke:#f97316,color:#fff
+    style D fill:#d97706,stroke:#f59e0b,color:#fff
+    style E fill:#059669,stroke:#10b981,color:#fff
 ```
 
 | Family                     | Controls                                                | What It Covers                                            |
@@ -239,35 +222,43 @@ flowchart TB
 ## Infrastructure as Code (Multi-IaC)
 
 ```mermaid
-graph LR
-    subgraph IaC["Choose Your IaC"]
-        TF["Terraform<br/>16 modules"]
-        CDK["AWS CDK<br/>TypeScript"]
-        AMP["Amplify Gen 2<br/>Zero-config"]
+flowchart TD
+    subgraph IaC["  CHOOSE YOUR IaC  "]
+        direction LR
+        TF["Terraform\n16 modules\nproduction-ready"]
+        CDK["AWS CDK\nTypeScript\nconstructs"]
+        AMP["Amplify Gen 2\nzero-config\nauto-provisions"]
     end
 
-    subgraph Envs["4 Environments"]
+    subgraph Account1["  AWS ACCOUNT 1  "]
+        direction LR
         Dev["Dev"]
         QA["QA"]
+    end
+
+    subgraph Account2["  AWS ACCOUNT 2  "]
+        direction LR
         PreProd["Pre-Prod"]
         Prod["Prod"]
     end
 
-    subgraph Services["AWS Services"]
-        DDB["DynamoDB"]
-        Cog["Cognito"]
-        AS["AppSync"]
-        S3["S3"]
-        CF["CloudFront + WAF"]
-        OS["OpenSearch"]
+    subgraph Services["  MANAGED SERVICES PER ENVIRONMENT  "]
+        direction LR
+        S1["Cognito\nAuth"]
+        S2["AppSync\nGraphQL"]
+        S3["DynamoDB\nData"]
+        S4["S3 + CloudFront\nHosting + CDN"]
+        S5["OpenSearch\nSearch"]
     end
 
-    IaC --> Envs
-    Envs --> Services
+    IaC ==> Account1
+    Account1 ==> Account2
+    Account2 ==> Services
 
-    style IaC fill:#0f172a,stroke:#f59e0b,color:#fff
-    style Envs fill:#1e293b,stroke:#3b82f6,color:#fff
-    style Services fill:#232f3e,stroke:#ff9900,color:#fff
+    style IaC fill:#6d28d9,stroke:#8b5cf6,color:#ede9fe
+    style Account1 fill:#1e40af,stroke:#3b82f6,color:#e0e7ff
+    style Account2 fill:#047857,stroke:#10b981,color:#d1fae5
+    style Services fill:#92400e,stroke:#f59e0b,color:#fef3c7
 ```
 
 | IaC Option            | Location                         | Status                       | Best For                                |
@@ -305,14 +296,14 @@ graph LR
 
 ```mermaid
 flowchart LR
-    A["1. Fork"] --> B["2. Set VITE_PLATFORM"]
-    B --> C["3. Replace domain types"]
-    C --> D["4. Implement adapters"]
-    D --> E["5. Deploy IaC"]
-    E --> F["6. Ship"]
+    A["Fork\nRepo"] --> B["Set\nVITE_PLATFORM"] --> C["Replace\nDomain Types"] --> D["Implement\nAdapters"] --> E["Deploy\nInfra"] --> F["Ship"]
 
-    style A fill:#f59e0b,stroke:#b45309,color:#000
-    style F fill:#10b981,stroke:#059669,color:#000
+    style A fill:#6b7280,stroke:#9ca3af,color:#fff
+    style B fill:#7c3aed,stroke:#8b5cf6,color:#fff
+    style C fill:#1e40af,stroke:#3b82f6,color:#fff
+    style D fill:#0d9488,stroke:#14b8a6,color:#fff
+    style E fill:#b45309,stroke:#f59e0b,color:#fff
+    style F fill:#059669,stroke:#10b981,color:#fff
 ```
 
 **Step 1:** Fork & clone, `cp .env.example .env`
