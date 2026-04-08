@@ -1,436 +1,138 @@
-# AI-Native T-Shirt Sizing & Story Pointing Guide
+# AI-Native Sizing Guide
 
-> **Purpose:** Estimation framework for AI-assisted development where Claude Code is the primary builder. AI accelerates coding, but discussion, infrastructure, QA, review, and release ceremonies still take real human time. This guide sizes based on **total delivery effort**, not just coding speed.
->
-> **Context:** IMS Gen2 — 18 epics, 107 stories, React + Amplify Gen2/CDK + NIST 800-53 compliance.
->
-> **Last updated:** 2026-04-08
+> Sizing framework for AI-assisted development. AI accelerates every phase — sizing is based on **total delivery effort across the full build cycle**, not coding speed alone.
 
 ---
 
-## The Problem with Traditional Sizing
+## The Sizing Hierarchy
 
-Traditional T-shirt sizing and story points measure **human effort**:
+```
+Build/Release  →  T-shirt size (calculated from epic count + complexity)
+  └── Epic     →  T-shirt size (calculated from story count + total points)
+      └── Story →  Story points (set per story)
+```
 
-- "This is a 5-pointer because it'll take a developer 2-3 days"
-- "This is an XL because it's complex and needs 3 sprints"
-
-With Claude as the builder, **coding speed is no longer the bottleneck**. What used to be a 5-point story (3 days of coding) can be built in 30 minutes. But it still might take 2 days to deliver because of:
-
-- Review cycles (human reviews AI output)
-- Integration testing (E2E, manual QA)
-- Approval gates (NIST compliance, SoD)
-- Dependency waiting (backend API, design, infra)
-- Context complexity (how much Claude needs to understand before it can build correctly)
-
-**The new sizing doesn't measure effort — it measures delivery friction.**
+- **Stories** are the atomic unit — sized in story points
+- **Epics** roll up automatically — T-shirt from total story points
+- **Builds** roll up automatically — T-shirt from epic count and complexity
 
 ---
 
-## How AI Assists Every Phase of the Build Cycle
+## Story Points
 
-In an AI-native SDLC, AI participates in **every phase** — not just coding. The build cycle is planned at the **release level**, not sprint-by-sprint. The question isn't "what AI can't do" but "how much human judgment each phase still requires."
+| Points | What It Means    | AI Build | Total Delivery | Example                            |
+| ------ | ---------------- | -------- | -------------- | ---------------------------------- |
+| **1**  | Trivial change   | 10 min   | 1-2 hours      | Add field to existing form         |
+| **2**  | Small feature    | 15 min   | 2-4 hours      | Add filter to table                |
+| **3**  | Standard feature | 30 min   | 4-8 hours      | New page with table + RBAC         |
+| **5**  | Complex feature  | 1 hour   | 1-2 days       | Form + API + validation + E2E      |
+| **8**  | Cross-cutting    | 2 hours  | 2-3 days       | Auth flow, schema change, workflow |
+| **13** | New pattern      | 4 hours  | 3-5 days       | New provider adapter, CDK stack    |
 
-### AI Role Across the Build Cycle
+### Point Modifiers
 
-| Phase                     | How AI Assists                                                        | Human Judgment Needed                                             | Traditional Time | AI-Native Time |
-| ------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------- | ---------------- | -------------- |
-| **Requirements**          | Drafts stories from epics, generates ACs, identifies edge cases       | Stakeholder alignment, scope decisions, priority calls            | 2-3 days         | 4-8 hours      |
-| **Architecture**          | Explores options, generates ADRs, reviews patterns against codebase   | Final decision on trade-offs, commit to direction                 | 1-2 days         | 2-4 hours      |
-| **Implementation**        | Writes production code, unit tests, follows patterns automatically    | Intent validation — is this what we actually wanted?              | 2-4 weeks        | 2-3 days       |
-| **Code Review**           | Pre-reviews with `/review-full` (security, architecture, performance) | Final approval — human signs off on AI-reviewed + AI-written code | 1-2 hours/PR     | 30-60 min/PR   |
-| **Testing**               | Generates E2E scripts, runs test suites, triages failures             | Review test coverage, verify edge cases, exploratory testing      | 1-2 weeks        | 2-3 days       |
-| **Infrastructure**        | Writes Terraform/CDK, generates env configs                           | Apply/validate/rollback cycles are sequential (can't parallelize) | 1-2 weeks        | 3-5 days       |
-| **Security & Compliance** | Runs NIST audit (`/review-security`), flags violations                | Compliance sign-off, documentation for auditors                   | 1 week           | 1-2 days       |
-| **Bug Triage**            | Diagnoses root cause from error logs, suggests fix                    | Verify diagnosis, approve fix, re-test                            | 1-2 days/bug     | 2-4 hours/bug  |
-| **Release**               | Creates PR, generates changelog, manages branch promotion             | Smoke test in each environment, final go/no-go                    | 1-2 days         | 4-8 hours      |
-| **Documentation**         | Generates README, API docs, test reports, architecture diagrams       | Review for accuracy, ensure it tells the right story              | 1 week           | 1-2 days       |
-
-### Build Cycle Compression
-
-```
-Traditional Release Cycle (no AI):
-  Requirements:     2 weeks
-  Development:      4 weeks
-  Testing:          2 weeks
-  Infra + Release:  1 week
-  Total:            ~9 weeks
-
-AI-Native Release Cycle:
-  Requirements:     2-3 days   (AI drafts, human refines)
-  Development:      3-5 days   (AI builds, human reviews)
-  Testing:          2-3 days   (AI generates + runs, human validates)
-  Infra + Release:  3-5 days   (AI writes IaC, sequential deploy cycles)
-  Total:            ~2-3 weeks
-```
-
-**Result: 3-4x compression on the full build cycle.** AI participates in every phase — the compression comes from AI handling the heavy lifting while humans focus on judgment, decisions, and sign-offs.
-
-### The NFR Check
-
-Before finalizing any release size, check for factors that extend the cycle:
-
-| Factor                                                                 | If Present → Impact                               |
-| ---------------------------------------------------------------------- | ------------------------------------------------- |
-| **New infrastructure** (first-time CDK/Terraform resources)            | +3-5 days — deploy/validate cycles are sequential |
-| **Security-sensitive** (auth, RBAC, PII, NIST controls)                | +1-2 days — compliance documentation and review   |
-| **External dependency** (waiting on design, API contract, third-party) | Calendar time — blocks regardless of AI speed     |
-| **Performance targets** (load testing, benchmarks required)            | +2-3 days — test cycles are slow and iterative    |
-| **Schema migration** (DB changes, data migration)                      | +2-3 days — rollback plan, data verification      |
+| Factor                               | Impact |
+| ------------------------------------ | ------ |
+| New page/route                       | +1     |
+| New form with Zod validation         | +1     |
+| API integration (not mock)           | +2     |
+| New infra resource (Terraform/CDK)   | +2     |
+| NIST-sensitive (auth, RBAC, audit)   | +2     |
+| Multi-step workflow (SoD, approvals) | +2     |
+| Schema migration                     | +3     |
+| First-time architectural pattern     | +3     |
 
 ---
 
-## Release / Build Cycle T-Shirt Sizing (Primary Unit)
+## Epic T-Shirt Sizing
 
-In AI-native development, **the release is the planning unit** — not the sprint. Teams plan what goes into a build, AI executes the implementation, humans validate and ship. Size the release, not individual stories.
+Calculated from total story points in the epic:
 
-### Size Definitions
-
-| Size   | Calendar Time     | What It Contains                                                                           | Constraint                                                    |
-| ------ | ----------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
-| **XS** | 1-2 days          | 1-2 epics, all UI-only, no infra, no new auth patterns                                     | Zero external dependencies                                    |
-| **S**  | 3-5 days (1 week) | 2-3 epics, mostly UI + mock data, simple RBAC extensions                                   | Minimal review cycles                                         |
-| **M**  | 1-2 weeks         | 3-5 epics, includes API integration, new infra resources, moderate RBAC                    | Some infra/API dependencies                                   |
-| **L**  | 2-4 weeks         | 5-8 epics, cross-cutting concerns (auth changes, schema migration, multi-tenant), full E2E | Significant review + testing                                  |
-| **XL** | 4-6 weeks         | 8+ epics, new platform capabilities (Amplify Gen2, CDK stacks, OpenSearch), NIST audit     | Architecture decisions, infra provisioning, compliance review |
-
-### What Determines Release Size (Not Code Volume)
-
-| Factor                           | Weight     | Why                                                                                            |
-| -------------------------------- | ---------- | ---------------------------------------------------------------------------------------------- |
-| **Number of review cycles**      | High       | Every PR needs human review. More PRs = more calendar time.                                    |
-| **Infra provisioning**           | High       | Terraform/CDK/Amplify changes need plan → apply → test → rollback plan. Can't be parallelized. |
-| **NIST compliance touchpoints**  | High       | Changes to auth/RBAC/audit require extra scrutiny, documentation, and approval.                |
-| **API schema changes**           | Medium     | GraphQL schema changes propagate to resolvers → types → UI. Each layer needs testing.          |
-| **Number of new pages/modules**  | Medium     | Each new page = new route, RBAC entry, E2E test suite.                                         |
-| **Dependency on external teams** | Medium     | Waiting for design, backend API, or infra team decisions.                                      |
-| **Risk of rework**               | Low-Medium | Unclear requirements → Claude builds the wrong thing → human reviews → rework.                 |
-| **Raw code volume**              | Low        | Claude writes 500 lines as fast as 50. Volume is NOT a sizing factor anymore.                  |
+| Total Points | T-Shirt | Example                                    |
+| ------------ | ------- | ------------------------------------------ |
+| 1-10         | **XS**  | Small utility epic, 2-3 simple stories     |
+| 11-18        | **S**   | Standard CRUD epic, 4-6 stories            |
+| 19-28        | **M**   | Moderate complexity, API + infra involved  |
+| 29-40        | **L**   | Cross-cutting, auth/security, many stories |
+| 41+          | **XL**  | Platform-level, decompose if possible      |
 
 ---
 
-## AI-Native Story Pointing (Story Level)
+## Build/Release T-Shirt Sizing
 
-Use this to size **individual stories** within an epic.
+Calculated from epic count and total complexity:
 
-### The New Point Scale
-
-We keep Fibonacci (1, 2, 3, 5, 8, 13) but redefine what the numbers mean:
-
-| Points | Delivery Time                    | AI Build Time | Review + QA Time | Example                                                                      |
-| ------ | -------------------------------- | ------------- | ---------------- | ---------------------------------------------------------------------------- |
-| **1**  | 1-2 hours                        | 10-15 min     | 30-60 min        | Add a new KPI card to existing dashboard                                     |
-| **2**  | 2-4 hours                        | 15-30 min     | 1-2 hours        | Add filter/sort to existing table                                            |
-| **3**  | 4-8 hours (half day to full day) | 30-60 min     | 2-4 hours        | New page with table, filters, RBAC. No new patterns.                         |
-| **5**  | 1-2 days                         | 1-2 hours     | 4-8 hours        | New feature with form + validation + API integration + E2E tests             |
-| **8**  | 2-3 days                         | 2-4 hours     | 1-2 days         | Cross-cutting: new auth flow, schema change, or multi-step workflow          |
-| **13** | 3-5 days                         | 4-8 hours     | 2-3 days         | New architectural pattern (provider adapter, CDK stack, OpenSearch pipeline) |
-
-### What Determines Story Points
-
-| Factor                                 | +1 Point Each | Why                                                                |
-| -------------------------------------- | ------------- | ------------------------------------------------------------------ |
-| **New page/route**                     | +1            | Needs route setup, RBAC entry, lazy loading, layout                |
-| **New form with validation**           | +1            | Zod schema, react-hook-form, error states, accessibility           |
-| **API integration (not mock)**         | +2            | Provider adapter, DTO mapping, error handling, caching strategy    |
-| **New infra resource**                 | +2            | CDK/Amplify/Terraform change, deployment, validation               |
-| **NIST-sensitive** (auth, RBAC, audit) | +2            | Extra review scrutiny, compliance documentation                    |
-| **Multi-step workflow**                | +2            | State machine, SoD enforcement, approval gates                     |
-| **New E2E test suite**                 | +1            | Java/TestNG test class, page objects, selectors, test data         |
-| **Schema migration**                   | +3            | DynamoDB/Cosmos DB schema change, data migration, rollback plan    |
-| **New architectural pattern**          | +3            | First-time pattern (e.g., first CDK stack, first OpenSearch query) |
-
-### The Critical Insight: AI Build Time vs Total Delivery Time
-
-```
-Story 1.1: User Login (5 points)
-├── AI Build Time:     ~45 min (Claude writes sign-in component, auth context, mock provider)
-├── Human Review:      ~1 hour (review code, check NIST compliance, test manually)
-├── E2E Test:          ~2 hours (write test plan, generate E2E code, run, fix flakes)
-├── QA Sign-off:       ~1 hour (manual walkthrough of all ACs)
-└── Total Delivery:    ~5 hours ≈ 1 day
-
-Story 7.1: Analytics KPI Cards (3 points)
-├── AI Build Time:     ~20 min (Claude writes 6 KPI cards with mock data)
-├── Human Review:      ~30 min (quick review, mostly UI)
-├── E2E Test:          ~1 hour (simple assertions on card values)
-├── QA Sign-off:       ~30 min
-└── Total Delivery:    ~2.5 hours ≈ half day
-```
-
-**AI build time is 10-15% of total delivery time.** The rest is review, testing, and process.
+| Total Points | T-Shirt | Typical Duration | Example                               |
+| ------------ | ------- | ---------------- | ------------------------------------- |
+| 1-30         | **S**   | 3-5 days         | Docs + testing + backlog cleanup      |
+| 31-60        | **M**   | 1-2 weeks        | 2-3 epics, moderate integration       |
+| 61-100       | **L**   | 2-4 weeks        | 5+ epics, cross-cutting concerns      |
+| 101+         | **XL**  | 4-6 weeks        | 7+ epics, infra + security + platform |
 
 ---
 
-## Epic-Level Sizing for IMS Gen2
+## How AI Assists Each Phase
 
-Based on our 18 epics, here's how they size in the AI-native model:
+| Phase              | AI Role                          | Human Role                | Traditional | AI-Native    |
+| ------------------ | -------------------------------- | ------------------------- | ----------- | ------------ |
+| **Requirements**   | Drafts stories, generates ACs    | Scope decisions, priority | 2-3 days    | 4-8 hours    |
+| **Architecture**   | Explores options, generates ADRs | Decides trade-offs        | 1-2 days    | 2-4 hours    |
+| **Implementation** | Writes code + tests              | Reviews, validates intent | 2-4 weeks   | 2-3 days     |
+| **Code Review**    | Pre-reviews (security, arch)     | Final approval            | 1-2 hrs/PR  | 30-60 min/PR |
+| **Testing**        | Generates E2E, triages failures  | Validates coverage        | 1-2 weeks   | 2-3 days     |
+| **Infrastructure** | Writes IaC                       | Apply/validate cycles     | 1-2 weeks   | 3-5 days     |
+| **Security**       | Runs NIST audit, flags issues    | Compliance sign-off       | 1 week      | 1-2 days     |
+| **Release**        | Changelog, branch promotion      | Smoke test, go/no-go      | 1-2 days    | 4-8 hours    |
 
-### Sizing by Complexity Category
-
-#### Category A: UI-Heavy, Pattern-Established (S-M per epic)
-
-These follow existing patterns — Claude builds fast, review is straightforward.
-
-| Epic                        | Stories | Total Points | T-Shirt | Constraint                                    |
-| --------------------------- | ------- | ------------ | ------- | --------------------------------------------- |
-| Epic 1: Auth & User Mgmt    | 7       | ~30          | M       | NIST-sensitive (AC-3, IA-2) — extra review    |
-| Epic 2: Dashboard           | 6       | ~18          | S       | Mostly UI, existing component patterns        |
-| Epic 3: Inventory           | 6       | ~22          | S-M     | Table + search + filters, established pattern |
-| Epic 4: Deployment Pipeline | 5       | ~25          | M       | Multi-step workflow (SoD), firmware lifecycle |
-| Epic 5: Compliance          | 5       | ~20          | S-M     | CRUD + vulnerability panel, NIST audit trail  |
-| Epic 6: Account & Service   | 6       | ~22          | M       | Kanban board, calendar view, drag-and-drop    |
-| Epic 7: Analytics           | 6       | ~20          | S-M     | Charts (Recharts), KPIs, export               |
-| Epic 8: Notifications       | 5       | ~15          | S       | Real-time updates, toast system               |
-
-#### Category B: Integration-Heavy (M-L per epic)
-
-These require API integration, new infra, or cross-cutting changes.
-
-| Epic                        | Stories | Total Points | T-Shirt | Constraint                                   |
-| --------------------------- | ------- | ------------ | ------- | -------------------------------------------- |
-| Epic 9: Global Search       | 5       | ~28          | M-L     | OpenSearch integration, new query patterns   |
-| Epic 10: Geo Location       | 6       | ~25          | M       | Map library, geo clustering, new viz pattern |
-| Epic 11: Telemetry          | 7       | ~35          | L       | Real-time data pipeline, heatmaps, new infra |
-| Epic 12: Advanced Analytics | 6       | ~30          | M-L     | OpenSearch aggregations, chart customization |
-
-#### Category C: Infrastructure & Platform (L-XL per epic)
-
-These introduce new architectural patterns or platform capabilities.
-
-| Epic                          | Stories | Total Points | T-Shirt | Constraint                                       |
-| ----------------------------- | ------- | ------------ | ------- | ------------------------------------------------ |
-| Epic 13: Terraform Infra      | 6       | ~40          | L       | 13 AWS modules, state management, environments   |
-| Epic 14: CI/CD Pipeline       | 6       | ~30          | L       | GitHub Actions, deployment strategy, rollback    |
-| Epic 15: Performance          | 5       | ~25          | M-L     | Optimization, virtualization, code splitting     |
-| Epic 16: Accessibility        | 6       | ~20          | M       | WCAG 2.1 AA audit, keyboard nav, screen readers  |
-| Epic 17: Multi-Tenant         | 8       | ~40          | L-XL    | Data isolation, tenant scoping, CustomerAdmin    |
-| Epic 18: Provider Abstraction | 6       | ~35          | L       | CDK/Amplify/Azure adapters, integration contract |
+**Result: 3-4x compression on the full build cycle.**
 
 ---
 
-## Release Planning with AI-Native Sizing
+## Build Cycle Phases
 
-### How to Plan a Release
+Every release goes through these. AI assists each, none can be skipped.
 
-1. **Group epics by dependency chain** (not by team, since Claude is the team)
-2. **Size the release** using the T-shirt table above
-3. **Identify the constraint** (what will actually slow delivery — review, infra, compliance?)
-4. **Set a realistic calendar target** based on the constraint, not the code volume
-
-### Example: Release 1.0 (MVP)
-
-```
-Epics: 1 (Auth) + 2 (Dashboard) + 3 (Inventory) + 4 (Deployment) + 5 (Compliance)
-Stories: 29
-Total Points: ~115
-T-Shirt: L (2-4 weeks)
-
-Constraint: NIST compliance on Epic 1 (auth) + Epic 4 (SoD workflow)
-  → Extra review cycles on auth stories
-  → Compliance documentation needed before merge
-
-AI build time: ~20 hours (all 29 stories)
-Review + QA time: ~60-80 hours
-Infra setup: ~10 hours
-
-Calendar time: ~3 weeks (accounting for review bottleneck)
-```
-
-### Example: Release 2.0 (Full Platform)
-
-```
-Epics: 6-12 (remaining features) + 15 (performance)
-Stories: 41
-Total Points: ~195
-T-Shirt: XL (4-6 weeks)
-
-Constraint: OpenSearch integration (Epic 9, 11, 12) requires infra first
-  → CDK stack must be deployed before search stories
-  → Pipeline depends on data being in OpenSearch
-
-Calendar time: ~5 weeks (infra-gated)
-```
-
----
-
-## The Sizing Conversation: How to Run It
-
-### Step 1: Requirements Intake
-
-BA hands Claude the requirement document. Claude breaks it into epics and stories using the existing SPEC Method workflow.
-
-```
-/review-full                    # Audit existing codebase state
-brownfield-inspect              # Understand current architecture
-```
-
-### Step 2: AI-Assisted Sizing
-
-For each epic/story, ask Claude to size it using this guide:
-
-```
-Prompt: "Read Docs/ai-native-sizing-guide.md. Now size Epic 9 (Global Search)
-considering our existing architecture, OpenSearch integration complexity,
-and the 5 stories. Give me T-shirt size for the epic and story points
-for each story with justification."
-```
-
-Claude knows:
-
-- The codebase structure (it built it)
-- Which patterns exist vs need to be created
-- Which files will be touched (and whether they're NIST-sensitive)
-- The E2E test effort per story type
-
-### Step 3: Constraint Identification
-
-For each release, identify the **actual bottleneck**:
-
-| Question                         | If Yes →                   | Impact                               |
-| -------------------------------- | -------------------------- | ------------------------------------ |
-| Does it touch auth/RBAC?         | NIST review overhead       | +30% calendar time                   |
-| Does it need new infra?          | CDK/Terraform deploy cycle | +1 week minimum                      |
-| Does it introduce a new pattern? | Architecture review        | +2-3 days for first story, then fast |
-| Does it need OpenSearch?         | Data pipeline setup        | +1 week first time                   |
-| Is design finalized?             | No rework risk             | Standard timeline                    |
-| Is design NOT finalized?         | Rework likely              | +50% buffer                          |
-
-### Step 4: Capacity Planning
-
-In AI-native development, **throughput is limited by review bandwidth, not coding bandwidth.**
-
-```
-Traditional: 1 developer = 8-10 story points per sprint
-AI-native:   1 developer + Claude = 30-40 story points per sprint
-                                     (but limited by review throughput)
-
-Bottleneck: How fast can the human review, test, and approve?
-  → 1 person reviewing AI output: ~15-20 stories per sprint
-  → 2 people reviewing: ~30-35 stories per sprint
-```
-
-### Step 5: Create the Skill (Optional)
-
-You can create a `/size-epic` or `/size-release` skill that automates this:
-
-```
-# .claude/commands/size-epic.md
-Read Docs/ai-native-sizing-guide.md.
-Read the epic at Docs/epics/epic-{N}/.
-For each story:
-- Count new pages, forms, API integrations, NIST touchpoints
-- Calculate story points using the factor table
-- Justify each point value
-Output: epic T-shirt size + story point breakdown + constraint analysis
-```
-
----
-
-## Key Takeaways
-
-### What Changed in AI-Native Sizing
-
-| Traditional                          | AI-Native                                                              |
-| ------------------------------------ | ---------------------------------------------------------------------- |
-| Estimate **coding effort**           | Estimate **delivery friction**                                         |
-| Developer velocity is the constraint | **Review bandwidth** is the constraint                                 |
-| Complex logic = more points          | Complex logic = same points (Claude handles it)                        |
-| Large codebase changes = XL          | Large codebase changes = M (Claude writes it fast)                     |
-| New pattern = risky = more points    | New pattern = +3 points (first time), then fast                        |
-| Infra work = separate team           | Infra work = Claude writes CDK, but **deploy cycle is the constraint** |
-
-### The 5 Real Constraints in AI-Native Development
-
-1. **Review throughput** — How fast can humans review AI-generated code?
-2. **Infrastructure deploy cycles** — CDK/Terraform plan → apply → validate → rollback test
-3. **NIST compliance gates** — Security-sensitive changes need extra scrutiny and documentation
-4. **Integration test cycles** — E2E tests take real time to run, debug, and stabilize
-5. **Requirement clarity** — Unclear requirements cause rework. AI amplifies both good and bad requirements.
-
-### The Formula
-
-```
-Delivery Time = AI Build Time + (Review Cycles × Review Duration) + Infra Deploy Time + QA Time + Buffer
-
-Where:
-  AI Build Time     ≈ 10-15% of total (fast, predictable)
-  Review Cycles     = Number of PRs × avg review time per PR
-  Infra Deploy Time = 0 (UI only) to 1 week (new CDK stack)
-  QA Time           = Story points × 30 min (unit) + 1 hour (E2E per story)
-  Buffer            = 20% (clear requirements) to 50% (unclear requirements)
-```
-
----
-
-## Appendix: IMS Gen2 Project Summary
-
-| Metric                           | Value                             |
-| -------------------------------- | --------------------------------- |
-| Total Epics                      | 18                                |
-| Total Stories                    | 107                               |
-| Total Estimated Points           | ~450                              |
-| Category A (UI-heavy)            | 8 epics, ~172 points              |
-| Category B (Integration)         | 4 epics, ~118 points              |
-| Category C (Infrastructure)      | 6 epics, ~190 points              |
-| Estimated Full Build (AI)        | ~80 hours of Claude time          |
-| Estimated Full Delivery          | 12-16 weeks (review-gated)        |
-| Team Size for Optimal Throughput | 1 developer + Claude + 1 reviewer |
-
----
-
-## Build Cycle Checklist
-
-Every release goes through these phases. AI assists in each, but the phases themselves cannot be skipped.
-
-| Phase             | What Happens                                      | AI Role                                  | Human Role                         | Typical Duration |
-| ----------------- | ------------------------------------------------- | ---------------------------------------- | ---------------------------------- | ---------------- |
-| **Scope & Plan**  | Define what goes in this release, T-shirt size it | Drafts story breakdown, estimates points | Decides scope, priority, cut-line  | 1-2 days         |
-| **Build**         | Implement all features, write tests               | Writes code + tests (primary builder)    | Reviews PRs, validates intent      | 2-5 days         |
-| **Integrate**     | Wire to real services, deploy to dev environment  | Writes adapters, IaC, config             | Validate connections, troubleshoot | 1-3 days         |
-| **QA Gate**       | Run E2E suite, exploratory testing, file bugs     | Generates test scripts, triages failures | Verifies reports, approves quality | 1-2 days         |
-| **Security Gate** | NIST compliance audit, vulnerability scan         | Runs `/review-security`, flags issues    | Signs off on compliance            | 1 day            |
-| **Release**       | Promote through environments, smoke test, tag     | Creates release notes, manages PRs       | Go/no-go decision per environment  | 4-8 hours        |
-
-**Typical M-sized release: 2-3 weeks end-to-end.**
+| Phase             | AI + Human                                          | Duration  |
+| ----------------- | --------------------------------------------------- | --------- |
+| **Scope & Plan**  | AI drafts breakdown, human decides cut-line         | 1-2 days  |
+| **Build**         | AI writes code + tests, human reviews PRs           | 2-5 days  |
+| **Integrate**     | AI writes adapters + IaC, human validates           | 1-3 days  |
+| **QA Gate**       | AI runs E2E + triages, human approves quality       | 1-2 days  |
+| **Security Gate** | AI audits NIST, human signs off                     | 1 day     |
+| **Release**       | AI manages PRs + notes, human promotes environments | 4-8 hours |
 
 ---
 
 ## Guardrails
 
-### Reviewer Fatigue
+**Reviewer Fatigue** — AI outputs code 10x faster but review speed only improves ~1.2x. Size based on reviewer capacity: 1 reviewer handles 3-4 PRs/day with quality attention.
 
-AI increases code output by 10x but human review speed improves only ~1.2x. Size tasks based on the reviewer's capacity, not the AI's speed. A sprint with 40 AI-generated stories but only 1 reviewer will bottleneck at review, not coding.
+**Speed Illusion** — Fast code generation does not mean small task. If review + QA + compliance takes hours, the story is not small.
 
-**Rule of thumb:** 1 reviewer can handle 3-4 PRs per day with quality attention.
+**XL = Stop** — Never start an XL story. Decompose to L or smaller first.
 
-### The Speed Illusion
-
-Fast code generation does not mean a small task. If discussion, testing, or compliance review takes hours, the story is not small — regardless of how fast Claude wrote the code.
-
-**Size based on total delivery time, not AI build time.**
-
-### XL Means Stop
-
-Never start development on an XL story. It produces spaghetti code and prompt-looping. Always decompose to L or smaller before writing any code.
-
-### The Context Trap
-
-Keep stories XS-M sized so they fit within the AI's effective context window. Larger stories cause the AI to lose track of requirements and produce inconsistent output.
+**Context Trap** — Keep stories XS-M so AI stays within effective context window. Larger stories cause inconsistent output.
 
 ---
 
 ## Post-Sprint Calibration
 
-After each sprint, capture these metrics to improve future estimates:
+| Metric                      | Action                                        |
+| --------------------------- | --------------------------------------------- |
+| Estimated vs actual points  | Adjust sizing factors if consistently off     |
+| AI build time vs total time | If AI is >20% of total, stories are too small |
+| Review queue                | Add reviewers if queue exceeds 1 day          |
+| Bug escape rate             | Improve test coverage or review rigor         |
 
-| Metric                      | What to Track                              | Action                                               |
-| --------------------------- | ------------------------------------------ | ---------------------------------------------------- |
-| Estimated vs Actual points  | Story-by-story comparison                  | Adjust sizing factors if consistently off            |
-| AI Build Time vs Total Time | Ratio per story                            | If AI time is >20% of total, stories are too small   |
-| Review Bottleneck           | Hours waiting for review per PR            | Add reviewers if queue exceeds 1 day                 |
-| Bug Escape Rate             | Bugs found in QA vs prod                   | Improve test coverage or review rigor                |
-| Discussion Time             | Hours spent in meetings per story          | If >2 hours, requirements are unclear — fix upstream |
-| Infra Lead Time             | Days from IaC merge to working environment | Optimize pipeline or pre-provision                   |
+---
 
-**The goal:** Make future estimates more accurate by learning what actually consumed the time — was it discussion, review, QA, infra, or rework?
+## IMS Gen2 Actuals
+
+| Build                           | Epics | Stories | Points | T-Shirt | Status  |
+| ------------------------------- | ----- | ------- | ------ | ------- | ------- |
+| Build 1 — Core Platform         | 7     | 42      | 188    | XL      | Done    |
+| Build 2 — Advanced Features     | 10    | 58      | 205    | XL      | Done    |
+| Build 3 — Enterprise Hardening  | 6     | 58      | 206    | XL      | Done    |
+| Build 4 — External Integrations | 2     | 21      | 89     | L       | Done    |
+| Build 5 — Quality & Docs        | —     | —       | —      | S       | Done    |
+| Build 6 — Production Ready      | —     | —       | —      | L       | Planned |
