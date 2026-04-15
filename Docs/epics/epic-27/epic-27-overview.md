@@ -50,9 +50,9 @@ For a template that aspires to be enterprise-grade, a unified "device passport" 
 
 - **Epic 8** — Audit Trail infrastructure (AUDIT# records, Lambda processor) — MUST be live
 - **Epic 20 Story 20.6** — Firmware Version History (timeline pattern, detail page convention) — reference implementation
-- **Epic 20 Story 20.8** — CDC Event Provider (`ICDCProvider`, `CDCEvent`, `getChangeHistory`) — data source for 21.1
-- **Story 26.9** — `FirmwareAssignment` entity — extended in 21.4
-- **Epic 15** — Digital Twin state snapshots — referenced (not modified) by 21.1
+- **Epic 20 Story 20.8** — CDC Event Provider (`ICDCProvider`, `CDCEvent`, `getChangeHistory`) — data source for 27.1
+- **Story 26.9** — `FirmwareAssignment` entity — extended in 27.4
+- **Epic 15** — Digital Twin state snapshots — referenced (not modified) by 27.1
 
 ## Out of Scope (Explicitly Deferred)
 
