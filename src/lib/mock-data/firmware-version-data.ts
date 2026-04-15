@@ -35,6 +35,8 @@ const FAM1_V1_EVENTS: FirmwareVersionEvent[] = [
     timestamp: "2025-08-15T14:00:00Z",
     description: "Passed IEC 62443 compliance review",
     metadata: { reviewId: "GP-2025-1842", score: "94" },
+    approvalComment:
+      "Clean pass against IEC 62443-4-2 SL-2. Thermal envelope validated against extended-temp lab profile. No blocking findings.",
   },
   {
     id: "evt-104",
@@ -72,6 +74,8 @@ const FAM1_V1_1_EVENTS: FirmwareVersionEvent[] = [
     timestamp: "2025-10-08T16:00:00Z",
     description: "Failed — unsigned driver component detected",
     metadata: { reason: "Unsigned driver: pwr_ctrl_thermal.sys", reviewId: "GP-2025-2104" },
+    rejectionReason:
+      "Driver pwr_ctrl_thermal.sys is shipped unsigned — this breaks Windows kernel-mode driver signing enforcement on customer endpoints. Re-submit after signing with the production CA.",
   },
 ];
 
@@ -100,6 +104,8 @@ const FAM1_V1_2_EVENTS: FirmwareVersionEvent[] = [
     timestamp: "2025-10-22T11:00:00Z",
     description: "Passed compliance review — all drivers signed",
     metadata: { reviewId: "GP-2025-2201", score: "97" },
+    approvalComment:
+      "Re-submission resolves the unsigned-driver issue from v1.1.0. All binaries now signed by the production CA (cert: CA-PROD-2025-09). Approved for rollout.",
   },
   {
     id: "evt-124",
@@ -238,6 +244,8 @@ const FAM3_V3_0_EVENTS: FirmwareVersionEvent[] = [
     timestamp: "2026-01-14T11:00:00Z",
     description: "Passed IEC 62443 + NIST 800-53 review",
     metadata: { reviewId: "GP-2026-0102", score: "96" },
+    approvalComment:
+      "Full SL-2 + NIST AC/AU/SI alignment verified. Grid-synchronization module tested across all APAC frequency profiles. Approved for regulated customer deployment.",
   },
   {
     id: "evt-304",
@@ -269,11 +277,17 @@ const FAM3_V3_1_EVENTS: FirmwareVersionEvent[] = [
   },
   {
     id: "evt-313",
-    type: "NOTE",
+    type: "REJECTED",
     actor: "compliance.team@guidepoint.com",
     actorRole: "Admin",
-    timestamp: "2026-03-20T10:00:00Z",
-    description: "Review in progress — awaiting lab test results for grid sync module",
+    timestamp: "2026-03-25T10:00:00Z",
+    description: "Failed grid-sync lab test — anti-islanding threshold out of tolerance",
+    metadata: {
+      reason: "Anti-islanding disconnect time 2.4s (spec: <=2.0s)",
+      reviewId: "GP-2026-0318",
+    },
+    rejectionReason:
+      "Anti-islanding disconnect time measured at 2.4 seconds under 60 Hz profile; IEEE 1547 requires <= 2.0 s. Re-tune the grid_sync.c PLL coefficients and re-submit with updated lab certificate.",
   },
 ];
 
