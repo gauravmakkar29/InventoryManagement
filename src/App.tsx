@@ -15,6 +15,11 @@ const Dashboard = lazy(() =>
 const Inventory = lazy(() =>
   import("./app/components/inventory").then((m) => ({ default: m.Inventory })),
 );
+const DeviceDetailPage = lazy(() =>
+  import("./app/components/inventory/device-detail-page").then((m) => ({
+    default: m.DeviceDetailPage,
+  })),
+);
 const AccountService = lazy(() =>
   import("./app/components/account-service").then((m) => ({ default: m.AccountService })),
 );
@@ -117,6 +122,14 @@ export default function App() {
               element={
                 <RouteElement name="inventory">
                   <Inventory />
+                </RouteElement>
+              }
+            />
+            <Route
+              path="/inventory/:deviceId"
+              element={
+                <RouteElement name="device-detail">
+                  <DeviceDetailPage />
                 </RouteElement>
               }
             />

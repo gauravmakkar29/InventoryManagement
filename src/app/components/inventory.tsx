@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { ChevronLeft, ChevronRight, Package, Plus } from "lucide-react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { DeviceStatus } from "@/lib/types";
@@ -42,9 +43,19 @@ export function Inventory() {
   const { groups } = useAuth();
   const role = getPrimaryRole(groups);
   const canEdit = canPerformAction(role, "edit");
+  const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<Tab>("hardware");
   const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  // Story 3.7 (#429) — row activation opens the device detail page.
+  // Keeps the edit controls in the last column non-activating via stopPropagation.
+  const handleOpenDevice = useCallback(
+    (deviceId: string) => {
+      navigate(`/inventory/${deviceId}`);
+    },
+    [navigate],
+  );
 
   const {
     devices,
@@ -230,8 +241,18 @@ export function Inventory() {
                     paginatedDevices.map((device, i) => (
                       <tr
                         key={device.id}
+                        role="link"
+                        tabIndex={0}
+                        aria-label={`Open details for ${device.name}`}
+                        onClick={() => handleOpenDevice(device.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            handleOpenDevice(device.id);
+                          }
+                        }}
                         className={cn(
-                          "h-[52px] border-b border-border/30 last:border-0 hover:bg-muted/50 transition-colors",
+                          "h-[52px] border-b border-border/30 last:border-0 cursor-pointer hover:bg-muted/50 focus:bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 transition-colors",
                           i % 2 === 1 && "bg-muted/30",
                         )}
                       >
@@ -260,12 +281,17 @@ export function Inventory() {
                           <HealthBar value={device.health} />
                         </td>
                         {canEdit && (
-                          <td className="px-4 py-2.5">
+                          <td
+                            className="px-4 py-2.5"
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
+                          >
                             <select
                               value={device.status}
                               onChange={(e) =>
                                 handleStatusChange(device.id, e.target.value as DeviceStatus)
                               }
+                              onClick={(e) => e.stopPropagation()}
                               className="h-8 rounded-md border border-border bg-card px-2 text-[14px] text-foreground/80 focus:border-accent-text focus:outline-none focus:ring-1 focus:ring-ring/20 cursor-pointer"
                             >
                               {ALL_STATUSES.map((s) => (
