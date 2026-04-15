@@ -295,15 +295,27 @@ export function FirmwareTransitionPanel({
     [role, firmware.uploadedBy, currentUserId],
   );
 
+  // Story 27.4 (#420) AC4: destructive transitions (Recall) require a reason
+  // with a minimum length so the audit trail carries actionable context.
+  const REASON_MIN_LENGTH = 10;
+  const REASON_MAX_LENGTH = 1000;
+
+  const trimmedReason = reason.trim();
+  const reasonRequired = confirmingTransition?.destructive ?? false;
+  const reasonValid = reasonRequired
+    ? trimmedReason.length >= REASON_MIN_LENGTH && trimmedReason.length <= REASON_MAX_LENGTH
+    : trimmedReason.length <= REASON_MAX_LENGTH;
+
   const handleConfirm = useCallback(() => {
     if (!confirmingTransition) return;
-    onTransition(firmware.id, confirmingTransition.to, reason || undefined);
+    if (!reasonValid) return; // safety net — button should already be disabled
+    onTransition(firmware.id, confirmingTransition.to, trimmedReason || undefined);
     toast.success(
       `Firmware ${firmware.name} transitioned to ${STATE_CONFIG[confirmingTransition.to].label}`,
     );
     setConfirmingTransition(null);
     setReason("");
-  }, [confirmingTransition, firmware, onTransition, reason]);
+  }, [confirmingTransition, firmware, onTransition, trimmedReason, reasonValid]);
 
   if (transitions.length === 0) {
     return (
@@ -323,27 +335,56 @@ export function FirmwareTransitionPanel({
           <div>
             <label
               htmlFor="transition-reason"
-              className="block text-[13px] font-medium text-muted-foreground mb-1"
+              className="mb-1 block text-[13px] font-medium text-muted-foreground"
             >
-              Reason (optional)
+              {reasonRequired
+                ? `Reason (required, min ${REASON_MIN_LENGTH} chars)`
+                : "Comment (optional)"}
             </label>
-            <input
+            <textarea
               id="transition-reason"
-              type="text"
+              rows={3}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="Enter reason for this transition..."
-              className="w-full rounded border border-border bg-card px-2.5 py-1.5 text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
+              maxLength={REASON_MAX_LENGTH}
+              placeholder={
+                reasonRequired
+                  ? "Required: why are you rejecting/recalling this firmware? (min 10 chars — e.g. 'v4.1.0 introduced MPPT disconnects at Shanghai HQ — rolling back pending hotfix')"
+                  : "Optional: note for the audit trail (e.g. 'tested against customer sandbox, all green')"
+              }
+              aria-describedby="transition-reason-counter"
+              aria-required={reasonRequired}
+              aria-invalid={reasonRequired && !reasonValid ? true : undefined}
+              className="w-full resize-y rounded border border-border bg-card px-2.5 py-1.5 text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50"
             />
+            <div
+              id="transition-reason-counter"
+              className={cn(
+                "mt-1 text-right text-[11px]",
+                trimmedReason.length > 900
+                  ? "text-warning-text"
+                  : reasonRequired && !reasonValid
+                    ? "text-danger-text"
+                    : "text-muted-foreground",
+              )}
+              aria-live="polite"
+            >
+              {trimmedReason.length} / {REASON_MAX_LENGTH}
+              {reasonRequired && trimmedReason.length < REASON_MIN_LENGTH && (
+                <span className="ml-2">(need {REASON_MIN_LENGTH - trimmedReason.length} more)</span>
+              )}
+            </div>
           </div>
           <div className="flex gap-2">
             <button
               onClick={handleConfirm}
+              disabled={!reasonValid}
               className={cn(
                 "rounded-lg px-3 py-1.5 text-[14px] font-medium text-white cursor-pointer",
                 confirmingTransition.destructive
                   ? "bg-danger hover:bg-danger"
                   : "bg-accent hover:bg-accent-hover",
+                !reasonValid && "cursor-not-allowed opacity-50",
               )}
             >
               Confirm {confirmingTransition.label}

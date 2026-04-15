@@ -4,7 +4,7 @@
 // =============================================================================
 
 import { useMemo } from "react";
-import { Clock, User } from "lucide-react";
+import { Clock, MessageSquareQuote, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -22,6 +22,13 @@ export interface TimelineEvent {
   description: string;
   color: TimelineEventColor;
   metadata?: Record<string, string>;
+  /**
+   * Optional free-text comment attached to the event — used by Story 27.4 (#420)
+   * to surface firmware approval notes and rejection reasons inline with the
+   * corresponding timeline node. When present, rendered as a subtle quote-style
+   * block under the description.
+   */
+  comment?: string;
 }
 
 interface VersionTimelineProps {
@@ -115,6 +122,19 @@ function TimelineEntry({ event, isLast }: { event: TimelineEvent; isLast: boolea
         </div>
 
         <p className="mt-1 text-[14px] text-foreground">{event.description}</p>
+
+        {event.comment && event.comment.trim().length > 0 && (
+          <blockquote
+            className="mt-2 flex gap-2 rounded-md border-l-2 border-border bg-muted/40 px-3 py-2 text-[13px] text-muted-foreground"
+            aria-label={`Note from ${event.actor}`}
+          >
+            <MessageSquareQuote
+              className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground/70"
+              aria-hidden="true"
+            />
+            <span className="italic">{event.comment}</span>
+          </blockquote>
+        )}
 
         <div className="mt-1.5 flex flex-wrap items-center gap-3 text-[12px] text-muted-foreground">
           <span className="inline-flex items-center gap-1">
