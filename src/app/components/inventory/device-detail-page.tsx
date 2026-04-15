@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
 import type { MockDevice } from "@/lib/mock-data/inventory-data";
 import { StatusBadge } from "./device-table-helpers";
+import { LifecycleTab } from "./lifecycle-tab";
 
 // ---------------------------------------------------------------------------
 // Tab shell — minimal, in-file primitive. Kept small so future stories
@@ -217,7 +218,8 @@ export function DeviceDetailPage() {
 
   const tabs: DeviceDetailTab[] = [
     { id: "overview", label: "Overview", content: <OverviewTab device={device} /> },
-    // Future: { id: "lifecycle", label: "Lifecycle", content: <LifecycleTab /> } — Story 27.1
+    // Story 27.1 (#417) — device lifecycle timeline
+    { id: "lifecycle", label: "Lifecycle", content: <LifecycleTab deviceId={device.id} /> },
     // Future: { id: "ownership", label: "Ownership", content: <OwnershipTab /> } — Story 27.3
   ];
 

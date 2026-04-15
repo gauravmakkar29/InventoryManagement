@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 // Types
 // ---------------------------------------------------------------------------
 
-export type TimelineEventColor = "green" | "red" | "blue" | "gray";
+export type TimelineEventColor = "green" | "red" | "blue" | "gray" | "amber" | "purple" | "teal";
 
 export interface TimelineEvent {
   id: string;
@@ -47,6 +47,9 @@ const DOT_COLORS: Record<TimelineEventColor, string> = {
   red: "bg-danger",
   blue: "bg-info",
   gray: "bg-muted-foreground",
+  amber: "bg-warning",
+  purple: "bg-accent",
+  teal: "bg-high",
 };
 
 const LABEL_COLORS: Record<TimelineEventColor, string> = {
@@ -54,6 +57,9 @@ const LABEL_COLORS: Record<TimelineEventColor, string> = {
   red: "bg-danger-bg text-danger-text",
   blue: "bg-info-bg text-info-text",
   gray: "bg-muted text-muted-foreground",
+  amber: "bg-warning-bg text-warning-text",
+  purple: "bg-accent-bg text-accent-text",
+  teal: "bg-info-bg text-info-text",
 };
 
 // ---------------------------------------------------------------------------
