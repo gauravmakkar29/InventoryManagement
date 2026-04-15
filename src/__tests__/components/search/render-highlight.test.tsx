@@ -15,8 +15,7 @@ describe("renderHighlight", () => {
     const mark = container.querySelector("mark");
     expect(mark).not.toBeNull();
     expect(mark?.textContent).toBe("world");
-    expect(mark?.className).toContain("bg-amber-200");
-    expect(mark?.className).toContain("dark:bg-amber-900/50");
+    expect(mark?.className).toContain("bg-warning-bg");
     expect(mark?.className).toContain("px-0.5");
     expect(mark?.className).toContain("rounded-sm");
     expect(container.textContent).toBe("Hello world test");

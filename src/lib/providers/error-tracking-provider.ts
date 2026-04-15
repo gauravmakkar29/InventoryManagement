@@ -40,7 +40,10 @@ export interface IErrorTracker {
 // =============================================================================
 // Console Error Tracker (Development)
 // =============================================================================
+// This adapter intentionally routes to `console.*` because it IS the dev-mode
+// logger. The `no-console` lint rule is disabled for this class only.
 
+/* eslint-disable no-console */
 export class ConsoleErrorTracker implements IErrorTracker {
   captureException(error: Error, context?: ErrorContext): void {
     console.error("[ErrorTracker] Exception:", error.message, context ?? "");
@@ -68,6 +71,7 @@ export class ConsoleErrorTracker implements IErrorTracker {
     console.debug("[ErrorTracker] Breadcrumb:", category ?? "default", "—", message);
   }
 }
+/* eslint-enable no-console */
 
 // =============================================================================
 // Sentry-Compatible Adapter (Production reference)
