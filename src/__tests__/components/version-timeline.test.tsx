@@ -112,6 +112,39 @@ describe("VersionTimeline", () => {
     expect(items).toHaveLength(3);
   });
 
+  describe("comment rendering (Story 27.4 #420)", () => {
+    it("renders the comment as a quote block when present", () => {
+      const eventsWithComment: TimelineEvent[] = [
+        {
+          ...MOCK_EVENTS[1]!,
+          comment: "Clean pass against IEC 62443-4-2 SL-2.",
+        },
+      ];
+      render(<VersionTimeline events={eventsWithComment} />);
+
+      const quote = screen.getByText(/IEC 62443-4-2 SL-2/i);
+      expect(quote).toBeInTheDocument();
+      expect(quote.closest("blockquote")).not.toBeNull();
+      expect(quote.closest("blockquote")).toHaveAttribute(
+        "aria-label",
+        `Note from ${MOCK_EVENTS[1]!.actor}`,
+      );
+    });
+
+    it("omits the quote block when comment is absent", () => {
+      render(<VersionTimeline events={MOCK_EVENTS} />);
+      expect(document.querySelector("blockquote")).toBeNull();
+    });
+
+    it("omits the quote block for whitespace-only comments", () => {
+      const eventsWithWhitespaceComment: TimelineEvent[] = [
+        { ...MOCK_EVENTS[1]!, comment: "   \n   " },
+      ];
+      render(<VersionTimeline events={eventsWithWhitespaceComment} />);
+      expect(document.querySelector("blockquote")).toBeNull();
+    });
+  });
+
   it("renders time elements with dateTime attribute", () => {
     render(<VersionTimeline events={MOCK_EVENTS} />);
 

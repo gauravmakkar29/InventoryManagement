@@ -72,6 +72,8 @@ function mapVersionEvents(version: FirmwareVersion): TimelineEvent[] {
     description: evt.description,
     color: EVENT_COLOR_MAP[evt.type],
     metadata: evt.metadata,
+    // Story 27.4 (#420) — surface approver/rejecter note on the corresponding event
+    comment: evt.approvalComment ?? evt.rejectionReason,
   }));
 }
 
