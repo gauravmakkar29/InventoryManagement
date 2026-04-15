@@ -11,8 +11,11 @@ import { ArrowLeft, ChevronRight, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDeviceInventory } from "@/lib/hooks/use-device-inventory";
 import type { MockDevice } from "@/lib/mock-data/inventory-data";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole } from "@/lib/rbac";
 import { StatusBadge } from "./device-table-helpers";
 import { LifecycleTab } from "./lifecycle-tab";
+import { OwnershipTab } from "./ownership-tab";
 
 // ---------------------------------------------------------------------------
 // Tab shell — minimal, in-file primitive. Kept small so future stories
@@ -182,6 +185,7 @@ function DeviceNotFound({ deviceId }: { deviceId: string }) {
 
 export function DeviceDetailPage() {
   const { deviceId } = useParams<{ deviceId: string }>();
+  const { groups } = useAuth();
   const navigate = useNavigate();
   const { devices, isLoading } = useDeviceInventory();
   const [activeTabId, setActiveTabId] = useState("overview");
@@ -216,6 +220,17 @@ export function DeviceDetailPage() {
     );
   }
 
+  // Story 27.3 (#419) AC9 — Ownership tab is gated: Technicians and
+  // Viewers do not see it. CustomerAdmin's record list is further filtered
+  // to their own customer inside the hook.
+  const role = getPrimaryRole(groups);
+  const canViewOwnership = role === "Admin" || role === "Manager" || role === "CustomerAdmin";
+
+  // MockDevice does not carry customerId today — use a sensible fallback
+  // so the Ownership tab still renders a seed record when mocked. Real
+  // backends return the current customerId from the device record.
+  const currentCustomerId = (device as unknown as { customerId?: string }).customerId ?? "cust-001";
+
   const tabs: DeviceDetailTab[] = [
     { id: "overview", label: "Overview", content: <OverviewTab device={device} /> },
     // Story 27.1 (#417) — device lifecycle timeline
@@ -225,7 +240,16 @@ export function DeviceDetailPage() {
       label: "Lifecycle",
       content: <LifecycleTab deviceId={device.id} currentStatus={device.status} />,
     },
-    // Future: { id: "ownership", label: "Ownership", content: <OwnershipTab /> } — Story 27.3
+    // Story 27.3 (#419) — chain of custody, role-gated
+    ...(canViewOwnership
+      ? [
+          {
+            id: "ownership",
+            label: "Ownership",
+            content: <OwnershipTab deviceId={device.id} currentCustomerId={currentCustomerId} />,
+          },
+        ]
+      : []),
   ];
 
   const activeTab = tabs.find((t) => t.id === activeTabId) ?? tabs[0]!;

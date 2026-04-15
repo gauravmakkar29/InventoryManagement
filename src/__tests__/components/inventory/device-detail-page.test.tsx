@@ -32,7 +32,24 @@ vi.mock("@/lib/hooks/use-device-inventory", () => ({
   }),
 }));
 
-// Import AFTER mock so the mock is applied
+// Story 27.3 (#419) wiring: DeviceDetailPage now reads useAuth to role-gate
+// the Ownership tab. Stub to Admin so all tabs render in these tests.
+vi.mock("@/lib/use-auth", () => ({
+  useAuth: () => ({ groups: ["Admin"] }),
+}));
+
+// Avoid needing a real CDC provider for the Ownership tab's hook.
+vi.mock("@/lib/providers/registry", async () => {
+  const actual = await vi.importActual<typeof import("@/lib/providers/registry")>(
+    "@/lib/providers/registry",
+  );
+  return {
+    ...actual,
+    useCDCProvider: () => null,
+  };
+});
+
+// Import AFTER mocks so the mocks are applied
 import { DeviceDetailPage } from "@/app/components/inventory/device-detail-page";
 
 // ---------------------------------------------------------------------------
