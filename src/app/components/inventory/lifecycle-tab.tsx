@@ -21,6 +21,7 @@ import {
   type TimelineEventColor,
 } from "@/app/components/shared/version-timeline";
 import { LIFECYCLE_CATEGORIES, LifecycleFilters } from "./lifecycle-filters";
+import { DeviceStatusSummary } from "./device-status-summary";
 
 // ---------------------------------------------------------------------------
 // Category → color mapping
@@ -118,9 +119,27 @@ function PartialFailureBanner({ sources }: { sources: readonly string[] }) {
 
 export interface LifecycleTabProps {
   deviceId: string;
+  /** Story 27.5 (#421) — required for the Status Summary panel. */
+  currentStatus: string;
+  /**
+   * Story 27.5 (#421) — device creation time anchors the first status
+   * interval. Optional — falls back to 180 days ago when the device model
+   * doesn't carry a timestamp (MockDevice currently does not).
+   */
+  deviceCreatedAt?: string;
 }
 
-export function LifecycleTab({ deviceId }: LifecycleTabProps) {
+const DEFAULT_DEVICE_CREATED_FALLBACK_DAYS = 180;
+
+export function LifecycleTab({ deviceId, currentStatus, deviceCreatedAt }: LifecycleTabProps) {
+  const effectiveCreatedAt = useMemo(
+    () =>
+      deviceCreatedAt ??
+      new Date(
+        Date.now() - DEFAULT_DEVICE_CREATED_FALLBACK_DAYS * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+    [deviceCreatedAt],
+  );
   const [timeRange, setTimeRange] = useState<LifecycleTimeRangePreset>("30d");
   const [selectedCategories, setSelectedCategories] = useState<Set<DeviceLifecycleCategory>>(
     () => new Set<DeviceLifecycleCategory>(LIFECYCLE_CATEGORIES),
@@ -156,6 +175,14 @@ export function LifecycleTab({ deviceId }: LifecycleTabProps) {
       aria-labelledby="device-detail-tab-lifecycle"
       className="space-y-4 pt-6"
     >
+      <DeviceStatusSummary
+        deviceId={deviceId}
+        currentStatus={currentStatus}
+        deviceCreatedAt={effectiveCreatedAt}
+        lifecycleEvents={events}
+        timeRange={timeRange}
+      />
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <LifecycleFilters
           timeRange={timeRange}

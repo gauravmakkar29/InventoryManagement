@@ -2,6 +2,26 @@
 // IMS Gen 2 — Core Type Definitions (Section 4.4)
 // =============================================================================
 
+// --- Story 27.5 (#421): Device Status Transition History ---
+
+/** Source category for a status change — where the change originated. */
+export type DeviceStatusSource = "user" | "system" | "device" | "unknown";
+
+/**
+ * A half-open interval during which the device was in a specific status.
+ * `endAt === null` indicates the currently active status.
+ */
+export interface DeviceStatusTransition {
+  /** DeviceStatus enum value; kept as string to avoid a forward-declaration cycle. */
+  status: string;
+  startAt: string; // ISO-8601
+  endAt: string | null;
+  durationMs: number;
+  actor: string; // userId, "system", "device", or "unknown"
+  source: DeviceStatusSource;
+  reason?: string;
+}
+
 // --- Story 27.1 (#417): Device Lifecycle 360 view-models ---
 
 /**
