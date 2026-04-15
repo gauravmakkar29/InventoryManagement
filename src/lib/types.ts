@@ -112,6 +112,10 @@ export interface Firmware {
   familyId?: string;
   /** Lifecycle state for secure distribution (#355) */
   lifecycleState?: FirmwareLifecycleState;
+  /** Optional approver's note captured at stage promotion (Story 27.4, #420) */
+  approvalComment?: string;
+  /** Required reason when firmware is rejected at any stage (Story 27.4, #420) */
+  rejectionReason?: string;
 }
 
 /** Firmware family — groups versions under a product line (#354) */
@@ -161,6 +165,12 @@ export interface FirmwareAssignment {
   previousFirmwareId?: string;
   previousFirmwareVersion?: string;
   downloadTokenId?: string;
+  /**
+   * Required when the assignment downgrades the device to an older version
+   * (i.e. `isRollback(firmwareVersion, previousFirmwareVersion) === true`).
+   * Story 27.4, #420.
+   */
+  rollbackReason?: string;
 }
 
 export interface ServiceOrder {

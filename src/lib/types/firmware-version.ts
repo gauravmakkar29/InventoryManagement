@@ -25,6 +25,18 @@ export interface FirmwareVersionEvent {
   timestamp: string; // ISO 8601
   description: string;
   metadata?: Record<string, string>;
+  /**
+   * Optional free-text comment captured on APPROVED events (Story 27.4, #420).
+   * Max 1000 chars. Persisted on the event itself so the timeline can render
+   * it inline with the approval node.
+   */
+  approvalComment?: string;
+  /**
+   * Required free-text reason captured on REJECTED events (Story 27.4, #420).
+   * Min 10, max 1000 chars. Persisted on the event itself so the timeline can
+   * render it inline with the rejection node.
+   */
+  rejectionReason?: string;
 }
 
 /** Color category for timeline rendering per AC7 */

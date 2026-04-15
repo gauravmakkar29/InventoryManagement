@@ -122,6 +122,27 @@ export const MOCK_FIRMWARE_ASSIGNMENTS: FirmwareAssignment[] = [
     assignedAt: "2025-09-12T09:15:00Z",
     assignmentMethod: "OTA",
   },
+
+  // --- Rollback example (Story 27.4, #420) ---
+  // Device 1 was briefly on v4.1.0 (fa-001 assigned 2026-04-04) but rolled back
+  // to v4.0.2 the next day after a regression was observed in the field. The
+  // `rollbackReason` field is required per Story 27.4 AC5.
+  {
+    id: "fa-009",
+    deviceId: "dev-001",
+    deviceName: "SG-3600-INV-001",
+    firmwareId: "fw-004",
+    firmwareVersion: "v4.0.2",
+    firmwareName: "INV-3200 Controller",
+    assignedBy: "u-admin-01",
+    assignedByEmail: "admin@hlm.com",
+    assignedAt: "2026-04-05T08:00:00Z",
+    assignmentMethod: "MANUAL",
+    previousFirmwareId: "fw-001",
+    previousFirmwareVersion: "v4.1.0",
+    rollbackReason:
+      "v4.1.0 caused intermittent MPPT disconnections at Shanghai HQ under peak-load conditions. Rolling back to last known-good v4.0.2 while engineering prepares a hotfix. Ref: incident INC-2026-0405-001.",
+  },
 ];
 
 /**
