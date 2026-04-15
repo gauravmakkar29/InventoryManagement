@@ -2,6 +2,25 @@
 // IMS Gen 2 — Core Type Definitions (Section 4.4)
 // =============================================================================
 
+// --- Story 27.3 (#419): Device Ownership / Custody Chain ---
+
+/**
+ * A half-open custody interval during which the device was assigned to
+ * a specific customer (and optionally a site). `endAt === null` marks
+ * the currently active assignment. Derived from the audit log.
+ */
+export interface DeviceOwnershipRecord {
+  customerId: string;
+  customerName: string;
+  siteId?: string;
+  siteName?: string;
+  startAt: string; // ISO-8601
+  endAt: string | null; // null => current
+  durationDays: number; // computed; for open intervals = now - startAt
+  transferredBy: { userId: string; displayName: string };
+  transferReason?: string;
+}
+
 // --- Story 27.5 (#421): Device Status Transition History ---
 
 /** Source category for a status change — where the change originated. */
