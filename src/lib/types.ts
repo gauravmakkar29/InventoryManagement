@@ -2,6 +2,33 @@
 // IMS Gen 2 — Core Type Definitions (Section 4.4)
 // =============================================================================
 
+// --- Story 27.1 (#417): Device Lifecycle 360 view-models ---
+
+/**
+ * Classification for a single event on the per-device lifecycle timeline.
+ *
+ * Projected from CDC events, firmware assignments, service orders, and audit
+ * entries — NOT a new system of record. See `device-lifecycle.mapper.ts`.
+ */
+export type DeviceLifecycleCategory = "Firmware" | "Service" | "Ownership" | "Status" | "Audit";
+
+export interface DeviceLifecycleEvent {
+  /** Stable synthetic id: `${sourceEntityType}:${sourceEntityId}:${timestamp}` */
+  id: string;
+  deviceId: string;
+  category: DeviceLifecycleCategory;
+  /** Machine-readable action code, e.g. "firmware.deployed", "status.changed" */
+  action: string;
+  actor: { userId: string; displayName: string };
+  /** ISO-8601 */
+  timestamp: string;
+  /** Human-readable one-liner for the timeline row */
+  summary: string;
+  sourceEntityType: "FirmwareAssignment" | "ServiceOrder" | "AuditLog" | "DigitalTwinSnapshot";
+  sourceEntityId: string;
+  metadata?: Record<string, unknown>;
+}
+
 // --- Status Enums ---
 
 export enum DeviceStatus {
