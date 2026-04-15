@@ -1,8 +1,14 @@
 // =============================================================================
-// LifecycleFilters — Story 27.1 (#417) Phase 2
+// LifecycleFilters — Story 27.1 (#417) Phase 2 + Story 27.2 (#418)
 //
 // Date-range preset selector + category multi-select for the device lifecycle
 // timeline. Pure presentation: state is lifted to the parent <LifecycleTab>.
+//
+// Story 27.2 additions:
+//   - `permittedCategories` — categories the current role may enable. Any
+//     category NOT in the set renders disabled with a tooltip.
+//   - `onResetToDefault` — optional; renders a "Reset to default" link-style
+//     button next to the filter chips.
 // =============================================================================
 
 import { cn } from "@/lib/utils";
@@ -38,6 +44,14 @@ export interface LifecycleFiltersProps {
   onTimeRangeChange: (value: LifecycleTimeRangePreset) => void;
   selectedCategories: ReadonlySet<DeviceLifecycleCategory>;
   onCategoryToggle: (category: DeviceLifecycleCategory) => void;
+  /**
+   * Story 27.2 (#418) — categories the current role may enable. Categories
+   * NOT in the set render disabled with a tooltip. Defaults to every
+   * category when omitted so callers that don't need RBAC keep working.
+   */
+  permittedCategories?: ReadonlySet<DeviceLifecycleCategory>;
+  /** Story 27.2 (#418) — optional Reset button; hidden when not provided. */
+  onResetToDefault?: () => void;
 }
 
 export function LifecycleFilters({
@@ -45,7 +59,12 @@ export function LifecycleFilters({
   onTimeRangeChange,
   selectedCategories,
   onCategoryToggle,
+  permittedCategories,
+  onResetToDefault,
 }: LifecycleFiltersProps) {
+  const isPermitted = (category: DeviceLifecycleCategory) =>
+    !permittedCategories || permittedCategories.has(category);
+
   return (
     <div
       role="toolbar"
@@ -82,20 +101,26 @@ export function LifecycleFilters({
         </span>
         {LIFECYCLE_CATEGORIES.map((category) => {
           const active = selectedCategories.has(category);
+          const permitted = isPermitted(category);
           return (
             <label
               key={category}
+              title={permitted ? undefined : "Not available for your role"}
               className={cn(
-                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[13px] font-medium transition-colors cursor-pointer select-none",
-                active
-                  ? "border-accent bg-accent-bg text-accent-text"
-                  : "border-border bg-card text-muted-foreground hover:bg-muted",
+                "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[13px] font-medium transition-colors select-none",
+                permitted
+                  ? active
+                    ? "cursor-pointer border-accent bg-accent-bg text-accent-text"
+                    : "cursor-pointer border-border bg-card text-muted-foreground hover:bg-muted"
+                  : "cursor-not-allowed border-border bg-muted/50 text-muted-foreground/60",
               )}
             >
               <input
                 type="checkbox"
-                checked={active}
-                onChange={() => onCategoryToggle(category)}
+                checked={permitted && active}
+                onChange={() => permitted && onCategoryToggle(category)}
+                disabled={!permitted}
+                aria-disabled={!permitted || undefined}
                 className="sr-only"
                 aria-label={`Toggle ${category} events`}
               />
@@ -104,6 +129,16 @@ export function LifecycleFilters({
           );
         })}
       </fieldset>
+
+      {onResetToDefault && (
+        <button
+          type="button"
+          onClick={onResetToDefault}
+          className="text-[12px] font-medium text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+        >
+          Reset to default
+        </button>
+      )}
     </div>
   );
 }
