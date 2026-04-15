@@ -62,7 +62,10 @@ const LEVEL_PRIORITY: Record<LogLevel, number> = {
 // =============================================================================
 // Console Transport (Development)
 // =============================================================================
+// This transport intentionally routes to `console.*` — it IS the dev-mode log
+// sink. The `no-console` lint rule is disabled for this class only.
 
+/* eslint-disable no-console */
 export class ConsoleTransport implements ILogTransport {
   send(entry: LogEntry): void {
     const { level, message, context, data } = entry;
@@ -85,6 +88,7 @@ export class ConsoleTransport implements ILogTransport {
     }
   }
 }
+/* eslint-enable no-console */
 
 // =============================================================================
 // JSON Transport (Production — pipe to CloudWatch, Datadog, etc.)
@@ -105,6 +109,7 @@ export class JsonTransport implements ILogTransport {
       navigator.sendBeacon?.(this.endpoint, json);
     } else {
       // Fallback: structured console output (captured by log aggregator)
+      // eslint-disable-next-line no-console -- structured JSON fallback sink
       console.log(json);
     }
   }

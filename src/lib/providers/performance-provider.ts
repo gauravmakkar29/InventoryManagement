@@ -91,7 +91,10 @@ function rateVital(name: WebVitalName, value: number): WebVitalMetric["rating"] 
 // =============================================================================
 // Console Reporter (Development)
 // =============================================================================
+// This reporter intentionally routes to `console.*` — it IS the dev-mode perf
+// sink. The `no-console` lint rule is disabled for this class only.
 
+/* eslint-disable no-console */
 export class ConsolePerformanceReporter implements IPerformanceReporter {
   reportVital(metric: WebVitalMetric): void {
     const icon = metric.rating === "good" ? "✓" : metric.rating === "poor" ? "✗" : "⚠";
@@ -104,6 +107,7 @@ export class ConsolePerformanceReporter implements IPerformanceReporter {
     console.debug(`[Perf] ${mark.name}: ${mark.duration.toFixed(1)}ms`, mark.metadata ?? "");
   }
 }
+/* eslint-enable no-console */
 
 // =============================================================================
 // Beacon Reporter (Production — send to analytics endpoint)
@@ -192,6 +196,7 @@ export function createPerformanceMonitor(
       }
 
       if (isDev) {
+        // eslint-disable-next-line no-console -- dev-mode init notice
         console.info("[Perf] Web Vitals monitoring started");
       }
     },
