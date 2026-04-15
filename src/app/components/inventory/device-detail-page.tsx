@@ -219,7 +219,12 @@ export function DeviceDetailPage() {
   const tabs: DeviceDetailTab[] = [
     { id: "overview", label: "Overview", content: <OverviewTab device={device} /> },
     // Story 27.1 (#417) — device lifecycle timeline
-    { id: "lifecycle", label: "Lifecycle", content: <LifecycleTab deviceId={device.id} /> },
+    // Story 27.5 (#421) — summary panel renders inside LifecycleTab
+    {
+      id: "lifecycle",
+      label: "Lifecycle",
+      content: <LifecycleTab deviceId={device.id} currentStatus={device.status} />,
+    },
     // Future: { id: "ownership", label: "Ownership", content: <OwnershipTab /> } — Story 27.3
   ];
 

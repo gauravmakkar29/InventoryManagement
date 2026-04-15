@@ -28,6 +28,16 @@ vi.mock("@/lib/hooks/use-device-lifecycle", () => ({
     hookState.lastTimeRange = opts?.timeRange;
     return hookState.result;
   },
+  // Simple passthrough for the DeviceStatusSummary's window calc —
+  // matches the real implementation's shape closely enough for tests
+  // that don't assert on exact timestamps.
+  resolveTimeRangeWindow: (preset: string) => {
+    if (preset === "all") return undefined;
+    const days = preset === "7d" ? 7 : preset === "30d" ? 30 : preset === "90d" ? 90 : 180;
+    const end = new Date().toISOString();
+    const start = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+    return { start, end };
+  },
 }));
 
 vi.mock("sonner", () => ({
@@ -69,7 +79,7 @@ describe("LifecycleTab", () => {
 
   it("shows the loading skeleton while the hook is loading", () => {
     hookState.result = { events: [], isLoading: true, unavailableSources: [] };
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
     expect(screen.getByRole("status", { name: /loading timeline/i })).toBeInTheDocument();
   });
 
@@ -86,7 +96,7 @@ describe("LifecycleTab", () => {
       unavailableSources: [],
     };
 
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
 
     expect(screen.getByText("Firmware event")).toBeInTheDocument();
     expect(screen.getByText("Service event")).toBeInTheDocument();
@@ -106,7 +116,7 @@ describe("LifecycleTab", () => {
       unavailableSources: [],
     };
 
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
 
     expect(screen.getByText("Audit event")).toBeInTheDocument();
 
@@ -121,7 +131,7 @@ describe("LifecycleTab", () => {
 
   it("requests a new time range when the range selector is changed", async () => {
     const user = userEvent.setup();
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
 
     expect(hookState.lastTimeRange).toBe("30d");
     await user.selectOptions(screen.getByLabelText(/range/i), "7d");
@@ -134,19 +144,19 @@ describe("LifecycleTab", () => {
       isLoading: false,
       unavailableSources: ["Audit"],
     };
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
     expect(screen.getByRole("alert")).toHaveTextContent(/audit history/i);
   });
 
   it("shows the empty state when no events match the current filter", () => {
     hookState.result = { events: [], isLoading: false, unavailableSources: [] };
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
     expect(screen.getByText(/no lifecycle events in this window/i)).toBeInTheDocument();
   });
 
   it("disables the Export CSV button when there are no visible events", () => {
     hookState.result = { events: [], isLoading: false, unavailableSources: [] };
-    render(<LifecycleTab deviceId="dev-001" />);
+    render(<LifecycleTab deviceId="dev-001" currentStatus="online" />);
     expect(screen.getByRole("button", { name: /export csv/i })).toBeDisabled();
   });
 });
