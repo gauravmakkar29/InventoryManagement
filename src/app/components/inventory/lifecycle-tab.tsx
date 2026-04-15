@@ -1,12 +1,21 @@
 // =============================================================================
-// LifecycleTab — Story 27.1 (#417) Phase 2
+// LifecycleTab — Story 27.1 (#417) Phase 2 + Story 27.2 (#418) + Story 27.5 (#421)
 //
 // Composes the existing VersionTimeline primitive with the
 // `useDeviceLifecycle` aggregation hook. Filters (date range + categories)
 // are client-side; only the time-range re-fetches.
+//
+// Story 27.2 adds persona-aware defaults:
+//   - Initial category selection comes from the current role's default
+//     lifecycle categories (see src/lib/rbac-lifecycle.ts).
+//   - Non-permitted categories are rendered disabled with a tooltip.
+//   - Selection is persisted to localStorage per {role, deviceId} so
+//     returning users see their last view.
+//   - A "Reset to default" button restores the role default and clears
+//     the localStorage entry.
 // =============================================================================
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Download } from "lucide-react";
 import { toast } from "sonner";
 import { generateCSV } from "@/lib/report-generator";
@@ -20,7 +29,14 @@ import {
   type TimelineEvent,
   type TimelineEventColor,
 } from "@/app/components/shared/version-timeline";
-import { LIFECYCLE_CATEGORIES, LifecycleFilters } from "./lifecycle-filters";
+import { useAuth } from "@/lib/use-auth";
+import { getPrimaryRole, type Role } from "@/lib/rbac";
+import {
+  getDefaultLifecycleCategories,
+  getPermittedLifecycleCategories,
+  lifecycleFilterStorageKey,
+} from "@/lib/rbac-lifecycle";
+import { LifecycleFilters } from "./lifecycle-filters";
 import { DeviceStatusSummary } from "./device-status-summary";
 
 // ---------------------------------------------------------------------------
@@ -114,6 +130,48 @@ function PartialFailureBanner({ sources }: { sources: readonly string[] }) {
 }
 
 // ---------------------------------------------------------------------------
+// localStorage helpers for persona filter persistence (Story 27.2)
+// ---------------------------------------------------------------------------
+
+function readPersistedCategories(
+  storageKey: string,
+  permitted: ReadonlySet<DeviceLifecycleCategory>,
+): DeviceLifecycleCategory[] | null {
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return null;
+    const filtered = parsed.filter(
+      (v): v is DeviceLifecycleCategory =>
+        typeof v === "string" && permitted.has(v as DeviceLifecycleCategory),
+    );
+    return filtered;
+  } catch {
+    return null;
+  }
+}
+
+function writePersistedCategories(
+  storageKey: string,
+  categories: ReadonlySet<DeviceLifecycleCategory>,
+): void {
+  try {
+    window.localStorage.setItem(storageKey, JSON.stringify([...categories]));
+  } catch {
+    // Quota / private-mode — silently ignore; UX still works in-memory.
+  }
+}
+
+function clearPersistedCategories(storageKey: string): void {
+  try {
+    window.localStorage.removeItem(storageKey);
+  } catch {
+    // ignore
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Main tab content
 // ---------------------------------------------------------------------------
 
@@ -140,29 +198,66 @@ export function LifecycleTab({ deviceId, currentStatus, deviceCreatedAt }: Lifec
       ).toISOString(),
     [deviceCreatedAt],
   );
-  const [timeRange, setTimeRange] = useState<LifecycleTimeRangePreset>("30d");
-  const [selectedCategories, setSelectedCategories] = useState<Set<DeviceLifecycleCategory>>(
-    () => new Set<DeviceLifecycleCategory>(LIFECYCLE_CATEGORIES),
+
+  // Story 27.2: resolve current user's role + persona defaults
+  const { groups } = useAuth();
+  const role: Role = useMemo(() => getPrimaryRole(groups), [groups]);
+  const permittedCategories = useMemo(
+    () => new Set<DeviceLifecycleCategory>(getPermittedLifecycleCategories(role)),
+    [role],
   );
+  const storageKey = useMemo(() => lifecycleFilterStorageKey(role, deviceId), [role, deviceId]);
+
+  const [timeRange, setTimeRange] = useState<LifecycleTimeRangePreset>("30d");
+
+  // Initialize selection from localStorage if present, otherwise from the
+  // persona default. Persisted values are filtered to the currently
+  // permitted set — a role change or a policy tightening won't re-enable
+  // a category the user is no longer allowed to see.
+  const [selectedCategories, setSelectedCategories] = useState<Set<DeviceLifecycleCategory>>(() => {
+    const persisted = readPersistedCategories(storageKey, permittedCategories);
+    if (persisted !== null) return new Set(persisted);
+    return new Set(getDefaultLifecycleCategories(role));
+  });
+
+  // Persist selection when it changes (debounced by React's batch update
+  // semantics; a rapid burst of toggles still only triggers a few writes).
+  useEffect(() => {
+    writePersistedCategories(storageKey, selectedCategories);
+  }, [storageKey, selectedCategories]);
 
   const { events, isLoading, unavailableSources } = useDeviceLifecycle(deviceId, { timeRange });
 
-  // Client-side category filter over the already-fetched events
+  // Client-side category filter over the already-fetched events.
+  // We also gate on permittedCategories so a stale selection can never
+  // surface an event the role isn't allowed to see.
   const visibleEvents = useMemo(
-    () => events.filter((e) => selectedCategories.has(e.category)),
-    [events, selectedCategories],
+    () =>
+      events.filter(
+        (e) => permittedCategories.has(e.category) && selectedCategories.has(e.category),
+      ),
+    [events, selectedCategories, permittedCategories],
   );
 
   const timelineEvents = useMemo(() => visibleEvents.map(mapToTimelineEvent), [visibleEvents]);
 
-  const handleCategoryToggle = useCallback((category: DeviceLifecycleCategory) => {
-    setSelectedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(category)) next.delete(category);
-      else next.add(category);
-      return next;
-    });
-  }, []);
+  const handleCategoryToggle = useCallback(
+    (category: DeviceLifecycleCategory) => {
+      if (!permittedCategories.has(category)) return; // defensive
+      setSelectedCategories((prev) => {
+        const next = new Set(prev);
+        if (next.has(category)) next.delete(category);
+        else next.add(category);
+        return next;
+      });
+    },
+    [permittedCategories],
+  );
+
+  const handleResetToDefault = useCallback(() => {
+    setSelectedCategories(new Set(getDefaultLifecycleCategories(role)));
+    clearPersistedCategories(storageKey);
+  }, [role, storageKey]);
 
   const handleExport = useCallback(() => {
     triggerCsvDownload(visibleEvents, deviceId);
@@ -189,6 +284,8 @@ export function LifecycleTab({ deviceId, currentStatus, deviceCreatedAt }: Lifec
           onTimeRangeChange={setTimeRange}
           selectedCategories={selectedCategories}
           onCategoryToggle={handleCategoryToggle}
+          permittedCategories={permittedCategories}
+          onResetToDefault={handleResetToDefault}
         />
         <button
           type="button"
