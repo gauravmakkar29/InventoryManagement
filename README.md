@@ -1,10 +1,36 @@
-# IMS Gen 2 -- Enterprise React Template
+<div align="center">
 
-> **Production-ready, cloud-agnostic enterprise application template** with pluggable providers, NIST 800-53 security controls, and multi-IaC infrastructure. Fork it, set 3 env vars, deploy to any cloud.
+# IMS Gen 2
 
-`Enterprise RBAC` | `NIST 800-53` | `Cloud-Agnostic` | `12 Modules` | `530+ Tests` | `Multi-IaC`
+### Enterprise Hardware Lifecycle Management Platform
 
-![Build](https://img.shields.io/badge/build-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-85%25+-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Node](https://img.shields.io/badge/node-20+-purple) ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue) ![React](https://img.shields.io/badge/React-18-61dafb)
+_Production-ready, cloud-agnostic enterprise application template with pluggable providers, NIST 800-53 security controls, and multi-IaC infrastructure._
+
+**Fork it. Set 3 env vars. Deploy to any cloud.**
+
+<br />
+
+[![Build](https://img.shields.io/badge/build-passing-10B981?style=flat-square)](https://github.com/gauravmakkar29/InventoryManagement/actions)
+[![Coverage](https://img.shields.io/badge/coverage-85%25+-2563EB?style=flat-square)](#testing)
+[![Tests](https://img.shields.io/badge/tests-530%2B_unit_%2B_E2E-059669?style=flat-square)](#testing)
+[![License](https://img.shields.io/badge/license-MIT-475569?style=flat-square)](LICENSE)
+
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](#tech-stack)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat-square&logo=typescript&logoColor=white)](#tech-stack)
+[![Vite](https://img.shields.io/badge/Vite-6.3-646CFF?style=flat-square&logo=vite&logoColor=white)](#tech-stack)
+[![Tailwind](https://img.shields.io/badge/Tailwind-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](#tech-stack)
+[![Node](https://img.shields.io/badge/Node-20+-339933?style=flat-square&logo=node.js&logoColor=white)](#quick-start)
+
+[![NIST 800-53](https://img.shields.io/badge/NIST_800--53-37_controls-DC2626?style=flat-square)](Docs/nist-800-53-control-mapping.md)
+[![RBAC](https://img.shields.io/badge/RBAC-5_roles-7C3AED?style=flat-square)](#security-nist-800-53-built-in)
+[![WCAG](https://img.shields.io/badge/WCAG-2.1_AA-0F766E?style=flat-square)](#design-system)
+[![Multi-IaC](https://img.shields.io/badge/Multi--IaC-Terraform_%7C_CDK_%7C_Amplify-F59E0B?style=flat-square)](#infrastructure-as-code-multi-iac)
+
+<br />
+
+<sub><strong>QUICK NAV</strong> · <a href="#quick-start">Quick Start</a> · <a href="#system-architecture">Architecture</a> · <a href="#testing">Testing</a> · <a href="#how-to-use-as-a-template">Use as Template</a> · <a href="#documentation">Docs</a></sub>
+
+</div>
 
 ---
 
@@ -384,12 +410,90 @@ All located in `src/components/` -- Radix primitive + Tailwind + `class-variance
 
 ## Testing
 
-| Type           | Stack                         | Command                  |
-| -------------- | ----------------------------- | ------------------------ |
-| Unit (530+)    | Vitest + RTL + vitest-axe     | `npm test`               |
-| Coverage       | Istanbul                      | `npm run test:coverage`  |
-| E2E Regression | Java 17 + Playwright + TestNG | `npm run test:e2e`       |
-| E2E Smoke      | Same                          | `npm run test:e2e:smoke` |
+**Multi-layer test automation** -- 530+ unit tests, full E2E framework, visual regression, accessibility assertions, Storybook, and CI integration. All part of the template -- no separate setup.
+
+### Test Layers
+
+| Layer                       | Stack                                          | Scope                                       | Command                   |
+| --------------------------- | ---------------------------------------------- | ------------------------------------------- | ------------------------- |
+| **Unit (530+)**             | Vitest 3 + React Testing Library + vitest-axe  | Components, hooks, utils, providers         | `npm test`                |
+| **Coverage Gate**           | Istanbul (V8)                                  | >= 85% per `code-quality-rulebook`          | `npm run test:coverage`   |
+| **Accessibility (Unit)**    | vitest-axe + `jsx-a11y` ESLint                 | WCAG 2.1 AA assertions inside unit tests    | `npm test` (integrated)   |
+| **E2E Regression**          | Java 17 + Maven + TestNG + Playwright + Spring | Full UI + API regression suite              | `npm run test:e2e`        |
+| **E2E Smoke**               | Same                                           | Critical-path (login, CRUD, deploy)         | `npm run test:e2e:smoke`  |
+| **E2E Module**              | Same                                           | Single-module targeted run                  | `npm run test:e2e:module` |
+| **E2E Headed (debug)**      | Same + headed Chromium                         | Local debug with visible browser            | `npm run test:e2e:headed` |
+| **Visual Regression**       | Playwright `toHaveScreenshot()`                | Pixel-diff snapshots, `0.003` max ratio     | `npm run test:visual`     |
+| **Component Visualization** | Storybook 8 + `@storybook/addon-a11y`          | Interactive playground + per-component a11y | `npm run storybook`       |
+| **Type Safety**             | TypeScript 5.7 strict, no `any`                | Build-time type check                       | `npm run build`           |
+| **Lint**                    | ESLint 9 + commitlint (`config-conventional`)  | Code quality + commit message format        | `npm run lint`            |
+
+### E2E Framework Architecture (`e2e/ims-e2e/`)
+
+Java/Maven multi-module framework using the **Actor / DSL pattern** -- tests read like plain English:
+
+```java
+actor.attemptsTo(Click.on(LOGIN_BUTTON));
+actor.attemptsTo(Enter.textInto(USERNAME_FIELD).value("admin@company.com"));
+actor.should(See.that(DASHBOARD_HEADER).isVisible());
+```
+
+| Module         | Responsibility                                                                         |
+| -------------- | -------------------------------------------------------------------------------------- |
+| `ims-core`     | Actor pattern, DSL actions, annotations, assertions, ExtentReports HTML reporting      |
+| `ims-core-ui`  | Playwright browser management, UI page actions (Click, Type, Select, Verify), locators |
+| `ims-core-api` | REST/GraphQL API client, HTTP wrappers, JSON utilities                                 |
+| `ims-tests`    | IMS-specific page objects, action implementations, macros, TestNG suites               |
+
+**3-layer page objects**: Pages (locators) -> Impls (action compositions) -> Macros (high-level flows).
+
+**Spring profiles**: `application-web.properties` (browser config), `application-test.properties` (environment), `application-local.properties` (local debug overrides, git-ignored).
+
+### Visual Regression (`e2e/visual/`)
+
+Playwright Node-based snapshot diffing -- separate from the Java E2E framework.
+
+```bash
+# Terminal 1 -- build & serve production bundle
+npm run build && npm run preview           # http://localhost:4173
+
+# Terminal 2 -- run visual tests
+npm run test:visual                        # compare against committed snapshots
+npm run test:visual:update                 # regenerate baselines after intentional UI change
+```
+
+| Concept         | Detail                                     |
+| --------------- | ------------------------------------------ |
+| Config          | `e2e/visual/playwright.config.ts`          |
+| Test files      | `e2e/visual/tests/*.visual.ts`             |
+| Baseline images | `e2e/visual/snapshots/` (committed to git) |
+| Diff results    | `e2e/visual/test-results/` (git-ignored)   |
+| Tolerance       | `maxDiffPixelRatio: 0.003`, single worker  |
+
+### Code Generation
+
+Schema-first contracts with CI-checked generation:
+
+| Generator     | Source                        | Output                                | Command                   |
+| ------------- | ----------------------------- | ------------------------------------- | ------------------------- |
+| GraphQL types | `codegen.ts`                  | `src/lib/graphql/generated/`          | `npm run codegen`         |
+| OpenAPI types | `src/lib/schema/openapi.yaml` | `src/lib/schema/generated/openapi.ts` | `npm run codegen:openapi` |
+
+### CI Integration (`.github/workflows/`)
+
+| Workflow          | Trigger                    | Runs                                        |
+| ----------------- | -------------------------- | ------------------------------------------- |
+| `ci.yml`          | PR + push                  | Build + lint + unit + coverage gate (>=85%) |
+| `e2e-nightly.yml` | Scheduled nightly + manual | Full E2E regression suite                   |
+| `deploy.yml`      | Push to main               | Build + deploy to environment               |
+
+### Testing Rulebooks
+
+Enforced standards live in `SPEC/rulebooks/`:
+
+- `code-quality-rulebook.md` -- file size limits, naming, SRP, DRY, >= 85% coverage, no `any`, no `console.log`
+- `e2e-rulebook.md` -- test plan rules, framework architecture, naming, selectors
+- `git-workflow-rulebook.md` -- commit format, branch naming, PR process, story-to-code traceability
 
 ---
 
