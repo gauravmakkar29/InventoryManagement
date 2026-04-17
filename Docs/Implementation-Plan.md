@@ -44,14 +44,17 @@
 
 ### 1.3 Artifact locations
 
-| Artifact                      | Location                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------- |
-| Business requirements         | [`Docs/Requirement.md`](./Requirement.md)                                             |
-| Build / Epic / Story tracking | [GitHub Project #1](https://github.com/users/gauravmakkar29/projects/1)               |
-| Epic milestones               | [GitHub Milestones](https://github.com/gauravmakkar29/InventoryManagement/milestones) |
-| Story detail                  | `Docs/epics/epic-{N}/story-{N.M}.md`                                                  |
-| Per-epic tech spec            | `Docs/epics/epic-{N}/tech-spec.md`                                                    |
-| Master brief                  | `Docs/IMS-Gen2-Detailed-Project-Brief-For-Terraform.md`                               |
+> **Heads-up on Build Cycles vs Milestones.** Build cycles ("Build 1 — Core Platform", …) are **NOT** GitHub milestones. They live **only** as options on the `Release` single-select field inside [Project #1](https://github.com/users/gauravmakkar29/projects/1). The repo's [Milestones page](https://github.com/gauravmakkar29/InventoryManagement/milestones) is used exclusively for **epics** (one milestone per epic). To see build-cycle grouping, open the project board and group / filter by the `Release` field.
+
+| Artifact                  | Location                                                                                                                                            |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Business requirements     | [`Docs/Requirement.md`](./Requirement.md)                                                                                                           |
+| **Build cycles**          | [Project #1](https://github.com/users/gauravmakkar29/projects/1) → `Release` field (6 options: Build 1–6). Not in the Milestones page.              |
+| **Epic grouping**         | [GitHub Milestones](https://github.com/gauravmakkar29/InventoryManagement/milestones) — one milestone per epic (Epic 1 … Epic 27).                  |
+| Issue / Story tracking    | [Project #1 board](https://github.com/users/gauravmakkar29/projects/1) — sort, filter, and group by Status, Sprint, Priority, Release (build), etc. |
+| Story detail (functional) | `Docs/epics/epic-{N}/story-{N.M}.md`                                                                                                                |
+| Per-epic tech spec        | `Docs/epics/epic-{N}/tech-spec.md`                                                                                                                  |
+| Master brief              | `Docs/IMS-Gen2-Detailed-Project-Brief-For-Terraform.md`                                                                                             |
 
 ---
 
@@ -68,7 +71,7 @@ IMS Gen 2 is delivered across **six build cycles**. Each cycle builds on the pre
 | **5** | **Quality & Resilience**      |    18 | 21, 22            | Refactor state management and data layer for long-term maintainability and consistent behaviour under load.                                                                      |
 | **6** | **Production Ready**          |     5 | 23                | Final design-system consolidation and release-candidate polish for GA.                                                                                                           |
 
-> **Where this lives:** the `Release` single-select field on [GitHub Project #1](https://github.com/users/gauravmakkar29/projects/1) stores each item's build-cycle assignment. Filtering the board by `Release` reproduces the same grouping used below.
+> **Where this lives.** Build cycles are stored as values of the `Release` single-select field on [GitHub Project #1](https://github.com/users/gauravmakkar29/projects/1) — **not** as GitHub Milestones. Open the project, group or filter the board by `Release`, and you'll see the same six-cycle grouping used in this document. The [Milestones page](https://github.com/gauravmakkar29/InventoryManagement/milestones) holds epics only.
 
 ---
 
