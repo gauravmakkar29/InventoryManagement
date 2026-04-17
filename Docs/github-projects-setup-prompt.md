@@ -15,23 +15,23 @@ this guide uses the **GitHub** column — mentally swap in your Jira term as you
 
 > **Working demo links below point at this repository** — `gauravmakkar29/InventoryManagement` + [Project #1](https://github.com/users/gauravmakkar29/projects/1). If you use this prompt to bootstrap a new project, the **Section 2 automation prompt** still uses `ORG` / `REPO` / `N` placeholders — that's intentional.
 
-| Jira term          | GitHub equivalent                                          | Where to see it (demo link)                                                                                                                                                                                                                                     | Notes                                                                        |
-| ------------------ | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Story / Task / Bug | **Issue** (with label)                                     | [Issues list](https://github.com/gauravmakkar29/InventoryManagement/issues) · [New Issue chooser](https://github.com/gauravmakkar29/InventoryManagement/issues/new/choose)                                                                                      | One issue type in GitHub; differentiate via `story` / `bug` / `task` labels  |
-| Epic               | **Milestone** (or `epic:N` label)                          | [Milestones](https://github.com/gauravmakkar29/InventoryManagement/milestones) · [Labels](https://github.com/gauravmakkar29/InventoryManagement/labels)                                                                                                         | Milestones group issues toward a target date; labels enable filtering        |
-| Sprint             | **Iteration** (Project field)                              | [Project board](https://github.com/users/gauravmakkar29/projects/1) · [Project Settings](https://github.com/users/gauravmakkar29/projects/1/settings) (Sprint field configured here)                                                                            | Configured on the project's Sprint field (Manual Step 1)                     |
-| Release / Version  | **Milestone** (release)                                    | [Milestones](https://github.com/gauravmakkar29/InventoryManagement/milestones) · [Project board](https://github.com/users/gauravmakkar29/projects/1) (Release roadmap tab)                                                                                      | Same primitive as epics — separated by naming convention (`v1.0.0 — MVP`)    |
-| Story Points       | **Story Points** (Number field)                            | [Insights (Velocity chart)](https://github.com/users/gauravmakkar29/projects/1/insights)                                                                                                                                                                        | Custom project field (Step 8b)                                               |
-| Priority           | **Priority** (Single Select)                               | [Project board — group by Priority](https://github.com/users/gauravmakkar29/projects/1) · [Labels](https://github.com/gauravmakkar29/InventoryManagement/labels)                                                                                                | Custom project field + `P0`–`P3` labels (Step 8a)                            |
-| Status / Workflow  | **Status** (Single Select)                                 | [Project board](https://github.com/users/gauravmakkar29/projects/1) · [Project Workflows](https://github.com/users/gauravmakkar29/projects/1/workflows)                                                                                                         | Backlog → Sprint Ready → In Development → In Review → In QA → Done → Blocked |
-| Assignee           | **Assignee**                                               | [My open issues](https://github.com/issues/assigned) · [My assigned on this repo](https://github.com/gauravmakkar29/InventoryManagement/issues/assigned/gauravmakkar29)                                                                                         | Native on every issue                                                        |
-| Components         | **Labels** (`infra`, `test`, …)                            | [Labels](https://github.com/gauravmakkar29/InventoryManagement/labels)                                                                                                                                                                                          | Use type/area labels to categorize                                           |
-| Board              | **Project (V2) View**                                      | [Project home](https://github.com/users/gauravmakkar29/projects/1)                                                                                                                                                                                              | Board / Table / Roadmap layouts on the same project                          |
-| JQL                | **Filter syntax** (`is:open label:bug iteration:@current`) | [Open bugs in this repo](https://github.com/gauravmakkar29/InventoryManagement/issues?q=is%3Aopen+label%3Abug) · [GitHub search syntax docs](https://docs.github.com/en/issues/tracking-your-work-with-issues/filtering-and-searching-issues-and-pull-requests) | Similar semantics, different grammar                                         |
-| Parent link        | **Task list / Issue reference** (`#123`, `- [ ] #123`)     | [Issues list](https://github.com/gauravmakkar29/InventoryManagement/issues) · [Milestone 1 detail](https://github.com/gauravmakkar29/InventoryManagement/milestone/1)                                                                                           | Tracked via issue body checklists and milestone membership                   |
-| Reports / Gadgets  | **Insights charts**                                        | [Project Insights](https://github.com/users/gauravmakkar29/projects/1/insights)                                                                                                                                                                                 | Sprint burn-up, velocity, bug trend, epic progress (Manual Step 4)           |
-| Automation rules   | **Built-in Workflows**                                     | [Project Workflows](https://github.com/users/gauravmakkar29/projects/1/workflows)                                                                                                                                                                               | Auto-add to project, status on close/merge/review (Manual Step 3)            |
-| Permission scheme  | **CODEOWNERS + Branch protection**                         | [Issue templates](https://github.com/gauravmakkar29/InventoryManagement/tree/main/.github/ISSUE_TEMPLATE) · [Branch rules](https://github.com/gauravmakkar29/InventoryManagement/settings/branches) _(admin-only)_                                              | Reviewer enforcement + merge gating                                          |
+| Jira term          | GitHub equivalent                                          | Where to see it (demo link)                                                                                                                                                                                                                                     | Notes                                                                                                      |
+| ------------------ | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Story / Task / Bug | **Issue** (with label)                                     | [Issues list](https://github.com/gauravmakkar29/InventoryManagement/issues) · [New Issue chooser](https://github.com/gauravmakkar29/InventoryManagement/issues/new/choose)                                                                                      | One issue type in GitHub; differentiate via `story` / `bug` / `task` labels                                |
+| Epic               | **Milestone** (one per epic)                               | [Milestones](https://github.com/gauravmakkar29/InventoryManagement/milestones)                                                                                                                                                                                  | STEP 3 creates one milestone per `EPICS` entry. No `epic:N` labels (redundant with milestones).            |
+| Sprint             | **Iteration** (Project field)                              | [Project board](https://github.com/users/gauravmakkar29/projects/1) · [Project Settings](https://github.com/users/gauravmakkar29/projects/1/settings) (Sprint field configured here)                                                                            | Configured on the project's Sprint field (Manual Step 1)                                                   |
+| Release / Version  | **`Release` project field** (Build Cycle)                  | [Build Cycles view](https://github.com/users/gauravmakkar29/projects/1/views/5) · [Project Settings](https://github.com/users/gauravmakkar29/projects/1/settings) → Release field                                                                               | STEP 8a creates this single-select field with options `Build 1 — …` … `Build N — …`. Group any view by it. |
+| Story Points       | **Story Points** (Number field)                            | [Insights (Velocity chart)](https://github.com/users/gauravmakkar29/projects/1/insights)                                                                                                                                                                        | Custom project field (Step 8b)                                                                             |
+| Priority           | **Priority** (Single Select)                               | [Project board — group by Priority](https://github.com/users/gauravmakkar29/projects/1) · [Labels](https://github.com/gauravmakkar29/InventoryManagement/labels)                                                                                                | Custom project field + `P0`–`P3` labels (Step 8a)                                                          |
+| Status / Workflow  | **Status** (Single Select)                                 | [Project board](https://github.com/users/gauravmakkar29/projects/1) · [Project Workflows](https://github.com/users/gauravmakkar29/projects/1/workflows)                                                                                                         | Backlog → Sprint Ready → In Development → In Review → In QA → Done → Blocked                               |
+| Assignee           | **Assignee**                                               | [My open issues](https://github.com/issues/assigned) · [My assigned on this repo](https://github.com/gauravmakkar29/InventoryManagement/issues/assigned/gauravmakkar29)                                                                                         | Native on every issue                                                                                      |
+| Components         | **Labels** (`infra`, `test`, …)                            | [Labels](https://github.com/gauravmakkar29/InventoryManagement/labels)                                                                                                                                                                                          | Use type/area labels to categorize                                                                         |
+| Board              | **Project (V2) View**                                      | [Project home](https://github.com/users/gauravmakkar29/projects/1)                                                                                                                                                                                              | Board / Table / Roadmap layouts on the same project                                                        |
+| JQL                | **Filter syntax** (`is:open label:bug iteration:@current`) | [Open bugs in this repo](https://github.com/gauravmakkar29/InventoryManagement/issues?q=is%3Aopen+label%3Abug) · [GitHub search syntax docs](https://docs.github.com/en/issues/tracking-your-work-with-issues/filtering-and-searching-issues-and-pull-requests) | Similar semantics, different grammar                                                                       |
+| Parent link        | **Task list / Issue reference** (`#123`, `- [ ] #123`)     | [Issues list](https://github.com/gauravmakkar29/InventoryManagement/issues) · [Milestone 1 detail](https://github.com/gauravmakkar29/InventoryManagement/milestone/1)                                                                                           | Tracked via issue body checklists and milestone membership                                                 |
+| Reports / Gadgets  | **Insights charts**                                        | [Project Insights](https://github.com/users/gauravmakkar29/projects/1/insights)                                                                                                                                                                                 | Sprint burn-up, velocity, bug trend, epic progress (Manual Step 4)                                         |
+| Automation rules   | **Built-in Workflows**                                     | [Project Workflows](https://github.com/users/gauravmakkar29/projects/1/workflows)                                                                                                                                                                               | Auto-add to project, status on close/merge/review (Manual Step 3)                                          |
+| Permission scheme  | **CODEOWNERS + Branch protection**                         | [Issue templates](https://github.com/gauravmakkar29/InventoryManagement/tree/main/.github/ISSUE_TEMPLATE) · [Branch rules](https://github.com/gauravmakkar29/InventoryManagement/settings/branches) _(admin-only)_                                              | Reviewer enforcement + merge gating                                                                        |
 
 **Quick rule of thumb:** _Stories become Issues, Epics become Milestones, Sprints become
 Iterations._ Everything else is a field, label, or native GitHub primitive.
@@ -122,6 +122,21 @@ me to run anything manually.
 
 ---
 
+### HIERARCHY THIS PROMPT CREATES (read first)
+
+```
+Release  (project field, single-select)  ──►  "Build 1 — Core Platform", "Build 2 — …"
+    │
+    └──►  Epic  (GitHub milestone, one per epic)  ──►  "Epic 1: Authentication", "Epic 2: …"
+              │
+              └──►  Story / Bug / Task  (GitHub issue, labelled + assigned to a milestone
+                    + tagged with a Release value on the project board)
+```
+
+> **Why this shape:** `Release` groups multi-sprint "build cycles" (the outcome-driven waves of delivery). `Epic` milestones group issues within an epic and give you a built-in progress bar per epic. Stories and bugs are plain GitHub issues — they pick up their epic via their milestone and their build cycle via the `Release` field on the project board.
+
+The four layers are the **selling point of this prompt**. Field names, option names, and labels below are sensible defaults — adapt them freely. **Do not change the four-layer hierarchy** (Release → Epic → Issue + field/milestone/label wiring) unless you want a different workflow.
+
 ### CONFIGURATION
 
 Replace every placeholder below with your actual values.
@@ -132,6 +147,16 @@ REPO=your-org/your-repo
 PROJECT_NAME=My Project Board
 PROJECT_DESCRIPTION=One-line description of your project
 
+# --- Layer 1: Build Cycles (become Release-field options on the project) ---
+BUILD_CYCLES:
+  1 = Core Platform              # foundational auth, CRUD, baseline workflows
+  2 = Advanced Features          # analytics, search, richer integrations
+  3 = Enterprise Hardening       # security, infra, observability
+  4 = Template & Infrastructure  # extract template, external integrations
+  5 = Quality & Resilience       # refactors, perf, reliability
+  6 = Production Ready           # design-system polish, GA
+
+# --- Layer 2: Epics (become GitHub milestones, one per entry) ---
 EPICS:
   1 = Project Bootstrap & Auth
   2 = Core Inventory CRUD
@@ -139,13 +164,11 @@ EPICS:
   4 = Work Order System
   5 = Firmware Management
 
-SPRINT_START_DATE=2026-05-01
-SPRINT_COUNT=12
-SPRINT_DURATION_WEEKS=2
+# --- Layer 3/4: Issues (stories + bugs + tasks) are created by humans after setup ---
 
-RELEASES:
-  v1.0.0 — MVP         | due: 2026-08-01 | Minimum viable product
-  v1.1.0 — Analytics    | due: 2026-10-01 | Dashboard and reporting
+# --- Optional: sprint cadence, tracked as a Date field on the project ---
+SPRINT_START_DATE=2026-05-01
+SPRINT_DURATION_WEEKS=2
 
 TEAM:
   leads    = lead-username
@@ -214,17 +237,7 @@ gh label create "P2-medium" --color "FBCA04" --description "Plan for next sprint
 gh label create "P3-low" --color "0E8A16" --description "Nice to have, backlog" --repo "REPO" --force
 ```
 
-**Epic labels — generate one per epic from the EPICS config:**
-
-```bash
-gh label create "epic:1" --color "6F42C1" --description "Epic 1 — Project Bootstrap & Auth" --repo "REPO" --force
-gh label create "epic:2" --color "6F42C1" --description "Epic 2 — Core Inventory CRUD" --repo "REPO" --force
-gh label create "epic:3" --color "6F42C1" --description "Epic 3 — Location & Hierarchy" --repo "REPO" --force
-gh label create "epic:4" --color "6F42C1" --description "Epic 4 — Work Order System" --repo "REPO" --force
-gh label create "epic:5" --color "6F42C1" --description "Epic 5 — Firmware Management" --repo "REPO" --force
-```
-
-(Generate additional `epic:N` commands if the EPICS config has more entries.)
+> **No `epic:N` labels.** In this hierarchy, an epic is a **milestone** (see STEP 3), not a label. An issue picks up its epic by assigning the milestone. That gives you free progress tracking, issue counts, and close/open stats per epic — you don't need a parallel label.
 
 **Status / process labels:**
 
@@ -258,44 +271,37 @@ gh label create "regression-failure" --color "FBCA04" --description "Failed in r
 
 ---
 
-### STEP 3 — Create sprint milestones
+### STEP 3 — Create Epic milestones
 
-Create one milestone per sprint. Calculate dates yourself — do NOT use `date -d`
-(it is not portable). Instead, compute dates by adding (sprint_number - 1) \* 14 days
-to SPRINT_START_DATE. Use `gh api` with ISO 8601 dates.
+For **each entry in the `EPICS` config**, create one GitHub milestone. The milestone is how an issue declares "I belong to this epic" — GitHub gives you a free per-epic progress bar, open/closed count, and milestone detail page as a result.
 
-For each sprint 1 through SPRINT_COUNT:
+Run one command per epic (replace `REPO`, titles, and descriptions with values from the `EPICS` config). Milestones do not require a due date; omit `due_on` if you don't have one, or populate it per epic.
 
 ```bash
 gh api repos/REPO/milestones --method POST \
-  --field title="Sprint 1 (2026-05-01 - 2026-05-14)" \
-  --field due_on="2026-05-14T23:59:59Z" \
-  --field description="Sprint 1"
+  --field title="Epic 1: Project Bootstrap & Auth" \
+  --field description="Foundational authentication, user management, and app shell"
 ```
 
 ```bash
 gh api repos/REPO/milestones --method POST \
-  --field title="Sprint 2 (2026-05-15 - 2026-05-28)" \
-  --field due_on="2026-05-28T23:59:59Z" \
-  --field description="Sprint 2"
+  --field title="Epic 2: Core Inventory CRUD" \
+  --field description="Core device inventory management — create, read, update, delete, search, filter"
 ```
-
-(Continue for all sprints. Calculate the actual dates — do not use placeholder dates.)
-
-**Then create release milestones from the RELEASES config:**
 
 ```bash
 gh api repos/REPO/milestones --method POST \
-  --field title="v1.0.0 — MVP" \
-  --field due_on="2026-08-01T23:59:59Z" \
-  --field description="Minimum viable product"
+  --field title="Epic 3: Location & Hierarchy" \
+  --field description="Geographic and organizational hierarchy — map view, filters, drill-down"
 ```
 
-(One command per release entry.)
+(Continue for every entry in the `EPICS` config. One command per epic.)
 
-If any milestone already exists (HTTP 422), skip it and continue.
+If a milestone already exists (HTTP 422), skip it and continue.
 
-**After running all commands, print:** "Created N sprint milestones + N release milestones."
+> **No sprint or release milestones here.** Sprint cadence is tracked on the project via the `Sprint Start` date field (STEP 8). Build cycles are the `Release` field (also STEP 8). Milestones are exclusively for epics — one milestone per epic, full stop.
+
+**After running all commands, print:** "Created N epic milestones."
 
 ---
 
@@ -306,27 +312,13 @@ notice — do not overwrite existing templates.
 
 **4a. Write `.github/ISSUE_TEMPLATE/story.yml`**
 
-Content — generate the epic dropdown options from the EPICS config:
+> No Epic dropdown in this template — the issue's **milestone** (set after creation) defines its epic. That avoids an always-outdated enum in two places.
 
 ```yaml
 name: Story
 description: Create a new user story
 labels: ["story"]
 body:
-  - type: dropdown
-    id: epic
-    attributes:
-      label: Epic
-      description: Which epic does this story belong to?
-      options:
-        - "Epic 1 — Project Bootstrap & Auth"
-        - "Epic 2 — Core Inventory CRUD"
-        - "Epic 3 — Location & Hierarchy"
-        - "Epic 4 — Work Order System"
-        - "Epic 5 — Firmware Management"
-    validations:
-      required: true
-
   - type: input
     id: story-id
     attributes:
@@ -625,21 +617,19 @@ You will need this number for Step 8.
 
 ### STEP 8 — Create custom fields on the project
 
-Use the project number from Step 7 in every command below. Replace PROJECT_NUMBER.
+Use the project number from Step 7 in every command below. Replace `PROJECT_NUMBER`. The project's **node ID** (starts with `PVT_`) is needed for all GraphQL mutations — get it from `gh project list --owner "ORG" --format json` and use it as `PROJECT_ID` below.
 
-**8a. Priority field (Single Select):**
+> **Hierarchy reminder.** The two fields that carry the hierarchy are **`Release`** (Build Cycle — 8c below) and the **milestone** (Epic — already created in STEP 3). Every other field in this step is a refinement that teams can tune.
 
-```bash
-gh project field-create PROJECT_NUMBER --owner "ORG" --name "Priority" --data-type "SINGLE_SELECT"
-```
+**8a. `Release` field (Single Select — THIS IS THE BUILD CYCLE FIELD)**
 
-After creation, retrieve the field ID:
+This is the most important field in the whole setup. Each option is a build cycle from `BUILD_CYCLES` config.
 
 ```bash
-gh project field-list PROJECT_NUMBER --owner "ORG" --format json
+gh project field-create PROJECT_NUMBER --owner "ORG" --name "Release" --data-type "SINGLE_SELECT"
 ```
 
-Find the field named "Priority" and note its `id`. Then add the options via GraphQL:
+Retrieve the field ID (`gh project field-list PROJECT_NUMBER --owner "ORG" --format json`), then add the build-cycle options:
 
 ```bash
 gh api graphql -f query='
@@ -648,10 +638,40 @@ mutation($projectId: ID!, $fieldId: ID!) {
     projectId: $projectId
     fieldId: $fieldId
     singleSelectOptions: [
-      {name: "P0-Critical", color: RED, description: "Drop everything"}
-      {name: "P1-High", color: ORANGE, description: "Must fix this sprint"}
-      {name: "P2-Medium", color: YELLOW, description: "Plan for next sprint"}
-      {name: "P3-Low", color: GREEN, description: "Nice to have"}
+      {name: "Build 1 — Core Platform",             color: BLUE,   description: "Foundational auth + core CRUD"}
+      {name: "Build 2 — Advanced Features",         color: GREEN,  description: "Analytics, search, integrations"}
+      {name: "Build 3 — Enterprise Hardening",      color: PURPLE, description: "Security, infra, observability"}
+      {name: "Build 4 — Template & Infrastructure", color: ORANGE, description: "Reusable template + provider plug-ins"}
+      {name: "Build 5 — Quality & Resilience",      color: YELLOW, description: "Refactors, perf, reliability"}
+      {name: "Build 6 — Production Ready",          color: GRAY,   description: "Design-system polish + GA"}
+    ]
+  }) {
+    projectV2Field {
+      ... on ProjectV2SingleSelectField { id name }
+    }
+  }
+}' -f projectId="PROJECT_ID" -f fieldId="RELEASE_FIELD_ID"
+```
+
+Generate one option per `BUILD_CYCLES` config entry — do not skip this step.
+
+**8b. `Priority` field (Single Select)**
+
+```bash
+gh project field-create PROJECT_NUMBER --owner "ORG" --name "Priority" --data-type "SINGLE_SELECT"
+```
+
+```bash
+gh api graphql -f query='
+mutation($projectId: ID!, $fieldId: ID!) {
+  updateProjectV2Field(input: {
+    projectId: $projectId
+    fieldId: $fieldId
+    singleSelectOptions: [
+      {name: "Critical", color: RED,    description: "Drop everything"}
+      {name: "High",     color: ORANGE, description: "Must fix this sprint"}
+      {name: "Medium",   color: YELLOW, description: "Plan for next sprint"}
+      {name: "Low",      color: GREEN,  description: "Nice to have"}
     ]
   }) {
     projectV2Field {
@@ -661,23 +681,23 @@ mutation($projectId: ID!, $fieldId: ID!) {
 }' -f projectId="PROJECT_ID" -f fieldId="PRIORITY_FIELD_ID"
 ```
 
-Replace PROJECT*ID with the project's node ID (from `gh project list --format json`,
-look for the `id` field — it starts with `PVT*`).
-
-**8b. Story Points field (Number):**
+**8c. `Story Points` field (Number)**
 
 ```bash
 gh project field-create PROJECT_NUMBER --owner "ORG" --name "Story Points" --data-type "NUMBER"
 ```
 
-**8c. Epic field (Single Select):**
+**8d. `Sprint Start` field (Date) — optional sprint cadence tracker**
+
+Many teams prefer a Date field over GitHub's Iteration field because it's simpler and works identically across every view. Pick one or the other.
 
 ```bash
-gh project field-create PROJECT_NUMBER --owner "ORG" --name "Epic" --data-type "SINGLE_SELECT"
+gh project field-create PROJECT_NUMBER --owner "ORG" --name "Sprint Start" --data-type "DATE"
 ```
 
-Then retrieve the Epic field ID from `gh project field-list` and add options via GraphQL,
-one per EPICS config entry:
+> **If you prefer GitHub's built-in Iteration field instead** (sprints are predefined and auto-advance), create `--name "Sprint" --data-type "ITERATION"`. Iteration start-date and duration can only be set in the UI after creation (see Manual Steps).
+
+**8e. `Status` field options (auto-created — just update the options)**
 
 ```bash
 gh api graphql -f query='
@@ -686,48 +706,13 @@ mutation($projectId: ID!, $fieldId: ID!) {
     projectId: $projectId
     fieldId: $fieldId
     singleSelectOptions: [
-      {name: "Epic 1 — Project Bootstrap & Auth", color: PURPLE}
-      {name: "Epic 2 — Core Inventory CRUD", color: PURPLE}
-      {name: "Epic 3 — Location & Hierarchy", color: PURPLE}
-      {name: "Epic 4 — Work Order System", color: PURPLE}
-      {name: "Epic 5 — Firmware Management", color: PURPLE}
-    ]
-  }) {
-    projectV2Field {
-      ... on ProjectV2SingleSelectField { id name }
-    }
-  }
-}' -f projectId="PROJECT_ID" -f fieldId="EPIC_FIELD_ID"
-```
-
-**8d. Sprint field (Iteration):**
-
-```bash
-gh project field-create PROJECT_NUMBER --owner "ORG" --name "Sprint" --data-type "ITERATION"
-```
-
-NOTE: The iteration start date and duration CANNOT be set via the API. This must be
-configured manually in the GitHub UI after creation. Flag this in the manual steps output.
-
-**8e. Status field options:**
-
-The Status field is auto-created with every project. Retrieve its field ID from
-`gh project field-list`, then update its options to match the team's workflow:
-
-```bash
-gh api graphql -f query='
-mutation($projectId: ID!, $fieldId: ID!) {
-  updateProjectV2Field(input: {
-    projectId: $projectId
-    fieldId: $fieldId
-    singleSelectOptions: [
-      {name: "Backlog", color: GRAY, description: "Not yet planned"}
-      {name: "Sprint Ready", color: BLUE, description: "Groomed and estimated"}
+      {name: "Backlog",        color: GRAY,   description: "Not yet planned"}
+      {name: "Sprint Ready",   color: BLUE,   description: "Groomed and estimated"}
       {name: "In Development", color: YELLOW, description: "Currently being coded"}
-      {name: "In Review", color: ORANGE, description: "PR open, awaiting review"}
-      {name: "In QA", color: PURPLE, description: "Merged, being tested"}
-      {name: "Done", color: GREEN, description: "Accepted and deployed"}
-      {name: "Blocked", color: RED, description: "Cannot proceed"}
+      {name: "In Review",      color: ORANGE, description: "PR open, awaiting review"}
+      {name: "In QA",          color: PURPLE, description: "Merged, being tested"}
+      {name: "Done",           color: GREEN,  description: "Accepted and deployed"}
+      {name: "Blocked",        color: RED,    description: "Cannot proceed"}
     ]
   }) {
     projectV2Field {
@@ -736,6 +721,63 @@ mutation($projectId: ID!, $fieldId: ID!) {
   }
 }' -f projectId="PROJECT_ID" -f fieldId="STATUS_FIELD_ID"
 ```
+
+**8f. `QA Status` field (Single Select — optional but recommended)**
+
+Adds lightweight QA visibility alongside the main `Status` field, so PM can see test progress without opening every issue.
+
+```bash
+gh project field-create PROJECT_NUMBER --owner "ORG" --name "QA Status" --data-type "SINGLE_SELECT"
+```
+
+```bash
+gh api graphql -f query='
+mutation($projectId: ID!, $fieldId: ID!) {
+  updateProjectV2Field(input: {
+    projectId: $projectId
+    fieldId: $fieldId
+    singleSelectOptions: [
+      {name: "Not Started",   color: GRAY,  description: "No tests written yet"}
+      {name: "Tests Written", color: BLUE,  description: "Tests exist, not yet run"}
+      {name: "Passing",       color: GREEN, description: "Tests green"}
+      {name: "Failing",       color: RED,   description: "Tests red — blocker"}
+    ]
+  }) {
+    projectV2Field {
+      ... on ProjectV2SingleSelectField { id name }
+    }
+  }
+}' -f projectId="PROJECT_ID" -f fieldId="QA_STATUS_FIELD_ID"
+```
+
+**8g. `T-Shirt Size` field (Single Select — optional, complements Story Points)**
+
+```bash
+gh project field-create PROJECT_NUMBER --owner "ORG" --name "T-Shirt Size" --data-type "SINGLE_SELECT"
+```
+
+```bash
+gh api graphql -f query='
+mutation($projectId: ID!, $fieldId: ID!) {
+  updateProjectV2Field(input: {
+    projectId: $projectId
+    fieldId: $fieldId
+    singleSelectOptions: [
+      {name: "XS", color: GREEN,  description: "Trivial (~1 pt)"}
+      {name: "S",  color: GREEN,  description: "Small (~2 pts)"}
+      {name: "M",  color: YELLOW, description: "Medium (~3–5 pts)"}
+      {name: "L",  color: ORANGE, description: "Large (~8 pts)"}
+      {name: "XL", color: RED,    description: "Extra large (~13+ pts) — break down"}
+    ]
+  }) {
+    projectV2Field {
+      ... on ProjectV2SingleSelectField { id name }
+    }
+  }
+}' -f projectId="PROJECT_ID" -f fieldId="TSHIRT_FIELD_ID"
+```
+
+> **No `Epic` field.** Epic is the issue's milestone (STEP 3) — adding a parallel single-select Epic field causes drift. Remove it if it already exists.
 
 ---
 
@@ -808,12 +850,20 @@ After ALL automated steps complete, print this exact output:
   SETUP COMPLETE — Automated Steps
 ================================================================
 
-  Labels created:     ~35 (type, priority, epic, status, size, E2E)
-  Milestones created: SPRINT_COUNT sprints + N releases
+  Hierarchy wired:    Release → Epic (milestone) → Issue
+  Labels created:     ~25 (type, priority, status, size, E2E)
+  Milestones created: N epic milestones (one per EPICS entry)
   Issue templates:    story.yml, bug.yml, task.yml, config.yml
   PR template:        PULL_REQUEST_TEMPLATE.md
   CODEOWNERS:         .github/CODEOWNERS
-  Project:            PROJECT_NAME (with Status, Priority, Story Points, Epic, Sprint fields)
+  Project:            PROJECT_NAME with fields:
+                        - Status        (7 options)
+                        - Release       (N Build Cycle options)
+                        - Priority      (4 options)
+                        - Story Points  (number)
+                        - Sprint Start  (date)
+                        - QA Status     (4 options)
+                        - T-Shirt Size  (5 options)
   Branch protection:  main (require PR + review + status checks)
 
 ================================================================
@@ -834,35 +884,31 @@ After ALL automated steps complete, print this exact output:
 
 ## 3. Manual Steps After Automation
 
-These 5 tasks **cannot be automated** because GitHub provides no API for them.
+These tasks **cannot be automated** because GitHub provides no API for them.
 Complete them in the GitHub web UI after running the prompt above.
 
 **Estimated time:** 15-20 minutes total.
 
 ---
 
-### Manual Step 1: Configure Sprint Iterations (5 min)
+### Manual Step 1: (Optional) Configure Sprint Iteration (skip if using Sprint Start Date)
 
-The prompt created the Sprint field, but iteration dates must be set in the UI.
+If you chose the **Date** variant in STEP 8d, skip this — there's nothing to configure.
 
-1. Open your project board: `https://github.com/orgs/ORG/projects/N`
-2. Click the **three-dot menu** (top-right) and select **Settings**
-3. In the left sidebar, click the **Sprint** field
-4. Set **Duration** to your sprint length (e.g., 2 weeks)
-5. Set **Start date** to your first sprint date (matches `SPRINT_START_DATE` from config)
-6. GitHub auto-generates sequential iterations. Rename each one if needed:
-   - Click the iteration name to edit it
-   - Rename to match your milestones: `Sprint 1 (2026-05-01 - 2026-05-14)`, etc.
-7. Click **Save changes**
+If you chose the **Iteration** variant instead, iteration dates must be set in the UI:
 
-**How to verify:** The Sprint field should show in Table view as a dropdown with
-dated iterations. Filter `iteration:@current` should return items in today's sprint.
+1. Open your project: `https://github.com/users/ORG/projects/N`
+2. Three-dot menu (top-right) → **Settings**
+3. Sidebar → **Sprint** field → set **Duration** (e.g., 2 weeks) + **Start date** (matches `SPRINT_START_DATE` from config)
+4. Click **Save changes**
+
+**How to verify:** The Sprint field shows a dropdown with dated iterations; filter `iteration:@current` returns items in today's sprint.
 
 ---
 
 ### Manual Step 2: Create Project Views (5 min)
 
-Create 7 views — one for each team activity.
+Create these views — **the `Build Cycles` view is the one that proves your hierarchy is wired correctly.**
 
 For each view below:
 
@@ -873,17 +919,20 @@ For each view below:
 5. Set **Group By** from the view menu (funnel icon)
 6. The view auto-saves
 
-| #   | View Name        | Layout  | Filter                           | Group By  | Purpose               |
-| --- | ---------------- | ------- | -------------------------------- | --------- | --------------------- |
-| 1   | Current Sprint   | Board   | `iteration:@current`             | (none)    | Daily standup board   |
-| 2   | Backlog          | Table   | `status:Backlog`                 | Priority  | Backlog grooming      |
-| 3   | My Work          | Table   | `assignee:@me is:open`           | Status    | Personal task list    |
-| 4   | By Epic          | Table   | `is:open`                        | Epic      | Cross-epic visibility |
-| 5   | Bug Triage       | Table   | `label:bug is:open`              | Priority  | Bug management        |
-| 6   | Release Roadmap  | Roadmap | (all items)                      | Milestone | Stakeholder timeline  |
-| 7   | Done This Sprint | Table   | `iteration:@current status:Done` | (none)    | Sprint review prep    |
+| #   | View Name        | Layout  | Filter                                | Group By      | Purpose                                                     |
+| --- | ---------------- | ------- | ------------------------------------- | ------------- | ----------------------------------------------------------- |
+| 1   | **Build Cycles** | Table   | (all items)                           | **Release**   | **The hero view — proves the hierarchy.** One row per build |
+| 2   | Current Sprint   | Board   | `"Sprint Start":@current`             | Status        | Daily standup board                                         |
+| 3   | Backlog          | Table   | `status:Backlog`                      | **Milestone** | Backlog grooming by epic                                    |
+| 4   | My Work          | Table   | `assignee:@me is:open`                | Status        | Personal task list                                          |
+| 5   | By Epic          | Table   | `is:open`                             | **Milestone** | Cross-epic visibility (milestone = epic)                    |
+| 6   | Bug Triage       | Table   | `label:bug is:open`                   | Priority      | Bug management                                              |
+| 7   | Roadmap          | Roadmap | (all items)                           | Milestone     | Stakeholder timeline                                        |
+| 8   | Done This Sprint | Table   | `"Sprint Start":@current status:Done` | (none)        | Sprint review prep                                          |
 
-**How to verify:** Click through each tab. The view should show the correct subset of items.
+> **Grouping by Release (view #1)** is the single best demo-able artifact from this prompt. It proves Build Cycle → Epic (milestone) → Issue is visible end-to-end.
+
+**How to verify:** Open view #1 — you should see one row/group per build cycle. Expand Build 1 → you see issues assigned there. Click an issue → it has a milestone (the epic) and a Release value (the build).
 
 ---
 
@@ -914,14 +963,15 @@ appear on the project board in the "Backlog" column. Close it — it should move
 2. Click the **Insights** tab (bar-chart icon, next to the view tabs)
 3. For each chart below, click **New chart**, configure it, and click **Save**:
 
-| #   | Chart Name      | Type       | X-Axis    | Y-Axis              | Group By | Filter               |
-| --- | --------------- | ---------- | --------- | ------------------- | -------- | -------------------- |
-| 1   | Sprint Burn-Up  | Historical | Time      | Count of items      | Status   | `iteration:@current` |
-| 2   | Velocity Trend  | Current    | Iteration | Sum of Story Points | (none)   | `status:Done`        |
-| 3   | Status Overview | Current    | Status    | Count of items      | (none)   | (none)               |
-| 4   | Bug Trend       | Historical | Time      | Count of items      | Priority | `label:bug`          |
-| 5   | Epic Progress   | Current    | Epic      | Count of items      | Status   | (none)               |
-| 6   | Team Workload   | Current    | Assignee  | Count of items      | Status   | `is:open`            |
+| #   | Chart Name         | Type       | X-Axis        | Y-Axis              | Group By | Filter                    |
+| --- | ------------------ | ---------- | ------------- | ------------------- | -------- | ------------------------- |
+| 1   | **Build Progress** | Current    | **Release**   | Count of items      | Status   | (none) — the hero chart   |
+| 2   | Sprint Burn-Up     | Historical | Time          | Count of items      | Status   | `"Sprint Start":@current` |
+| 3   | Velocity by Build  | Current    | **Release**   | Sum of Story Points | (none)   | `status:Done`             |
+| 4   | Status Overview    | Current    | Status        | Count of items      | (none)   | (none)                    |
+| 5   | Bug Trend          | Historical | Time          | Count of items      | Priority | `label:bug`               |
+| 6   | Epic Progress      | Current    | **Milestone** | Count of items      | Status   | (none)                    |
+| 7   | Team Workload      | Current    | Assignee      | Count of items      | Status   | `is:open`                 |
 
 **How to verify:** Each chart should render. The Sprint Burn-Up will be empty until
 issues are assigned to the current iteration.
@@ -954,10 +1004,10 @@ everything is set up correctly.
 ### Quick verification commands
 
 ```bash
-# Count labels (expect ~35)
+# Count labels (expect ~25)
 gh label list --repo "REPO" --limit 100 | wc -l
 
-# Count milestones (expect SPRINT_COUNT + number of releases)
+# Count milestones (expect N — one per epic)
 gh api repos/REPO/milestones | python -c "import sys,json; print(len(json.load(sys.stdin)))"
 
 # Verify project exists
@@ -966,42 +1016,39 @@ gh project list --owner "ORG"
 # Verify templates exist
 ls .github/ISSUE_TEMPLATE/
 # Expected: story.yml  bug.yml  task.yml  config.yml
-
-# Verify PR template exists
-ls .github/PULL_REQUEST_TEMPLATE.md
-
-# Verify CODEOWNERS exists
-ls .github/CODEOWNERS
 ```
 
 ### Full checklist
 
-| Category         | Item                                            | Check |
-| ---------------- | ----------------------------------------------- | ----- |
-| **Labels**       | Type labels exist (story, bug, enhancement...)  | [ ]   |
-| **Labels**       | Priority labels exist (P0-P3)                   | [ ]   |
-| **Labels**       | Epic labels exist (epic:1 through epic:N)       | [ ]   |
-| **Labels**       | Size labels exist (XS, S, M, L, XL)             | [ ]   |
-| **Labels**       | Status labels exist (qa-plan, blocked...)       | [ ]   |
-| **Milestones**   | Sprint milestones created with correct dates    | [ ]   |
-| **Milestones**   | Release milestones created with due dates       | [ ]   |
-| **Templates**    | Story template renders in "New Issue" chooser   | [ ]   |
-| **Templates**    | Bug template renders in "New Issue" chooser     | [ ]   |
-| **Templates**    | Task template renders in "New Issue" chooser    | [ ]   |
-| **Templates**    | Blank issues disabled (config.yml)              | [ ]   |
-| **Templates**    | PR template renders on new PR creation          | [ ]   |
-| **CODEOWNERS**   | File exists and has correct team assignments    | [ ]   |
-| **Project**      | Project visible at org level                    | [ ]   |
-| **Project**      | Status field has 7 options (Backlog...Blocked)  | [ ]   |
-| **Project**      | Priority field has 4 options (P0...P3)          | [ ]   |
-| **Project**      | Story Points field exists (Number type)         | [ ]   |
-| **Project**      | Epic field has N options (matches EPICS config) | [ ]   |
-| **Project**      | Sprint field exists (Iteration type)            | [ ]   |
-| **Project**      | Sprint iterations have correct dates            | [ ]   |
-| **Views**        | 7 views created (Sprint, Backlog, My Work...)   | [ ]   |
-| **Workflows**    | 6 workflows enabled and configured              | [ ]   |
-| **Charts**       | 6 Insights charts created                       | [ ]   |
-| **Branch rules** | main branch requires PR + review + CI           | [ ]   |
+| Category         | Item                                                                                     | Check |
+| ---------------- | ---------------------------------------------------------------------------------------- | ----- |
+| **Hierarchy**    | `Build Cycles` view groups issues by `Release` with 6 groups (one per Build)             | [ ]   |
+| **Hierarchy**    | Each epic has a milestone (open `/milestones`)                                           | [ ]   |
+| **Hierarchy**    | A test issue can be created, assigned to an epic milestone, and tagged with a Release    | [ ]   |
+| **Labels**       | Type labels exist (story, bug, enhancement, tech-debt, …)                                | [ ]   |
+| **Labels**       | Size labels exist (XS, S, M, L, XL)                                                      | [ ]   |
+| **Labels**       | Status/process labels exist (qa-plan, blocked, needs-review, …)                          | [ ]   |
+| **Labels**       | No `epic:N` labels (epics are milestones, not labels)                                    | [ ]   |
+| **Milestones**   | One milestone per epic, named `Epic N: Title`                                            | [ ]   |
+| **Templates**    | Story template renders in "New Issue" chooser (no Epic dropdown)                         | [ ]   |
+| **Templates**    | Bug template renders in "New Issue" chooser                                              | [ ]   |
+| **Templates**    | Task template renders in "New Issue" chooser                                             | [ ]   |
+| **Templates**    | Blank issues disabled (config.yml)                                                       | [ ]   |
+| **Templates**    | PR template renders on new PR creation                                                   | [ ]   |
+| **CODEOWNERS**   | File exists and has correct team assignments                                             | [ ]   |
+| **Project**      | Project visible at owner level                                                           | [ ]   |
+| **Project**      | `Release` field with N Build Cycle options (matches `BUILD_CYCLES` config)               | [ ]   |
+| **Project**      | `Status` field has 7 options (Backlog … Blocked)                                         | [ ]   |
+| **Project**      | `Priority` field has 4 options (Critical / High / Medium / Low)                          | [ ]   |
+| **Project**      | `Story Points` field exists (Number type)                                                | [ ]   |
+| **Project**      | `Sprint Start` field exists (Date type) — OR Sprint (Iteration)                          | [ ]   |
+| **Project**      | `QA Status` field has 4 options                                                          | [ ]   |
+| **Project**      | `T-Shirt Size` field has 5 options                                                       | [ ]   |
+| **Project**      | **No `Epic` single-select field** (epic is the milestone)                                | [ ]   |
+| **Views**        | 8 views created — Build Cycles #1, Sprint, Backlog, My Work, By Epic, Bug, Roadmap, Done | [ ]   |
+| **Workflows**    | 6 workflows enabled and configured                                                       | [ ]   |
+| **Charts**       | 7 Insights charts created (Build Progress = the hero chart)                              | [ ]   |
+| **Branch rules** | main branch requires PR + review + CI                                                    | [ ]   |
 
 ---
 
