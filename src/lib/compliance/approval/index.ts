@@ -23,7 +23,7 @@ export {
   NoConditionalWaiverError,
   SelfApprovalError,
 } from "./approval-errors";
-export { ApprovalProvider, useApproval } from "./use-approval";
+export { ApprovalProvider, useApproval, useApprovalEngine } from "./use-approval";
 export type { ApprovalProviderProps, UseApprovalResult } from "./use-approval";
 // Story 28.4 — SLA tracking
 export {

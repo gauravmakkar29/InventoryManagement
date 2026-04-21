@@ -36,6 +36,18 @@ function useCtx(): ApprovalCtxValue {
   return ctx;
 }
 
+/**
+ * Access the underlying `IApprovalEngine` and current actor from the
+ * surrounding `<ApprovalProvider>`.
+ *
+ * Use this only when you need to pass the engine into a component that
+ * expects it as a prop (e.g., `<ConditionsPanel>`). Prefer `useApproval`
+ * for the hook-based API.
+ */
+export function useApprovalEngine(): ApprovalCtxValue {
+  return useCtx();
+}
+
 export interface UseApprovalResult {
   readonly approval: Approval | null | undefined;
   readonly isLoading: boolean;
