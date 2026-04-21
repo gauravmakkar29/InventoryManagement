@@ -1,6 +1,7 @@
 /**
- * <FirmwareReviewTab /> — reference wiring for Epic 28 approval + SLA
- * primitives on the firmware review flow (behind `VITE_FEATURE_COMPLIANCE_LIB`).
+ * <FirmwareReviewTab /> — reference wiring for Epic 28 approval + SLA +
+ * secure-distribution primitives on the firmware review flow (behind
+ * `VITE_FEATURE_COMPLIANCE_LIB`).
  *
  * Composition:
  * - `<ApprovalGateBadge>` — current approval state pill
@@ -9,6 +10,9 @@
  *   + approval state permit the transition
  * - `<ConditionsPanel>` — SLA condition tracker, shown when the approval
  *   is conditionally-approved
+ * - `<SecureDownloadButton>` — mint/redeem a single-use secure download
+ *   link for the reviewer once the approval has reached the `approved`
+ *   state. Demonstrates the secure-distribution primitive end-to-end.
  *
  * Checklist completeness comes from the sibling Artifacts tab (shared
  * `<FirmwareComplianceProvider>`). No IMS/firmware types leak into
@@ -20,12 +24,14 @@ import { useEffect } from "react";
 import { ApprovalDecisionPanel } from "@/app/components/compliance/approval-decision-panel";
 import { ApprovalGateBadge } from "@/app/components/compliance/approval-gate-badge";
 import { ConditionsPanel } from "@/app/components/compliance/conditions-panel";
+import { SecureDownloadButton } from "@/app/components/compliance/secure-download-button";
 import { useApproval, useApprovalEngine } from "@/lib/compliance/approval";
 import { useChecklist } from "@/lib/compliance/checklist";
 import type { Completeness } from "@/lib/compliance/checklist";
 import { useAuth } from "@/lib/use-auth";
 import { canPerformAction, getPrimaryRole } from "@/lib/rbac";
 import { FIRMWARE_INTAKE_SCHEMA_ID } from "@/lib/firmware/firmware-artifact-schema";
+import { useFirmwareDistributionDriver } from "./firmware-compliance-provider";
 
 export interface FirmwareReviewTabProps {
   readonly firmwareVersionId: string;
@@ -94,6 +100,47 @@ export function FirmwareReviewTab({ firmwareVersionId }: FirmwareReviewTabProps)
       {approval?.state === "conditionally-approved" && (
         <ConditionsPanel approval={approval} engine={engine} actor={actor} canSatisfy={canDecide} />
       )}
+
+      {approval?.state === "approved" && (
+        <SecureDistributionSection
+          firmwareVersionId={firmwareVersionId}
+          recipientUserId={actor.userId}
+          actor={actor}
+        />
+      )}
+    </div>
+  );
+}
+
+function SecureDistributionSection({
+  firmwareVersionId,
+  recipientUserId,
+  actor,
+}: {
+  readonly firmwareVersionId: string;
+  readonly recipientUserId: string;
+  readonly actor: { readonly userId: string; readonly displayName: string };
+}) {
+  const driver = useFirmwareDistributionDriver();
+  return (
+    <div className="rounded-lg border border-border bg-card p-4">
+      <h3 className="text-[14px] font-semibold text-foreground">Secure distribution</h3>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">
+        Approval is final. Mint a single-use, recipient-bound download link. The token is signed,
+        bound to your user, expires on first use, and every mint/redeem is audit-logged (NIST
+        AU-2/3).
+      </p>
+      <div className="mt-3">
+        <SecureDownloadButton
+          driver={driver}
+          actor={actor}
+          recipientUserId={recipientUserId}
+          evidenceId={firmwareVersionId}
+          purpose={`Firmware ${firmwareVersionId} post-approval distribution`}
+          label="Secure download"
+          expiresInSeconds={900}
+        />
+      </div>
     </div>
   );
 }
