@@ -28,6 +28,8 @@ import { FirmwareStateBadge } from "./firmware-lifecycle";
 import { VersionTimeline, type TimelineEvent } from "../shared/version-timeline";
 import { FirmwareDeployedSitesTab } from "./firmware-deployed-sites-tab";
 import { FirmwareActiveLinksTab } from "./firmware-active-links-tab";
+import { FirmwareArtifactsTab } from "./firmware-artifacts-tab";
+import { isFeatureEnabled } from "@/lib/feature-flags";
 import { GenerateDownloadLinkModal } from "./generate-download-link-modal";
 import { EVENT_COLOR_MAP } from "@/lib/types/firmware-version";
 import type { FirmwareVersion } from "@/lib/types";
@@ -36,13 +38,20 @@ import type { FirmwareVersion } from "@/lib/types";
 // Types
 // ---------------------------------------------------------------------------
 
-type DetailTab = "details" | "deployed-sites" | "active-links";
+type DetailTab = "details" | "deployed-sites" | "active-links" | "artifacts";
 
-const TABS: { id: DetailTab; label: string }[] = [
+// Epic 28 reference wiring — the Artifacts tab is only surfaced when the
+// compliance library feature flag is on. When off, the legacy tab set is
+// preserved exactly as before.
+const BASE_TABS: { id: DetailTab; label: string }[] = [
   { id: "details", label: "Version Details" },
   { id: "deployed-sites", label: "Deployed Sites" },
   { id: "active-links", label: "Active Links" },
 ];
+
+const TABS: { id: DetailTab; label: string }[] = isFeatureEnabled("COMPLIANCE_LIB")
+  ? [...BASE_TABS, { id: "artifacts", label: "Artifacts" }]
+  : BASE_TABS;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -415,6 +424,10 @@ export function FirmwareDetailPage() {
               onGenerateClick={() => setGenerateModalOpen(true)}
               canGenerate={canGenerate}
             />
+          )}
+
+          {activeTab === "artifacts" && isFeatureEnabled("COMPLIANCE_LIB") && (
+            <FirmwareArtifactsTab firmwareVersionId={selectedVersion.id} />
           )}
         </>
       )}
