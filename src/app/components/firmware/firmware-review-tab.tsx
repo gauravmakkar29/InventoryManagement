@@ -32,6 +32,7 @@ import { useAuth } from "@/lib/use-auth";
 import { canPerformAction, getPrimaryRole } from "@/lib/rbac";
 import { FIRMWARE_INTAKE_SCHEMA_ID } from "@/lib/firmware/firmware-artifact-schema";
 import { useFirmwareDistributionDriver } from "./firmware-compliance-provider";
+import { FirmwareDeploymentConfirmSection } from "./firmware-deployment-confirm-section";
 
 export interface FirmwareReviewTabProps {
   readonly firmwareVersionId: string;
@@ -102,11 +103,14 @@ export function FirmwareReviewTab({ firmwareVersionId }: FirmwareReviewTabProps)
       )}
 
       {approval?.state === "approved" && (
-        <SecureDistributionSection
-          firmwareVersionId={firmwareVersionId}
-          recipientUserId={actor.userId}
-          actor={actor}
-        />
+        <>
+          <SecureDistributionSection
+            firmwareVersionId={firmwareVersionId}
+            recipientUserId={actor.userId}
+            actor={actor}
+          />
+          <FirmwareDeploymentConfirmSection firmwareVersionId={firmwareVersionId} actor={actor} />
+        </>
       )}
     </div>
   );
