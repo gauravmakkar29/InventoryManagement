@@ -29,7 +29,10 @@ import { VersionTimeline, type TimelineEvent } from "../shared/version-timeline"
 import { FirmwareDeployedSitesTab } from "./firmware-deployed-sites-tab";
 import { FirmwareActiveLinksTab } from "./firmware-active-links-tab";
 import { FirmwareArtifactsTab } from "./firmware-artifacts-tab";
+import { FirmwareReviewTab } from "./firmware-review-tab";
+import { FirmwareComplianceProvider } from "./firmware-compliance-provider";
 import { isFeatureEnabled } from "@/lib/feature-flags";
+import type { ComplianceActor } from "@/lib/compliance/types";
 import { GenerateDownloadLinkModal } from "./generate-download-link-modal";
 import { EVENT_COLOR_MAP } from "@/lib/types/firmware-version";
 import type { FirmwareVersion } from "@/lib/types";
@@ -38,10 +41,10 @@ import type { FirmwareVersion } from "@/lib/types";
 // Types
 // ---------------------------------------------------------------------------
 
-type DetailTab = "details" | "deployed-sites" | "active-links" | "artifacts";
+type DetailTab = "details" | "deployed-sites" | "active-links" | "artifacts" | "review";
 
-// Epic 28 reference wiring — the Artifacts tab is only surfaced when the
-// compliance library feature flag is on. When off, the legacy tab set is
+// Epic 28 reference wiring — Artifacts + Review tabs are only surfaced when
+// the compliance library feature flag is on. When off, the legacy tab set is
 // preserved exactly as before.
 const BASE_TABS: { id: DetailTab; label: string }[] = [
   { id: "details", label: "Version Details" },
@@ -50,8 +53,10 @@ const BASE_TABS: { id: DetailTab; label: string }[] = [
 ];
 
 const TABS: { id: DetailTab; label: string }[] = isFeatureEnabled("COMPLIANCE_LIB")
-  ? [...BASE_TABS, { id: "artifacts", label: "Artifacts" }]
+  ? [...BASE_TABS, { id: "artifacts", label: "Artifacts" }, { id: "review", label: "Review" }]
   : BASE_TABS;
+
+const COMPLIANCE_TABS: readonly DetailTab[] = ["artifacts", "review"] as const;
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -426,8 +431,23 @@ export function FirmwareDetailPage() {
             />
           )}
 
-          {activeTab === "artifacts" && isFeatureEnabled("COMPLIANCE_LIB") && (
-            <FirmwareArtifactsTab firmwareVersionId={selectedVersion.id} />
+          {COMPLIANCE_TABS.includes(activeTab) && isFeatureEnabled("COMPLIANCE_LIB") && (
+            <FirmwareComplianceProvider
+              actor={
+                {
+                  userId: user?.id ?? "anonymous",
+                  displayName: user?.name ?? user?.email ?? "Anonymous",
+                } satisfies ComplianceActor
+              }
+              role={role}
+            >
+              {activeTab === "artifacts" && (
+                <FirmwareArtifactsTab firmwareVersionId={selectedVersion.id} />
+              )}
+              {activeTab === "review" && (
+                <FirmwareReviewTab firmwareVersionId={selectedVersion.id} />
+              )}
+            </FirmwareComplianceProvider>
           )}
         </>
       )}
