@@ -45,6 +45,27 @@ export const queryKeys = {
     all: ["compliance"] as const,
     list: (filters?: Record<string, unknown>) =>
       [...queryKeys.compliance.all, "list", filters] as const,
+    // Epic 28 — compliance primitives
+    evidence: {
+      all: ["compliance", "evidence"] as const,
+      detail: (id: string) => ["compliance", "evidence", "detail", id] as const,
+      signedUrl: (id: string, expiresInSeconds: number) =>
+        ["compliance", "evidence", "signedUrl", id, expiresInSeconds] as const,
+      list: (filters?: Record<string, unknown>) =>
+        ["compliance", "evidence", "list", filters] as const,
+    },
+    checklist: {
+      all: ["compliance", "checklist"] as const,
+      state: (schemaId: string, subjectId: string) =>
+        ["compliance", "checklist", "state", schemaId, subjectId] as const,
+      schema: (schemaId: string) => ["compliance", "checklist", "schema", schemaId] as const,
+    },
+    approval: {
+      all: ["compliance", "approval"] as const,
+      bySubject: (subjectId: string) => ["compliance", "approval", "bySubject", subjectId] as const,
+      pending: (filters?: Record<string, unknown>) =>
+        ["compliance", "approval", "pending", filters] as const,
+    },
   },
 
   // Service Orders

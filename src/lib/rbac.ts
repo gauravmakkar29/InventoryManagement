@@ -3,11 +3,44 @@
  *
  * 5 roles: Admin, Manager, Technician, Viewer, CustomerAdmin
  * Each role has a set of allowed pages and actions.
+ *
+ * NIST 800-53 controls enforced by this module:
+ * - AC-3 (Access Enforcement): canPerformAction / canAccessPage gate every
+ *   sensitive operation. Every compliance primitive (Epic 28) calls
+ *   canPerformAction BEFORE side-effects and writes an audit-denial record
+ *   on failure (AU-2 / AU-3).
+ * - AC-5 (Separation of Duties): submit vs decide, request vs approve,
+ *   initiate vs complete are deliberately split across distinct actions so a
+ *   single principal cannot both raise and ratify a compliance decision.
+ *   Runtime SoD (same-principal-rejection) is additionally enforced at the
+ *   compliance engine adapters (see src/lib/compliance/approval/).
+ * - AC-6 (Least Privilege): Viewer + CustomerAdmin receive read/submit-only
+ *   subsets of the compliance action surface.
  */
 
 export type Role = "Admin" | "Manager" | "Technician" | "Viewer" | "CustomerAdmin";
 
-export type Action = "create" | "edit" | "delete" | "approve";
+export type Action =
+  | "create"
+  | "edit"
+  | "delete"
+  | "approve"
+  // Epic 28 — Compliance primitives (generic, domain-agnostic).
+  // NIST AC-3 enforcement points; AC-5 pair splits (submit/decide,
+  // request/approve, initiate/complete) are intentional so no single
+  // principal can both propose and ratify the same compliance event.
+  | "evidence:put"
+  | "evidence:read"
+  | "checklist:attach"
+  | "checklist:waive"
+  | "approval:submit" // AC-5: pair with "approval:decide"
+  | "approval:decide" // AC-5: pair with "approval:submit"
+  | "distribution:request" // AC-5: pair with "distribution:approve"
+  | "distribution:approve" // AC-5: pair with "distribution:request"
+  | "confirmation:initiate" // AC-5: pair with "confirmation:complete"
+  | "confirmation:complete" // AC-5: pair with "confirmation:initiate"
+  | "confirmation:abandon"
+  | "impact:query";
 
 export interface RolePermissions {
   pages: string[];
@@ -32,7 +65,24 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "user-management",
       "customers",
     ],
-    actions: ["create", "edit", "delete", "approve"],
+    actions: [
+      "create",
+      "edit",
+      "delete",
+      "approve",
+      "evidence:put",
+      "evidence:read",
+      "checklist:attach",
+      "checklist:waive",
+      "approval:submit",
+      "approval:decide",
+      "distribution:request",
+      "distribution:approve",
+      "confirmation:initiate",
+      "confirmation:complete",
+      "confirmation:abandon",
+      "impact:query",
+    ],
     filterByCustomer: false,
   },
   Manager: {
@@ -48,14 +98,34 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "incidents",
       "digital-twin",
       "executive-summary",
-      "customers", // AC-3: Customer management access
+      "customers",
     ],
-    actions: ["create", "edit", "approve"],
+    actions: [
+      "create",
+      "edit",
+      "approve",
+      "evidence:put",
+      "evidence:read",
+      "checklist:attach",
+      "checklist:waive",
+      "approval:decide",
+      "distribution:approve",
+      "impact:query",
+    ],
     filterByCustomer: false,
   },
   Technician: {
     pages: ["dashboard", "inventory", "account-service"],
-    actions: ["create", "edit"],
+    actions: [
+      "create",
+      "edit",
+      "evidence:read",
+      "checklist:attach",
+      "approval:submit",
+      "distribution:request",
+      "confirmation:initiate",
+      "confirmation:complete",
+    ],
     filterByCustomer: false,
   },
   Viewer: {
@@ -70,14 +140,14 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "telemetry",
       "incidents",
       "digital-twin",
-      "customers", // AC-3: Read-only customer view access
+      "customers",
     ],
-    actions: [],
+    actions: ["evidence:read", "impact:query"],
     filterByCustomer: false,
   },
   CustomerAdmin: {
     pages: ["dashboard", "inventory", "account-service"],
-    actions: ["create", "edit"],
+    actions: ["create", "edit", "evidence:read", "approval:submit"],
     filterByCustomer: true,
   },
 };
