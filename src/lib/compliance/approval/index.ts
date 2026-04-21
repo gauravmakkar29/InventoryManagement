@@ -25,3 +25,14 @@ export {
 } from "./approval-errors";
 export { ApprovalProvider, useApproval } from "./use-approval";
 export type { ApprovalProviderProps, UseApprovalResult } from "./use-approval";
+// Story 28.4 — SLA tracking
+export {
+  computeAlertMilestones,
+  evaluateSlaSeverity,
+  evaluateSlaStatus,
+  formatRemaining,
+  summarizeConditions,
+} from "./sla-tracker";
+export type { AlertMilestone, ConditionHealth, SlaSeverity } from "./sla-tracker";
+export { useSlaWatch } from "./use-sla-watch";
+export type { UseSlaWatchOptions } from "./use-sla-watch";

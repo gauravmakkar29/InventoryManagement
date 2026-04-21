@@ -23,4 +23,22 @@ export interface IApprovalEngine {
   ): Promise<Approval>;
   resubmit(id: string, resubmittedBy: ComplianceActor): Promise<Approval>;
   listPending(filter: { readonly limit?: number }): Promise<readonly Approval[]>;
+  /**
+   * Story 28.4 — SLA tracking.
+   * Mark a conditional-approval condition as satisfied. Requires
+   * `canPerformAction(role, "approval:decide")`. Writes an AUDIT# record.
+   */
+  markConditionSatisfied(
+    approvalId: string,
+    conditionId: string,
+    reason: string,
+    actor: ComplianceActor,
+  ): Promise<Approval>;
+  /**
+   * Re-evaluate condition states against the current clock, write audit
+   * records for any pending→breached transitions (idempotent — a breached
+   * condition is audited exactly once, subsequent reads are no-ops), and
+   * return the refreshed Approval.
+   */
+  refreshSlaStatus(approvalId: string): Promise<Approval>;
 }
