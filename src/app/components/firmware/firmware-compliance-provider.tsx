@@ -18,8 +18,16 @@ import { createContext, useContext, useMemo } from "react";
 import type { ReactNode } from "react";
 
 import { firmwareIntakeChecklistSchema } from "@/lib/firmware/firmware-artifact-schema";
+import {
+  FIRMWARE_DEPLOYMENT_KIND,
+  firmwareDeploymentValidator,
+} from "@/lib/firmware/firmware-deployment-validator";
 import { ApprovalProvider, createMockApprovalEngine } from "@/lib/compliance/approval";
 import { ChecklistProvider, createMockChecklistStore } from "@/lib/compliance/checklist";
+import {
+  createMockConfirmationEngine,
+  type IConfirmationEngine,
+} from "@/lib/compliance/confirmation";
 import {
   SecureDistributionProvider,
   createMockSecureDistribution,
@@ -35,11 +43,22 @@ export interface FirmwareComplianceProviderProps {
   readonly children: ReactNode;
 }
 
-interface DistributionDriverCtx {
-  readonly driver: ISecureDistribution;
+interface FirmwareComplianceCtx {
+  readonly distribution: ISecureDistribution;
+  readonly confirmation: IConfirmationEngine;
 }
 
-const DistributionDriverContext = createContext<DistributionDriverCtx | null>(null);
+const FirmwareComplianceContext = createContext<FirmwareComplianceCtx | null>(null);
+
+function useComplianceCtx(): FirmwareComplianceCtx {
+  const ctx = useContext(FirmwareComplianceContext);
+  if (!ctx) {
+    throw new Error(
+      "Firmware compliance hooks require <FirmwareComplianceProvider> higher in the tree.",
+    );
+  }
+  return ctx;
+}
 
 /**
  * Access the mock secure-distribution driver used inside the firmware
@@ -48,13 +67,16 @@ const DistributionDriverContext = createContext<DistributionDriverCtx | null>(nu
  * mock that would have its own disconnected jti / consumed-token state.
  */
 export function useFirmwareDistributionDriver(): ISecureDistribution {
-  const ctx = useContext(DistributionDriverContext);
-  if (!ctx) {
-    throw new Error(
-      "useFirmwareDistributionDriver requires <FirmwareComplianceProvider> higher in the tree.",
-    );
-  }
-  return ctx.driver;
+  return useComplianceCtx().distribution;
+}
+
+/**
+ * Access the mock two-phase confirmation engine used inside the firmware
+ * compliance scope. The firmware deployment validator is pre-registered
+ * under kind `"firmware-deployment"` at provider construction time.
+ */
+export function useFirmwareConfirmationEngine(): IConfirmationEngine {
+  return useComplianceCtx().confirmation;
 }
 
 export function FirmwareComplianceProvider({
@@ -64,6 +86,10 @@ export function FirmwareComplianceProvider({
 }: FirmwareComplianceProviderProps) {
   const stores = useMemo(() => {
     const resolveRole = () => role;
+    const confirmation = createMockConfirmationEngine({ resolveRole });
+    // Register the domain-specific validator once per provider instance.
+    // The compliance library stays generic; the validator lives here.
+    confirmation.validators.register(FIRMWARE_DEPLOYMENT_KIND, firmwareDeploymentValidator);
     return {
       evidenceStore: createMockEvidenceStore({ resolveRole }),
       checklistStore: createMockChecklistStore({
@@ -72,12 +98,16 @@ export function FirmwareComplianceProvider({
       }),
       approvalEngine: createMockApprovalEngine({ resolveRole }),
       distribution: createMockSecureDistribution({ resolveRole }),
+      confirmation,
     };
   }, [role]);
 
-  const distributionCtx = useMemo<DistributionDriverCtx>(
-    () => ({ driver: stores.distribution }),
-    [stores.distribution],
+  const ctxValue = useMemo<FirmwareComplianceCtx>(
+    () => ({
+      distribution: stores.distribution,
+      confirmation: stores.confirmation,
+    }),
+    [stores.distribution, stores.confirmation],
   );
 
   return (
@@ -85,9 +115,9 @@ export function FirmwareComplianceProvider({
       <ChecklistProvider store={stores.checklistStore} actor={actor}>
         <ApprovalProvider engine={stores.approvalEngine} actor={actor}>
           <SecureDistributionProvider driver={stores.distribution} actor={actor}>
-            <DistributionDriverContext.Provider value={distributionCtx}>
+            <FirmwareComplianceContext.Provider value={ctxValue}>
               {children}
-            </DistributionDriverContext.Provider>
+            </FirmwareComplianceContext.Provider>
           </SecureDistributionProvider>
         </ApprovalProvider>
       </ChecklistProvider>
