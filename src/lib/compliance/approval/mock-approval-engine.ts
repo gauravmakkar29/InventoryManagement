@@ -26,6 +26,7 @@ import {
   NoConditionalWaiverError,
   SelfApprovalError,
 } from "./approval-errors";
+import { evaluateSlaStatus } from "./sla-tracker";
 
 export interface MockApprovalEngineOptions {
   readonly resolveRole?: (actor: ComplianceActor) => Role;
@@ -202,6 +203,73 @@ export function createMockApprovalEngine(options: MockApprovalEngineOptions = {}
       const all = [...byId.values()].filter((a) => a.state === "pending");
       all.sort((a, b) => (a.history[0]?.at ?? "").localeCompare(b.history[0]?.at ?? ""));
       return limit ? all.slice(0, limit) : all;
+    },
+
+    async markConditionSatisfied(approvalId, conditionId, reason, actor) {
+      authorize(actor, "approval:decide", approvalId);
+      const current = byId.get(approvalId);
+      if (!current) throw new ApprovalNotFoundError(approvalId);
+
+      const idx = current.conditions.findIndex((c) => c.id === conditionId);
+      if (idx < 0) {
+        logAudit({
+          action: "compliance.approval.condition.satisfy",
+          resourceType: "Approval",
+          resourceId: approvalId,
+          actor,
+          outcome: "denied",
+          reason: `condition ${conditionId} not found`,
+        });
+        throw new ApprovalNotFoundError(`${approvalId}/${conditionId}`);
+      }
+
+      const prior = current.conditions[idx]!;
+      const nextConditions = [
+        ...current.conditions.slice(0, idx),
+        { ...prior, status: "satisfied" as const },
+        ...current.conditions.slice(idx + 1),
+      ];
+      const updated: Approval = { ...current, conditions: nextConditions };
+      byId.set(approvalId, updated);
+
+      logAudit({
+        action: "compliance.approval.condition.satisfy",
+        resourceType: "Approval",
+        resourceId: approvalId,
+        actor,
+        outcome: "success",
+        context: { conditionId, priorStatus: prior.status },
+        reason,
+      });
+      return updated;
+    },
+
+    async refreshSlaStatus(approvalId) {
+      const current = byId.get(approvalId);
+      if (!current) throw new ApprovalNotFoundError(approvalId);
+      const clock = now();
+      let changed = false;
+      const nextConditions = current.conditions.map((c) => {
+        const next = evaluateSlaStatus(c, clock);
+        if (next !== c.status && next === "breached" && c.status === "pending") {
+          changed = true;
+          // Idempotent breach audit — emit once at pending→breached flip.
+          logAudit({
+            action: "compliance.approval.condition.breached",
+            resourceType: "Approval",
+            resourceId: approvalId,
+            actor: { userId: "system", displayName: "System" },
+            outcome: "success",
+            context: { conditionId: c.id, dueAt: c.dueAt, observedAt: clock.toISOString() },
+          });
+          return { ...c, status: "breached" as const };
+        }
+        return c;
+      });
+      if (!changed) return current;
+      const updated: Approval = { ...current, conditions: nextConditions };
+      byId.set(approvalId, updated);
+      return updated;
     },
   };
 }
