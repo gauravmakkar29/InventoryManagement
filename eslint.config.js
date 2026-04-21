@@ -51,5 +51,36 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": ["error", { allow: ["warn", "error"] }],
     },
-  }
+  },
+  // Epic 28 — compliance library must remain domain-agnostic.
+  // The primitives under src/lib/compliance/** must not import from any
+  // feature folder; keeping this enforced is what lets the library be
+  // re-used by template consumers in other domains.
+  {
+    files: ["src/lib/compliance/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: [
+                "**/lib/firmware/**",
+                "**/lib/device*",
+                "**/lib/sbom*",
+                "**/lib/customer*",
+                "**/app/components/firmware/**",
+                "**/app/components/inventory/**",
+                "**/app/components/deployment/**",
+                "**/app/components/sbom/**",
+                "**/app/components/analytics/**",
+              ],
+              message:
+                "Compliance primitives must remain domain-agnostic (Epic 28). Import only generic utilities and @tanstack/react-query / lucide-react / @/lib/rbac / @/lib/audit / @/lib/query-keys / @/lib/feature-flags.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 );
