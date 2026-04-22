@@ -34,6 +34,7 @@
     "dashboard": "Dashboard",
     "inventory": "Inventory",
     "deployment": "Deployment",
+    "firmwareCatalog": "Firmware Catalog",
     "compliance": "Compliance",
     "sbom": "SBOM",
     "serviceOrders": "Service Orders",

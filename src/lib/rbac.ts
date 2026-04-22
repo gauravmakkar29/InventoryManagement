@@ -54,6 +54,7 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
       "dashboard",
       "inventory",
       "deployment",
+      "firmware-catalog",
       "compliance",
       "sbom",
       "account-service",
@@ -86,10 +87,12 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
     filterByCustomer: false,
   },
   Manager: {
+    // AC-3: firmware-catalog parallels deployment-scope access (read + author families).
     pages: [
       "dashboard",
       "inventory",
       "deployment",
+      "firmware-catalog",
       "compliance",
       "sbom",
       "account-service",
@@ -129,10 +132,12 @@ const PERMISSIONS: Record<Role, RolePermissions> = {
     filterByCustomer: false,
   },
   Viewer: {
+    // AC-3: firmware-catalog read access mirrors deployment — no action grants.
     pages: [
       "dashboard",
       "inventory",
       "deployment",
+      "firmware-catalog",
       "compliance",
       "sbom",
       "account-service",
