@@ -18,6 +18,7 @@ import {
   Fingerprint,
   FileText,
   Building2,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
@@ -49,6 +50,12 @@ const NAV_GROUPS: NavGroup[] = [
     labelKey: "nav.operations",
     items: [
       { labelKey: "nav.deployment", path: "/deployment", page: "deployment", icon: Rocket },
+      {
+        labelKey: "nav.firmwareCatalog",
+        path: "/firmware",
+        page: "firmware-catalog",
+        icon: Layers,
+      },
       { labelKey: "nav.customers", path: "/customers", page: "customers", icon: Building2 },
       { labelKey: "nav.compliance", path: "/compliance", page: "compliance", icon: Shield },
       { labelKey: "nav.sbom", path: "/sbom", page: "sbom", icon: FileBox },
@@ -136,6 +143,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       "/inventory": () => import("../inventory"),
       "/account-service": () => import("../account-service"),
       "/deployment": () => import("../deployment"),
+      "/firmware": () => import("../firmware/firmware-families"),
       "/compliance": () => import("../compliance"),
       "/sbom": () => import("../sbom"),
       "/analytics": () => import("../analytics"),

@@ -11,6 +11,7 @@ const ROUTE_META: Record<string, { title: string }> = {
   "/": { title: "Dashboard" },
   "/inventory": { title: "Inventory & Assets" },
   "/deployment": { title: "Deployment" },
+  "/firmware": { title: "Firmware Catalog" },
   "/compliance": { title: "Compliance" },
   "/account-service": { title: "Service Orders" },
   "/analytics": { title: "Analytics" },

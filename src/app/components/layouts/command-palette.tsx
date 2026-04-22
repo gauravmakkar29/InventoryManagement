@@ -13,6 +13,7 @@ import {
   ShieldAlert,
   Fingerprint,
   FileText,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
   { label: "Dashboard", path: "/", icon: LayoutDashboard, group: "Pages" },
   { label: "Inventory", path: "/inventory", icon: Package, group: "Pages" },
   { label: "Deployment", path: "/deployment", icon: Rocket, group: "Pages" },
+  { label: "Firmware Catalog", path: "/firmware", icon: Layers, group: "Pages" },
   { label: "Compliance", path: "/compliance", icon: Shield, group: "Pages" },
   { label: "SBOM", path: "/sbom", icon: FileBox, group: "Pages" },
   { label: "Service Orders", path: "/account-service", icon: ClipboardList, group: "Pages" },

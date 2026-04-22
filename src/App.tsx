@@ -69,6 +69,11 @@ const FirmwareDetailPage = lazy(() =>
     default: m.FirmwareDetailPage,
   })),
 );
+const FirmwareFamiliesTab = lazy(() =>
+  import("./app/components/firmware/firmware-families").then((m) => ({
+    default: m.FirmwareFamiliesTab,
+  })),
+);
 const CustomerListPage = lazy(() =>
   import("./app/components/customers/customer-list-page").then((m) => ({
     default: m.CustomerListPage,
@@ -154,6 +159,14 @@ export default function App() {
               element={
                 <RouteElement name="firmware-detail">
                   <FirmwareDetailPage />
+                </RouteElement>
+              }
+            />
+            <Route
+              path="/firmware"
+              element={
+                <RouteElement name="firmware-catalog">
+                  <FirmwareFamiliesTab />
                 </RouteElement>
               }
             />

@@ -83,6 +83,7 @@ const ROUTE_TO_PAGE: Record<string, string> = {
   "/": "dashboard",
   "/inventory": "inventory",
   "/deployment": "deployment",
+  "/firmware": "firmware-catalog",
   "/compliance": "compliance",
   "/sbom": "sbom",
   "/account-service": "account-service",

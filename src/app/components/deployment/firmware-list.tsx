@@ -1,5 +1,4 @@
 import { Upload, Package, Shield, ShieldCheck, AlertTriangle, RotateCcw, Ban } from "lucide-react";
-import { Link } from "react-router";
 import { cn } from "../../../lib/utils";
 import { ApprovalStageIndicator } from "./approval-stage-indicator";
 import type { FirmwareEntry } from "./deployment-types";
@@ -126,18 +125,16 @@ function FirmwareCard({
         isDeprecated ? "border-border/50 opacity-60" : "border-border",
       )}
     >
-      {/* Header: version (link to detail) + status badge */}
+      {/* Header: version + status badge */}
       <div className="flex items-center justify-between">
-        <Link
-          to={`/deployment/firmware/${fw.id}`}
+        <span
           className={cn(
-            "text-sm font-bold hover:underline focus-visible:outline-none focus-visible:underline",
+            "text-sm font-bold",
             isDeprecated ? "text-muted-foreground line-through" : "text-foreground",
           )}
-          aria-label={`View details for firmware ${fw.version}`}
         >
           {fw.version}
-        </Link>
+        </span>
         <span className={cn("rounded-sm px-1.5 py-0.5 text-[12px] font-medium", statusBadge)}>
           {fw.status}
         </span>

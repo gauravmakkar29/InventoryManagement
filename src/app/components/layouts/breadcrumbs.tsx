@@ -13,6 +13,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "": "Dashboard",
   inventory: "Inventory",
   deployment: "Deployment",
+  firmware: "Firmware Catalog",
   compliance: "Compliance",
   sbom: "SBOM",
   "account-service": "Service Orders",

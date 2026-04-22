@@ -6,7 +6,8 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import { Package, Plus, ChevronRight, Layers } from "lucide-react";
+import { Link } from "react-router";
+import { Package, Plus, ChevronRight, Layers, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/use-auth";
@@ -280,6 +281,16 @@ function FirmwareFamilyCard({
               ))}
             </div>
           )}
+          <div className="mt-3 flex justify-end border-t border-border/60 pt-3">
+            <Link
+              to={`/deployment/firmware/${family.id}`}
+              className="inline-flex items-center gap-1 text-[13px] font-medium text-accent-text hover:underline"
+              aria-label={`View full version history and compliance artifacts for ${family.name}`}
+            >
+              View version history & compliance
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       )}
     </div>
