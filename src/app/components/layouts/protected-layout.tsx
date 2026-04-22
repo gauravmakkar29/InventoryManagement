@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "@/lib/use-auth";
 import { getPrimaryRole, canAccessPage } from "@/lib/rbac";
@@ -10,6 +10,7 @@ import { SkipToContent } from "./skip-to-content";
 import { CommandPalette } from "./command-palette";
 import { SessionTimeoutWarning } from "../session-timeout-warning";
 import { ConnectivityStatusBar } from "../connectivity/connectivity-status-bar";
+import { ServiceHealthPanel } from "../connectivity/service-health-panel";
 import { useConnectivityMonitor } from "../connectivity/use-connectivity-monitor";
 import { Skeleton } from "@/components/skeleton";
 import { useRealtimeNotifications } from "@/lib/hooks/use-realtime-notifications";
@@ -100,6 +101,8 @@ export function ProtectedLayout() {
   const connectivity = useConnectivityMonitor();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const [serviceHealthExpanded, setServiceHealthExpanded] = useState(false);
+  const isAdmin = getPrimaryRole(groups) === "Admin";
 
   // Real-time notifications — mock adapter for local dev, replaced by WebSocket/SSE in production
   const realtimeProvider = useMemo(() => {
@@ -151,6 +154,16 @@ export function ProtectedLayout() {
             tabIndex={-1}
           >
             <Breadcrumbs />
+            {connectivity.overallStatus !== "AllHealthy" && (
+              <div className="mb-4">
+                <ServiceHealthPanel
+                  connectivity={connectivity}
+                  isAdmin={isAdmin}
+                  expanded={serviceHealthExpanded}
+                  onToggle={() => setServiceHealthExpanded((v) => !v)}
+                />
+              </div>
+            )}
             <Outlet />
           </main>
         </div>
